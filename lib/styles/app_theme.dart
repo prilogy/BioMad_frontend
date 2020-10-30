@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'extreme_colors.dart';
+import 'biomad_colors.dart';
 
 class AppTheme {
   AppTheme._();
