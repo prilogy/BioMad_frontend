@@ -1,8 +1,17 @@
+import 'package:api/api.dart';
+import 'package:biomad_frontend/config/env.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'services/dio.dart' as dioService;
+import 'services/api.dart' as apiService;
 
 void main() async {
-  await DotEnv().load('.env');
+  await Env.init('.env');
+  dioService.init();
+  apiService.init();
+
+  var res = await apiService.api.auth.logIn(LogInWithCredentialsModel(email: "user@example.com", password: "string"));
+  print(res);
 
   runApp(MyApp());
 }

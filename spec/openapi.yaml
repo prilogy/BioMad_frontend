@@ -1,0 +1,719 @@
+openapi: 3.0.1
+info:
+  title: BioMad API v1
+  description: Web API documentation for BioMad application.
+  contact:
+    name: Artyom Lukyanov
+    email: artglz63@gmail.com
+  license:
+    name: MIT
+  version: v1
+paths:
+  /api/v1/Auth/logIn:
+    post:
+      tags:
+        - Auth
+      summary: Logs in user with given credentials
+      requestBody:
+        description: ''
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/LogInWithCredentialsModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogInWithCredentialsModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/LogInWithCredentialsModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/LogInWithCredentialsModel'
+      responses:
+        '200':
+          description: If authentication is succeeded
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/AuthenticationResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationResult'
+        '404':
+          description: If credentials are invalid
+      security:
+        - bearer: []
+  /api/v1/Auth/signUp:
+    post:
+      tags:
+        - Auth
+      summary: Signs up new user
+      requestBody:
+        description: ''
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/SignUpModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignUpModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SignUpModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/SignUpModel'
+      responses:
+        '200':
+          description: If sign up is successfully completed
+        '400':
+          description: If something else went wrong
+        '409':
+          description: If user with given email already exists
+      security:
+        - bearer: []
+  /api/v1/Auth/refreshToken:
+    post:
+      tags:
+        - Auth
+      summary: "Authenticates user with model contains refresh token;\r\nRevokes given refresh token and provides with new"
+      requestBody:
+        description: ''
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenAuthenticationModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenAuthenticationModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenAuthenticationModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenAuthenticationModel'
+      responses:
+        '200':
+          description: If everything went ok
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/AuthenticationResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationResult'
+        '400':
+          description: If anything went wrong
+      security:
+        - bearer: []
+  '/api/v1/Auth/logIn/{type}':
+    post:
+      tags:
+        - Auth
+      summary: Logs in user by its social account
+      parameters:
+        - name: token
+          in: query
+          description: Token of social provider identity
+          required: true
+          schema:
+            type: string
+            description: Token of social provider identity
+        - name: type
+          in: path
+          description: Name of social provider
+          required: true
+          schema:
+            type: string
+            description: Name of social provider
+            nullable: true
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/AuthenticationResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationResult'
+        '400':
+          description: If anything went BAD
+        '404':
+          description: If social provider is invalid
+      security:
+        - bearer: []
+  '/api/v1/Auth/signUp/{type}/identity':
+    post:
+      tags:
+        - Auth
+      summary: Gets social provider identity to provide data for auth flow
+      parameters:
+        - name: token
+          in: query
+          description: Token of social account identity
+          required: true
+          schema:
+            type: string
+            description: Token of social account identity
+        - name: type
+          in: path
+          description: Name of social provider
+          required: true
+          schema:
+            type: string
+            description: Name of social provider
+            nullable: true
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/SocialAuthenticationIdentity'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SocialAuthenticationIdentity'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SocialAuthenticationIdentity'
+        '400':
+          description: If something else went wrong
+        '404':
+          description: If type is invalids
+      security:
+        - bearer: []
+  '/api/v1/Auth/signUp/{type}':
+    post:
+      tags:
+        - Auth
+      summary: Signs up new user with connected social account
+      parameters:
+        - name: type
+          in: path
+          description: Name of social provider
+          required: true
+          schema:
+            type: string
+            description: Name of social provider
+            nullable: true
+      requestBody:
+        description: Data for User's sign up
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/SignUpWithSocialAccountModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignUpWithSocialAccountModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SignUpWithSocialAccountModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/SignUpWithSocialAccountModel'
+        required: true
+      responses:
+        '200':
+          description: If sign up is successfully completed
+        '400':
+          description: If something else went wrong
+        '409':
+          description: If user with given email already exists
+      security:
+        - bearer: []
+  /api/v1/Member:
+    post:
+      tags:
+        - Member
+      summary: Adds new member to user
+      requestBody:
+        description: ''
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/MemberModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemberModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/MemberModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/MemberModel'
+      responses:
+        '200':
+          description: If member was added
+        '400':
+          description: If anything went BAD and member wasn't added
+      security:
+        - bearer: []
+  '/api/v1/Member/{id}':
+    delete:
+      tags:
+        - Member
+      summary: Removes member out of user
+      parameters:
+        - name: id
+          in: path
+          description: Id of member to remove from user
+          required: true
+          schema:
+            type: integer
+            description: Id of member to remove from user
+            format: int32
+      responses:
+        '200':
+          description: If member was removed
+        '400':
+          description: If anything went BAD and member wasn't removed
+      security:
+        - bearer: []
+    patch:
+      tags:
+        - Member
+      summary: Edits data of member
+      parameters:
+        - name: id
+          in: path
+          description: Id of member to edit
+          required: true
+          schema:
+            type: integer
+            description: Id of member to edit
+            format: int32
+      requestBody:
+        description: Model with new data
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/MemberModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemberModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/MemberModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/MemberModel'
+      responses:
+        '200':
+          description: If member was edited
+        '400':
+          description: If anything went BAD and member wasn't edited
+      security:
+        - bearer: []
+  /api/v1/SocialAccount/provider:
+    get:
+      tags:
+        - SocialAccount
+      summary: Gets social providers list
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SocialAccountProvider'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SocialAccountProvider'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SocialAccountProvider'
+      security:
+        - bearer: []
+  '/api/v1/SocialAccount/{type}':
+    post:
+      tags:
+        - SocialAccount
+      summary: Adds social account to current user
+      parameters:
+        - name: token
+          in: query
+          description: Token of social provider account
+          required: true
+          schema:
+            type: string
+            description: Token of social provider account
+        - name: type
+          in: path
+          description: Social provider name
+          required: true
+          schema:
+            type: string
+            description: Social provider name
+            nullable: true
+      responses:
+        '200':
+          description: If everything went OK
+        '400':
+          description: If anything went BAD
+        '404':
+          description: If provider isn't valid
+      security:
+        - bearer: []
+    delete:
+      tags:
+        - SocialAccount
+      summary: Removes social account from current user
+      parameters:
+        - name: type
+          in: path
+          description: Social provider name to delete
+          required: true
+          schema:
+            type: string
+            description: Social provider name to delete
+            nullable: true
+      responses:
+        '200':
+          description: If everything went OK
+        '400':
+          description: If anything went BAD
+        '404':
+          description: If provider isn't valid or social account doesn't exist
+      security:
+        - bearer: []
+  /api/v1/User:
+    get:
+      tags:
+        - User
+      summary: Gets user's account info
+      responses:
+        '200':
+          description: If user data successfully returned
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/User'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      security:
+        - bearer: []
+    patch:
+      tags:
+        - User
+      summary: Edits user's data
+      requestBody:
+        description: New user data
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/UserEditModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserEditModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UserEditModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UserEditModel'
+      responses:
+        '200':
+          description: If user data was edited
+        '400':
+          description: If anything went BAD and user data wasn't edited
+      security:
+        - bearer: []
+components:
+  schemas:
+    LogInWithCredentialsModel:
+      required:
+        - email
+        - password
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      additionalProperties: false
+    Gender:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        key:
+          type: string
+          nullable: true
+      additionalProperties: false
+    Member:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+          nullable: true
+        dateCreatedAt:
+          type: string
+          format: date-time
+        dateBirthday:
+          type: string
+          format: date-time
+        genderId:
+          type: integer
+          format: int32
+        gender:
+          $ref: '#/components/schemas/Gender'
+        userId:
+          type: integer
+          format: int32
+        user:
+          $ref: '#/components/schemas/User'
+      additionalProperties: false
+    SocialAccountProvider:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+          nullable: true
+      additionalProperties: false
+    SocialAccount:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        key:
+          type: string
+          nullable: true
+        dateCreatedAt:
+          type: string
+          format: date-time
+        providerId:
+          type: integer
+          format: int32
+        provider:
+          $ref: '#/components/schemas/SocialAccountProvider'
+        userId:
+          type: integer
+          format: int32
+          nullable: true
+        user:
+          $ref: '#/components/schemas/User'
+      additionalProperties: false
+    Role:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        key:
+          type: string
+          nullable: true
+      additionalProperties: false
+    RefreshToken:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        token:
+          type: string
+          nullable: true
+        dateExpiration:
+          type: string
+          format: date-time
+        isValid:
+          type: boolean
+          readOnly: true
+        userId:
+          type: integer
+          format: int32
+        user:
+          $ref: '#/components/schemas/User'
+      additionalProperties: false
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        email:
+          type: string
+          format: email
+          nullable: true
+        password:
+          type: string
+          nullable: true
+        dateCreatedAt:
+          type: string
+          format: date-time
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/Member'
+          nullable: true
+        currentMemberId:
+          type: integer
+          format: int32
+        socialAccounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/SocialAccount'
+          nullable: true
+        roleId:
+          type: integer
+          format: int32
+        role:
+          $ref: '#/components/schemas/Role'
+        refreshTokens:
+          type: array
+          items:
+            $ref: '#/components/schemas/RefreshToken'
+          nullable: true
+      additionalProperties: false
+    AuthenticationResult:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        refreshToken:
+          $ref: '#/components/schemas/RefreshToken'
+        accessToken:
+          type: string
+          nullable: true
+      additionalProperties: false
+    SignUpModel:
+      required:
+        - dateBirthday
+        - email
+        - genderId
+        - name
+        - password
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+        genderId:
+          type: integer
+          format: int32
+        dateBirthday:
+          type: string
+          format: date-time
+        password:
+          minLength: 6
+          type: string
+      additionalProperties: false
+    RefreshTokenAuthenticationModel:
+      required:
+        - memberId
+        - refreshToken
+        - userId
+      type: object
+      properties:
+        refreshToken:
+          type: string
+        userId:
+          type: integer
+          description: Id of current user
+          format: int32
+        memberId:
+          type: integer
+          description: Id of current member
+          format: int32
+      additionalProperties: false
+    SocialAuthenticationIdentity:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+      additionalProperties: false
+    SignUpWithSocialAccountModel:
+      required:
+        - dateBirthday
+        - email
+        - genderId
+        - name
+        - password
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+        genderId:
+          type: integer
+          format: int32
+        dateBirthday:
+          type: string
+          format: date-time
+        password:
+          minLength: 6
+          type: string
+        identity:
+          $ref: '#/components/schemas/SocialAuthenticationIdentity'
+      additionalProperties: false
+    MemberModel:
+      required:
+        - dateBirthday
+        - genderId
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+        genderId:
+          type: integer
+          format: int32
+        dateBirthday:
+          type: string
+          format: date-time
+      additionalProperties: false
+    UserEditModel:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          nullable: true
+        password:
+          type: string
+          nullable: true
+      additionalProperties: false
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
