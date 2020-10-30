@@ -16,7 +16,7 @@ dependencies:
   dio: ^3.0.9
   api:
     path: ./api
-
+  easy_localization: ^2.3.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -27,3 +27,5 @@ flutter:
   uses-material-design: true
   assets:
     - .env
+    - assets/translations/en.json
+    - assets/translations/ru.json
