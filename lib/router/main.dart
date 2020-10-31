@@ -24,7 +24,7 @@ final authRoute = RouteBuilder('/auth', (args) => AuthScreen(), false);
 
 final routes = [
   authRoute,
-  RouteBuilder('/main', (args) => MyHomePage())
+  RouteBuilder('/main', (args) => MyHomePage(title: "s",))
 ];
 
 class RouteBuilder {

@@ -6,6 +6,6 @@ final settingsReducer = combineReducers<Settings>(
     [TypedReducer<Settings, Actions.SetSettings>(_setSettings)]);
 
 Settings _setSettings(Settings state, Actions.SetSettings action) {
-
-  return state;
+  Settings.saveToLocalStorage(action.settings);
+  return action.settings;
 }
