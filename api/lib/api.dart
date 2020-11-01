@@ -5,7 +5,9 @@ import 'dart:core';
 import 'dart:async';
 
 // apis
-part 'api/auth.dart';
+part 'api/auth_api.dart';
+part 'api/social_account_api.dart';
+part 'api/member_api.dart';
 
 // helpers
 part 'helper/api_base.dart';
@@ -29,7 +31,12 @@ part 'models/user_edit_model.dart';
 
 /// Main api class
 class Api {
-  final Auth auth;
+  final AuthApi auth;
+  final SocialAccountApi socialAccount;
+  final MemberApi member;
 
-  Api(Dio dio): auth = Auth(dio);
+  Api(Dio dio)
+      : auth = AuthApi(dio),
+        socialAccount = SocialAccountApi(dio),
+        member = MemberApi(dio);
 }

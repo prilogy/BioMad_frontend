@@ -1,5 +1,7 @@
+import 'package:api/api.dart';
 import 'package:biomad_frontend/screens/auth_screen.dart';
 import 'package:biomad_frontend/screens/home_screen.dart';
+import 'package:biomad_frontend/screens/member_add_screen.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:flutter/material.dart';
 
@@ -20,12 +22,19 @@ class RouteGenerator {
   }
 }
 
+class Routes {
+  static const main = '/main';
+  static const member = '/member';
+}
+
 final authRoute = RouteBuilder('/auth', (args) => AuthScreen(), false);
 
 final routes = [
   authRoute,
-  RouteBuilder('/main', (args) => MyHomePage(title: "s",))
+  RouteBuilder(Routes.main, (args) => MyHomePage(title: "s",)),
+  RouteBuilder(Routes.member, (args) => MemberAddScreen(member: args as Member))
 ];
+
 
 class RouteBuilder {
   final String routeName;

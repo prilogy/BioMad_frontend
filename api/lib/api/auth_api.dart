@@ -1,7 +1,7 @@
 part of api.api;
 
-class Auth extends ApiBase<Auth> {
-  Auth(Dio dio, {String version = "v1"}) : super(dio, version);
+class AuthApi extends ApiBase<AuthApi> {
+  AuthApi(Dio dio, {String version = "v1"}) : super(dio, version);
 
   /// Logs in with email and password
   Future<AuthenticationResult> logIn(LogInWithCredentialsModel model) async {
@@ -34,7 +34,6 @@ class Auth extends ApiBase<Auth> {
     try {
       var url = '${v}/auth/refreshToken';
       var response = await dio.post(url, data: model);
-
       return AuthenticationResult.fromJson(response.data);
     } on DioError catch (e) {
       print(e);

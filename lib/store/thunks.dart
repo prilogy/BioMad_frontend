@@ -14,7 +14,6 @@ class StoreThunks {
   static ThunkAction<AppState> authorize(AuthenticationResultGetter getter, {VoidCallback onSuccess, VoidCallback onError}) {
     return (Store<AppState> store) async {
       var res = await getter();
-      print('res');
       if (res == null) {
         await onError?.call();
         return;

@@ -63,14 +63,15 @@ class _MyHomePageState extends State<MyHomePage> {
           panelBuilder: (sc) => ListView(
             padding: EdgeInsets.symmetric(vertical: 0),
             children: [
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: Indents.md, horizontal: Indents.md),
-              child: AccountContainer(),
-            )
-          ],),
-          borderRadius: BorderRadius.only(topLeft: Radius.circular(RadiusValues.main), topRight: Radius.circular(RadiusValues.main)),
-          onPanelSlide: (double pos) => setState((){
-            _fabHeight = pos * (_panelHeightOpen - _panelHeightClosed) + _initFabHeight;
+              AccountContainer(),
+            ],
+          ),
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(RadiusValues.main),
+              topRight: Radius.circular(RadiusValues.main)),
+          onPanelSlide: (double pos) => setState(() {
+            _fabHeight =
+                pos * (_panelHeightOpen - _panelHeightClosed) + _initFabHeight;
           }),
         ),
       ]), // This trailing comma makes auto-formatting nicer for build methods.
