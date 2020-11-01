@@ -1,4 +1,6 @@
 import 'package:api/api.dart';
+import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
+import 'package:biomad_frontend/helper/keys.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
@@ -18,7 +20,8 @@ class AuthScreen extends StatelessWidget {
                   return await api.auth.logIn(LogInWithCredentialsModel(
                       email: "user@example.com", password: "string"));
                 }, onSuccess: () {
-                  print('success');
+                  SnackBarExtension.info("Logged in successfully");
+                  Keys.rootNavigator.currentState.pushReplacementNamed('/main');
                 }, onError: () {
                   print('didnt login');
                 }));

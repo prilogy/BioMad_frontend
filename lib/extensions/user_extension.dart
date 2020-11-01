@@ -10,6 +10,6 @@ extension UserExtension on User {
   }
 
   static void saveToLocalStorage(User user) {
-    localStorage.setItem(UserExtension.localStorageKey, user.toJson());
+    localStorage.setItem(UserExtension.localStorageKey, user?.toJson() ?? null);
   }
 }

@@ -1,5 +1,6 @@
 import 'package:api/api.dart';
 import 'package:biomad_frontend/services/localstorage.dart';
+import 'package:biomad_frontend/store/main.dart';
 
 class Authorization {
   RefreshToken refreshToken;
@@ -7,6 +8,9 @@ class Authorization {
   int currentMemberId;
 
   bool get isAuthorized => refreshToken != null && accessToken != null;
+  
+  User get user => store.state.user;
+  Member get currentMember => store.state.user.members.firstWhere((x) => x.id == currentMemberId);
 
   static String localStorageKey = 'authorization_state';
 
@@ -22,8 +26,7 @@ class Authorization {
   }
 
   static void saveToLocalStorage(Authorization model) {
-    print('saving to local' + model.toJson().toString());
-    localStorage.setItem(localStorageKey, model.toJson());
+    localStorage.setItem(localStorageKey, model?.toJson() ?? null);
   }
 
   Authorization.fromJson(Map<String, dynamic>  json) {

@@ -1,4 +1,5 @@
 import 'package:api/api.dart';
+import 'package:biomad_frontend/helper/keys.dart';
 import 'package:biomad_frontend/models/authorization.dart';
 import 'package:biomad_frontend/store/authorization/actions.dart';
 import 'package:biomad_frontend/store/main.dart';
@@ -13,6 +14,7 @@ class StoreThunks {
   static ThunkAction<AppState> authorize(AuthenticationResultGetter getter, {VoidCallback onSuccess, VoidCallback onError}) {
     return (Store<AppState> store) async {
       var res = await getter();
+      print('res');
       if (res == null) {
         await onError?.call();
         return;
@@ -23,11 +25,17 @@ class StoreThunks {
           currentMemberId: res.user.currentMemberId,
           refreshToken: res.refreshToken);
 
-      print('####RES' + auth.toJson().toString());
-
       store.dispatch(SetUser(res.user));
       store.dispatch(SetAuthorization(auth));
       await onSuccess?.call();
+    };
+  }
+
+  static ThunkAction<AppState> logOut() {
+    return (Store<AppState> store) {
+      store.dispatch(SetUser(null));
+      store.dispatch(SetAuthorization(null));
+      Keys.rootNavigator.currentState.pushReplacementNamed('/auth');
     };
   }
 }

@@ -8,10 +8,8 @@ class Auth extends ApiBase<Auth> {
     try {
       var url = '${v}/auth/logIn';
       var response = await dio.post(url, data: model);
-
       return AuthenticationResult.fromJson(response.data);
     } on DioError catch (e) {
-      print(e);
       return null;
     }
   }
