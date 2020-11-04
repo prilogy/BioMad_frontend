@@ -1,6 +1,12 @@
+import 'package:api/api.dart';
 import 'package:biomad_frontend/config/env.dart';
+import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
+import 'package:biomad_frontend/helper/keys.dart';
+import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
+import 'package:biomad_frontend/store/thunks.dart';
 import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 final Dio dio = new Dio();
 
@@ -12,5 +18,14 @@ void init() {
     var customHeaders = {"Authorization": store.state.authorization?.accessToken == null ? null : 'Bearer ${store.state.authorization.accessToken}'};
     options.headers.addAll(customHeaders);
     return options;
+  }));
+  dio.interceptors.add(InterceptorsWrapper(onResponse: (r) async {
+    if(r.statusCode == 401 && store.state.authorization.isAuthorized)
+      store.dispatch(StoreThunks.authorizeWithRefreshToken(
+        onError: () {
+          Keys.rootNavigator.currentState.pushReplacementNamed('/auth');
+          SnackBarExtension.info(tr('snack_bar.log_out_due_refresh_token'));
+        }
+      ));
   }));
 }

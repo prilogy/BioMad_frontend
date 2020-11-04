@@ -1,6 +1,11 @@
 {
-  "text": "text1",
-  "obj": {
-    "key" : "key1"
+  "input_hint": {
+    "name": "Name or alias",
+    "email": "Email",
+    "not_empty": "This field shouldn't be empty",
+    "email_invalid": "Email is not valid"
+  },
+  "snack_bar": {
+    "log_out_due_refresh_token" : "Seems like you haven't been here for a long time, please, re-log in to to ensure security."
   }
 }

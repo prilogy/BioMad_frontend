@@ -5,6 +5,9 @@ import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
+import 'package:biomad_frontend/widgets/block_base_widget.dart';
+import 'package:biomad_frontend/widgets/custom_text_form_field.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class MemberAddScreen extends StatefulWidget {
@@ -17,6 +20,9 @@ class MemberAddScreen extends StatefulWidget {
 }
 
 class _MemberAddScreenState extends State<MemberAddScreen> {
+  final _nameController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -27,7 +33,7 @@ class _MemberAddScreenState extends State<MemberAddScreen> {
         leading: BackButton(),
         actions: [
           widget.member != null &&
-          widget.member.id != store.state.authorization.currentMemberId
+                  widget.member.id != store.state.authorization.currentMemberId
               ? IconButton(
                   icon: Icon(Icons.highlight_remove_outlined,
                       color: BioMadColors.error),
@@ -60,29 +66,59 @@ class _MemberAddScreenState extends State<MemberAddScreen> {
         title: Text(title, style: TextStyle(color: theme.primaryColor)),
       ),
       body: Container(
-        child: RaisedButton(
-          child: Text('add'),
-          onPressed: () async {
-              var res = await api.member
-                  .add(MemberModel(name: "Zack Brown", genderId: 1));
-              if (res == false) {
-                SnackBarExtension.error('Ошибка при добавлении профиля');
-                return;
-              }
-              store.dispatch(StoreThunks.authorize(() async {
-                return await api.auth.refreshToken(
-                    RefreshTokenAuthenticationModel(
-                        refreshToken:
-                            store.state.authorization.refreshToken.token,
-                        memberId: store.state.authorization.currentMemberId,
-                        userId: store.state.user.id));
-              }, onError: () {
-                SnackBarExtension.error('Ошибка при добавлении пользователя');
-              }, onSuccess: () {
-                SnackBarExtension.success('Пользщователь успешно добавлен');
-              }));
-              Navigator.of(context).pop();
-          },
+        child: Column(
+          children: [
+            BlockBaseWidget(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    CustomTextFormField(
+                      controller: _nameController,
+                      labelText: tr('input_hint.name'),
+                      icon: Icon(Icons.account_circle_outlined),
+                      formValidator: () {
+                        return _formKey?.currentState?.validate();;
+                      },
+                    ),
+                    CustomTextFormField(
+                      controller: _nameController,
+                      labelText: tr('input_hint.name'),
+                      icon: Icon(Icons.account_circle_outlined),
+                      formValidator: () {
+                        return _formKey?.currentState?.validate();
+                      },
+                    )
+                  ],
+                ),
+              ),
+            ),
+            RaisedButton(
+              child: Text('add'),
+              onPressed: () async {
+                if (!_formKey.currentState.validate()) return;
+                var res = await api.member
+                    .add(MemberModel(name: "Zack Brown", genderId: 1));
+                if (res == false) {
+                  SnackBarExtension.error('Ошибка при добавлении профиля');
+                  return;
+                }
+                store.dispatch(StoreThunks.authorize(() async {
+                  return await api.auth.refreshToken(
+                      RefreshTokenAuthenticationModel(
+                          refreshToken:
+                              store.state.authorization.refreshToken.token,
+                          memberId: store.state.authorization.currentMemberId,
+                          userId: store.state.user.id));
+                }, onError: () {
+                  SnackBarExtension.error('Ошибка при добавлении пользователя');
+                }, onSuccess: () {
+                  SnackBarExtension.success('Пользщователь успешно добавлен');
+                }));
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
         ),
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:api/api.dart';
 import 'package:biomad_frontend/helper/keys.dart';
 import 'package:biomad_frontend/models/authorization.dart';
+import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/authorization/actions.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/user/actions.dart';
@@ -11,7 +12,8 @@ import 'package:redux_thunk/redux_thunk.dart';
 typedef AuthenticationResultGetter = Future<AuthenticationResult> Function();
 
 class StoreThunks {
-  static ThunkAction<AppState> authorize(AuthenticationResultGetter getter, {VoidCallback onSuccess, VoidCallback onError}) {
+  static ThunkAction<AppState> authorize(AuthenticationResultGetter getter,
+      {VoidCallback onSuccess, VoidCallback onError}) {
     return (Store<AppState> store) async {
       var res = await getter();
       if (res == null) {
@@ -27,6 +29,18 @@ class StoreThunks {
       store.dispatch(SetUser(res.user));
       store.dispatch(SetAuthorization(auth));
       await onSuccess?.call();
+    };
+  }
+
+  static ThunkAction<AppState> authorizeWithRefreshToken(
+      {VoidCallback onSuccess, VoidCallback onError}) {
+    return (Store<AppState> store) async {
+      store.dispatch(StoreThunks.authorize(() async {
+        return await api.auth.refreshToken(RefreshTokenAuthenticationModel(
+            refreshToken: store.state.authorization.refreshToken.token,
+            userId: store.state.user.id,
+            memberId: store.state.authorization.currentMemberId));
+      }, onError: onError, onSuccess: onSuccess));
     };
   }
 
