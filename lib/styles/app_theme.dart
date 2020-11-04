@@ -15,7 +15,7 @@ class AppTheme {
       canvasColor: BioMadColors.base[300],
       /* theme colors */
       primaryColor: BioMadColors.primary,
-      accentColor: BioMadColors.secondary,
+      accentColor: BioMadColors.primary,
       /* ------------ */
       appBarTheme: AppBarTheme(
           color: BioMadColors.base[100],

@@ -1,4 +1,5 @@
 import 'package:api/api.dart';
+import 'package:biomad_frontend/extensions/i18n_helper.dart';
 import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/router/main.dart';
@@ -12,6 +13,7 @@ import 'package:biomad_frontend/widgets/custom_list_builder.dart';
 import 'package:biomad_frontend/widgets/custom_list_tile.dart';
 import 'package:biomad_frontend/widgets/member_list_tile.dart';
 import 'package:biomad_frontend/widgets/custom_divider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -25,6 +27,7 @@ class _AccountContainerState extends State<AccountContainer> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final tr = trWithKey('account_container');
 
     return Container(
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -33,13 +36,13 @@ class _AccountContainerState extends State<AccountContainer> {
               top: Indents.md, left: Indents.md, right: Indents.md),
           margin: EdgeInsets.only(bottom: Indents.sm),
           child: Text(
-            'Ваш аккаунт',
+            tr('your_account'),
             style: theme.textTheme.headline6
                 .merge(TextStyle(color: theme.primaryColor)),
           ),
         ),
         CustomDivider(
-          text: 'Мои профили',
+          text: tr('my_profiles'),
           dividerPadding: EdgeInsets.only(top: Indents.smd),
         ),
         StoreConnector<AppState, User>(
@@ -48,7 +51,8 @@ class _AccountContainerState extends State<AccountContainer> {
                 gap: 0,
                 items: () {
                   var members = state.members;
-                  members.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+                  members.sort((a, b) =>
+                      a.name.toLowerCase().compareTo(b.name.toLowerCase()));
                   return state.members;
                 }(),
                 itemBuilder: (Member model, isLast) => MemberListTile(
@@ -69,7 +73,8 @@ class _AccountContainerState extends State<AccountContainer> {
                         }));
                       },
                       onTap: () async {
-                        Keys.rootNavigator.currentState.pushNamed(Routes.member, arguments: model);
+                        Keys.rootNavigator.currentState
+                            .pushNamed(Routes.member, arguments: model);
                       },
                     ))),
         CustomListTile(
@@ -90,7 +95,7 @@ class _AccountContainerState extends State<AccountContainer> {
                   ),
                 ),
               ),
-              Text('Добавить профиль', style: theme.textTheme.subtitle1)
+              Text(tr('add_profile'), style: theme.textTheme.subtitle1)
             ],
           ),
         )

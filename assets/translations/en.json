@@ -31,6 +31,16 @@
     "delete_success": "Profile has been deleted successfully",
     "delete_error": "Unexpected error occurred while deleting profile",
     "add_success": "Profile has been added successfully",
-    "add_error": "Unexpected error occurred while creating profile"
+    "add_error": "Unexpected error occurred while creating profile",
+    "delete": "Delete profile"
+  },
+  "member_list_tile": {
+    "current": "Current",
+    "switch": "Switch to this profile"
+  },
+  "account_container": {
+    "add_profile": "Add profile",
+    "your_account": "Your account",
+    "my_profiles": "My profiles"
   }
 }

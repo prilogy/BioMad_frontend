@@ -65,10 +65,9 @@ class _MemberScreenState extends State<MemberScreen> {
 
     final actionButton = widget.member != null &&
             widget.member.id != store.state.authorization.currentMemberId
-        ? IconButton(
-            icon: Icon(Icons.highlight_remove_outlined,
-                color: BioMadColors.error),
-            tooltip: tr('misc.delete'),
+        ? FlatButton(
+            child:
+                Text('_tr.delete', style: TextStyle(color: theme.errorColor)),
             onPressed: () {
               AcceptDialog.show(context, onYes: () async {
                 var res = await api.member.delete(widget.member.id);
@@ -108,7 +107,8 @@ class _MemberScreenState extends State<MemberScreen> {
               ? IconButton(
                   tooltip: tr('misc.save'),
                   onPressed: () async {
-                    var res = await api.member.edit(getMemberModel(), widget.member.id);
+                    var res = await api.member
+                        .edit(getMemberModel(), widget.member.id);
                     if (res == null) {
                       SnackBarExtension.error(tr('misc.save_error'));
                       return;

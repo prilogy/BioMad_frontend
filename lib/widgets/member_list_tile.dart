@@ -1,8 +1,10 @@
 import 'package:api/api.dart';
+import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/helpers/string_helpers.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:biomad_frontend/widgets/custom_list_tile.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +16,8 @@ class MemberListTile extends StatelessWidget {
   final AsyncCallback onTap;
   final bool divider;
 
-  MemberListTile(this.model, {this.onArrowTap, this.divider = true, this.onTap});
+  MemberListTile(this.model,
+      {this.onArrowTap, this.divider = true, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +27,7 @@ class MemberListTile extends StatelessWidget {
     final isCurrent = store.state.authorization?.currentMemberId == model.id;
 
     return CustomListTile(
+      tilePadding: EdgeInsets.only(left: Indents.md),
       onTap: onTap,
       divider: CustomDivider(
         dividerPadding: EdgeInsets.symmetric(horizontal: Indents.md),
@@ -47,23 +51,36 @@ class MemberListTile extends StatelessWidget {
           )
         ],
       ),
-      append: isCurrent
-          ? Text(
-              'Текущий',
-              style: theme.textTheme.subtitle1
-                  .merge(TextStyle(color: theme.canvasColor)),
-            )
-          : IconButton(
-              padding: EdgeInsets.all(0),
-              alignment: Alignment.centerRight,
+      append: Row(
+        children: [
+          isCurrent
+              ? Text(
+            tr('member_list_tile.current'),
+                  style: theme.textTheme.subtitle1
+                      .merge(TextStyle(color: theme.canvasColor)),
+                )
+              : Container(),
+          IconButton(
+            tooltip: tr('misc.edit'),
               icon: Icon(
-                Icons.arrow_forward,
+                Icons.settings,
                 color: theme.primaryColor,
               ),
-              tooltip: 'switch',
-              onPressed: () async {
-                await onArrowTap?.call();
-              }),
+              onPressed: onTap),
+          !isCurrent
+              ? IconButton(
+                  padding: EdgeInsets.all(0),
+                  icon: Icon(
+                    Icons.arrow_forward,
+                    color: theme.primaryColor,
+                  ),
+                  tooltip: tr('member_list_tile.switch'),
+                  onPressed: () async {
+                    await onArrowTap?.call();
+                  })
+              : Container()
+        ],
+      ),
     );
   }
 }
