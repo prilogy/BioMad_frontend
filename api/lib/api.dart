@@ -11,7 +11,7 @@ part 'api/member_api.dart';
 part 'api/helper_api.dart';
 
 // helpers
-part 'helper/api_base.dart';
+part 'helpers/api_base.dart';
 
 // models
 part 'models/authentication_result.dart';

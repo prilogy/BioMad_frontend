@@ -22,6 +22,7 @@ dependencies:
   localstorage: ^3.0.3+6
   redux_thunk: ^0.3.0
   sliding_up_panel: ^1.0.2
+  datetime_picker_formfield: ^1.0.0
 
 dev_dependencies:
   flutter_test:

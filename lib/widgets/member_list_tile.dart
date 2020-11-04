@@ -1,5 +1,5 @@
 import 'package:api/api.dart';
-import 'package:biomad_frontend/helper/string_helpers.dart';
+import 'package:biomad_frontend/helpers/string_helpers.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:biomad_frontend/widgets/custom_list_tile.dart';

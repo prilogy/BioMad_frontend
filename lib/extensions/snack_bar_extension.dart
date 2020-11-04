@@ -1,4 +1,4 @@
-import 'package:biomad_frontend/helper/keys.dart';
+import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:flutter/material.dart';
 

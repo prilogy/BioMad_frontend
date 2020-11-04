@@ -1,4 +1,4 @@
-import 'package:biomad_frontend/helper/indents_mixin.dart';
+import 'package:biomad_frontend/helpers/indents_mixin.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:flutter/material.dart';
 

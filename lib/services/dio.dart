@@ -1,7 +1,7 @@
 import 'package:api/api.dart';
 import 'package:biomad_frontend/config/env.dart';
 import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
-import 'package:biomad_frontend/helper/keys.dart';
+import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
@@ -20,6 +20,7 @@ void init() {
     return options;
   }));
   dio.interceptors.add(InterceptorsWrapper(onResponse: (r) async {
+    print('[ API REQUEST ] - CODE ${r.statusCode}');
     if(r.statusCode == 401 && store.state.authorization.isAuthorized)
       store.dispatch(StoreThunks.authorizeWithRefreshToken(
         onError: () {

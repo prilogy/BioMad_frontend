@@ -7,7 +7,7 @@ class MemberModel {
   int genderId = null;
   
   DateTime dateBirthday = null;
-  MemberModel({this.name, this.genderId});
+  MemberModel({this.name, this.genderId, this.dateBirthday});
 
   @override
   String toString() {

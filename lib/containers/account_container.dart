@@ -1,6 +1,6 @@
 import 'package:api/api.dart';
 import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
-import 'package:biomad_frontend/helper/keys.dart';
+import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
@@ -74,7 +74,6 @@ class _AccountContainerState extends State<AccountContainer> {
                     ))),
         CustomListTile(
           onTap: () {
-            print('lol');
             Keys.rootNavigator.currentState.pushNamed(Routes.member);
           },
           height: 60,

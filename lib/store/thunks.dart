@@ -1,5 +1,5 @@
 import 'package:api/api.dart';
-import 'package:biomad_frontend/helper/keys.dart';
+import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/models/authorization.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/authorization/actions.dart';

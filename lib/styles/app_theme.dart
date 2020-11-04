@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'biomad_colors.dart';
 
 class AppTheme {
+  static double borderWidth = 2.0;
+
   AppTheme._();
 
   static final ThemeData light = ThemeData(
@@ -13,7 +15,7 @@ class AppTheme {
       canvasColor: BioMadColors.base[300],
       /* theme colors */
       primaryColor: BioMadColors.primary,
-      accentColor: BioMadColors.primary,
+      accentColor: BioMadColors.secondary,
       /* ------------ */
       appBarTheme: AppBarTheme(
           color: BioMadColors.base[100],
@@ -24,16 +26,15 @@ class AppTheme {
           primaryVariant: BioMadColors.primary[500],
           secondary: BioMadColors.primary,
           secondaryVariant: BioMadColors.primary[500],
-          surface: BioMadColors.base[400],
+          surface: BioMadColors.base[100],
           background: BioMadColors.base[100],
           error: BioMadColors.error,
           onPrimary: BioMadColors.base[100],
           onSecondary: BioMadColors.base[100],
-          onSurface: BioMadColors.base[100],
-          onBackground: BioMadColors.base,
+          onSurface: BioMadColors.base[400],
+          onBackground: BioMadColors.base[500],
           onError: BioMadColors.base,
           brightness: Brightness.light),
       textTheme: TextTheme(
-          subtitle1: TextStyle(fontWeight: FontWeight.w500),
-          caption: TextStyle(color: Colors.white)));
+          subtitle1: TextStyle(fontWeight: FontWeight.w500)));
 }

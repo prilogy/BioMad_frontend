@@ -1,11 +1,36 @@
 {
+  "misc": {
+    "add": "Add",
+    "delete": "Delete",
+    "edit": "Edit",
+    "save": "Save changes",
+    "save_success": "Changes have been saved successfully",
+    "save_error": "Unexpected error occurred while saving changes",
+    "yes": "Yes",
+    "no": "No",
+    "cancel": "Cancel",
+    "continue": "Continue",
+    "warning": "Warning"
+  },
+  "accept_dialog": {
+    "desc": "Вы не сможете отменить это действите, хотите продолжить?"
+  },
   "input_hint": {
     "name": "Name or alias",
     "email": "Email",
+    "date_birthday": "Birthday date",
+    "sex": "Sex",
     "not_empty": "This field shouldn't be empty",
     "email_invalid": "Email is not valid"
   },
   "snack_bar": {
     "log_out_due_refresh_token" : "Seems like you haven't been here for a long time, please, re-log in to to ensure security."
+  },
+  "member_screen": {
+    "new_profile": "New profile",
+    "delete_success": "Profile has been deleted successfully",
+    "delete_error": "Unexpected error occurred while deleting profile",
+    "add_success": "Profile has been added successfully",
+    "add_error": "Unexpected error occurred while creating profile"
   }
 }

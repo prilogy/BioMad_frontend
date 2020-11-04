@@ -1,4 +1,5 @@
 import 'package:biomad_frontend/styles/biomad_colors.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,7 @@ class AcceptDialog {
       AsyncCallback onNo}) {
     // set up the buttons
     Widget cancelButton = FlatButton(
-      child: Text(noText ?? "No"),
+      child: Text(noText ?? tr('misc.no')),
       onPressed: () async {
         Navigator.of(context, rootNavigator: true).pop('dialog');
         await onNo?.call();
@@ -20,7 +21,7 @@ class AcceptDialog {
     );
     Widget continueButton = FlatButton(
       child: Text(
-        yesText ?? "Yes",
+        yesText ?? tr('misc.yes'),
         style: TextStyle(color: BioMadColors.error),
       ),
       onPressed: () async {
@@ -31,9 +32,9 @@ class AcceptDialog {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text(titleText ?? "Предупреждение"),
+      title: Text(titleText ?? tr('misc.warning')),
       content: Text(descriptionText ??
-          "Это действие будет невозможно отменить, вы хотите продолжить?"),
+          tr('accept_dialog.desc')),
       actions: [
         cancelButton,
         continueButton,
