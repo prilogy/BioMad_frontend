@@ -1,8 +1,11 @@
 import 'package:biomad_frontend/containers/account_container.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
+import 'package:biomad_frontend/styles/color_opacity.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:biomad_frontend/styles/radius_values.dart';
+import 'package:biomad_frontend/widgets/custom_divider.dart';
+import 'package:biomad_frontend/widgets/custom_list_tile.dart';
 import 'package:biomad_frontend/widgets/nav_bar.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +37,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       body: Stack(children: [
         Scaffold(
@@ -64,6 +69,27 @@ class _MyHomePageState extends State<MyHomePage> {
             padding: EdgeInsets.symmetric(vertical: 0),
             children: [
               AccountContainer(),
+              CustomDivider(
+                text: tr('misc.other'),
+              ),
+              CustomListTile(
+                onTap: () {
+                  store.dispatch(StoreThunks.logOut());
+                },
+                prepend: Row(
+                  children: [
+                    Padding(
+                        padding: EdgeInsets.only(right: Indents.md),
+                        child: CircleAvatar(
+                          backgroundColor: theme.primaryColor.withOpacity(ColorAlphas.a10),
+                            child: Icon(
+                          Icons.exit_to_app,
+                          color: theme.primaryColor,
+                        ))),
+                    Text(tr('misc.log_out'), style: theme.textTheme.subtitle1)
+                  ],
+                ),
+              )
             ],
           ),
           borderRadius: BorderRadius.only(

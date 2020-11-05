@@ -1,9 +1,7 @@
 import 'package:biomad_frontend/config/env.dart';
 import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
-import 'package:biomad_frontend/models/authorization.dart';
 import 'package:biomad_frontend/router/main.dart';
-import 'package:biomad_frontend/screens/home_screen.dart';
 import 'package:biomad_frontend/services/localstorage.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
@@ -11,7 +9,6 @@ import 'package:biomad_frontend/store/user/actions.dart';
 import 'package:biomad_frontend/styles/app_theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
 import 'services/api.dart' as apiService;
@@ -31,10 +28,13 @@ void main() async {
   ));
 }
 
+var connectionChecked = false;
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback(checkConnection);
+    if(!connectionChecked)
+      WidgetsBinding.instance.addPostFrameCallback(checkConnection);
 
     return StoreProvider<AppState>(
       store: store,
@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
         navigatorKey: Keys.rootNavigator,
         onGenerateRoute: (settings) => RouteGenerator.generateRoute(settings),
         initialRoute:
-            store.state.authorization.isAuthorized ? '/main' : '/auth',
+            store.state.authorization == null || !store.state.authorization.isAuthorized ? '/auth' : '/main',
         builder: (context, child) => Scaffold(
           key: Keys.rootScaffold,
           body: child,
@@ -58,6 +58,9 @@ class MyApp extends StatelessWidget {
   /// If TIMEOUT - shows snack bar
   /// If user == null - logs out
   Future checkConnection(dynamic _) async {
+    if(store.state.authorization == null || !store.state.authorization.isAuthorized)
+      return;
+
     try {
       var user = await apiService.api.user.infoWithExceptionOnTimeOut();
       if (user != null)
@@ -65,7 +68,8 @@ class MyApp extends StatelessWidget {
       else
         store.dispatch(StoreThunks.logOut());
     } catch (e) {
-      SnackBarExtension.dark(tr('misc.offline_mode'), Duration(hours: 2));
+      SnackBarExtension.dark(tr('snack_bar.offline_mode'), duration: Duration(hours: 2));
     }
+    connectionChecked = true;
   }
 }

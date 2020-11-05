@@ -1,5 +1,6 @@
 {
   "misc": {
+    "app_name": "BioMad",
     "add": "Add",
     "delete": "Delete",
     "edit": "Edit",
@@ -11,8 +12,9 @@
     "cancel": "Cancel",
     "continue": "Continue",
     "warning": "Warning",
-    "offline_mode": "No connection, offline mode",
-    "logout": "Logged out successfully"
+    "other": "Other",
+    "log_out": "Log out",
+    "or": "or"
   },
   "accept_dialog": {
     "desc": "Вы не сможете отменить это действите, хотите продолжить?"
@@ -20,13 +22,17 @@
   "input_hint": {
     "name": "Name or alias",
     "email": "Email",
+    "password": "Password",
     "date_birthday": "Birthday date",
     "sex": "Sex",
     "not_empty": "This field shouldn't be empty",
     "email_invalid": "Email is not valid"
   },
   "snack_bar": {
-    "log_out_due_refresh_token" : "Seems like you haven't been here for a long time, please, re-log in to to ensure security."
+    "log_out_due_refresh_token" : "Seems like you haven't been here for a long time, please, re-log in to to ensure security.",
+    "offline_mode": "No connection, offline mode",
+    "logout": "Logged out successfully",
+    "app_exit": "Repeat action to exit application"
   },
   "member_screen": {
     "new_profile": "New profile",
@@ -44,5 +50,15 @@
     "add_profile": "Add profile",
     "your_account": "Your account",
     "my_profiles": "My profiles"
+  },
+  "auth_screen": {
+    "login": "Sign in",
+    "reset_password": "Reset password",
+    "log_in": "Log in",
+    "sign_up": "Sign up",
+    "login_with_social": "Or sign in with socials",
+    "log_in_error": "Invalid email or password",
+    "log_in_success": "Logged in successfully",
+    "sign_up_title": "Sign up"
   }
 }

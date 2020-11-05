@@ -51,7 +51,7 @@ class StoreThunks {
       store.dispatch(SetUser(null));
       store.dispatch(SetAuthorization(null));
       Keys.rootNavigator.currentState.pushReplacementNamed('/auth');
-      SnackBarExtension.info(snackBarText ?? tr('misc.logout'));
+      SnackBarExtension.info(snackBarText ?? tr('snack_bar.log_out'));
     };
   }
 }

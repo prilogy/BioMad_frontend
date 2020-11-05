@@ -23,6 +23,10 @@ dependencies:
   redux_thunk: ^0.3.0
   sliding_up_panel: ^1.0.2
   datetime_picker_formfield: ^1.0.0
+  flutter_svg: ^0.19.1
+  google_sign_in: ^4.5.1
+  flutter_facebook_login: ^3.0.0
+  flutter_vk_login: ^0.0.2
 
 dev_dependencies:
   flutter_test:
@@ -37,3 +41,6 @@ flutter:
     - .env
     - assets/translations/en.json
     - assets/translations/ru.json
+    - assets/svg/fb_logo.svg
+    - assets/svg/vk_logo.svg
+    - assets/svg/google_logo.svg
