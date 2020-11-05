@@ -24,11 +24,12 @@ class RouteGenerator {
 }
 
 class Routes {
+  static const auth = '/auth';
   static const main = '/main';
   static const member = '/member';
 }
 
-final authRoute = RouteBuilder('/auth', (args) => AuthScreen(), false);
+final authRoute = RouteBuilder(Routes.auth, (args) => AuthScreen(), false);
 
 final routes = [
   authRoute,

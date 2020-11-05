@@ -2,6 +2,7 @@ import 'package:api/api.dart';
 import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/models/authorization.dart';
+import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/authorization/actions.dart';
 import 'package:biomad_frontend/store/main.dart';
@@ -48,9 +49,9 @@ class StoreThunks {
 
   static ThunkAction<AppState> logOut([String snackBarText]) {
     return (Store<AppState> store) {
+      //Keys.rootNavigator.currentState.pushReplacementNamed(Routes.auth);
       store.dispatch(SetUser(null));
       store.dispatch(SetAuthorization(null));
-      Keys.rootNavigator.currentState.pushReplacementNamed('/auth');
       SnackBarExtension.info(snackBarText ?? tr('snack_bar.log_out'));
     };
   }

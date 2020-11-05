@@ -1,12 +1,12 @@
 import 'package:api/api.dart';
-import 'package:biomad_frontend/extensions/i18n_helper.dart';
+import 'file:///Z:/flutter/biomad_frontend/lib/helpers/i18n_helper.dart';
 import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
-import 'package:biomad_frontend/styles/color_opacity.dart';
+import 'package:biomad_frontend/styles/color_alphas.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:biomad_frontend/widgets/block_base_widget.dart';
 import 'package:biomad_frontend/widgets/custom_list_builder.dart';

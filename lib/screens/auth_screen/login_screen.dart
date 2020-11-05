@@ -1,14 +1,15 @@
 import 'package:api/api.dart';
-import 'package:biomad_frontend/extensions/i18n_helper.dart';
+import 'file:///Z:/flutter/biomad_frontend/lib/helpers/i18n_helper.dart';
 import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
 import 'package:biomad_frontend/helpers/text_field_validators.dart';
+import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/services/social_auth.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
-import 'package:biomad_frontend/styles/color_opacity.dart';
+import 'package:biomad_frontend/styles/color_alphas.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:biomad_frontend/widgets/block_base_widget.dart';
 import 'package:biomad_frontend/widgets/custom_button.dart';
@@ -117,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 SnackBarExtension.success(
                                     _tr('log_in_success'));
                                 Keys.rootNavigator.currentState
-                                    .pushReplacementNamed('/main');
+                                    .pushReplacementNamed(Routes.main);
                               }));
                           },
                           margin: EdgeInsets.only(left: Indents.sm),

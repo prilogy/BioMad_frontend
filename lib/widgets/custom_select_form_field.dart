@@ -1,6 +1,6 @@
 import 'package:biomad_frontend/helpers/indents_mixin.dart';
 import 'package:biomad_frontend/helpers/text_field_validators.dart';
-import 'package:biomad_frontend/styles/color_opacity.dart';
+import 'package:biomad_frontend/styles/color_alphas.dart';
 import 'package:biomad_frontend/styles/decorations.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:flutter/material.dart';

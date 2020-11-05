@@ -1,5 +1,5 @@
 import 'package:api/api.dart';
-import 'package:biomad_frontend/extensions/i18n_helper.dart';
+import 'file:///Z:/flutter/biomad_frontend/lib/helpers/i18n_helper.dart';
 import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
 import 'package:biomad_frontend/helpers/accept_dialog.dart';
 import 'package:biomad_frontend/helpers/date_time_formats.dart';

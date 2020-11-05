@@ -2,7 +2,7 @@ import 'package:biomad_frontend/styles/app_theme.dart';
 import 'package:biomad_frontend/styles/radius_values.dart';
 import 'package:flutter/material.dart';
 
-import 'color_opacity.dart';
+import 'color_alphas.dart';
 
 class Decorations {
   static BorderRadius borderRadius = BorderRadius.all(Radius.circular(RadiusValues.less));
