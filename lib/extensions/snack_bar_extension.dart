@@ -41,4 +41,12 @@ extension SnackBarExtension on SnackBar {
       duration: duration,
     ));
   }
+
+  static void dark(String text,  [Duration duration = _defaultDuration]) {
+    SnackBarExtension.show(SnackBar(
+      content: Text(text, style: TextStyle(color: BioMadColors.base[100]),),
+      backgroundColor: BioMadColors.base[500],
+      duration: duration,
+    ));
+  }
 }

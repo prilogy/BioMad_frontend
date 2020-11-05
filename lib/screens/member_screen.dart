@@ -67,7 +67,7 @@ class _MemberScreenState extends State<MemberScreen> {
             widget.member.id != store.state.authorization.currentMemberId
         ? FlatButton(
             child:
-                Text('_tr.delete', style: TextStyle(color: theme.errorColor)),
+                Text(_tr('delete'), style: TextStyle(color: theme.errorColor)),
             onPressed: () {
               AcceptDialog.show(context, onYes: () async {
                 var res = await api.member.delete(widget.member.id);

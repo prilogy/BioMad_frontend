@@ -15,18 +15,19 @@ void init() {
   dio.options.connectTimeout = 4000;
   dio.interceptors
       .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
-    var customHeaders = {"Authorization": store.state.authorization?.accessToken == null ? null : 'Bearer ${store.state.authorization.accessToken}'};
+    var customHeaders = {
+      "Authorization": store.state.authorization?.accessToken == null
+          ? null
+          : 'Bearer ${store.state.authorization.accessToken}'
+    };
     options.headers.addAll(customHeaders);
     return options;
-  }));
-  dio.interceptors.add(InterceptorsWrapper(onResponse: (r) async {
+  }, onResponse: (r) async {
     print('[ API REQUEST ] - CODE ${r.statusCode}');
-    if(r.statusCode == 401 && store.state.authorization.isAuthorized)
-      store.dispatch(StoreThunks.authorizeWithRefreshToken(
-        onError: () {
-          Keys.rootNavigator.currentState.pushReplacementNamed('/auth');
-          SnackBarExtension.info(tr('snack_bar.log_out_due_refresh_token'));
-        }
-      ));
+    if (r.statusCode == 401 && store.state.authorization.isAuthorized)
+      store.dispatch(StoreThunks.authorizeWithRefreshToken(onError: () {
+        store.dispatch(
+            StoreThunks.logOut(tr('snack_bar.log_out_due_refresh_token')));
+      }));
   }));
 }

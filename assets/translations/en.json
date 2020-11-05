@@ -10,7 +10,9 @@
     "no": "No",
     "cancel": "Cancel",
     "continue": "Continue",
-    "warning": "Warning"
+    "warning": "Warning",
+    "offline_mode": "No connection, offline mode",
+    "logout": "Logged out successfully"
   },
   "accept_dialog": {
     "desc": "Вы не сможете отменить это действите, хотите продолжить?"
