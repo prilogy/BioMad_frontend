@@ -63,6 +63,7 @@ class MyApp extends StatelessWidget {
 
     try {
       var user = await apiService.api.user.infoWithExceptionOnTimeOut();
+      print('user: $user');
       if (user != null)
         store.dispatch(SetUser(user));
       else

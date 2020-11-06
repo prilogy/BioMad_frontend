@@ -67,7 +67,8 @@
     "create_account": "Create account",
     "sign_up_success": "Sign up succeeded, now you can log in with filled email and password!",
     "sign_up_error": "Something went wrong during process of sign up. Try again. We are sorry :(",
-    "sign_in_social_error": "Unexpected error while trying to log in with social network"
+    "sign_in_social_error": "Unexpected error while trying to log in with social network",
+    "email_in_use": "This Email is already in use"
   },
   "member_container": {
     "your_name_or_alias": "Your name or alias"

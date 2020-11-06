@@ -57,11 +57,10 @@ class AuthApi extends ApiBase<AuthApi> {
       {String token, String type}) async {
     try {
       var url = '${v}/auth/signUp/${type}/identity';
-      var response = await dio.post(url, data: {'token': token});
-
+      var response = await dio.post(url, data: {"token": token});
+      print(response);
       return SocialAuthenticationIdentity.fromJson(response.data);
     } on DioError catch (e) {
-      print(e);
       return null;
     }
   }
@@ -71,11 +70,13 @@ class AuthApi extends ApiBase<AuthApi> {
       SignUpWithSocialAccountModel model, String type) async {
     try {
       var url = '${v}/auth/signUp/${type}';
-      var response = await dio.post(url, data: model);
-
+      print(url);
+      await dio.post(url, data: model);
       return true;
     } on DioError catch (e) {
-      return false;
+      if(e.response?.statusCode == 409)
+        return false;
+      return null;
     }
   }
 }

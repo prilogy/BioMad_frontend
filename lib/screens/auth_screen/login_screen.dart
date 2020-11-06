@@ -137,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             onPressed: () async {
                               var googleAuth = GoogleAuthService();
                               var token = await googleAuth.getToken();
-                              print(token ?? "WTF");
+
                               await _authWithSocial(
                                   context,
                                   SocialAccountProvider.google,
@@ -148,13 +148,30 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           SocialAuthIcon(
                             svgPath: FacebookAuthService.svgPath,
-                            onPressed: () {},
+                            onPressed: () async {
+                              var fbAuth = FacebookAuthService();
+                              var token = await fbAuth.getToken();
+                              print(token);
+
+                              await _authWithSocial(
+                                  context,
+                                  SocialAccountProvider.facebook,
+                                  token);
+                            },
                             backgroundColor: FacebookAuthService.color,
                             svgSize: 22,
                           ),
                           SocialAuthIcon(
                             svgPath: VkAuthService.svgPath,
-                            onPressed: () {},
+                            onPressed: () async {
+                              var vkAuth = VkAuthService();
+                              var token = await vkAuth.getToken();
+
+                              await _authWithSocial(
+                                  context,
+                                  SocialAccountProvider.vk,
+                                  token);
+                            },
                             backgroundColor: VkAuthService.color,
                             svgSize: 15,
                           )
@@ -180,15 +197,18 @@ class _LoginScreenState extends State<LoginScreen> {
     if (token == null) {
       var socialName =
           provider.name[0].toUpperCase() + provider.name.substring(1);
-      SnackBarExtension.error(tr('auth_scree.sign_in_social_error'));
+      SnackBarExtension.error(tr('auth_screen.sign_in_social_error'));
       return;
     }
 
     var r = await api.auth.logInWithSocial(token: token, type: provider.name);
-    print('r: $r');
     if (r == null) {
+      print('here');
       var identity = await api.auth.signUpWithSocialInfo(token: token, type: provider.name);
-      print('ident: $identity');
+      if(identity == null) {
+        SnackBarExtension.error(tr('auth_screen.sign_in_social_error'));
+        return;
+      }
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) =>
               SignUpScreen(socialIdentity: identity, socialType: provider.name)));

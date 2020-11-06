@@ -65,6 +65,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         children: [
                           MemberContainer(
                             null,
+                            prefilledName: widget.socialIdentity?.name,
                             onChange: (x) {
                               print(x.toJson());
                               setState(() {
@@ -146,7 +147,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                               dateBirthday: _memberModel.dateBirthday
                                             );
 
-                                            print(model.toJson());
                                             bool r;
                                             if(widget.socialIdentity != null)
                                               r = await api.auth.signUpWithSocial(SignUpWithSocialAccountModel(
@@ -157,15 +157,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                   email: _emailController.text,
                                                   dateBirthday: _memberModel.dateBirthday,
                                                 identity: widget.socialIdentity
-                                              ), 'vk');
+                                              ), widget.socialType);
                                               else r = await api.auth.signUp(model);
 
+                                              if(r != false)
                                               Keys.rootNavigator.currentState.pushReplacementNamed(Routes.auth);
 
-                                            if(r)
+                                            if(r == true)
                                               SnackBarExtension.success(tr('auth_screen.sign_up_success'));
-                                            else
+                                            else if(r == null)
                                               SnackBarExtension.error(tr('auth_screen.sign_up_error'));
+                                            else if(r == false)
+                                              SnackBarExtension.info(tr('auth_screen.email_in_use'));
 
                                           }
                                         }, text: tr('auth_screen.create_account'),)

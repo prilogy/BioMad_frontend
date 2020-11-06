@@ -51,9 +51,16 @@ class _MemberContainerState extends State<MemberContainer> {
 
   @override
   void initState() {
+    if(widget.prefilledName != null)
+      setState(() {
+        _nameController.text = widget.prefilledName;
+        _profilePreviewName = widget.prefilledName;
+        _avatarColor = colors[randomInRange(0, colors.length - 1)];
+      });
+
     if (widget.member != null)
       setState(() {
-        final name = widget.prefilledName != null ? widget.prefilledName : widget.member.name;
+        final name = widget.member.name;
         _nameController.text = name;
         _profilePreviewName = name;
         _dateBirthDayController.text =

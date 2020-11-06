@@ -1,5 +1,7 @@
 library api.api;
 
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'dart:core';
 import 'dart:async';
