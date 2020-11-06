@@ -192,7 +192,7 @@ class SocialAuthIcon extends StatelessWidget {
           BoxShadow(
               blurRadius: 20,
               color:
-                  (shadowColor ?? backgroundColor).withOpacity(ColorAlphas.a10),
+                  (shadowColor ?? backgroundColor).withOpacity(ColorAlphas.a30),
               spreadRadius: 1)
         ],
       ),

@@ -9,13 +9,21 @@
 .history
 .svn/
 
+*.jks
+*.mp4
+
+store.keystore
+key.properties
+
+android/app/src/main/res/values/strings.xml
+
 # IntelliJ related
 *.iml
 *.ipr
 *.iws
 .idea/
 
-**/.env
+.env
 
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
@@ -24,7 +32,6 @@
 
 # Flutter/Dart/Pub related
 **/doc/api/
-**/ios/Flutter/.last_build_id
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
@@ -41,3 +48,8 @@ app.*.symbols
 
 # Obfuscation related
 app.*.map.json
+
+# Exceptions to above rules.
+!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+
+.vscode/
