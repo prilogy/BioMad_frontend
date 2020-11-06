@@ -59,6 +59,7 @@ class CustomDateFormField extends StatelessWidget with IndentsMixin {
         padding: const EdgeInsets.only(top: 2.0),
         child: DateTimeField(
           format: DateTimeFormats.defaultDate,
+          onChanged: onDateSelected ?? (x) {},
           onShowPicker: (context, currentValue) async {
             DateTime date;
             if(type != CustomDateFormFieldType.time)

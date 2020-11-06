@@ -1,11 +1,8 @@
 part of api.api;
 
 class MemberModel {
-  
   String name = null;
-  
   int genderId = null;
-  
   DateTime dateBirthday = null;
   MemberModel({this.name, this.genderId, this.dateBirthday});
 

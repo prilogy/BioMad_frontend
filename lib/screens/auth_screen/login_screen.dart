@@ -5,6 +5,7 @@ import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
 import 'package:biomad_frontend/helpers/text_field_validators.dart';
 import 'package:biomad_frontend/router/main.dart';
+import 'package:biomad_frontend/screens/auth_screen/sign_up_screen.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/services/social_auth.dart';
 import 'package:biomad_frontend/store/main.dart';
@@ -72,9 +73,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     CustomTextFormField(
                       icon: Icon(Icons.alternate_email),
                       controller: _emailController,
-                      formValidator: () {
-                        return _formKey?.currentState?.validate();
-                      },
                       validator: TextFieldValidators.isEmail,
                       labelText: tr('input_hint.email'),
                       hintText: 'example@email.com',
@@ -83,9 +81,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       margin: EdgeInsets.only(bottom: Indents.sm),
                       icon: Icon(Icons.lock),
                       controller: _passwordController,
-                      formValidator: () {
-                        return _formKey?.currentState?.validate();
-                      },
                       validator: TextFieldValidators.isNotEmpty,
                       labelText: tr('input_hint.password'),
                       obscureText: true,
@@ -94,7 +89,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         CustomButton.flat(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(builder: (x) => SignUpScreen()));
+                          },
                           text: _tr('sign_up'),
                         ),
                         CustomButton.raised(

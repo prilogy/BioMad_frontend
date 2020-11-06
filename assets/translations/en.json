@@ -14,7 +14,8 @@
     "warning": "Warning",
     "other": "Other",
     "log_out": "Log out",
-    "or": "or"
+    "or": "or",
+    "years_old": "Years old"
   },
   "accept_dialog": {
     "desc": "Вы не сможете отменить это действите, хотите продолжить?"
@@ -31,11 +32,12 @@
   "snack_bar": {
     "log_out_due_refresh_token" : "Seems like you haven't been here for a long time, please, re-log in to to ensure security.",
     "offline_mode": "No connection, offline mode",
-    "logout": "Logged out successfully",
+    "log_out": "Logged out successfully",
     "app_exit": "Repeat action to exit application"
   },
   "member_screen": {
     "new_profile": "New profile",
+    "edit_profile": "Edit profile",
     "delete_success": "Profile has been deleted successfully",
     "delete_error": "Unexpected error occurred while deleting profile",
     "add_success": "Profile has been added successfully",
