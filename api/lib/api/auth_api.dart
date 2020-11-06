@@ -36,21 +36,19 @@ class AuthApi extends ApiBase<AuthApi> {
       var response = await dio.post(url, data: model);
       return AuthenticationResult.fromJson(response.data);
     } on DioError catch (e) {
-      print(e);
       return null;
     }
   }
 
   /// Signs up
-  Future<AuthenticationResult> signUp(SignUpModel model) async {
+  Future<bool> signUp(SignUpModel model) async {
     try {
       var url = '${v}/auth/signUp';
       var response = await dio.post(url, data: model);
 
-      return AuthenticationResult.fromJson(response.data);
+      return true;
     } on DioError catch (e) {
-      print(e);
-      return null;
+      return false;
     }
   }
 
@@ -69,16 +67,15 @@ class AuthApi extends ApiBase<AuthApi> {
   }
 
   /// Signs up with social identity
-  Future<AuthenticationResult> signUpWithSocial(
+  Future<bool> signUpWithSocial(
       SignUpWithSocialAccountModel model, String type) async {
     try {
       var url = '${v}/auth/signUp/${type}';
       var response = await dio.post(url, data: model);
 
-      return AuthenticationResult.fromJson(response.data);
+      return true;
     } on DioError catch (e) {
-      print(e);
-      return null;
+      return false;
     }
   }
 }

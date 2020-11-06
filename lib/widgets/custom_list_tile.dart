@@ -13,7 +13,7 @@ class CustomListTile extends StatelessWidget {
   final VoidCallback onTap;
 
   CustomListTile(
-      {this.height = 55,
+      {this.height = 60,
       this.prepend,
       this.append,
       this.onTap,

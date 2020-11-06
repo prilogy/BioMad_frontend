@@ -17,11 +17,14 @@ class Member {
   int userId = null;
   
   User user = null;
+
+  String color = null;
+
   Member();
 
   @override
   String toString() {
-    return 'Member[id=$id, name=$name, dateCreatedAt=$dateCreatedAt, dateBirthday=$dateBirthday, genderId=$genderId, gender=$gender, userId=$userId, user=$user, ]';
+    return 'Member[id=$id, name=$name, dateCreatedAt=$dateCreatedAt, dateBirthday=$dateBirthday, genderId=$genderId, gender=$gender, userId=$userId, user=$user, color=$color ]';
   }
 
   Member.fromJson(Map<String, dynamic> json) {
@@ -39,6 +42,7 @@ class Member {
       null :
       Gender.fromJson(json['gender']);
     userId = json['userId'];
+    color = json['color'];
     user = (json['user'] == null) ?
       null :
       User.fromJson(json['user']);
@@ -61,6 +65,8 @@ class Member {
       json['userId'] = userId;
     if (user != null)
       json['user'] = user;
+    if(color != null)
+      json['color'] = color;
     return json;
   }
 

@@ -6,9 +6,11 @@ import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
+import 'package:biomad_frontend/styles/avatar_sizes.dart';
 import 'package:biomad_frontend/styles/color_alphas.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:biomad_frontend/widgets/block_base_widget.dart';
+import 'package:biomad_frontend/widgets/custom_circle_avatar.dart';
 import 'package:biomad_frontend/widgets/custom_list_builder.dart';
 import 'package:biomad_frontend/widgets/custom_list_tile.dart';
 import 'package:biomad_frontend/widgets/member_list_tile.dart';
@@ -81,12 +83,12 @@ class _AccountContainerState extends State<AccountContainer> {
           onTap: () {
             Keys.rootNavigator.currentState.pushNamed(Routes.member);
           },
-          height: 60,
           prepend: Row(
             children: [
               Padding(
                 padding: const EdgeInsets.only(right: Indents.md),
-                child: CircleAvatar(
+                child: CustomCircleAvatar(
+                  radius: AvatarSizes.md,
                   backgroundColor:
                       theme.primaryColor.withOpacity(ColorAlphas.a10),
                   child: Icon(

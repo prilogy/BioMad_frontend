@@ -19,6 +19,7 @@ class GoogleAuthService implements SocialAuthService {
   @override
   Future<String> getToken() async {
     var result = await googleSignIn.signIn();
+    print(result);
     var googleKey = await result.authentication;
     return googleKey?.idToken ?? null;
   }

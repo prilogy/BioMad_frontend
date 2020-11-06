@@ -5,7 +5,12 @@ class SocialAccountProvider {
   int id = null;
   
   String name = null;
-  SocialAccountProvider();
+
+  static final SocialAccountProvider google = SocialAccountProvider(name: 'Google', id: 1);
+  static final SocialAccountProvider vk = SocialAccountProvider(name: 'VK', id: 2);
+  static final SocialAccountProvider facebook = SocialAccountProvider(name: 'Facebook', id: 3);
+
+  SocialAccountProvider({this.id, this.name});
 
   @override
   String toString() {

@@ -13,14 +13,15 @@ class SignUpWithSocialAccountModel {
   String password = null;
   
   SocialAuthenticationIdentity identity = null;
+  String color = null;
 
 
   SignUpWithSocialAccountModel({this.email, this.name, this.genderId,
-      this.dateBirthday, this.password, this.identity});
+      this.dateBirthday, this.password, this.identity, this.color});
 
   @override
   String toString() {
-    return 'SignUpWithSocialAccountModel[email=$email, name=$name, genderId=$genderId, dateBirthday=$dateBirthday, password=$password, identity=$identity, ]';
+    return 'SignUpWithSocialAccountModel[email=$email, name=$name, genderId=$genderId, dateBirthday=$dateBirthday, password=$password, identity=$identity, color=$color ]';
   }
 
   SignUpWithSocialAccountModel.fromJson(Map<String, dynamic> json) {
@@ -32,6 +33,7 @@ class SignUpWithSocialAccountModel {
       null :
       DateTime.parse(json['dateBirthday']);
     password = json['password'];
+    color = json['color'];
     identity = (json['identity'] == null) ?
       null :
       SocialAuthenticationIdentity.fromJson(json['identity']);
@@ -51,6 +53,8 @@ class SignUpWithSocialAccountModel {
       json['password'] = password;
     if (identity != null)
       json['identity'] = identity;
+    if(color != null)
+      json['color'] = color;
     return json;
   }
 

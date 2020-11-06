@@ -10,13 +10,14 @@ class SignUpModel {
   DateTime dateBirthday = null;
 
   String password = null;
+  String color = null;
 
   SignUpModel(
-      {this.email, this.name, this.genderId, this.dateBirthday, this.password});
+      {this.email, this.name, this.genderId, this.dateBirthday, this.password, this.color});
 
   @override
   String toString() {
-    return 'SignUpModel[email=$email, name=$name, genderId=$genderId, dateBirthday=$dateBirthday, password=$password, ]';
+    return 'SignUpModel[email=$email, name=$name, genderId=$genderId, dateBirthday=$dateBirthday, password=$password, color=$color ]';
   }
 
   SignUpModel.fromJson(Map<String, dynamic> json) {
@@ -28,6 +29,7 @@ class SignUpModel {
         ? null
         : DateTime.parse(json['dateBirthday']);
     password = json['password'];
+    color = json['color'];
   }
 
   Map<String, dynamic> toJson() {
@@ -39,6 +41,7 @@ class SignUpModel {
       json['dateBirthday'] =
           dateBirthday == null ? null : dateBirthday.toUtc().toIso8601String();
     if (password != null) json['password'] = password;
+    if(color != null) json['color'] = color;
     return json;
   }
 

@@ -24,10 +24,12 @@
     "name": "Name or alias",
     "email": "Email",
     "password": "Password",
+    "re_password": "Repeat password",
     "date_birthday": "Birthday date",
     "sex": "Sex",
     "not_empty": "This field shouldn't be empty",
-    "email_invalid": "Email is not valid"
+    "email_invalid": "Email is not valid",
+    "re_password_invalid": "Password should match"
   },
   "snack_bar": {
     "log_out_due_refresh_token" : "Seems like you haven't been here for a long time, please, re-log in to to ensure security.",
@@ -61,6 +63,13 @@
     "login_with_social": "Or sign in with socials",
     "log_in_error": "Invalid email or password",
     "log_in_success": "Logged in successfully",
-    "sign_up_title": "Sign up"
+    "sign_up_title": "Sign up",
+    "create_account": "Create account",
+    "sign_up_success": "Sign up succeeded, now you can log in with filled email and password!",
+    "sign_up_error": "Something went wrong during process of sign up. Try again. We are sorry :(",
+    "sign_in_social_error": "Unexpected error while trying to log in with social network"
+  },
+  "member_container": {
+    "your_name_or_alias": "Your name or alias"
   }
 }

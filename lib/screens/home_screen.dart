@@ -3,9 +3,11 @@ import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
+import 'package:biomad_frontend/styles/avatar_sizes.dart';
 import 'package:biomad_frontend/styles/color_alphas.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:biomad_frontend/styles/radius_values.dart';
+import 'package:biomad_frontend/widgets/custom_circle_avatar.dart';
 import 'package:biomad_frontend/widgets/custom_divider.dart';
 import 'package:biomad_frontend/widgets/custom_list_tile.dart';
 import 'package:biomad_frontend/widgets/nav_bar.dart';
@@ -78,13 +80,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 onTap: () {
                   Keys.rootNavigator.currentState.pushReplacementNamed(Routes.auth);
                   WidgetsBinding.instance.addPostFrameCallback((x) => store.dispatch(StoreThunks.logOut()));
-
                 },
                 prepend: Row(
                   children: [
                     Padding(
                         padding: EdgeInsets.only(right: Indents.md),
-                        child: CircleAvatar(
+                        child: CustomCircleAvatar(
+                          radius: AvatarSizes.md,
                           backgroundColor: theme.primaryColor.withOpacity(ColorAlphas.a10),
                             child: Icon(
                           Icons.exit_to_app,

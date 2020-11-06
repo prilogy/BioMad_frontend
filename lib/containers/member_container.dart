@@ -1,10 +1,11 @@
 import 'package:api/api.dart';
+import 'package:biomad_frontend/helpers/color_helpers.dart';
 import 'package:biomad_frontend/helpers/date_time_formats.dart';
 import 'package:biomad_frontend/helpers/random.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
-import 'package:biomad_frontend/widgets/CustomCircleAvatar.dart';
+import 'package:biomad_frontend/widgets/custom_circle_avatar.dart';
 import 'package:biomad_frontend/widgets/custom_date_form_field.dart';
 import 'package:biomad_frontend/widgets/custom_select_form_field.dart';
 import 'package:biomad_frontend/widgets/custom_text_form_field.dart';
@@ -15,9 +16,10 @@ import 'package:flutter/material.dart';
 class MemberContainer extends StatefulWidget {
   final Member member;
   final bool changeColor;
+  final String prefilledName;
   final void Function(MemberModel) onChange;
 
-  MemberContainer(this.member, {this.changeColor = true, this.onChange});
+  MemberContainer(this.member, {this.changeColor = true, this.onChange, this.prefilledName});
 
   @override
   _MemberContainerState createState() => _MemberContainerState();
@@ -36,8 +38,9 @@ class _MemberContainerState extends State<MemberContainer> {
   MemberModel getMemberModel() => MemberModel(
       name: _nameController.text,
       genderId: _genderId,
+      color: ColorHelpers.toHex(_avatarColor, ),
       dateBirthday:
-          DateTimeFormats.defaultDate.parse(_dateBirthDayController.text));
+          DateTimeFormats.defaultDate.parse(_dateBirthDayController.text),);
 
   int getAgeFromDate(DateTime date) =>
       DateTime.now().difference(date).inDays ~/ 365;
@@ -50,12 +53,15 @@ class _MemberContainerState extends State<MemberContainer> {
   void initState() {
     if (widget.member != null)
       setState(() {
-        _nameController.text = widget.member.name;
-        _profilePreviewName = widget.member.name;
+        final name = widget.prefilledName != null ? widget.prefilledName : widget.member.name;
+        _nameController.text = name;
+        _profilePreviewName = name;
         _dateBirthDayController.text =
             DateTimeFormats.defaultDate.format(widget.member.dateBirthday);
         _profilePreviewAge = getAgeFromDate(widget.member.dateBirthday);
         _genderId = widget.member.genderId;
+        if(widget.member.color != null)
+          _avatarColor = ColorHelpers.fromHex(widget.member.color);
       });
 
     getGenders().then((x) => {
@@ -121,13 +127,17 @@ class _MemberContainerState extends State<MemberContainer> {
                     children: [
                       Row(
                         children: [
-                          Text(
+                          if(_profilePreviewName == null || _profilePreviewName == '')
+                            Text(tr('member_container.your_name_or_alias'), style: theme.textTheme.headline6
+                                .merge(TextStyle(color: theme.canvasColor)))
+                          else
+                            Text(
                             _nameController.text,
                             style: theme.textTheme.headline6,
                           ),
                           if (_profilePreviewAge != null)
                             Text(
-                              (_profilePreviewName?.length != 0 ? ', ' : '') +
+                              ', ' +
                                   _profilePreviewAge.toString(),
                               style: theme.textTheme.headline6
                                   .merge(TextStyle(color: theme.canvasColor)),

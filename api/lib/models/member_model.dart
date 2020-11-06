@@ -4,7 +4,9 @@ class MemberModel {
   String name = null;
   int genderId = null;
   DateTime dateBirthday = null;
-  MemberModel({this.name, this.genderId, this.dateBirthday});
+  String color = null;
+
+  MemberModel({this.name, this.genderId, this.dateBirthday, this.color});
 
   @override
   String toString() {
@@ -15,6 +17,7 @@ class MemberModel {
     if (json == null) return;
     name = json['name'];
     genderId = json['genderId'];
+    color = json['color'];
     dateBirthday = (json['dateBirthday'] == null) ?
       null :
       DateTime.parse(json['dateBirthday']);
@@ -28,6 +31,8 @@ class MemberModel {
       json['genderId'] = genderId;
     if (dateBirthday != null)
       json['dateBirthday'] = dateBirthday == null ? null : dateBirthday.toUtc().toIso8601String();
+    if(color != null)
+      json['color'] = color;
     return json;
   }
 

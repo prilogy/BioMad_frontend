@@ -10,8 +10,8 @@ class ColorHelpers {
   }
 
   /// Prefixes a hash sign if [leadingHashSign] is set to `true` (default is `true`).
-  static String toHex(Color color, {bool leadingHashSign = true}) => '${leadingHashSign ? '#' : ''}'
-      '${color.alpha.toRadixString(16).padLeft(2, '0')}'
+  static String toHex(Color color, {bool leadingHashSign = true, bool hasFf = false}) => '${leadingHashSign ? '#' : ''}'
+      '${hasFf ? color.alpha.toRadixString(16).padLeft(2, '0') : ''}'
       '${color.red.toRadixString(16).padLeft(2, '0')}'
       '${color.green.toRadixString(16).padLeft(2, '0')}'
       '${color.blue.toRadixString(16).padLeft(2, '0')}';

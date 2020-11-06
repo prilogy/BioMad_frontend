@@ -12,7 +12,7 @@ import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
-import 'package:biomad_frontend/widgets/CustomCircleAvatar.dart';
+import 'package:biomad_frontend/widgets/custom_circle_avatar.dart';
 import 'package:biomad_frontend/widgets/block_base_widget.dart';
 import 'package:biomad_frontend/widgets/custom_date_form_field.dart';
 import 'package:biomad_frontend/widgets/custom_future_builder.dart';
