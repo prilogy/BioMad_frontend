@@ -15,7 +15,7 @@
 store.keystore
 key.properties
 
-android/app/src/main/res/values/strings.xml
+**/strings.xml
 
 # IntelliJ related
 *.iml
