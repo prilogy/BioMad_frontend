@@ -66,7 +66,7 @@ class MemberListTile extends StatelessWidget {
           IconButton(
               tooltip: tr('misc.edit'),
               icon: Icon(
-                Icons.settings,
+                Icons.edit,
                 color: theme.primaryColor,
               ),
               onPressed: onTap),
