@@ -53,7 +53,9 @@
   "account_container": {
     "add_profile": "Добавить профиль",
     "your_account": "Ваш аккаунт",
-    "my_profiles": "Мои профили"
+    "my_profiles": "Мои профили",
+    "current_profile": "Текущий пользователь",
+    "socials": "Подключенные социацльные сети"
   },
   "auth_screen": {
     "login": "Вход",
@@ -71,6 +73,7 @@
     "email_in_use": "Этот Email уже используется"
   },
   "member_container": {
-    "your_name_or_alias": "Ваше имя или псевдоним"
+    "your_name_or_alias": "Ваше имя или псевдоним",
+    "title": "Ваши профили"
   }
 }

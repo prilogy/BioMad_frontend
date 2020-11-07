@@ -12,8 +12,10 @@ class CustomListTile extends StatelessWidget {
   final EdgeInsetsGeometry tilePadding;
   final VoidCallback onTap;
 
+  static const double baseHeight = 60;
+
   CustomListTile(
-      {this.height = 60,
+      {this.height = baseHeight,
       this.prepend,
       this.append,
       this.onTap,

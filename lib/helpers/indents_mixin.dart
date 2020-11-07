@@ -4,10 +4,10 @@ mixin IndentsMixin {
   EdgeInsetsGeometry get padding;
   EdgeInsetsGeometry get margin;
 
-  Widget withIndents({Widget child}) {
+  Widget withIndents({Widget child, bool ignorePadding=false, bool ignoreMargin=false}) {
     return Container(
-      padding: padding,
-      margin: margin,
+      padding: !ignorePadding ? padding : null,
+      margin: !ignoreMargin ? margin : null,
       child: child,
     );
   }

@@ -36,7 +36,7 @@ class CustomButton extends StatelessWidget with IndentsMixin {
       this.radius = RadiusValues.less,
       this.iconIndent = Indents.md,
       this.prependIcon,
-      this.disabled = false})
+      this.disabled = false,})
       : this.type = CustomButtonType.raised;
 
   CustomButton.flat(
@@ -69,6 +69,7 @@ class CustomButton extends StatelessWidget with IndentsMixin {
 
   @override
   Widget build(BuildContext context) {
+    final innerPadding = padding;
     final theme = Theme.of(context);
     Color tColor = textColor ?? null;
     Color bgColor = backgroundColor ?? null;
@@ -149,7 +150,9 @@ class CustomButton extends StatelessWidget with IndentsMixin {
     switch (type) {
       case CustomButtonType.raised:
         return withIndents(
+          ignorePadding: true,
           child: RaisedButton(
+            padding: padding,
               splashColor: tColor.withOpacity(ColorAlphas.a30),
               hoverColor: tColor.withOpacity(ColorAlphas.a10),
               focusColor: tColor.withOpacity(ColorAlphas.a10),
@@ -162,7 +165,9 @@ class CustomButton extends StatelessWidget with IndentsMixin {
         break;
       case CustomButtonType.flat:
         return withIndents(
+          ignorePadding: true,
           child: FlatButton(
+              padding: padding,
               splashColor: tColor.withOpacity(ColorAlphas.a30),
               hoverColor: tColor.withOpacity(ColorAlphas.a10),
               focusColor: tColor.withOpacity(ColorAlphas.a10),
@@ -175,7 +180,9 @@ class CustomButton extends StatelessWidget with IndentsMixin {
         break;
       case CustomButtonType.outlined:
         return withIndents(
+          ignorePadding: true,
           child: FlatButton(
+              padding: padding,
               splashColor: tColor.withOpacity(ColorAlphas.a30),
               hoverColor: tColor.withOpacity(ColorAlphas.a10),
               focusColor: tColor.withOpacity(ColorAlphas.a10),

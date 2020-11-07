@@ -67,7 +67,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             null,
                             prefilledName: widget.socialIdentity?.name,
                             onChange: (x) {
-                              print(x.toJson());
                               setState(() {
                                 _memberModel = x;
                               });

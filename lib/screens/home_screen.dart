@@ -73,29 +73,6 @@ class _MyHomePageState extends State<MyHomePage> {
             padding: EdgeInsets.symmetric(vertical: 0),
             children: [
               AccountContainer(),
-              CustomDivider(
-                text: tr('misc.other'),
-              ),
-              CustomListTile(
-                onTap: () {
-                  Keys.rootNavigator.currentState.pushReplacementNamed(Routes.auth);
-                  WidgetsBinding.instance.addPostFrameCallback((x) => store.dispatch(StoreThunks.logOut()));
-                },
-                prepend: Row(
-                  children: [
-                    Padding(
-                        padding: EdgeInsets.only(right: Indents.md),
-                        child: CustomCircleAvatar(
-                          radius: AvatarSizes.md,
-                          backgroundColor: theme.primaryColor.withOpacity(ColorAlphas.a10),
-                            child: Icon(
-                          Icons.exit_to_app,
-                          color: theme.primaryColor,
-                        ))),
-                    Text(tr('misc.log_out'), style: theme.textTheme.subtitle1)
-                  ],
-                ),
-              )
             ],
           ),
           borderRadius: BorderRadius.only(

@@ -18,9 +18,10 @@ class MemberListTile extends StatelessWidget {
   final AsyncCallback onArrowTap;
   final AsyncCallback onTap;
   final bool divider;
+  final EdgeInsetsGeometry padding;
 
   MemberListTile(this.model,
-      {this.onArrowTap, this.divider = true, this.onTap});
+      {this.onArrowTap, this.padding = const EdgeInsets.only(left: Indents.md), this.divider = true, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class MemberListTile extends StatelessWidget {
     final isCurrent = store.state.authorization?.currentMemberId == model.id;
 
     return CustomListTile(
-      tilePadding: EdgeInsets.only(left: Indents.md),
+      tilePadding: padding,
       onTap: onTap,
       divider: CustomDivider(
         dividerPadding: EdgeInsets.symmetric(horizontal: Indents.md),

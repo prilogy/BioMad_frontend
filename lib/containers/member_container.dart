@@ -1,4 +1,5 @@
 import 'package:api/api.dart';
+import 'package:biomad_frontend/helpers/age_from_date.dart';
 import 'package:biomad_frontend/helpers/color_helpers.dart';
 import 'package:biomad_frontend/helpers/date_time_formats.dart';
 import 'package:biomad_frontend/helpers/random.dart';
@@ -42,8 +43,6 @@ class _MemberContainerState extends State<MemberContainer> {
       dateBirthday:
           DateTimeFormats.defaultDate.parse(_dateBirthDayController.text),);
 
-  int getAgeFromDate(DateTime date) =>
-      DateTime.now().difference(date).inDays ~/ 365;
 
   void onChange() {
     widget.onChange(getMemberModel());

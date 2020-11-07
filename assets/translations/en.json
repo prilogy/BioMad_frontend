@@ -18,7 +18,7 @@
     "years_old": "Years old"
   },
   "accept_dialog": {
-    "desc": "Вы не сможете отменить это действите, хотите продолжить?"
+    "desc": "You will not be able to undo this action, do you want to continue?"
   },
   "input_hint": {
     "name": "Name or alias",
@@ -53,7 +53,9 @@
   "account_container": {
     "add_profile": "Add profile",
     "your_account": "Your account",
-    "my_profiles": "My profiles"
+    "my_profiles": "My profiles",
+    "current_profile": "Current profile",
+    "socials": "Connected social networks"
   },
   "auth_screen": {
     "login": "Sign in",
@@ -72,5 +74,9 @@
   },
   "member_container": {
     "your_name_or_alias": "Your name or alias"
+  },
+  "member_list_container": {
+    "add_profile": "Add profile",
+    "title": "Your profiles"
   }
 }
