@@ -15,7 +15,9 @@
     "other": "Other",
     "log_out": "Log out",
     "or": "or",
-    "years_old": "Years old"
+    "years_old": "Years old",
+    "connect": "Connect",
+    "disconnect": "Disconnect"
   },
   "accept_dialog": {
     "desc": "You will not be able to undo this action, do you want to continue?"
@@ -55,7 +57,11 @@
     "your_account": "Your account",
     "my_profiles": "My profiles",
     "current_profile": "Current profile",
-    "socials": "Connected social networks"
+    "socials": "Connected social networks",
+    "social_connect_success": "Social network successfully connected",
+    "social_connect_error": "Unexpected error while connecting social network",
+    "social_disconnect_success": "Social network successfully disconnected",
+    "social_disconnect_error": "Unexpected error while disconnecting social network"
   },
   "auth_screen": {
     "login": "Sign in",

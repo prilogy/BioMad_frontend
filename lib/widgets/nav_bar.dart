@@ -1,3 +1,4 @@
+import 'package:biomad_frontend/helpers/color_helpers.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,7 @@ class _NavBarState extends State<NavBar> {
           width: NavBar.size,
           child: FittedBox(
             child: FloatingActionButton(
+              backgroundColor: ColorHelpers.fromHex(member.color) ?? theme.primaryColor,
               onPressed: () {
                 widget.onAvatarTap();
               },

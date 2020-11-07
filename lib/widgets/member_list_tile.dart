@@ -36,16 +36,23 @@ class MemberListTile extends StatelessWidget {
         dividerPadding: EdgeInsets.symmetric(horizontal: Indents.md),
         color: Theme.of(context).canvasColor,
       ),
-      prepend: Row(
-        children: [
-          Padding(
-              padding: EdgeInsets.only(right: Indents.md),
-              child: CustomCircleAvatar(text: name, radius: AvatarSizes.md, backgroundColor: model.color == null ? theme.primaryColor : ColorHelpers.fromHex(model.color))),
-          Text(
-            name,
-            style: theme.textTheme.subtitle1,
-          )
-        ],
+      prepend: Expanded(
+        child: Row(
+          children: [
+            Padding(
+                padding: EdgeInsets.only(right: Indents.md),
+                child: CustomCircleAvatar(text: name, radius: AvatarSizes.md, backgroundColor: model.color == null ? theme.primaryColor : ColorHelpers.fromHex(model.color))),
+            Expanded(
+              child: Text(
+                name,
+                softWrap: true,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.subtitle1,
+              ),
+            )
+          ],
+        ),
       ),
       append: Row(
         children: [

@@ -156,17 +156,20 @@ class _LoginScreenState extends State<LoginScreen> {
                             shadowColor: theme.colorScheme.onBackground,
                             svgSize: GoogleAuthService.size,
                           ),
-                          SocialAuthIcon(
-                            svgPath: FacebookAuthService.svgPath,
-                            onPressed: () async {
-                              var fbAuth = FacebookAuthService();
-                              var token = await fbAuth.getToken();
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: Indents.md),
+                            child: SocialAuthIcon(
+                              svgPath: FacebookAuthService.svgPath,
+                              onPressed: () async {
+                                var fbAuth = FacebookAuthService();
+                                var token = await fbAuth.getToken();
 
-                              await _authWithSocial(context,
-                                  SocialAccountProvider.facebook, token);
-                            },
-                            backgroundColor: FacebookAuthService.color,
-                            svgSize: FacebookAuthService.size,
+                                await _authWithSocial(context,
+                                    SocialAccountProvider.facebook, token);
+                              },
+                              backgroundColor: FacebookAuthService.color,
+                              svgSize: FacebookAuthService.size,
+                            ),
                           ),
                           SocialAuthIcon(
                             svgPath: VkAuthService.svgPath,

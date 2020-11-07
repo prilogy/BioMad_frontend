@@ -139,6 +139,9 @@ class _MemberContainerState extends State<MemberContainer> {
                           else
                             Text(
                             _nameController.text,
+                            softWrap: false,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: theme.textTheme.headline6,
                           ),
                           if (_profilePreviewAge != null)

@@ -16,4 +16,26 @@ class SocialAccountApi extends ApiBase<AuthApi> {
       return null;
     }
   }
+
+  Future<bool> add(String token, String type) async {
+    try {
+      var url = '$v/socialAccount/$type';
+      var response = await dio.post(url, data: {"token": token});
+
+      return true;
+    } on DioError catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> remove(String type) async {
+    try {
+      var url = '$v/socialAccount/$type';
+      var response = await dio.delete(url);
+
+      return true;
+    } on DioError catch (e) {
+      return false;
+    }
+  }
 }

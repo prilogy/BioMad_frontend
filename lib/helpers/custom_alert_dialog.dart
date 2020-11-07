@@ -15,6 +15,7 @@ AlertDialog customAlertDialog(BuildContext context,
 
   return AlertDialog(
     scrollable: true,
+    insetPadding: EdgeInsets.symmetric(horizontal: Indents.lg),
     content: Container(
       height: contentHeight ?? MediaQuery.of(context).size.height/3,
       width: MediaQuery.of(context).size.width,

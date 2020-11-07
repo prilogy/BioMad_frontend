@@ -45,7 +45,7 @@ class VkAuthService implements SocialAuthService {
   final FlutterVkLogin vkLogin;
   static final String svgPath = "assets/svg/vk_logo.svg";
   static final Color color = Color(0xff4A76A8);
-  static final double size = 18;
+  static final double size = 17;
 
   VkAuthService(): vkLogin = FlutterVkLogin();
 
