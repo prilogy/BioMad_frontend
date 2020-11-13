@@ -65,7 +65,7 @@
   },
   "auth_screen": {
     "login": "Вход",
-    "reset_password": "Сбросить пароль",
+    "reset_password": "Забыл пароль",
     "log_in": "Войти",
     "sign_up": "Присоединиться",
     "login_with_social": "Или вход через социальные сети",
@@ -79,7 +79,10 @@
     "email_in_use": "Этот Email уже используется"
   },
   "member_container": {
-    "your_name_or_alias": "Ваше имя или псевдоним",
+    "your_name_or_alias": "Имя или псевдоним"
+  },
+  "member_list_container": {
+    "add_profile": "Добавить профиль",
     "title": "Ваши профили"
   }
 }

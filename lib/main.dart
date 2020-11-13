@@ -10,6 +10,7 @@ import 'package:biomad_frontend/styles/app_theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 import 'services/api.dart' as apiService;
 import 'services/dio.dart' as dioService;
@@ -33,6 +34,9 @@ var connectionChecked = false;
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    initializeDateFormatting("ru", null);
+    initializeDateFormatting("en", null);
+
     if(!connectionChecked)
       WidgetsBinding.instance.addPostFrameCallback(checkConnection);
 
