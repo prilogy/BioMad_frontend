@@ -2,10 +2,10 @@ import 'dart:math';
 
 import 'package:api/api.dart';
 import 'package:biomad_frontend/containers/member_container.dart';
-import 'file:///Z:/flutter/biomad_frontend/lib/helpers/i18n_helper.dart';
 import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
 import 'package:biomad_frontend/helpers/accept_dialog.dart';
 import 'package:biomad_frontend/helpers/date_time_formats.dart';
+import 'package:biomad_frontend/helpers/i18n_helper.dart';
 import 'package:biomad_frontend/helpers/random.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
