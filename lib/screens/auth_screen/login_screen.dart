@@ -1,6 +1,7 @@
 import 'package:api/api.dart';
 import 'package:biomad_frontend/helpers/i18n_helper.dart';
 import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
+import 'package:biomad_frontend/helpers/i18n_helper.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
 import 'package:biomad_frontend/helpers/text_field_validators.dart';
@@ -93,12 +94,18 @@ class _LoginScreenState extends State<LoginScreen> {
                             // TODO: implement reset password flow
                           },
                           textColor: theme.canvasColor,
-                          text: 'Forgot password',
+                          text: _tr('reset_password'),
                           padding: EdgeInsets.all(0),
                         ),
                         Row(
                           children: [
-
+                            CustomButton.flat(
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (x) => SignUpScreen()));
+                              },
+                              text: _tr('sign_up'),
+                            ),
                             CustomButton.raised(
                               onPressed: () async {
                                 if (_formKey.currentState.validate())
@@ -126,13 +133,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               },
                               margin: EdgeInsets.only(left: Indents.sm),
                               text: _tr('log_in'),
-                            ),
-                            CustomButton.flat(
-                              onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (x) => SignUpScreen()));
-                              },
-                              text: _tr('sign_up'),
                             ),
                           ],
                         ),

@@ -5,6 +5,7 @@ import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
 import 'package:biomad_frontend/helpers/age_from_date.dart';
 import 'package:biomad_frontend/helpers/color_helpers.dart';
 import 'package:biomad_frontend/helpers/custom_alert_dialog.dart';
+import 'package:biomad_frontend/helpers/i18n_helper.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/models/authorization.dart';
 import 'package:biomad_frontend/router/main.dart';

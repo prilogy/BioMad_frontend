@@ -63,7 +63,7 @@ class _MemberContainerState extends State<MemberContainer> {
         _nameController.text = name;
         _profilePreviewName = name;
         _dateBirthDayController.text =
-            DateTimeFormats.defaultDate.format(widget.member.dateBirthday);
+            DateTimeFormats.defaultDate.format(widget.member.dateBirthday ?? DateTime.now());
         _profilePreviewAge = getAgeFromDate(widget.member.dateBirthday);
         _genderId = widget.member.genderId;
         if(widget.member.color != null)
