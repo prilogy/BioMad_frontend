@@ -50,6 +50,30 @@ part 'models/social_authentication_identity.dart';
 part 'models/user.dart';
 
 part 'models/user_edit_model.dart';
+part 'models/article.dart';
+part 'models/article_translation.dart';
+part 'models/biomarker.dart';
+part 'models/biomarker_article.dart';
+part 'models/culture.dart';
+part 'models/unit.dart';
+part 'models/unit_transfer.dart';
+part 'models/unit_translation.dart';
+part 'models/gender_translation.dart';
+part 'models/confirmation_code.dart';
+part 'models/category_biomarker.dart';
+part 'models/category.dart';
+part 'models/category_translation.dart';
+part 'models/biomarker_unit.dart';
+part 'models/biomarker_type.dart';
+part 'models/biomarker_type_translation.dart';
+part 'models/biomarker_reference.dart';
+part 'models/biomarker_reference_config.dart';
+part 'models/biomarker_reference_config_dependency.dart';
+part 'models/biomarker_reference_config_dependency_range.dart';
+part 'models/biomarker_reference_config_dependency_type.dart';
+part 'models/types.dart';
+part 'models/biomarker_translation.dart';
+part 'models/biomarker_article_type.dart';
 
 /// Main api class
 class Api {

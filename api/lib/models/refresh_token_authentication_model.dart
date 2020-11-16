@@ -7,9 +7,7 @@ class RefreshTokenAuthenticationModel {
   int userId = null;
   /* Id of current member */
   int memberId = null;
-
-  RefreshTokenAuthenticationModel({
-      this.refreshToken, this.userId, this.memberId});
+  RefreshTokenAuthenticationModel({this.refreshToken, this.userId, this.memberId});
 
   @override
   String toString() {

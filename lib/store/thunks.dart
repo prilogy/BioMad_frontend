@@ -74,7 +74,7 @@ class StoreThunks {
   static ThunkAction<AppState> refreshGendersAndCulture() {
     return (Store<AppState> store) async {
       var genders = await api.helper.genders();
-      store.dispatch(SetHelper(genders));
+      //store.dispatch(SetHelper(genders));
     };
   }
 }

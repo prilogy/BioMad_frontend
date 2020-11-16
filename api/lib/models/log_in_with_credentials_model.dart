@@ -5,8 +5,6 @@ class LogInWithCredentialsModel {
   String email = null;
   
   String password = null;
-
-
   LogInWithCredentialsModel({this.email, this.password});
 
   @override

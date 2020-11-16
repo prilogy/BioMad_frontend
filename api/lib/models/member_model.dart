@@ -1,37 +1,38 @@
 part of api.api;
 
 class MemberModel {
+  
   String name = null;
+  
   int genderId = null;
+  
   DateTime dateBirthday = null;
+  
   String color = null;
-
-  MemberModel({this.name, this.genderId, this.dateBirthday, this.color});
+  MemberModel({this.name, this.color, this.genderId, this.dateBirthday});
 
   @override
   String toString() {
-    return 'MemberModel[name=$name, genderId=$genderId, dateBirthday=$dateBirthday, ]';
+    return 'MemberModel[name=$name, genderId=$genderId, dateBirthday=$dateBirthday, color=$color, ]';
   }
 
   MemberModel.fromJson(Map<String, dynamic> json) {
     if (json == null) return;
     name = json['name'];
     genderId = json['genderId'];
-    color = json['color'];
     dateBirthday = (json['dateBirthday'] == null) ?
       null :
       DateTime.parse(json['dateBirthday']);
+    color = json['color'];
   }
 
   Map<String, dynamic> toJson() {
     Map <String, dynamic> json = {};
-    if (name != null)
       json['name'] = name;
     if (genderId != null)
       json['genderId'] = genderId;
     if (dateBirthday != null)
       json['dateBirthday'] = dateBirthday == null ? null : dateBirthday.toUtc().toIso8601String();
-    if(color != null)
       json['color'] = color;
     return json;
   }
