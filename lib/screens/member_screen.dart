@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:api/api.dart';
 import 'package:biomad_frontend/containers/member_container.dart';
+import 'package:biomad_frontend/helpers/i18n_helper.dart';
 import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
 import 'package:biomad_frontend/helpers/accept_dialog.dart';
 import 'package:biomad_frontend/helpers/date_time_formats.dart';
@@ -75,7 +76,6 @@ class _MemberScreenState extends State<MemberScreen> {
                   Navigator.of(context).pop();
                 })
             : Container();
-
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(),

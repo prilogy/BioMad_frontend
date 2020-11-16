@@ -1,5 +1,6 @@
 import 'package:api/api.dart';
 import 'package:biomad_frontend/containers/members_list_container.dart';
+import 'package:biomad_frontend/helpers/i18n_helper.dart';
 import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
 import 'package:biomad_frontend/helpers/age_from_date.dart';
 import 'package:biomad_frontend/helpers/color_helpers.dart';
@@ -9,6 +10,7 @@ import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/models/authorization.dart';
 import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/services/api.dart';
+import 'package:biomad_frontend/store/Gender/actions.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
 import 'package:biomad_frontend/styles/avatar_sizes.dart';
@@ -32,6 +34,12 @@ class AccountContainer extends StatefulWidget {
   _AccountContainerState createState() => _AccountContainerState();
 }
 
+//Получение пола
+//void gendersAsync() async{
+//  var gen = await api.helper.genders();
+//  store.dispatch(SetGender(gen.firstWhere((x)=>x.id == store.state.authorization.currentMember.genderId)));
+//}
+
 class _AccountContainerState extends State<AccountContainer> {
   @override
   Widget build(BuildContext context) {
@@ -39,6 +47,8 @@ class _AccountContainerState extends State<AccountContainer> {
     final _tr = trWithKey('account_container');
     final user = store.state.user;
     final currentMember = store.state.authorization.currentMember;
+    //Добавить локализацию
+    //gendersAsync(); //Подгрузка гендеров
 
     return Container(
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -102,6 +112,8 @@ class _AccountContainerState extends State<AccountContainer> {
             converter: (store) => store.state.authorization,
             builder: (ctx, state) {
               final currentMember = state.currentMember;
+              final gender = store.state.gender;
+
               return BlockBaseWidget(
                 child: Column(
                   children: [
@@ -128,10 +140,11 @@ class _AccountContainerState extends State<AccountContainer> {
                                 ),
                               ),
                               Text(
-                                  currentMember.gender.key +
-                                      ', ' +
-                                      getAgeFromDate(currentMember.dateBirthday)
-                                          .toString(),
+                                  (store.state.gender?.key ?? 'None') +
+                                          ', ' +
+                                          getAgeFromDate(
+                                                  currentMember.dateBirthday)
+                                              .toString(),
                                   style: theme.textTheme.bodyText2.merge(
                                       TextStyle(
                                           color: theme.colorScheme.onSurface)))
@@ -153,7 +166,11 @@ class _AccountContainerState extends State<AccountContainer> {
             converter: (store) => store.state.user,
             builder: (ctx, state) => Column(
               children: [
-                for(var item in [SocialAccountProvider.google, SocialAccountProvider.facebook, SocialAccountProvider.vk])
+                for (var item in [
+                  SocialAccountProvider.google,
+                  SocialAccountProvider.facebook,
+                  SocialAccountProvider.vk
+                ])
                   SocialAccountListTile(item)
               ],
             ),

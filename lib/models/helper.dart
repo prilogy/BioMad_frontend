@@ -1,18 +1,19 @@
 import 'package:api/api.dart';
 import 'package:biomad_frontend/services/localstorage.dart';
 
-class Settings {
+class Helper {
   List<Gender> genders;
+  List<Gender> cultures;
 
   // TODO: add cultures
 
-  static String localStorageKey = "settings_state";
+  static String localStorageKey = "helper_state";
 
-  Settings({this.genders});
+  Helper({this.genders});
 
-  Settings.fromJson(Map<String, dynamic> json) {
+  Helper.fromJson(Map<String, dynamic> json) {
     genders =
-        (json['genders'] == null) ? null : Gender.listFromJson(json['genders']);
+    (json['genders'] == null) ? null : Gender.listFromJson(json['genders']);
   }
 
   Map<String, dynamic> toJson() {
@@ -21,12 +22,12 @@ class Settings {
     return json;
   }
 
-  static Settings fromLocalStorage() {
+  static Helper fromLocalStorage() {
     var json = localStorage.getItem(localStorageKey);
-    return Settings.fromJson(json ?? Map<String, dynamic>());
+    return Helper.fromJson(json ?? Map<String, dynamic>());
   }
 
-  static void saveToLocalStorage(Settings model) {
+  static void saveToLocalStorage(Helper model) {
     localStorage.setItem(localStorageKey, model.toJson());
   }
 }

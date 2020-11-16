@@ -51,7 +51,27 @@ class _MyHomePageState extends State<MyHomePage> {
                 style: TextStyle(color: Theme.of(context).primaryColor)),
           ),
           body: Container(
-            child: Text("body"),
+            child: Column(
+              children: <Widget>[
+                RaisedButton(
+                  onPressed: () {},
+                  child:
+                      const Text('add marker', style: TextStyle(fontSize: 20)),
+                ),
+                RaisedButton(
+                  onPressed: () {},
+                  child:
+                  const Text('edit marker', style: TextStyle(fontSize: 20)),
+                ),
+                RaisedButton(
+                  onPressed: () {
+                    Keys.rootNavigator.currentState.pushReplacementNamed(Routes.biomarker);
+                  },
+                  child:
+                  const Text('open marker', style: TextStyle(fontSize: 20)),
+                ),
+              ],
+            ),
           ),
         ),
         Positioned(

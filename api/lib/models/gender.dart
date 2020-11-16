@@ -1,7 +1,7 @@
 part of api.api;
 
 class Gender {
-  
+
   int id = null;
   
   String key = null;
@@ -48,5 +48,6 @@ class Gender {
      }
      return map;
   }
+
 }
 
