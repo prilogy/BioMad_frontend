@@ -32,8 +32,8 @@ class AppState {
       : user = UserExtension.fromLocalStorage(),
         settings = Settings.fromLocalStorage(),
         authorization = Authorization.fromLocalStorage(),
-        gender = GenderExtension.fromLocalStorage(),
         // TODO: remove
+        gender = GenderExtension.fromLocalStorage(),
         helper = Helper.fromLocalStorage();
 }
 
@@ -45,8 +45,8 @@ AppState appStateReducer(AppState state, action) {
         action,
       ),
       authorization: authorizationReducer(state.authorization, action),
-      gender: genderReducer(state.gender, action),
-      helper: helperReducer(state.helper, action)); // TODO: remove
+      gender: genderReducer(state.gender, action), // TODO: remove
+      helper: helperReducer(state.helper, action));
 }
 
 final Store<AppState> store = Store<AppState>(appStateReducer,

@@ -39,7 +39,9 @@ class MyApp extends StatelessWidget {
     initializeDateFormatting("ru", null);
     initializeDateFormatting("en", null);
 
-    if(!connectionChecked)
+    print(store.state.helper.toJson());
+
+    if (!connectionChecked)
       WidgetsBinding.instance.addPostFrameCallback(initAction);
 
     return StoreProvider<AppState>(
@@ -49,8 +51,10 @@ class MyApp extends StatelessWidget {
         theme: AppTheme.light,
         navigatorKey: Keys.rootNavigator,
         onGenerateRoute: (settings) => RouteGenerator.generateRoute(settings),
-        initialRoute:
-            store.state.authorization == null || !store.state.authorization.isAuthorized ? '/auth' : '/main',
+        initialRoute: store.state.authorization == null ||
+                !store.state.authorization.isAuthorized
+            ? '/auth'
+            : '/main',
         builder: (context, child) => Scaffold(
           key: Keys.rootScaffold,
           body: child,
@@ -64,11 +68,10 @@ class MyApp extends StatelessWidget {
   /// If TIMEOUT - shows snack bar
   /// If user == null - logs out
   Future initAction(dynamic _) async {
-    if(store.state.settings.genders == null)
-      store.dispatch(StoreThunks.refreshGendersAndCulture());
+    store.dispatch(StoreThunks.refreshGendersAndCulture());
 
-    if(store.state.authorization == null || !store.state.authorization.isAuthorized)
-      return;
+    if (store.state.authorization == null ||
+        !store.state.authorization.isAuthorized) return;
 
     try {
       var user = await apiService.api.user.infoWithExceptionOnTimeOut();
@@ -77,7 +80,8 @@ class MyApp extends StatelessWidget {
       else
         store.dispatch(StoreThunks.logOut());
     } catch (e) {
-      SnackBarExtension.dark(tr('snack_bar.offline_mode'), duration: Duration(hours: 2));
+      SnackBarExtension.dark(tr('snack_bar.offline_mode'),
+          duration: Duration(hours: 2));
     }
     connectionChecked = true;
   }

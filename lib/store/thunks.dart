@@ -2,6 +2,7 @@ import 'package:api/api.dart';
 import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/models/authorization.dart';
+import 'package:biomad_frontend/models/helper.dart';
 import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/services/localstorage.dart';
@@ -38,12 +39,14 @@ class StoreThunks {
 
       // TODO: remove -------------------
       var gen = await api.helper.genders();
-      var genObject = gen.firstWhere((x)=>x.id == store.state.authorization.currentMember.genderId);
+      var genObject = gen.firstWhere(
+          (x) => x.id == store.state.authorization.currentMember.genderId);
       store.dispatch(SetGender(genObject));
       //Отладка
       print(genObject); //Подгруженный объект
       //print(store.state.gender.id); //Id гендера в сторе
-      print(localStorage.getItem("gender_state")); //Текущее состояние локал стора
+      print(
+          localStorage.getItem("gender_state")); //Текущее состояние локал стора
       // --------------------------------
 
       await onSuccess?.call();
@@ -73,8 +76,18 @@ class StoreThunks {
 
   static ThunkAction<AppState> refreshGendersAndCulture() {
     return (Store<AppState> store) async {
+      if (store.state.helper != null &&
+          (store.state.helper?.lastUpdateDate
+                  ?.difference(DateTime.now())
+                  ?.inDays ?? 3) <
+              2) return;
+
       var genders = await api.helper.genders();
-      //store.dispatch(SetHelper(genders));
+      var cultures = await api.helper.cultures();
+      store.dispatch(SetHelper(Helper(
+          genders: genders,
+          cultures: cultures,
+          lastUpdateDate: DateTime.now())));
     };
   }
 }
