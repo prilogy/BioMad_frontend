@@ -4,7 +4,9 @@ import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/models/authorization.dart';
 import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/services/api.dart';
+import 'package:biomad_frontend/services/localstorage.dart';
 import 'package:biomad_frontend/store/authorization/actions.dart';
+import 'package:biomad_frontend/store/gender/actions.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/user/actions.dart';
 import 'package:dio/dio.dart';
@@ -31,6 +33,13 @@ class StoreThunks {
 
       store.dispatch(SetUser(res.user));
       store.dispatch(SetAuthorization(auth));
+      var gen = await api.helper.genders();
+      var genObject = gen.firstWhere((x)=>x.id == store.state.authorization.currentMember.genderId);
+      store.dispatch(SetGender(genObject));
+      //Отладка
+      print(genObject); //Подгруженный объект
+      print(store.state.gender.id); //Id гендера в сторе
+      print(localStorage.getItem("gender_state")); //Текущее состояние локал стора
       await onSuccess?.call();
     };
   }

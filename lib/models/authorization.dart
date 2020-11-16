@@ -11,6 +11,7 @@ class Authorization {
   
   User get user => store.state.user;
   Member get currentMember => store.state.user.members.firstWhere((x) => x.id == currentMemberId);
+//  Gender get gender => store.state.gender;
 
   static String localStorageKey = 'authorization_state';
 

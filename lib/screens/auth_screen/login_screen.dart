@@ -1,5 +1,5 @@
 import 'package:api/api.dart';
-import 'file:///Z:/flutter/biomad_frontend/lib/helpers/i18n_helper.dart';
+import 'package:biomad_frontend/helpers/i18n_helper.dart';
 import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
