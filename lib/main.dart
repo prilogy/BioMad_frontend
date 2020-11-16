@@ -1,8 +1,10 @@
+import 'package:api/api.dart';
 import 'package:biomad_frontend/config/env.dart';
 import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/services/localstorage.dart';
+import 'package:biomad_frontend/store/gender/actions.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
 import 'package:biomad_frontend/store/user/actions.dart';
@@ -33,6 +35,8 @@ var connectionChecked = false;
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    store.dispatch(SetGender(Gender()));
+    print(store.state.gender.toString());
     if(!connectionChecked)
       WidgetsBinding.instance.addPostFrameCallback(checkConnection);
 

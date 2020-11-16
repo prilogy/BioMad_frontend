@@ -38,7 +38,7 @@ class StoreThunks {
       store.dispatch(SetGender(genObject));
       //Отладка
       print(genObject); //Подгруженный объект
-      print(store.state.gender.id); //Id гендера в сторе
+      //print(store.state.gender.id); //Id гендера в сторе
       print(localStorage.getItem("gender_state")); //Текущее состояние локал стора
       await onSuccess?.call();
     };
