@@ -212,7 +212,7 @@ class _MemberContainerState extends State<MemberContainer> {
                     onChange();
                   },
                   items: _genders,
-                  itemBuilder: (x) => DropdownMenuItem(child: Text(x.key)))
+                  itemBuilder: (x) => DropdownMenuItem(child: Text(x.content?.name ?? x.key)))
               : Container()
         ],
       ),

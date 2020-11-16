@@ -140,7 +140,7 @@ class _AccountContainerState extends State<AccountContainer> {
                                 ),
                               ),
                               Text(
-                                  (store.state.gender?.key ?? 'None') +
+                                  (store.state.gender?.content?.name ?? '') +
                                           ', ' +
                                           getAgeFromDate(
                                                   currentMember.dateBirthday)
