@@ -1,26 +1,15 @@
 import 'package:api/api.dart';
+import 'package:biomad_frontend/models/helper.dart';
 import 'package:biomad_frontend/models/settings.dart';
 
-class SetSettings {
-  final Settings settings;
+class SetHelper {
+  final Helper helper;
 
-  SetSettings(this.settings);
 
-  @override
-  String toString() {
-      return 'Settings -> SetSettings{settings: $settings}';
-  }
-}
-
-class SetGenders {
-  final List<Gender> genders;
-
-  SetGenders(this.genders);
+  SetHelper(this.helper);
 
   @override
   String toString() {
-    return 'Genders -> SetGenders{settings: $genders}';
+    return 'Genders -> SetHelper{helper: $helper}';
   }
 }
-
-// TODO: implement SetCultures

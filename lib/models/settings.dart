@@ -1,19 +1,24 @@
+import 'package:api/api.dart';
 import 'package:biomad_frontend/services/localstorage.dart';
 
 class Settings {
+  List<Gender> genders;
+
+  // TODO: add cultures
 
   static String localStorageKey = "settings_state";
 
-  Settings();
+  Settings({this.genders});
 
   Settings.fromJson(Map<String, dynamic> json) {
-    /// TODO: implement
+    genders =
+        (json['genders'] == null) ? null : Gender.listFromJson(json['genders']);
   }
 
   Map<String, dynamic> toJson() {
-    var map = <String, dynamic>{};
-    // TODO: implement
-    return map;
+    var json = <String, dynamic>{};
+    json['genders'] = genders;
+    return json;
   }
 
   static Settings fromLocalStorage() {

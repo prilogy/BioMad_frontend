@@ -1,5 +1,5 @@
+import 'package:api/api.dart';
 import 'package:biomad_frontend/models/settings.dart';
-import 'package:flutter/cupertino.dart';
 
 class SetSettings {
   final Settings settings;

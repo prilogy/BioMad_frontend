@@ -7,7 +7,9 @@ import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/services/localstorage.dart';
 import 'package:biomad_frontend/store/authorization/actions.dart';
 import 'package:biomad_frontend/store/gender/actions.dart';
+import 'package:biomad_frontend/store/helper/actions.dart';
 import 'package:biomad_frontend/store/main.dart';
+import 'package:biomad_frontend/store/settings/actions.dart';
 import 'package:biomad_frontend/store/user/actions.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -33,6 +35,8 @@ class StoreThunks {
 
       store.dispatch(SetUser(res.user));
       store.dispatch(SetAuthorization(auth));
+
+      // TODO: remove -------------------
       var gen = await api.helper.genders();
       var genObject = gen.firstWhere((x)=>x.id == store.state.authorization.currentMember.genderId);
       store.dispatch(SetGender(genObject));
@@ -40,6 +44,8 @@ class StoreThunks {
       print(genObject); //Подгруженный объект
       //print(store.state.gender.id); //Id гендера в сторе
       print(localStorage.getItem("gender_state")); //Текущее состояние локал стора
+      // --------------------------------
+
       await onSuccess?.call();
     };
   }
@@ -62,6 +68,13 @@ class StoreThunks {
       store.dispatch(SetUser(null));
       store.dispatch(SetAuthorization(null));
       SnackBarExtension.info(snackBarText ?? tr('snack_bar.log_out'));
+    };
+  }
+
+  static ThunkAction<AppState> refreshGendersAndCulture() {
+    return (Store<AppState> store) async {
+      var genders = await api.helper.genders();
+      store.dispatch(SetHelper(genders));
     };
   }
 }

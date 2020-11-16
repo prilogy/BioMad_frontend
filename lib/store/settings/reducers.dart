@@ -1,4 +1,5 @@
 import 'package:biomad_frontend/models/settings.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:redux/redux.dart';
 import 'actions.dart' as Actions;
 

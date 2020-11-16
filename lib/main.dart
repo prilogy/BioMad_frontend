@@ -35,10 +35,10 @@ var connectionChecked = false;
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    store.dispatch(SetGender(Gender()));
-    print(store.state.gender.toString());
+    print(store.state.settings.toJson());
+
     if(!connectionChecked)
-      WidgetsBinding.instance.addPostFrameCallback(checkConnection);
+      WidgetsBinding.instance.addPostFrameCallback(initAction);
 
     return StoreProvider<AppState>(
       store: store,
@@ -61,7 +61,10 @@ class MyApp extends StatelessWidget {
   /// If OK - updates user info
   /// If TIMEOUT - shows snack bar
   /// If user == null - logs out
-  Future checkConnection(dynamic _) async {
+  Future initAction(dynamic _) async {
+    if(store.state.settings.genders == null)
+      store.dispatch(StoreThunks.refreshGendersAndCulture());
+
     if(store.state.authorization == null || !store.state.authorization.isAuthorized)
       return;
 
