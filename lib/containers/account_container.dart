@@ -34,11 +34,6 @@ class AccountContainer extends StatefulWidget {
   _AccountContainerState createState() => _AccountContainerState();
 }
 
-//Получение пола
-//void gendersAsync() async{
-//  var gen = await api.helper.genders();
-//  store.dispatch(SetGender(gen.firstWhere((x)=>x.id == store.state.authorization.currentMember.genderId)));
-//}
 
 class _AccountContainerState extends State<AccountContainer> {
   @override
@@ -112,7 +107,7 @@ class _AccountContainerState extends State<AccountContainer> {
             converter: (store) => store.state.authorization,
             builder: (ctx, state) {
               final currentMember = state.currentMember;
-              final gender = store.state.gender;
+              final gender = store.state.helper.genders;
 
               return BlockBaseWidget(
                 child: Column(
@@ -140,7 +135,7 @@ class _AccountContainerState extends State<AccountContainer> {
                                 ),
                               ),
                               Text(
-                                  (store.state.gender?.key ?? 'None') +
+                                  (gender[currentMember.genderId-1].key ?? 'None') +
                                           ', ' +
                                           getAgeFromDate(
                                                   currentMember.dateBirthday)

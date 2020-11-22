@@ -6,7 +6,7 @@ import 'package:biomad_frontend/styles/decorations.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:flutter/material.dart';
 
-class CustomTextFormField extends StatelessWidget with IndentsMixin {
+class BiomarkerFormField extends StatelessWidget with IndentsMixin {
   final TextEditingController controller;
   final InputDecoration inputDecoration;
   final String labelText;
@@ -14,27 +14,27 @@ class CustomTextFormField extends StatelessWidget with IndentsMixin {
   final Icon icon;
   final String Function(String) validator;
   final void Function(String) onChange;
-  final Future<dynamic> onTap;
+  final void Function() onTap;
   final bool Function() formValidator;
   final EdgeInsetsGeometry padding;
   final EdgeInsetsGeometry margin;
   final bool obscureText;
   final Color enabledColor;
 
-  CustomTextFormField(
+  BiomarkerFormField(
       {@required this.controller,
-      this.inputDecoration,
-      this.obscureText = false,
-      @required this.labelText,
-      this.hintText = '',
-      this.icon,
-      this.onChange,
+        this.inputDecoration,
+        this.obscureText = false,
+        @required this.labelText,
+        this.hintText = '',
+        this.icon,
+        this.onChange,
         this.onTap,
-      this.formValidator,
-      this.validator,
-      this.enabledColor,
-      this.margin = const EdgeInsets.only(bottom: Indents.md),
-      this.padding});
+        this.formValidator,
+        this.validator,
+        this.enabledColor,
+        this.margin = const EdgeInsets.only(bottom: Indents.md),
+        this.padding});
 
   @override
   Widget build(BuildContext context) {
@@ -45,10 +45,10 @@ class CustomTextFormField extends StatelessWidget with IndentsMixin {
             focusedBorder: baseDecoration.focusedBorder,
             enabledBorder: enabledColor != null
                 ? OutlineInputBorder(
-                    borderRadius: Decorations.borderRadius,
-                    borderSide: BorderSide(
-                        color: enabledColor, width: AppTheme.borderWidth),
-                  )
+              borderRadius: Decorations.borderRadius,
+              borderSide: BorderSide(
+                  color: enabledColor, width: AppTheme.borderWidth),
+            )
                 : baseDecoration.enabledBorder,
             errorBorder: baseDecoration.errorBorder,
             focusedErrorBorder: baseDecoration.focusedErrorBorder,
@@ -60,18 +60,10 @@ class CustomTextFormField extends StatelessWidget with IndentsMixin {
     return withIndents(
       child: Padding(
         padding: const EdgeInsets.only(top: 2.0),
-        child: TextFormField(
-          obscureText: obscureText,
-          onFieldSubmitted: (x) {
-            formValidator?.call();
-          },
-          onChanged: onChange ?? (x) {},
-          validator: (v) =>
-              validator?.call(v) ?? TextFieldValidators.isNotEmpty(v),
-          controller: controller,
-          decoration: decoration,
-        ),
+        child: TextField(
+            onTap: onTap,
+            decoration: decoration,
       ),
-    );
+    ));
   }
 }

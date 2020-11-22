@@ -1,4 +1,4 @@
-import 'package:biomad_frontend/containers/account_container.dart';
+import 'package:biomad_frontend/containers/biomarker_container.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/store/main.dart';
@@ -30,11 +30,20 @@ class _BioMarkerScreenState extends State<BioMarkerScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: BackButton(),
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Keys.rootNavigator.currentState.pushReplacementNamed(Routes.main);
+              },
+            );
+          },
+        ),
         title: Text("biomarker.name",
             style: TextStyle(color: Theme.of(context).primaryColor)),
       ),
-      body: Text("TEtxt"),
+      body: ListView(children:[BiomarkerContainer()]),
     );
   }
 }
