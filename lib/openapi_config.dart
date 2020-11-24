@@ -6,5 +6,5 @@ import 'package:openapi_generator_annotations/openapi_generator_annotations.dart
     inputSpecFile: 'spec/openapi.yaml',
     generatorName: Generator.DART,
     alwaysRun: true,
-    outputDirectory: 'apiT')
+    outputDirectory: 'apiTmp')
 class OpenapiConfig extends OpenapiGeneratorConfig {}

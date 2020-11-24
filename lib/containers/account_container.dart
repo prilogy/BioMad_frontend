@@ -34,12 +34,12 @@ class AccountContainer extends StatefulWidget {
   _AccountContainerState createState() => _AccountContainerState();
 }
 
-
 class _AccountContainerState extends State<AccountContainer> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final _tr = trWithKey('account_container');
+    final _ttr = trWithKey('gender');
     final user = store.state.user;
     final currentMember = store.state.authorization.currentMember;
     //Добавить локализацию
@@ -135,11 +135,12 @@ class _AccountContainerState extends State<AccountContainer> {
                                 ),
                               ),
                               Text(
-                                  (gender[currentMember.genderId-1].key ?? 'None') +
-                                          ', ' +
-                                          getAgeFromDate(
-                                                  currentMember.dateBirthday)
-                                              .toString(),
+                                  _ttr((gender[currentMember.genderId - 1]
+                                              .key ??
+                                          'neutral')) +
+                                      ', ' +
+                                      getAgeFromDate(currentMember.dateBirthday)
+                                          .toString(),
                                   style: theme.textTheme.bodyText2.merge(
                                       TextStyle(
                                           color: theme.colorScheme.onSurface)))

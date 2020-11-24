@@ -272,11 +272,750 @@ paths:
           description: If user with given email already exists
       security:
         - bearer: []
+  '/api/v1/Biomarker/{id}/history':
+    get:
+      tags:
+        - Biomarker
+      summary: Gets history of member's biomarker values for given Id of biomarker
+      parameters:
+        - name: id
+          in: path
+          description: Id of biomarker history to get
+          required: true
+          schema:
+            type: integer
+            description: Id of biomarker history to get
+            format: int32
+        - name: page
+          in: query
+          description: Number of page to get(starts from 1)
+          schema:
+            type: integer
+            description: Number of page to get(starts from 1)
+            format: int32
+        - name: pageSize
+          in: query
+          description: Number of objects on one page
+          schema:
+            type: integer
+            description: Number of objects on one page
+            format: int32
+        - name: orderByDate
+          in: query
+          description: Order by date(asc|desc)
+          schema:
+            type: string
+            description: Order by date(asc|desc)
+            default: desc
+            nullable: true
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberBiomarker'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberBiomarker'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberBiomarker'
+      security:
+        - bearer: []
+  /api/v1/Biomarker/type:
+    get:
+      tags:
+        - Biomarker
+      summary: Gets types of biomarkers
+      parameters:
+        - name: page
+          in: query
+          description: Number of page to get(starts from 1)
+          schema:
+            type: integer
+            description: Number of page to get(starts from 1)
+            format: int32
+        - name: pageSize
+          in: query
+          description: Number of objects on one page
+          schema:
+            type: integer
+            description: Number of objects on one page
+            format: int32
+        - name: orderByDate
+          in: query
+          description: Order by date(asc|desc)
+          schema:
+            type: string
+            description: Order by date(asc|desc)
+            nullable: true
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BiomarkerType'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BiomarkerType'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BiomarkerType'
+      security:
+        - bearer: []
+  '/api/v1/Biomarker/type/{id}':
+    get:
+      tags:
+        - Biomarker
+      summary: Gets type of biomarker of given id
+      parameters:
+        - name: id
+          in: path
+          description: Id of type to get
+          required: true
+          schema:
+            type: integer
+            description: Id of type to get
+            format: int32
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BiomarkerType'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BiomarkerType'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BiomarkerType'
+        '404':
+          description: If no resource was found
+      security:
+        - bearer: []
+  /api/v1/Biomarker:
+    get:
+      tags:
+        - Biomarker
+      summary: Gets paged resources of type
+      parameters:
+        - name: page
+          in: query
+          description: Number of page to get(starts from 1)
+          schema:
+            type: integer
+            description: Number of page to get(starts from 1)
+            format: int32
+        - name: pageSize
+          in: query
+          description: Number of objects on one page
+          schema:
+            type: integer
+            description: Number of objects on one page
+            format: int32
+        - name: orderByDate
+          in: query
+          description: Order by date(asc|desc)
+          schema:
+            type: string
+            description: Order by date(asc|desc)
+            nullable: true
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Biomarker'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Biomarker'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Biomarker'
+      security:
+        - bearer: []
+    post:
+      tags:
+        - Biomarker
+      summary: Gets paged resources of type of given ids
+      parameters:
+        - name: page
+          in: query
+          description: Number of page to get(starts from 1)
+          schema:
+            type: integer
+            description: Number of page to get(starts from 1)
+            format: int32
+        - name: pageSize
+          in: query
+          description: Number of objects on one page
+          schema:
+            type: integer
+            description: Number of objects on one page
+            format: int32
+        - name: orderByDate
+          in: query
+          description: Order by date(asc|desc)
+          schema:
+            type: string
+            description: Order by date(asc|desc)
+            nullable: true
+      requestBody:
+        description: Ids of resources to get
+        content:
+          application/json-patch+json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int32
+              description: Ids of resources to get
+              nullable: true
+          application/json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int32
+              description: Ids of resources to get
+              nullable: true
+          text/json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int32
+              description: Ids of resources to get
+              nullable: true
+          application/*+json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int32
+              description: Ids of resources to get
+              nullable: true
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Biomarker'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Biomarker'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Biomarker'
+      security:
+        - bearer: []
+  '/api/v1/Biomarker/{id}':
+    get:
+      tags:
+        - Biomarker
+      summary: Gets resource of type of given id
+      parameters:
+        - name: id
+          in: path
+          description: Number of page to get(starts from 1)
+          required: true
+          schema:
+            type: integer
+            description: Number of page to get(starts from 1)
+            format: int32
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Biomarker'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Biomarker'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Biomarker'
+        '404':
+          description: If no resource was found
+      security:
+        - bearer: []
+  '/api/v1/Category/{id}/history':
+    get:
+      tags:
+        - Category
+      summary: Gets state history of category with given id
+      parameters:
+        - name: id
+          in: path
+          description: Category of which history to get
+          required: true
+          schema:
+            type: integer
+            description: Category of which history to get
+            format: int32
+        - name: page
+          in: query
+          description: Number of page to get(starts from 1)
+          schema:
+            type: integer
+            description: Number of page to get(starts from 1)
+            format: int32
+        - name: pageSize
+          in: query
+          description: Number of objects on one page
+          schema:
+            type: integer
+            description: Number of objects on one page
+            format: int32
+        - name: orderByDate
+          in: query
+          description: Order by date(asc|desc)
+          schema:
+            type: string
+            description: Order by date(asc|desc)
+            default: desc
+            nullable: true
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberCategoryState'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberCategoryState'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberCategoryState'
+      security:
+        - bearer: []
+  /api/v1/Category/history:
+    get:
+      tags:
+        - Category
+      summary: Gets state history of categories
+      parameters:
+        - name: page
+          in: query
+          description: Number of page to get(starts from 1)
+          schema:
+            type: integer
+            description: Number of page to get(starts from 1)
+            format: int32
+        - name: pageSize
+          in: query
+          description: Number of objects on one page
+          schema:
+            type: integer
+            description: Number of objects on one page
+            format: int32
+        - name: orderByDate
+          in: query
+          description: Order by date(asc|desc)
+          schema:
+            type: string
+            description: Order by date(asc|desc)
+            default: desc
+            nullable: true
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberCategoryState'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberCategoryState'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberCategoryState'
+      security:
+        - bearer: []
+  /api/v1/Category:
+    get:
+      tags:
+        - Category
+      summary: Gets paged resources of type
+      parameters:
+        - name: page
+          in: query
+          description: Number of page to get(starts from 1)
+          schema:
+            type: integer
+            description: Number of page to get(starts from 1)
+            format: int32
+        - name: pageSize
+          in: query
+          description: Number of objects on one page
+          schema:
+            type: integer
+            description: Number of objects on one page
+            format: int32
+        - name: orderByDate
+          in: query
+          description: Order by date(asc|desc)
+          schema:
+            type: string
+            description: Order by date(asc|desc)
+            nullable: true
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+      security:
+        - bearer: []
+    post:
+      tags:
+        - Category
+      summary: Gets paged resources of type of given ids
+      parameters:
+        - name: page
+          in: query
+          description: Number of page to get(starts from 1)
+          schema:
+            type: integer
+            description: Number of page to get(starts from 1)
+            format: int32
+        - name: pageSize
+          in: query
+          description: Number of objects on one page
+          schema:
+            type: integer
+            description: Number of objects on one page
+            format: int32
+        - name: orderByDate
+          in: query
+          description: Order by date(asc|desc)
+          schema:
+            type: string
+            description: Order by date(asc|desc)
+            nullable: true
+      requestBody:
+        description: Ids of resources to get
+        content:
+          application/json-patch+json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int32
+              description: Ids of resources to get
+              nullable: true
+          application/json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int32
+              description: Ids of resources to get
+              nullable: true
+          text/json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int32
+              description: Ids of resources to get
+              nullable: true
+          application/*+json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int32
+              description: Ids of resources to get
+              nullable: true
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+      security:
+        - bearer: []
+  '/api/v1/Category/{id}':
+    get:
+      tags:
+        - Category
+      summary: Gets resource of type of given id
+      parameters:
+        - name: id
+          in: path
+          description: Number of page to get(starts from 1)
+          required: true
+          schema:
+            type: integer
+            description: Number of page to get(starts from 1)
+            format: int32
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Category'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '404':
+          description: If no resource was found
+      security:
+        - bearer: []
+  /api/v1/City:
+    get:
+      tags:
+        - City
+      summary: Gets paged resources of type
+      parameters:
+        - name: page
+          in: query
+          description: Number of page to get(starts from 1)
+          schema:
+            type: integer
+            description: Number of page to get(starts from 1)
+            format: int32
+        - name: pageSize
+          in: query
+          description: Number of objects on one page
+          schema:
+            type: integer
+            description: Number of objects on one page
+            format: int32
+        - name: orderByDate
+          in: query
+          description: Order by date(asc|desc)
+          schema:
+            type: string
+            description: Order by date(asc|desc)
+            nullable: true
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/City'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/City'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/City'
+      security:
+        - bearer: []
+    post:
+      tags:
+        - City
+      summary: Gets paged resources of type of given ids
+      parameters:
+        - name: page
+          in: query
+          description: Number of page to get(starts from 1)
+          schema:
+            type: integer
+            description: Number of page to get(starts from 1)
+            format: int32
+        - name: pageSize
+          in: query
+          description: Number of objects on one page
+          schema:
+            type: integer
+            description: Number of objects on one page
+            format: int32
+        - name: orderByDate
+          in: query
+          description: Order by date(asc|desc)
+          schema:
+            type: string
+            description: Order by date(asc|desc)
+            nullable: true
+      requestBody:
+        description: Ids of resources to get
+        content:
+          application/json-patch+json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int32
+              description: Ids of resources to get
+              nullable: true
+          application/json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int32
+              description: Ids of resources to get
+              nullable: true
+          text/json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int32
+              description: Ids of resources to get
+              nullable: true
+          application/*+json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int32
+              description: Ids of resources to get
+              nullable: true
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/City'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/City'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/City'
+      security:
+        - bearer: []
+  '/api/v1/City/{id}':
+    get:
+      tags:
+        - City
+      summary: Gets resource of type of given id
+      parameters:
+        - name: id
+          in: path
+          description: Number of page to get(starts from 1)
+          required: true
+          schema:
+            type: integer
+            description: Number of page to get(starts from 1)
+            format: int32
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/City'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/City'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/City'
+        '404':
+          description: If no resource was found
+      security:
+        - bearer: []
   /api/v1/Helper/gender:
     post:
       tags:
         - Helper
       summary: Gets list of genders
+      parameters:
+        - name: culture
+          in: header
+          description: Culture of user
+          schema:
+            type: string
+            description: Culture of user
+            nullable: true
       responses:
         '200':
           description: If everything went OK
@@ -322,6 +1061,167 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Culture'
+      security:
+        - bearer: []
+  /api/v1/Lab:
+    get:
+      tags:
+        - Lab
+      summary: Gets paged resources of type
+      parameters:
+        - name: page
+          in: query
+          description: Number of page to get(starts from 1)
+          schema:
+            type: integer
+            description: Number of page to get(starts from 1)
+            format: int32
+        - name: pageSize
+          in: query
+          description: Number of objects on one page
+          schema:
+            type: integer
+            description: Number of objects on one page
+            format: int32
+        - name: orderByDate
+          in: query
+          description: Order by date(asc|desc)
+          schema:
+            type: string
+            description: Order by date(asc|desc)
+            nullable: true
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Lab'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Lab'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Lab'
+      security:
+        - bearer: []
+    post:
+      tags:
+        - Lab
+      summary: Gets paged resources of type of given ids
+      parameters:
+        - name: page
+          in: query
+          description: Number of page to get(starts from 1)
+          schema:
+            type: integer
+            description: Number of page to get(starts from 1)
+            format: int32
+        - name: pageSize
+          in: query
+          description: Number of objects on one page
+          schema:
+            type: integer
+            description: Number of objects on one page
+            format: int32
+        - name: orderByDate
+          in: query
+          description: Order by date(asc|desc)
+          schema:
+            type: string
+            description: Order by date(asc|desc)
+            nullable: true
+      requestBody:
+        description: Ids of resources to get
+        content:
+          application/json-patch+json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int32
+              description: Ids of resources to get
+              nullable: true
+          application/json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int32
+              description: Ids of resources to get
+              nullable: true
+          text/json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int32
+              description: Ids of resources to get
+              nullable: true
+          application/*+json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int32
+              description: Ids of resources to get
+              nullable: true
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Lab'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Lab'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Lab'
+      security:
+        - bearer: []
+  '/api/v1/Lab/{id}':
+    get:
+      tags:
+        - Lab
+      summary: Gets resource of type of given id
+      parameters:
+        - name: id
+          in: path
+          description: Number of page to get(starts from 1)
+          required: true
+          schema:
+            type: integer
+            description: Number of page to get(starts from 1)
+            format: int32
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Lab'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lab'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Lab'
+        '404':
+          description: If no resource was found
       security:
         - bearer: []
   /api/v1/Member:
@@ -405,6 +1305,555 @@ paths:
           description: If member was edited
         '400':
           description: If anything went BAD and member wasn't edited
+      security:
+        - bearer: []
+  /api/v1/member/analysis/add:
+    post:
+      tags:
+        - MemberAnalysis
+      summary: Adds new analysis
+      description: '"Biomarkers" property IS required'
+      requestBody:
+        description: Model of analysis
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/MemberAnalysisModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemberAnalysisModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/MemberAnalysisModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/MemberAnalysisModel'
+        required: true
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                type: integer
+                format: int32
+            application/json:
+              schema:
+                type: integer
+                format: int32
+            text/json:
+              schema:
+                type: integer
+                format: int32
+        '400':
+          description: If anything went BAD
+      security:
+        - bearer: []
+  '/api/v1/member/analysis/{id}':
+    patch:
+      tags:
+        - MemberAnalysis
+      summary: Edits analysis of given id
+      description: '"Biomarkers" property IS NOT required'
+      parameters:
+        - name: id
+          in: path
+          description: Id of analysis
+          required: true
+          schema:
+            type: integer
+            description: Id of analysis
+            format: int32
+      requestBody:
+        description: New data
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/MemberAnalysisModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemberAnalysisModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/MemberAnalysisModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/MemberAnalysisModel'
+        required: true
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/MemberAnalysis'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberAnalysis'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/MemberAnalysis'
+        '400':
+          description: If anything went BAD
+      security:
+        - bearer: []
+    delete:
+      tags:
+        - MemberAnalysis
+      summary: Deletes analysis of given id
+      parameters:
+        - name: id
+          in: path
+          description: Id of analysis
+          required: true
+          schema:
+            type: integer
+            description: Id of analysis
+            format: int32
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/MemberAnalysis'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberAnalysis'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/MemberAnalysis'
+        '400':
+          description: If anything went BAD
+      security:
+        - bearer: []
+    get:
+      tags:
+        - MemberAnalysis
+      summary: Gets resource of type of given id
+      parameters:
+        - name: id
+          in: path
+          description: Number of page to get(starts from 1)
+          required: true
+          schema:
+            type: integer
+            description: Number of page to get(starts from 1)
+            format: int32
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/MemberAnalysis'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberAnalysis'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/MemberAnalysis'
+        '404':
+          description: If no resource was found
+      security:
+        - bearer: []
+  /api/v1/member/analysis:
+    get:
+      tags:
+        - MemberAnalysis
+      summary: Gets paged resources of type
+      parameters:
+        - name: page
+          in: query
+          description: Number of page to get(starts from 1)
+          schema:
+            type: integer
+            description: Number of page to get(starts from 1)
+            format: int32
+        - name: pageSize
+          in: query
+          description: Number of objects on one page
+          schema:
+            type: integer
+            description: Number of objects on one page
+            format: int32
+        - name: orderByDate
+          in: query
+          description: Order by date(asc|desc)
+          schema:
+            type: string
+            description: Order by date(asc|desc)
+            nullable: true
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberAnalysis'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberAnalysis'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberAnalysis'
+      security:
+        - bearer: []
+    post:
+      tags:
+        - MemberAnalysis
+      summary: Gets paged resources of type of given ids
+      parameters:
+        - name: page
+          in: query
+          description: Number of page to get(starts from 1)
+          schema:
+            type: integer
+            description: Number of page to get(starts from 1)
+            format: int32
+        - name: pageSize
+          in: query
+          description: Number of objects on one page
+          schema:
+            type: integer
+            description: Number of objects on one page
+            format: int32
+        - name: orderByDate
+          in: query
+          description: Order by date(asc|desc)
+          schema:
+            type: string
+            description: Order by date(asc|desc)
+            nullable: true
+      requestBody:
+        description: Ids of resources to get
+        content:
+          application/json-patch+json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int32
+              description: Ids of resources to get
+              nullable: true
+          application/json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int32
+              description: Ids of resources to get
+              nullable: true
+          text/json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int32
+              description: Ids of resources to get
+              nullable: true
+          application/*+json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int32
+              description: Ids of resources to get
+              nullable: true
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberAnalysis'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberAnalysis'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberAnalysis'
+      security:
+        - bearer: []
+  /api/v1/member/biomarker/add:
+    post:
+      tags:
+        - MemberBiomarker
+      summary: Adds new member biomarker
+      requestBody:
+        description: Model of biomarker
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/MemberBiomarkerModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemberBiomarkerModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/MemberBiomarkerModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/MemberBiomarkerModel'
+        required: true
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                type: integer
+                format: int32
+            application/json:
+              schema:
+                type: integer
+                format: int32
+            text/json:
+              schema:
+                type: integer
+                format: int32
+        '400':
+          description: If anything went BAD
+      security:
+        - bearer: []
+  '/api/v1/member/biomarker/{id}':
+    patch:
+      tags:
+        - MemberBiomarker
+      summary: Edits member's biomarker of given id
+      description: '"AnalysisId" is ignored'
+      parameters:
+        - name: id
+          in: path
+          description: Id of biomarker
+          required: true
+          schema:
+            type: integer
+            description: Id of biomarker
+            format: int32
+      requestBody:
+        description: New data
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/MemberBiomarkerModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemberBiomarkerModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/MemberBiomarkerModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/MemberBiomarkerModel'
+        required: true
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/MemberBiomarker'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberBiomarker'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/MemberBiomarker'
+        '400':
+          description: If anything went BAD
+      security:
+        - bearer: []
+    delete:
+      tags:
+        - MemberBiomarker
+      summary: Deletes member's biomarker of given id
+      parameters:
+        - name: id
+          in: path
+          description: Id of biomarker
+          required: true
+          schema:
+            type: integer
+            description: Id of biomarker
+            format: int32
+      responses:
+        '200':
+          description: If everything went OK
+        '400':
+          description: If anything went BAD
+      security:
+        - bearer: []
+    get:
+      tags:
+        - MemberBiomarker
+      summary: Gets resource of type of given id
+      parameters:
+        - name: id
+          in: path
+          description: Number of page to get(starts from 1)
+          required: true
+          schema:
+            type: integer
+            description: Number of page to get(starts from 1)
+            format: int32
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/MemberBiomarker'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberBiomarker'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/MemberBiomarker'
+        '404':
+          description: If no resource was found
+      security:
+        - bearer: []
+  /api/v1/member/biomarker:
+    get:
+      tags:
+        - MemberBiomarker
+      summary: Gets paged resources of type
+      parameters:
+        - name: page
+          in: query
+          description: Number of page to get(starts from 1)
+          schema:
+            type: integer
+            description: Number of page to get(starts from 1)
+            format: int32
+        - name: pageSize
+          in: query
+          description: Number of objects on one page
+          schema:
+            type: integer
+            description: Number of objects on one page
+            format: int32
+        - name: orderByDate
+          in: query
+          description: Order by date(asc|desc)
+          schema:
+            type: string
+            description: Order by date(asc|desc)
+            nullable: true
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberBiomarker'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberBiomarker'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberBiomarker'
+      security:
+        - bearer: []
+    post:
+      tags:
+        - MemberBiomarker
+      summary: Gets paged resources of type of given ids
+      parameters:
+        - name: page
+          in: query
+          description: Number of page to get(starts from 1)
+          schema:
+            type: integer
+            description: Number of page to get(starts from 1)
+            format: int32
+        - name: pageSize
+          in: query
+          description: Number of objects on one page
+          schema:
+            type: integer
+            description: Number of objects on one page
+            format: int32
+        - name: orderByDate
+          in: query
+          description: Order by date(asc|desc)
+          schema:
+            type: string
+            description: Order by date(asc|desc)
+            nullable: true
+      requestBody:
+        description: Ids of resources to get
+        content:
+          application/json-patch+json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int32
+              description: Ids of resources to get
+              nullable: true
+          application/json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int32
+              description: Ids of resources to get
+              nullable: true
+          text/json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int32
+              description: Ids of resources to get
+              nullable: true
+          application/*+json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int32
+              description: Ids of resources to get
+              nullable: true
+      responses:
+        '200':
+          description: If everything went OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberBiomarker'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberBiomarker'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberBiomarker'
       security:
         - bearer: []
   /api/v1/PasswordReset:
@@ -718,7 +2167,7 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/Unit'
-        '204':
+        '404':
           description: If no resource was found
       security:
         - bearer: []
@@ -863,6 +2312,633 @@ components:
         content:
           $ref: '#/components/schemas/GenderTranslation'
       additionalProperties: false
+    CityTranslation:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        cultureId:
+          type: integer
+          format: int32
+        culture:
+          $ref: '#/components/schemas/Culture'
+        name:
+          type: string
+          nullable: true
+        baseEntityId:
+          type: integer
+          format: int32
+        baseEntity:
+          $ref: '#/components/schemas/City'
+      additionalProperties: false
+    City:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        translations:
+          type: array
+          items:
+            $ref: '#/components/schemas/CityTranslation'
+          nullable: true
+        content:
+          $ref: '#/components/schemas/CityTranslation'
+        labs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Lab'
+          nullable: true
+        labIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+          nullable: true
+          readOnly: true
+      additionalProperties: false
+    LabTranslation:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        cultureId:
+          type: integer
+          format: int32
+        culture:
+          $ref: '#/components/schemas/Culture'
+        name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        baseEntityId:
+          type: integer
+          format: int32
+        baseEntity:
+          $ref: '#/components/schemas/Lab'
+      additionalProperties: false
+    Lab:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        phoneNumber:
+          type: string
+          nullable: true
+        cityId:
+          type: integer
+          format: int32
+        city:
+          $ref: '#/components/schemas/City'
+        translations:
+          type: array
+          items:
+            $ref: '#/components/schemas/LabTranslation'
+          nullable: true
+        content:
+          $ref: '#/components/schemas/LabTranslation'
+      additionalProperties: false
+    UnitTranslation:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        cultureId:
+          type: integer
+          format: int32
+        culture:
+          $ref: '#/components/schemas/Culture'
+        name:
+          type: string
+          nullable: true
+        baseEntityId:
+          type: integer
+          format: int32
+        baseEntity:
+          $ref: '#/components/schemas/Unit'
+        shorthand:
+          type: string
+          nullable: true
+      additionalProperties: false
+    BiomarkerTypeTranslation:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        cultureId:
+          type: integer
+          format: int32
+        culture:
+          $ref: '#/components/schemas/Culture'
+        name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        baseEntityId:
+          type: integer
+          format: int32
+        baseEntity:
+          $ref: '#/components/schemas/BiomarkerType'
+      additionalProperties: false
+    BiomarkerType:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        translations:
+          type: array
+          items:
+            $ref: '#/components/schemas/BiomarkerTypeTranslation'
+          nullable: true
+        content:
+          $ref: '#/components/schemas/BiomarkerTypeTranslation'
+        biomarkers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Biomarker'
+          nullable: true
+        biomarkerIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+          nullable: true
+          readOnly: true
+      additionalProperties: false
+    BiomarkerTranslation:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        cultureId:
+          type: integer
+          format: int32
+        culture:
+          $ref: '#/components/schemas/Culture'
+        name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        baseEntityId:
+          type: integer
+          format: int32
+        baseEntity:
+          $ref: '#/components/schemas/Biomarker'
+      additionalProperties: false
+    CategoryTranslation:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        cultureId:
+          type: integer
+          format: int32
+        culture:
+          $ref: '#/components/schemas/Culture'
+        name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        baseEntityId:
+          type: integer
+          format: int32
+        baseEntity:
+          $ref: '#/components/schemas/Category'
+      additionalProperties: false
+    MemberCategoryState:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        state:
+          type: number
+          format: double
+        difference:
+          type: number
+          format: double
+        categoryId:
+          type: integer
+          format: int32
+        category:
+          $ref: '#/components/schemas/Category'
+        memberId:
+          type: integer
+          format: int32
+        member:
+          $ref: '#/components/schemas/Member'
+        dateCreatedAt:
+          type: string
+          format: date-time
+      additionalProperties: false
+    CategoryBiomarker:
+      type: object
+      properties:
+        categoryId:
+          type: integer
+          format: int32
+        category:
+          $ref: '#/components/schemas/Category'
+        biomarkerId:
+          type: integer
+          format: int32
+        biomarker:
+          $ref: '#/components/schemas/Biomarker'
+      additionalProperties: false
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        translations:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryTranslation'
+          nullable: true
+        content:
+          $ref: '#/components/schemas/CategoryTranslation'
+        state:
+          $ref: '#/components/schemas/MemberCategoryState'
+        biomarkers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Biomarker'
+          nullable: true
+          readOnly: true
+        biomarkerIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+          nullable: true
+          readOnly: true
+        categoryBiomarkers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryBiomarker'
+          nullable: true
+      additionalProperties: false
+    ArticleTranslation:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        cultureId:
+          type: integer
+          format: int32
+        culture:
+          $ref: '#/components/schemas/Culture'
+        name:
+          type: string
+          nullable: true
+        text:
+          type: string
+          nullable: true
+        baseEntityId:
+          type: integer
+          format: int32
+        baseEntity:
+          $ref: '#/components/schemas/Article'
+      additionalProperties: false
+    Article:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        translations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArticleTranslation'
+          nullable: true
+        content:
+          $ref: '#/components/schemas/ArticleTranslation'
+      additionalProperties: false
+    BiomarkerReferenceConfigRange:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        lower:
+          type: number
+          format: double
+        upper:
+          type: number
+          format: double
+      additionalProperties: false
+    BiomarkerReferenceConfig:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        referenceId:
+          type: integer
+          format: int32
+        reference:
+          $ref: '#/components/schemas/BiomarkerReference'
+        ageRangeId:
+          type: integer
+          format: int32
+          nullable: true
+        ageRange:
+          $ref: '#/components/schemas/BiomarkerReferenceConfigRange'
+        genderId:
+          type: integer
+          format: int32
+        gender:
+          $ref: '#/components/schemas/Gender'
+      additionalProperties: false
+    BiomarkerReference:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        valueA:
+          type: number
+          format: double
+        valueB:
+          type: number
+          format: double
+        unitId:
+          type: integer
+          format: int32
+        unit:
+          $ref: '#/components/schemas/Unit'
+        biomarkerId:
+          type: integer
+          format: int32
+        biomarker:
+          $ref: '#/components/schemas/Biomarker'
+        config:
+          $ref: '#/components/schemas/BiomarkerReferenceConfig'
+      additionalProperties: false
+    BiomarkerArticleType:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        key:
+          type: string
+          nullable: true
+      additionalProperties: false
+    BiomarkerArticle:
+      type: object
+      properties:
+        biomarkerId:
+          type: integer
+          format: int32
+        biomarker:
+          $ref: '#/components/schemas/Biomarker'
+        articleId:
+          type: integer
+          format: int32
+        article:
+          $ref: '#/components/schemas/Article'
+        typeId:
+          type: integer
+          format: int32
+        type:
+          $ref: '#/components/schemas/BiomarkerArticleType'
+      additionalProperties: false
+    BiomarkerUnit:
+      type: object
+      properties:
+        biomarkerId:
+          type: integer
+          format: int32
+        biomarker:
+          $ref: '#/components/schemas/Biomarker'
+        unitId:
+          type: integer
+          format: int32
+        unit:
+          $ref: '#/components/schemas/Unit'
+      additionalProperties: false
+    Biomarker:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        typeId:
+          type: integer
+          format: int32
+        type:
+          $ref: '#/components/schemas/BiomarkerType'
+        translations:
+          type: array
+          items:
+            $ref: '#/components/schemas/BiomarkerTranslation'
+          nullable: true
+        content:
+          $ref: '#/components/schemas/BiomarkerTranslation'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+          nullable: true
+          readOnly: true
+        categoryIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+          nullable: true
+          readOnly: true
+        articles:
+          type: array
+          items:
+            $ref: '#/components/schemas/Article'
+          nullable: true
+        units:
+          type: array
+          items:
+            $ref: '#/components/schemas/Unit'
+          nullable: true
+          readOnly: true
+        unitIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+          nullable: true
+          readOnly: true
+        references:
+          type: array
+          items:
+            $ref: '#/components/schemas/BiomarkerReference'
+          nullable: true
+        categoryBiomarkers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryBiomarker'
+          nullable: true
+        biomarkerArticles:
+          type: array
+          items:
+            $ref: '#/components/schemas/BiomarkerArticle'
+          nullable: true
+        biomarkerUnits:
+          type: array
+          items:
+            $ref: '#/components/schemas/BiomarkerUnit'
+          nullable: true
+      additionalProperties: false
+    UnitTransfer:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        unitAId:
+          type: integer
+          format: int32
+        unitA:
+          $ref: '#/components/schemas/Unit'
+        unitBId:
+          type: integer
+          format: int32
+        unitB:
+          $ref: '#/components/schemas/Unit'
+        coefficient:
+          type: number
+          description: UnitA is UnitB * Coefficient
+          format: double
+      additionalProperties: false
+    Unit:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        translations:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnitTranslation'
+          nullable: true
+        content:
+          $ref: '#/components/schemas/UnitTranslation'
+        biomarkers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Biomarker'
+          nullable: true
+          readOnly: true
+        transfersToIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+          nullable: true
+          readOnly: true
+        transfersFromIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+          nullable: true
+          readOnly: true
+        transfersTo:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnitTransfer'
+          nullable: true
+        transfersFrom:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnitTransfer'
+          nullable: true
+        biomarkerUnits:
+          type: array
+          items:
+            $ref: '#/components/schemas/BiomarkerUnit'
+          nullable: true
+      additionalProperties: false
+    MemberBiomarker:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        value:
+          type: number
+          format: double
+        dateCreatedAt:
+          type: string
+          format: date-time
+        unitId:
+          type: integer
+          format: int32
+        unit:
+          $ref: '#/components/schemas/Unit'
+        biomarkerId:
+          type: integer
+          format: int32
+        biomarker:
+          $ref: '#/components/schemas/Biomarker'
+        analysisId:
+          type: integer
+          format: int32
+        analysis:
+          $ref: '#/components/schemas/MemberAnalysis'
+      additionalProperties: false
+    MemberAnalysis:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        date:
+          type: string
+          format: date-time
+        memberId:
+          type: integer
+          format: int32
+        member:
+          $ref: '#/components/schemas/Member'
+        labId:
+          type: integer
+          format: int32
+          nullable: true
+        lab:
+          $ref: '#/components/schemas/Lab'
+        biomarkers:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemberBiomarker'
+          nullable: true
+        dateCreatedAt:
+          type: string
+          format: date-time
+      additionalProperties: false
     Member:
       type: object
       properties:
@@ -881,11 +2957,32 @@ components:
         dateBirthday:
           type: string
           format: date-time
+        age:
+          type: integer
+          format: int32
+          readOnly: true
         genderId:
           type: integer
           format: int32
         gender:
           $ref: '#/components/schemas/Gender'
+        analyzes:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemberAnalysis'
+          nullable: true
+        analysisIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+          nullable: true
+          readOnly: true
+        categoryStates:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemberCategoryState'
+          nullable: true
         userId:
           type: integer
           format: int32
@@ -1017,6 +3114,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Member'
+          nullable: true
+        analyzes:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemberAnalysis'
           nullable: true
         currentMemberId:
           type: integer
@@ -1164,6 +3266,46 @@ components:
           type: string
           nullable: true
       additionalProperties: false
+    MemberBiomarkerModel:
+      required:
+        - biomarkerId
+        - unitId
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+        analysisId:
+          type: integer
+          format: int32
+        biomarkerId:
+          type: integer
+          format: int32
+        unitId:
+          type: integer
+          format: int32
+      additionalProperties: false
+    MemberAnalysisModel:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        labId:
+          type: integer
+          format: int32
+        date:
+          type: string
+          format: date-time
+        biomarkers:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemberBiomarkerModel'
+          nullable: true
+      additionalProperties: false
     PasswordResetModel:
       required:
         - code
@@ -1174,441 +3316,6 @@ components:
           type: string
         password:
           type: string
-      additionalProperties: false
-    UnitTranslation:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        cultureId:
-          type: integer
-          format: int32
-        culture:
-          $ref: '#/components/schemas/Culture'
-        name:
-          type: string
-          nullable: true
-        baseEntityId:
-          type: integer
-          format: int32
-        baseEntity:
-          $ref: '#/components/schemas/Unit'
-      additionalProperties: false
-    BiomarkerTypeTranslation:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        cultureId:
-          type: integer
-          format: int32
-        culture:
-          $ref: '#/components/schemas/Culture'
-        name:
-          type: string
-          nullable: true
-        description:
-          type: string
-          nullable: true
-        baseEntityId:
-          type: integer
-          format: int32
-        baseEntity:
-          $ref: '#/components/schemas/BiomarkerType'
-      additionalProperties: false
-    BiomarkerType:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        translations:
-          type: array
-          items:
-            $ref: '#/components/schemas/BiomarkerTypeTranslation'
-          nullable: true
-        content:
-          $ref: '#/components/schemas/BiomarkerTypeTranslation'
-        biomarkers:
-          type: array
-          items:
-            $ref: '#/components/schemas/Biomarker'
-          nullable: true
-      additionalProperties: false
-    BiomarkerTranslation:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        cultureId:
-          type: integer
-          format: int32
-        culture:
-          $ref: '#/components/schemas/Culture'
-        name:
-          type: string
-          nullable: true
-        description:
-          type: string
-          nullable: true
-        baseEntityId:
-          type: integer
-          format: int32
-        baseEntity:
-          $ref: '#/components/schemas/Biomarker'
-      additionalProperties: false
-    CategoryTranslation:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        cultureId:
-          type: integer
-          format: int32
-        culture:
-          $ref: '#/components/schemas/Culture'
-        name:
-          type: string
-          nullable: true
-        description:
-          type: string
-          nullable: true
-        baseEntityId:
-          type: integer
-          format: int32
-        baseEntity:
-          $ref: '#/components/schemas/Category'
-      additionalProperties: false
-    CategoryBiomarker:
-      type: object
-      properties:
-        categoryId:
-          type: integer
-          format: int32
-        category:
-          $ref: '#/components/schemas/Category'
-        biomarkerId:
-          type: integer
-          format: int32
-        biomarker:
-          $ref: '#/components/schemas/Biomarker'
-      additionalProperties: false
-    Category:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        translations:
-          type: array
-          items:
-            $ref: '#/components/schemas/CategoryTranslation'
-          nullable: true
-        content:
-          $ref: '#/components/schemas/CategoryTranslation'
-        biomarkers:
-          type: array
-          items:
-            $ref: '#/components/schemas/Biomarker'
-          nullable: true
-          readOnly: true
-        categoryBiomarkers:
-          type: array
-          items:
-            $ref: '#/components/schemas/CategoryBiomarker'
-          nullable: true
-      additionalProperties: false
-    ArticleTranslation:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        cultureId:
-          type: integer
-          format: int32
-        culture:
-          $ref: '#/components/schemas/Culture'
-        name:
-          type: string
-          nullable: true
-        text:
-          type: string
-          nullable: true
-        baseEntityId:
-          type: integer
-          format: int32
-        baseEntity:
-          $ref: '#/components/schemas/Article'
-      additionalProperties: false
-    Article:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        translations:
-          type: array
-          items:
-            $ref: '#/components/schemas/ArticleTranslation'
-          nullable: true
-        content:
-          $ref: '#/components/schemas/ArticleTranslation'
-      additionalProperties: false
-    BiomarkerReferenceConfigDependencyType:
-      enum:
-        - 0
-      type: integer
-      format: int32
-    BiomarkerReferenceConfigDependencyRange:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        lower:
-          type: number
-          format: double
-        upper:
-          type: number
-          format: double
-      additionalProperties: false
-    BiomarkerReferenceConfigDependency:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        type:
-          $ref: '#/components/schemas/BiomarkerReferenceConfigDependencyType'
-        rangeId:
-          type: integer
-          format: int32
-        range:
-          $ref: '#/components/schemas/BiomarkerReferenceConfigDependencyRange'
-        configId:
-          type: integer
-          format: int32
-        config:
-          $ref: '#/components/schemas/BiomarkerReferenceConfig'
-      additionalProperties: false
-    BiomarkerReferenceConfig:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        referenceId:
-          type: integer
-          format: int32
-        reference:
-          $ref: '#/components/schemas/BiomarkerReference'
-        dependencies:
-          type: array
-          items:
-            $ref: '#/components/schemas/BiomarkerReferenceConfigDependency'
-          nullable: true
-        genderId:
-          type: integer
-          format: int32
-        gender:
-          $ref: '#/components/schemas/Gender'
-      additionalProperties: false
-    BiomarkerReference:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        value:
-          type: number
-          format: double
-        unitId:
-          type: integer
-          format: int32
-        unit:
-          $ref: '#/components/schemas/Unit'
-        biomarkerId:
-          type: integer
-          format: int32
-        biomarker:
-          $ref: '#/components/schemas/Biomarker'
-        config:
-          $ref: '#/components/schemas/BiomarkerReferenceConfig'
-      additionalProperties: false
-    BiomarkerArticleType:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        key:
-          type: string
-          nullable: true
-      additionalProperties: false
-    BiomarkerArticle:
-      type: object
-      properties:
-        biomarkerId:
-          type: integer
-          format: int32
-        biomarker:
-          $ref: '#/components/schemas/Biomarker'
-        articleId:
-          type: integer
-          format: int32
-        article:
-          $ref: '#/components/schemas/Article'
-        typeId:
-          type: integer
-          format: int32
-        type:
-          $ref: '#/components/schemas/BiomarkerArticleType'
-      additionalProperties: false
-    BiomarkerUnit:
-      type: object
-      properties:
-        biomarkerId:
-          type: integer
-          format: int32
-        biomarker:
-          $ref: '#/components/schemas/Biomarker'
-        unitId:
-          type: integer
-          format: int32
-        unit:
-          $ref: '#/components/schemas/Unit'
-      additionalProperties: false
-    Biomarker:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        typeId:
-          type: integer
-          format: int32
-        type:
-          $ref: '#/components/schemas/BiomarkerType'
-        translations:
-          type: array
-          items:
-            $ref: '#/components/schemas/BiomarkerTranslation'
-          nullable: true
-        content:
-          $ref: '#/components/schemas/BiomarkerTranslation'
-        categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/Category'
-          nullable: true
-          readOnly: true
-        articles:
-          type: array
-          items:
-            $ref: '#/components/schemas/Article'
-          nullable: true
-          readOnly: true
-        units:
-          type: array
-          items:
-            $ref: '#/components/schemas/Unit'
-          nullable: true
-          readOnly: true
-        references:
-          type: array
-          items:
-            $ref: '#/components/schemas/BiomarkerReference'
-          nullable: true
-        categoryBiomarkers:
-          type: array
-          items:
-            $ref: '#/components/schemas/CategoryBiomarker'
-          nullable: true
-        biomarkerArticles:
-          type: array
-          items:
-            $ref: '#/components/schemas/BiomarkerArticle'
-          nullable: true
-        biomarkerUnits:
-          type: array
-          items:
-            $ref: '#/components/schemas/BiomarkerUnit'
-          nullable: true
-      additionalProperties: false
-    UnitTransfer:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        unitAId:
-          type: integer
-          format: int32
-        unitA:
-          $ref: '#/components/schemas/Unit'
-        unitBId:
-          type: integer
-          format: int32
-        unitB:
-          $ref: '#/components/schemas/Unit'
-        coefficient:
-          type: number
-          description: UnitA is UnitB * Coefficient
-          format: double
-      additionalProperties: false
-    Unit:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        translations:
-          type: array
-          items:
-            $ref: '#/components/schemas/UnitTranslation'
-          nullable: true
-        content:
-          $ref: '#/components/schemas/UnitTranslation'
-        biomarkers:
-          type: array
-          items:
-            $ref: '#/components/schemas/Biomarker'
-          nullable: true
-          readOnly: true
-        transfersToIds:
-          type: array
-          items:
-            type: integer
-            format: int32
-          nullable: true
-          readOnly: true
-        transfersFromIds:
-          type: array
-          items:
-            type: integer
-            format: int32
-          nullable: true
-          readOnly: true
-        transfersTo:
-          type: array
-          items:
-            $ref: '#/components/schemas/UnitTransfer'
-          nullable: true
-        transfersFrom:
-          type: array
-          items:
-            $ref: '#/components/schemas/UnitTransfer'
-          nullable: true
-        biomarkerUnits:
-          type: array
-          items:
-            $ref: '#/components/schemas/BiomarkerUnit'
-          nullable: true
       additionalProperties: false
     UserEditModel:
       type: object
