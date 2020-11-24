@@ -14,6 +14,7 @@ class CustomTextFormField extends StatelessWidget with IndentsMixin {
   final Icon icon;
   final String Function(String) validator;
   final void Function(String) onChange;
+  final Future<dynamic> onTap;
   final bool Function() formValidator;
   final EdgeInsetsGeometry padding;
   final EdgeInsetsGeometry margin;
@@ -28,6 +29,7 @@ class CustomTextFormField extends StatelessWidget with IndentsMixin {
       this.hintText = '',
       this.icon,
       this.onChange,
+        this.onTap,
       this.formValidator,
       this.validator,
       this.enabledColor,

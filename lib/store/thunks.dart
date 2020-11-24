@@ -37,18 +37,6 @@ class StoreThunks {
       store.dispatch(SetUser(res.user));
       store.dispatch(SetAuthorization(auth));
 
-      // TODO: remove -------------------
-      var gen = await api.helper.genders();
-      var genObject = gen.firstWhere(
-          (x) => x.id == store.state.authorization.currentMember.genderId);
-      store.dispatch(SetGender(genObject));
-      //Отладка
-      print(genObject); //Подгруженный объект
-      //print(store.state.gender.id); //Id гендера в сторе
-      print(
-          localStorage.getItem("gender_state")); //Текущее состояние локал стора
-      // --------------------------------
-
       await onSuccess?.call();
     };
   }

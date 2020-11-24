@@ -63,6 +63,11 @@
     "social_disconnect_success": "Social network successfully disconnected",
     "social_disconnect_error": "Unexpected error while disconnecting social network"
   },
+  "gender": {
+    "male": "Male",
+    "female": "Female",
+    "neutral": "Neutral"
+  },
   "auth_screen": {
     "login": "Sign in",
     "reset_password": "Reset password",

@@ -34,17 +34,12 @@ class AccountContainer extends StatefulWidget {
   _AccountContainerState createState() => _AccountContainerState();
 }
 
-//Получение пола
-//void gendersAsync() async{
-//  var gen = await api.helper.genders();
-//  store.dispatch(SetGender(gen.firstWhere((x)=>x.id == store.state.authorization.currentMember.genderId)));
-//}
-
 class _AccountContainerState extends State<AccountContainer> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final _tr = trWithKey('account_container');
+    final _ttr = trWithKey('gender');
     final user = store.state.user;
     final currentMember = store.state.authorization.currentMember;
     //Добавить локализацию
@@ -112,7 +107,7 @@ class _AccountContainerState extends State<AccountContainer> {
             converter: (store) => store.state.authorization,
             builder: (ctx, state) {
               final currentMember = state.currentMember;
-              final gender = store.state.gender;
+              final gender = store.state.helper.genders;
 
               return BlockBaseWidget(
                 child: Column(
@@ -140,11 +135,12 @@ class _AccountContainerState extends State<AccountContainer> {
                                 ),
                               ),
                               Text(
-                                  (store.state.gender?.content?.name ?? '') +
-                                          ', ' +
-                                          getAgeFromDate(
-                                                  currentMember.dateBirthday)
-                                              .toString(),
+                                  _ttr((gender[currentMember.genderId - 1]
+                                              .key ??
+                                          'neutral')) +
+                                      ', ' +
+                                      getAgeFromDate(currentMember.dateBirthday)
+                                          .toString(),
                                   style: theme.textTheme.bodyText2.merge(
                                       TextStyle(
                                           color: theme.colorScheme.onSurface)))
