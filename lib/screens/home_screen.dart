@@ -1,4 +1,5 @@
 import 'package:biomad_frontend/containers/account_container.dart';
+import 'package:biomad_frontend/containers/category_container.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/screens/search_screen.dart';
@@ -16,6 +17,9 @@ import 'package:biomad_frontend/widgets/custom_divider.dart';
 import 'package:biomad_frontend/widgets/custom_list_tile.dart';
 import 'package:biomad_frontend/widgets/custom_text_form_field.dart';
 import 'package:biomad_frontend/widgets/nav_bar.dart';
+import 'package:biomad_frontend/widgets/nav_page_bar.dart';
+import 'package:biomad_frontend/widgets/nav_top_bar.dart';
+import 'package:biomad_frontend/widgets/tmp_biomarker_buttons.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,14 +35,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   PanelController _panelController = PanelController();
 
   final double _initFabHeight = 120.0;
@@ -51,93 +47,16 @@ class _MyHomePageState extends State<MyHomePage> {
     final theme = Theme.of(context);
 
     return Scaffold(
+      appBar: AppBar(
+        title: NavTopBar(),
+      ),
       body: Stack(children: [
         Scaffold(
-          appBar: AppBar(
-            title: Text(
-                "Добро пожаловать, " +
-                    store.state.authorization.currentMember.name,
-                style: TextStyle(color: Theme.of(context).primaryColor)),
-          ),
-          body: Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                RaisedButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return biomarkerAlertDialog(
-                          context,
-                          title: "Добавить биомаркер",
-                          actions: <Widget>[
-                            TextButton(
-                              child: Text('Отмена'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                            TextButton(
-                              child: Text('Добавить'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                          contentPadding:
-                              EdgeInsets.symmetric(vertical: Indents.md),
-                        );
-                      },
-                    );
-                  },
-                  child: const Text('Добавить биомаркер',
-                      style: TextStyle(fontSize: 20)),
-                ),
-                RaisedButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return biomarkerAlertDialog(
-                          context,
-                          title: "Изменить биомаркер",
-                          actions: <Widget>[
-                            TextButton(
-                              child: Text('Отмена'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                            TextButton(
-                              child: Text('Изменить'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                          //contentHeight: h,
-                          contentPadding:
-                              EdgeInsets.symmetric(vertical: Indents.md),
-                        );
-                      },
-                    );
-                  },
-                  child: const Text('Изменить биомаркер',
-                      style: TextStyle(fontSize: 20)),
-                ),
-                RaisedButton(
-                  onPressed: () {
-                    Keys.rootNavigator.currentState
-                        .pushReplacementNamed(Routes.biomarker);
-                  },
-                  child: const Text('Открыть биомаркер',
-                      style: TextStyle(fontSize: 20)),
-                ),
-              ],
-            ),
-          ),
-        ),
+            body: Container(
+                //tmpBiomarker(context)
+                child: Column(
+          children: [NavPageBar(), CategoryContainer()],
+        ))),
         Positioned(
             bottom: NavBar.indent,
             right: NavBar.indent,

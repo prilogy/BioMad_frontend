@@ -71,8 +71,7 @@ class AuthApi extends ApiBase<AuthApi> {
       await dio.post(url, data: model);
       return true;
     } on DioError catch (e) {
-      if(e.response?.statusCode == 409)
-        return false;
+      if (e.response?.statusCode == 409) return false;
       return null;
     }
   }
