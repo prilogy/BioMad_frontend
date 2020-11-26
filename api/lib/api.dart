@@ -1,11 +1,8 @@
 library api.api;
 
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'dart:core';
 import 'dart:async';
-import 'package:biomad_frontend/services/localstorage.dart';
 
 // apis
 part 'api/auth_api.dart';
@@ -27,6 +24,8 @@ part 'helpers/api_base.dart';
 part 'models/authentication_result.dart';
 
 part 'models/gender.dart';
+
+part 'models/search_result_model.dart';
 
 part 'models/log_in_with_credentials_model.dart';
 
