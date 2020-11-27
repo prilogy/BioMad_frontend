@@ -10,6 +10,5 @@ final categoryReducer = combineReducers<CategoryList>([
 
 CategoryList _setCategory(CategoryList state, Actions.SetCategory action) {
   CategoryList.saveToLocalStorage(action.category);
-  print("REDUCE IT!");
   return action.category;
 }

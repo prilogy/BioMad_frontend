@@ -4,8 +4,6 @@ import 'package:biomad_frontend/services/localstorage.dart';
 class Settings {
   List<Gender> genders;
 
-  // TODO: add cultures
-
   static String localStorageKey = "settings_state";
 
   Settings({this.genders});

@@ -49,8 +49,7 @@ class _CategoryContainerState extends State<CategoryContainer> {
     final currentMember = store.state.authorization.currentMember;
 
     store.dispatch(StoreThunks.loadCategories());
-//    var category = store.state.category;
-//    print("IN RUN: $category");
+    var category = store.state.categoryList.categories;
 
     return Container(
         height: MediaQuery.of(context).size.height -
@@ -60,15 +59,21 @@ class _CategoryContainerState extends State<CategoryContainer> {
         child: ScrollConfiguration(
           behavior: NoRippleScrollBehaviour(),
           child: ListView.builder(
-              itemCount: 2,
-              itemBuilder: (context, index) => categoryItem(index)),
+              itemCount: store.state.categoryList.categories.length,
+              itemBuilder: (context, index) => categoryItem(index, category)),
         ));
   }
 
-  Widget categoryItem(int index) {
+  Widget categoryItem(int index, category) {
     final theme = Theme.of(context);
+    var category = store.state.categoryList.categories[index];
+
     return GestureDetector(
-      onTap: null,
+      onTap: () {
+        Keys.rootNavigator.currentState.pushReplacementNamed(
+            Routes.category_analysis,
+            arguments: category.id);
+      },
       child: Container(
         padding: EdgeInsets.only(left: Indents.md, right: Indents.sm),
         margin: EdgeInsets.only(
@@ -102,8 +107,7 @@ class _CategoryContainerState extends State<CategoryContainer> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-//                      store.state.category[index].content.name,
-                      "Hello",
+                      category.content.name,
                       style: theme.textTheme.bodyText2,
                     ),
                     Container(

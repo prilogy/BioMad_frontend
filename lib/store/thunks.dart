@@ -86,8 +86,6 @@ class StoreThunks {
     return (Store<AppState> store) async {
       var res = await api.category.info();
       store.dispatch(SetCategory(CategoryList(categories: res)));
-      print("ITS THUNK");
-      print(localStorage.getItem("categoryList_state"));
     };
   }
 }
