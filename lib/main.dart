@@ -39,8 +39,6 @@ class MyApp extends StatelessWidget {
     initializeDateFormatting("ru", null);
     initializeDateFormatting("en", null);
 
-    print(store.state.helper.toJson());
-
     if (!connectionChecked)
       WidgetsBinding.instance.addPostFrameCallback(initAction);
 
@@ -69,6 +67,13 @@ class MyApp extends StatelessWidget {
   /// If user == null - logs out
   Future initAction(dynamic _) async {
     store.dispatch(StoreThunks.refreshGendersAndCulture());
+
+    try {
+      store.dispatch(StoreThunks.loadCategories());
+    } catch (e) {
+      SnackBarExtension.dark("Запрос к категориям ошибочен",
+          duration: Duration(hours: 2));
+    }
 
     if (store.state.authorization == null ||
         !store.state.authorization.isAuthorized) return;

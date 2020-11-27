@@ -11,6 +11,7 @@ import 'package:biomad_frontend/models/authorization.dart';
 import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/Gender/actions.dart';
+import 'package:biomad_frontend/store/category/actions.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
 import 'package:biomad_frontend/styles/avatar_sizes.dart';
@@ -54,13 +55,15 @@ class _CategoryContainerState extends State<CategoryContainer> {
         child: ScrollConfiguration(
           behavior: NoRippleScrollBehaviour(),
           child: ListView.builder(
-              itemCount: 12,
+              itemCount: 1,
               itemBuilder: (context, index) => categoryItem(index)),
         ));
   }
 
   Widget categoryItem(int index) {
     final theme = Theme.of(context);
+    store.dispatch(StoreThunks.loadCategories());
+    var category = store.state.category;
     return GestureDetector(
       onTap: null,
       child: Container(
@@ -96,7 +99,7 @@ class _CategoryContainerState extends State<CategoryContainer> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Сердце и сосуды",
+                     category.content.name,
                       style: theme.textTheme.bodyText2,
                     ),
                     Container(

@@ -1,5 +1,4 @@
 import 'package:api/api.dart';
-import 'package:biomad_frontend/extensions/gender_extension.dart';
 import 'package:redux/redux.dart';
 import 'actions.dart' as Actions;
 

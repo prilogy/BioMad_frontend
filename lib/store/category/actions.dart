@@ -7,6 +7,6 @@ class SetCategory {
 
   @override
   String toString() {
-    return 'Gender -> SetGender{gender: $category}';
+    return 'Category -> SetCategory{category: $category}';
   }
 }

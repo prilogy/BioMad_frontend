@@ -15,7 +15,7 @@ class CategoryApi extends ApiBase<CategoryApi> {
 
   Future<Category> infoById(int id) async {
     try {
-      var url = '${v}/category/${id}';
+      var url = '${v}/Сategory/${id}';
       var response = await dio.get(url);
       return Category.fromJson(response.data);
     } on DioError catch (e) {

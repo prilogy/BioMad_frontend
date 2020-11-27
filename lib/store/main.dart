@@ -5,7 +5,7 @@ import 'package:biomad_frontend/models/authorization.dart';
 import 'package:biomad_frontend/models/helper.dart';
 import 'package:biomad_frontend/models/settings.dart';
 import 'package:biomad_frontend/store/authorization/reducers.dart';
-import 'package:biomad_frontend/store/gender/reducers.dart';
+import 'package:biomad_frontend/store/category/reducers.dart';
 import 'package:biomad_frontend/store/settings/reducers.dart';
 import 'package:biomad_frontend/store/user/reducers.dart';
 import 'package:flutter/material.dart';
@@ -19,29 +19,35 @@ class AppState {
   final Settings settings;
   final Authorization authorization;
   final Helper helper;
+  final Category category;
 
-  AppState(
-      {@required this.user,
-      @required this.settings,
-      @required this.authorization,
-      @required this.helper});
+  AppState({
+    @required this.user,
+    @required this.settings,
+    @required this.authorization,
+    @required this.helper,
+    @required this.category,
+  });
 
   AppState.initialState()
       : user = UserExtension.fromLocalStorage(),
         settings = Settings.fromLocalStorage(),
         authorization = Authorization.fromLocalStorage(),
-        helper = Helper.fromLocalStorage();
-}
+        helper = Helper.fromLocalStorage(),
+        category = Category.fromLocalStorage()
+  ;}
 
 AppState appStateReducer(AppState state, action) {
   return AppState(
-      user: userReducer(state.user, action),
-      settings: settingsReducer(
-        state.settings,
-        action,
-      ),
-      authorization: authorizationReducer(state.authorization, action),
-      helper: helperReducer(state.helper, action));
+    user: userReducer(state.user, action),
+    settings: settingsReducer(
+      state.settings,
+      action,
+    ),
+    authorization: authorizationReducer(state.authorization, action),
+    helper: helperReducer(state.helper, action),
+    category: categoryReducer(state.category, action),
+  );
 }
 
 final Store<AppState> store = Store<AppState>(appStateReducer,

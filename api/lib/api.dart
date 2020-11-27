@@ -3,6 +3,8 @@ library api.api;
 import 'package:dio/dio.dart';
 import 'dart:core';
 import 'dart:async';
+import 'dart:convert';
+import 'package:biomad_frontend/services/localstorage.dart';
 
 // apis
 part 'api/auth_api.dart';
@@ -16,6 +18,8 @@ part 'api/helper_api.dart';
 part 'api/user_api.dart';
 
 part 'api/category_api.dart';
+
+part 'api/biomarker_api.dart';
 
 // helpers
 part 'helpers/api_base.dart';
