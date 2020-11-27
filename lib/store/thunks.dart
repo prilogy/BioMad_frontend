@@ -7,7 +7,7 @@ import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/services/localstorage.dart';
 import 'package:biomad_frontend/store/authorization/actions.dart';
-import 'package:biomad_frontend/store/category/actions.dart';
+import 'package:biomad_frontend/store/gender/actions.dart';
 import 'package:biomad_frontend/store/helper/actions.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/settings/actions.dart';
@@ -36,9 +36,6 @@ class StoreThunks {
 
       store.dispatch(SetUser(res.user));
       store.dispatch(SetAuthorization(auth));
-
-      var category = await api.category.info();
-      store.dispatch(SetCategory(category));
 
       await onSuccess?.call();
     };
@@ -69,9 +66,8 @@ class StoreThunks {
     return (Store<AppState> store) async {
       if (store.state.helper != null &&
           (store.state.helper?.lastUpdateDate
-                      ?.difference(DateTime.now())
-                      ?.inDays ??
-                  3) <
+                  ?.difference(DateTime.now())
+                  ?.inDays ?? 3) <
               2) return;
 
       var genders = await api.helper.genders();
@@ -80,14 +76,6 @@ class StoreThunks {
           genders: genders,
           cultures: cultures,
           lastUpdateDate: DateTime.now())));
-    };
-  }
-
-  static ThunkAction<AppState> loadCategories() {
-    return (Store<AppState> store) async {
-      print("[WORK] LOADING CATEGORIES...");
-      var res = await api.category.info();
-      store.dispatch(SetCategory(res));
     };
   }
 }
