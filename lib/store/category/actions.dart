@@ -1,12 +1,13 @@
 import 'package:api/api.dart';
+import 'package:biomad_frontend/models/categoryList.dart';
 
 class SetCategory {
-  final Category category;
+  final CategoryList category;
 
   SetCategory(this.category);
 
   @override
   String toString() {
-    return 'Gender -> SetGender{gender: $category}';
+    return 'CategoryList -> SetCategoryList{categoryList: $category}';
   }
 }

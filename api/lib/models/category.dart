@@ -13,7 +13,7 @@ class Category {
 
   Category();
 
-  static String localStorageKey = "gender_state";
+  static String localStorageKey = "category_state";
 
   @override
   String toString() {
@@ -72,9 +72,5 @@ class Category {
       });
     }
     return map;
-  }
-
-  static void saveToLocalStorage(Category model) {
-    localStorage.setItem(localStorageKey, model.toJson());
   }
 }

@@ -3,6 +3,8 @@ library api.api;
 import 'package:dio/dio.dart';
 import 'dart:core';
 import 'dart:async';
+import 'dart:convert';
+import 'package:biomad_frontend/services/localstorage.dart';
 
 // apis
 part 'api/auth_api.dart';

@@ -48,13 +48,19 @@ class _CategoryContainerState extends State<CategoryContainer> {
     final user = store.state.user;
     final currentMember = store.state.authorization.currentMember;
 
+    store.dispatch(StoreThunks.loadCategories());
+//    var category = store.state.category;
+//    print("IN RUN: $category");
+
     return Container(
-        height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - 61,
+        height: MediaQuery.of(context).size.height -
+            AppBar().preferredSize.height -
+            61,
         width: MediaQuery.of(context).size.width,
         child: ScrollConfiguration(
           behavior: NoRippleScrollBehaviour(),
           child: ListView.builder(
-              itemCount: 12,
+              itemCount: 2,
               itemBuilder: (context, index) => categoryItem(index)),
         ));
   }
@@ -96,7 +102,8 @@ class _CategoryContainerState extends State<CategoryContainer> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Сердце и сосуды",
+//                      store.state.category[index].content.name,
+                      "Hello",
                       style: theme.textTheme.bodyText2,
                     ),
                     Container(

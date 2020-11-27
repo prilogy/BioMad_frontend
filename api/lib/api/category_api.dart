@@ -3,11 +3,11 @@ part of api.api;
 class CategoryApi extends ApiBase<CategoryApi> {
   CategoryApi(Dio dio, {String version = "v1"}) : super(dio, version);
 
-  Future<Category> info() async {
+  Future<List<Category>> info() async {
     try {
       var url = '${v}/category';
       var response = await dio.get(url);
-      return Category.fromJson(response.data);
+      return Category.listFromJson(response.data);
     } on DioError catch (e) {
       return null;
     }
