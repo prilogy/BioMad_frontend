@@ -9,6 +9,8 @@ import 'package:biomad_frontend/services/localstorage.dart';
 // apis
 part 'api/auth_api.dart';
 
+part 'api/member_analysis_api.dart';
+
 part 'api/social_account_api.dart';
 
 part 'api/member_api.dart';
@@ -129,6 +131,7 @@ class Api {
   final HelperApi helper;
   final UserApi user;
   final CategoryApi category;
+  final MemberAnalysisApi memberAnalysis;
 
   Api(Dio dio)
       : auth = AuthApi(dio),
@@ -136,5 +139,6 @@ class Api {
         member = MemberApi(dio),
         helper = HelperApi(dio),
         user = UserApi(dio),
+        memberAnalysis = MemberAnalysisApi(dio),
         category = CategoryApi(dio);
 }

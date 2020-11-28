@@ -1,3 +1,5 @@
+import 'package:biomad_frontend/helpers/keys.dart';
+import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +27,9 @@ class _NavPageBarState extends State<NavPageBar> {
       onTap: () {
         setState(() {
           selectedIndex = index;
+          if (navPageBar[index] == "Биомаркеры"){
+            Keys.rootNavigator.currentState.pushReplacementNamed(Routes.biomarker_list);
+          }
         });
       },
       child: Padding(

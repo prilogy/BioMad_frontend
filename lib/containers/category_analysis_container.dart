@@ -35,37 +35,109 @@ import 'package:biomad_frontend/styles/indents.dart';
 import 'package:biomad_frontend/styles/radius_values.dart';
 import 'package:flutter/material.dart';
 
-class CategoryContainer extends StatefulWidget {
+class CategoryAnalysisContainer extends StatefulWidget {
+  final int categoryId;
+
+  CategoryAnalysisContainer({Key key, @required this.categoryId})
+      : super(key: key);
+
   @override
-  _CategoryContainerState createState() => _CategoryContainerState();
+  _CategoryAnalysisContainerState createState() =>
+      _CategoryAnalysisContainerState(categoryId);
 }
 
-class _CategoryContainerState extends State<CategoryContainer> {
+class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
+  final int categoryId;
+
+  _CategoryAnalysisContainerState(this.categoryId);
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 //    final _tr = trWithKey('account_container');
     final user = store.state.user;
     final currentMember = store.state.authorization.currentMember;
+    var category = store.state.categoryList.categories
+        .firstWhere((element) => element.id == categoryId);
 
-    store.dispatch(StoreThunks.loadCategories());
-    var category = store.state.categoryList.categories;
-
-    //TODO: При авторизации не успевают подгружаться данные.
     return Container(
-        height: MediaQuery.of(context).size.height -
-            AppBar().preferredSize.height -
-            61,
-        width: MediaQuery.of(context).size.width,
-        child: ScrollConfiguration(
-          behavior: NoRippleScrollBehaviour(),
-          child: ListView.builder(
-              itemCount: store.state.categoryList.categories.length,
-              itemBuilder: (context, index) => categoryItem(index, category)),
-        ));
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      BlockBaseWidget(
+          padding: EdgeInsets.only(
+              top: Indents.md, left: Indents.md, right: Indents.md),
+          margin: EdgeInsets.only(bottom: Indents.sm),
+          header: "Общее состояние",
+          headerMergeStyle: TextStyle(color: theme.primaryColor),
+          child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text("50%",
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline3
+                        .merge(TextStyle(color: BioMadColors.warning))),
+                Container(
+                  padding: EdgeInsets.only(left: Indents.sm),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text("Удовлетворительное",
+                          style: Theme.of(context).textTheme.bodyText1),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.keyboard_arrow_up,
+                            size: 22.0,
+                            color: BioMadColors.warning,
+                          ),
+                          Text("14 ноября, 2020",
+                              style: Theme.of(context).textTheme.bodyText2),
+                        ],
+                      ),
+                    ],
+                  ),
+                )
+              ])),
+      BlockBaseWidget(
+          padding: EdgeInsets.only(
+              top: Indents.md, left: Indents.md, right: Indents.md),
+          margin: EdgeInsets.only(bottom: Indents.sm),
+          header: "Последние анализы",
+          headerMergeStyle: TextStyle(color: theme.primaryColor),
+          child: Container(
+            height: 70 * store.state.categoryList.categories.length.toDouble(),
+            width: MediaQuery.of(context).size.width,
+            child: ScrollConfiguration(
+              behavior: NoRippleScrollBehaviour(),
+              child: ListView.builder(
+                  itemCount: store.state.categoryList.categories.length,
+                  itemBuilder: (context, index) =>
+                      analysisItem(index, category)),
+            ),
+          )),
+      BlockBaseWidget(
+        padding: EdgeInsets.only(
+            top: Indents.md, left: Indents.md, right: Indents.md),
+        margin: EdgeInsets.only(bottom: Indents.sm),
+        header: "Последние биомаркеры",
+        headerMergeStyle: TextStyle(color: theme.primaryColor),
+        child: Container(
+          height: 70 * store.state.categoryList.categories.length.toDouble(),
+          width: MediaQuery.of(context).size.width,
+          child: ScrollConfiguration(
+            behavior: NoRippleScrollBehaviour(),
+            child: ListView.builder(
+                itemCount: store.state.categoryList.categories.length,
+                itemBuilder: (context, index) => analysisItem(index, category)),
+          ),
+        ),
+      )
+    ]));
   }
 
-  Widget categoryItem(int index, category) {
+  Widget analysisItem(int index, category) {
     final theme = Theme.of(context);
     var category = store.state.categoryList.categories[index];
 
@@ -78,9 +150,8 @@ class _CategoryContainerState extends State<CategoryContainer> {
       child: Container(
         padding: EdgeInsets.only(left: Indents.md, right: Indents.sm),
         margin: EdgeInsets.only(
-            top: index == 0 ? Indents.md : Indents.smd,
-            left: Indents.md,
-            right: Indents.md),
+          top: index == 0 ? Indents.md : Indents.smd,
+        ),
         decoration: BoxDecoration(
           color: BioMadColors.base[100],
           borderRadius: BorderRadius.all(Radius.circular(4)),

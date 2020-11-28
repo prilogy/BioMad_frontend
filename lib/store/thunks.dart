@@ -39,6 +39,7 @@ class StoreThunks {
 
       store.dispatch(SetUser(res.user));
       store.dispatch(SetAuthorization(auth));
+      store.dispatch(loadCategories());
 
       await onSuccess?.call();
     };

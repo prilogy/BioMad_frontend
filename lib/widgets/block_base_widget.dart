@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 class BlockBaseWidget extends StatelessWidget with IndentsMixin {
   final Widget child;
   final String header;
+  final double height;
+  final TextStyle headerMergeStyle;
   final CrossAxisAlignment crossAxisAlignment;
 
   final EdgeInsetsGeometry margin;
@@ -18,6 +20,8 @@ class BlockBaseWidget extends StatelessWidget with IndentsMixin {
   BlockBaseWidget(
       {this.child,
       this.header = "",
+      this.height,
+      this.headerMergeStyle,
       this.headerPadding = const EdgeInsets.all(0),
       this.crossAxisAlignment = CrossAxisAlignment.start,
       this.padding = const EdgeInsets.symmetric(horizontal: Indents.md),
@@ -26,6 +30,8 @@ class BlockBaseWidget extends StatelessWidget with IndentsMixin {
   BlockBaseWidget.forScrollingViews(
       {this.child,
       this.header,
+      this.height,
+      this.headerMergeStyle,
       this.crossAxisAlignment = CrossAxisAlignment.start,
       this.headerPadding = const EdgeInsets.only(left: Indents.md),
       this.padding = const EdgeInsets.all(0),
@@ -42,9 +48,10 @@ class BlockBaseWidget extends StatelessWidget with IndentsMixin {
             Container(
                 alignment: Alignment.topLeft,
                 padding: headerPadding,
-                margin: EdgeInsets.only(bottom: Indents.smd),
+                margin: EdgeInsets.only(bottom: Indents.sm),
+                height: height,
                 child:
-                    Text(header, style: Theme.of(context).textTheme.headline6)),
+                    Text(header, style: Theme.of(context).textTheme.headline6.merge(headerMergeStyle))),
           child
         ],
       ),
