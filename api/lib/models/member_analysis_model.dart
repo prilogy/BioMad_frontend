@@ -11,7 +11,7 @@ class MemberAnalysisModel {
   DateTime date = null;
   
   List<MemberBiomarkerModel> biomarkers = [];
-  MemberAnalysisModel({this.name, this.date, this.labId, this.description});
+  MemberAnalysisModel({this.name, this.date, this.labId, this.description, this.biomarkers});
 
   @override
   String toString() {

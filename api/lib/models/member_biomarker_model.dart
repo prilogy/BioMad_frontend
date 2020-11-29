@@ -9,7 +9,7 @@ class MemberBiomarkerModel {
   int biomarkerId = null;
   
   int unitId = null;
-  MemberBiomarkerModel();
+  MemberBiomarkerModel({this.value,this.analysisId,this.biomarkerId,this.unitId});
 
   @override
   String toString() {

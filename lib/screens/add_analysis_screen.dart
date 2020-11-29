@@ -1,26 +1,15 @@
 import 'package:api/api.dart';
-import 'package:biomad_frontend/containers/add_analysis_container.dart';
-import 'package:biomad_frontend/containers/biomarker_container.dart';
 import 'package:biomad_frontend/helpers/date_time_formats.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
 import 'package:biomad_frontend/router/main.dart';
-import 'package:biomad_frontend/store/main.dart';
-import 'package:biomad_frontend/store/thunks.dart';
-import 'package:biomad_frontend/styles/avatar_sizes.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
-import 'package:biomad_frontend/styles/color_alphas.dart';
 import 'package:biomad_frontend/styles/indents.dart';
-import 'package:biomad_frontend/styles/radius_values.dart';
-import 'package:biomad_frontend/widgets/biomarker_form_field.dart';
-import 'package:biomad_frontend/widgets/block_base_widget.dart';
-import 'package:biomad_frontend/widgets/custom_circle_avatar.dart';
-import 'package:biomad_frontend/widgets/custom_divider.dart';
-import 'package:biomad_frontend/widgets/custom_list_tile.dart';
-import 'package:biomad_frontend/widgets/nav_bar.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:biomad_frontend/widgets/biomarker_alert.dart';
+import 'package:biomad_frontend/widgets/biomarker_item.dart';
+import 'package:biomad_frontend/widgets/custom_date_form_field.dart';
+import 'package:biomad_frontend/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class AddAnalysisScreen extends StatefulWidget {
   final String title;
@@ -35,24 +24,147 @@ class AddAnalysisScreen extends StatefulWidget {
 }
 
 class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
+  final _analysisController = TextEditingController();
+  final _dateController = TextEditingController();
+  final int _labId = 1;
+  final _descriptionController = TextEditingController();
+  List<MemberBiomarkerModel> _biomarkers = [];
+  final _formKey = GlobalKey<FormState>();
+
+  MemberAnalysisModel getMemberAnalysisModel() => MemberAnalysisModel(
+      name: _analysisController.text,
+      date: DateTimeFormats.defaultDate.parse(_dateController.text),
+      labId: _labId,
+      description: _descriptionController.text,
+      biomarkers: _biomarkers);
+
+  void onChange() {
+    widget.onChange(getMemberAnalysisModel());
+  }
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
         appBar: AppBar(
-          leading: Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                icon: Icon(Icons.arrow_back),
+            leading: Builder(
+              builder: (BuildContext context) {
+                return IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () {
+                    Keys.rootNavigator.currentState
+                        .pushReplacementNamed(Routes.main);
+                  },
+                );
+              },
+            ),
+            title: Text("Добавить анализ",
+                style: TextStyle(color: Theme.of(context).primaryColor)),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.add),
                 onPressed: () {
-                  Keys.rootNavigator.currentState
-                      .pushReplacementNamed(Routes.main);
+                  print(getMemberAnalysisModel().toJson());
                 },
-              );
-            },
-          ),
-          title: Text("Добавить анализ",
-              style: TextStyle(color: Theme.of(context).primaryColor)),
-        ),
-        body: AddAnalysisContainer());
+              )
+            ]),
+        body: Container(
+            padding: EdgeInsets.only(
+                top: Indents.md, left: Indents.md, right: Indents.md),
+            margin: EdgeInsets.only(bottom: Indents.sm),
+            child: Form(
+                key: _formKey,
+                child: Column(children: [
+                  CustomTextFormField(
+                    controller: _analysisController,
+                    icon: Icon(Icons.assignment),
+                    labelText: "Анализ",
+                    hintText: "Введите название анализа",
+                    onChange: (x) {
+                      print("CHAINDEG");
+                      onChange();
+                    },
+                    formValidator: () {
+                      return _formKey?.currentState?.validate();
+                    },
+                  ),
+                  CustomDateFormField(
+                    type: CustomDateFormFieldType.date,
+                    labelText: "Дата сдачи анализа",
+                    controller: _dateController,
+                    icon: Icon(Icons.date_range),
+                    onDateSelected: (x) {
+                      onChange();
+                    },
+                  ),
+                  CustomTextFormField(
+                    controller: _descriptionController,
+                    icon: Icon(Icons.comment),
+                    labelText: "Примечание",
+                    hintText: "Уточните детали",
+                    onChange: (x) {
+                      onChange();
+                    },
+                    formValidator: () {
+                      return _formKey?.currentState?.validate();
+                    },
+                  ),
+                  Column(
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                              alignment: Alignment.topLeft,
+                              padding: EdgeInsets.only(top: Indents.sm),
+                              margin: EdgeInsets.only(bottom: Indents.sm),
+                              child: Text("Биомаркеры",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline6
+                                      .merge(TextStyle(
+                                          color: theme.primaryColor)))),
+                          IconButton(
+                            icon: Icon(Icons.add),
+                            color: BioMadColors.primary,
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  //_biomarkerFormKey
+                                  //======= ЛИСТ БИОМАРКЕРОВ ========//
+                                  return BiomarkerAlertDialog(
+                                    context,
+                                    title: "Добавить биомаркер",
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: Indents.md),
+                                  );
+                                },
+                              ).then((val) {
+                                setState(() {
+                                  _biomarkers.add(val);
+                                });
+                              });
+                            },
+                          )
+                        ],
+                      ),
+                      Container(
+                          height: 76 * _biomarkers.length.toDouble(),
+                          width: MediaQuery.of(context).size.width,
+                          child: ScrollConfiguration(
+                            behavior: NoRippleScrollBehaviour(),
+                            child: ListView.builder(
+                                itemCount: _biomarkers.length,
+                                itemBuilder: (context, index) => BiomarkerItem(
+                                    name: "Название биомаркера",
+                                    value: 23,
+                                    unit: "мкг/г",
+                                    status: "повышенный")),
+                          )),
+                    ],
+                  )
+                ]))));
   }
 }

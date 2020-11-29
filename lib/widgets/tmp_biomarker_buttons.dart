@@ -14,7 +14,7 @@ Widget tmpBiomarker(context){
           showDialog(
             context: context,
             builder: (BuildContext context) {
-              return biomarkerAlertDialog(
+              return BiomarkerAlertDialog(
                 context,
                 title: "Добавить биомаркер",
                 actions: <Widget>[
@@ -45,7 +45,7 @@ Widget tmpBiomarker(context){
           showDialog(
             context: context,
             builder: (BuildContext context) {
-              return biomarkerAlertDialog(
+              return BiomarkerAlertDialog(
                 context,
                 title: "Изменить биомаркер",
                 actions: <Widget>[

@@ -99,6 +99,7 @@ class _AddAnalysisContainerState extends State<AddAnalysisContainer> {
   final _dateController = TextEditingController();
   final int _labId = 1;
   final _descriptionController = TextEditingController();
+  final _biomarkers = []; //List<MemberBiomarkerModel>
   final _formKey = GlobalKey<FormState>();
 
   MemberAnalysisModel getMemberAnalysisModel() => MemberAnalysisModel(
@@ -106,6 +107,7 @@ class _AddAnalysisContainerState extends State<AddAnalysisContainer> {
         date: DateTimeFormats.defaultDate.parse(_dateController.text),
         labId: _labId,
         description: _descriptionController.text,
+        biomarkers: _biomarkers
       );
 
   void onChange() {
@@ -126,6 +128,7 @@ class _AddAnalysisContainerState extends State<AddAnalysisContainer> {
           children: [
             CustomTextFormField(
               controller: _analysisController,
+              icon: Icon(Icons.assignment),
               labelText: "Анализ",
               hintText: "Введите название анализа",
               onChange: (x) {
@@ -147,6 +150,7 @@ class _AddAnalysisContainerState extends State<AddAnalysisContainer> {
             ),
             CustomTextFormField(
               controller: _descriptionController,
+              icon: Icon(Icons.comment),
               labelText: "Примечание",
               hintText: "Уточните детали",
               onChange: (x) {

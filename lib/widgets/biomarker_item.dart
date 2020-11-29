@@ -124,7 +124,7 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return biomarkerAlertDialog(
+                          return BiomarkerAlertDialog(
                             context,
                             title: "Изменить биомаркер",
                             actions: <Widget>[
