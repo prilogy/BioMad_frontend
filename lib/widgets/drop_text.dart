@@ -37,6 +37,7 @@ class _DropTextState extends State<DropText> {
   Widget build(BuildContext context) {
     return Column(children: [
       GestureDetector(
+          behavior: HitTestBehavior.opaque,
           onTap: () => _changed(),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

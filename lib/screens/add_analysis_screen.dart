@@ -3,6 +3,9 @@ import 'package:biomad_frontend/helpers/date_time_formats.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
 import 'package:biomad_frontend/router/main.dart';
+import 'package:biomad_frontend/services/api.dart';
+import 'package:biomad_frontend/store/main.dart';
+import 'package:biomad_frontend/store/thunks.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:biomad_frontend/widgets/biomarker_alert.dart';
@@ -29,7 +32,8 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
   final int _labId = 1;
   final _descriptionController = TextEditingController();
   List<MemberBiomarkerModel> _biomarkers = [];
-  final _formKey = GlobalKey<FormState>();
+  var _biomarkerName;
+  var _biomarkerUnitName;
 
   MemberAnalysisModel getMemberAnalysisModel() => MemberAnalysisModel(
       name: _analysisController.text,
@@ -42,9 +46,13 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
     widget.onChange(getMemberAnalysisModel());
   }
 
+  String biomarkerJson;
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return Scaffold(
         appBar: AppBar(
             leading: Builder(
@@ -64,7 +72,23 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
               IconButton(
                 icon: Icon(Icons.add),
                 onPressed: () {
-                  print(getMemberAnalysisModel().toJson());
+                  MemberAnalysisModel result = getMemberAnalysisModel();
+//                  biomarkerJson = "[";
+//                  for (var elem in _biomarkers) {
+//                    biomarkerJson += elem.toJson().toString() + ', ';
+//                  }
+//                  var QueryJson ='{name: ' +
+//                      result.name +
+//                      ', description: ' +
+//                      result.description +
+//                      ', labId: ' +
+//                      result.labId.toString() +
+//                      ', date: ' +
+//                      result.date.toString() +
+//                      ', biomarkers: ' +
+//                      biomarkerJson +
+//                      ']}';
+                  api.memberAnalysis.add(result);
                 },
               )
             ]),
@@ -81,7 +105,6 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                     labelText: "Анализ",
                     hintText: "Введите название анализа",
                     onChange: (x) {
-                      print("CHAINDEG");
                       onChange();
                     },
                     formValidator: () {
@@ -143,7 +166,9 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                                 },
                               ).then((val) {
                                 setState(() {
-                                  _biomarkers.add(val);
+                                  _biomarkers.add(val[0]);
+                                  _biomarkerName = val[1] ?? "Unnamed";
+                                  _biomarkerUnitName = val[2] ?? "unnamed";
                                 });
                               });
                             },
@@ -158,10 +183,10 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                             child: ListView.builder(
                                 itemCount: _biomarkers.length,
                                 itemBuilder: (context, index) => BiomarkerItem(
-                                    name: "Название биомаркера",
-                                    value: 23,
-                                    unit: "мкг/г",
-                                    status: "повышенный")),
+                                    name: _biomarkerName ?? "Unnamed",
+                                    value: _biomarkers[index].value ?? "null",
+                                    unit: _biomarkerUnitName ?? "unnamed",
+                                    status: "<status>")),
                           )),
                     ],
                   )

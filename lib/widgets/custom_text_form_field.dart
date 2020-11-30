@@ -12,9 +12,11 @@ class CustomTextFormField extends StatelessWidget with IndentsMixin {
   final String labelText;
   final String hintText;
   final Icon icon;
+  final initialValue;
+  final keyboardType;
   final String Function(String) validator;
   final void Function(String) onChange;
-  final Future<dynamic> onTap;
+  final void Function() onTap;
   final bool Function() formValidator;
   final EdgeInsetsGeometry padding;
   final EdgeInsetsGeometry margin;
@@ -29,7 +31,9 @@ class CustomTextFormField extends StatelessWidget with IndentsMixin {
       this.hintText = '',
       this.icon,
       this.onChange,
-        this.onTap,
+      this.onTap,
+      this.initialValue,
+      this.keyboardType,
       this.formValidator,
       this.validator,
       this.enabledColor,
@@ -65,11 +69,14 @@ class CustomTextFormField extends StatelessWidget with IndentsMixin {
           onFieldSubmitted: (x) {
             formValidator?.call();
           },
+          onTap: onTap ?? null,
           onChanged: onChange ?? (x) {},
           validator: (v) =>
               validator?.call(v) ?? TextFieldValidators.isNotEmpty(v),
           controller: controller,
           decoration: decoration,
+          initialValue: initialValue ?? null,
+          keyboardType: keyboardType ?? TextInputType.text,
         ),
       ),
     );

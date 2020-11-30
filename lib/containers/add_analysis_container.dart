@@ -132,7 +132,6 @@ class _AddAnalysisContainerState extends State<AddAnalysisContainer> {
               labelText: "Анализ",
               hintText: "Введите название анализа",
               onChange: (x) {
-                print("CHAINDEG");
                 onChange();
               },
               formValidator: () {

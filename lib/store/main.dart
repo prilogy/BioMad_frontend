@@ -4,9 +4,11 @@ import 'package:biomad_frontend/models/authorization.dart';
 import 'package:biomad_frontend/models/helper.dart';
 import 'package:biomad_frontend/models/settings.dart';
 import 'package:biomad_frontend/models/categoryList.dart';
+import 'package:biomad_frontend/models/unitList.dart';
 import 'package:biomad_frontend/store/authorization/reducers.dart';
 import 'package:biomad_frontend/store/category/reducers.dart';
 import 'package:biomad_frontend/store/settings/reducers.dart';
+import 'package:biomad_frontend/store/unit/reducers.dart';
 import 'package:biomad_frontend/store/user/reducers.dart';
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
@@ -20,12 +22,14 @@ class AppState {
   final Authorization authorization;
   final Helper helper;
   final CategoryList categoryList;
+  final UnitList unit;
 
   AppState(
       {@required this.user,
       @required this.settings,
       @required this.authorization,
       @required this.categoryList,
+      @required this.unit,
       @required this.helper
       });
 
@@ -34,6 +38,7 @@ class AppState {
         settings = Settings.fromLocalStorage(),
         authorization = Authorization.fromLocalStorage(),
         categoryList = CategoryList.fromLocalStorage(),
+        unit = UnitList.fromLocalStorage(),
         helper = Helper.fromLocalStorage();
 }
 
@@ -47,6 +52,7 @@ AppState appStateReducer(AppState state, action) {
     authorization: authorizationReducer(state.authorization, action),
     helper: helperReducer(state.helper, action),
     categoryList: categoryReducer(state.categoryList, action),
+    unit: unitListReducer(state.unit, action),
   );
 }
 

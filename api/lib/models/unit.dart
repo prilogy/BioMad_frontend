@@ -21,6 +21,8 @@ class Unit {
   List<BiomarkerUnit> biomarkerUnits = [];
   Unit();
 
+  static String localStorageKey = "unit_state";
+
   @override
   String toString() {
     return 'Unit[id=$id, translations=$translations, content=$content, biomarkers=$biomarkers, transfersToIds=$transfersToIds, transfersFromIds=$transfersFromIds, transfersTo=$transfersTo, transfersFrom=$transfersFrom, biomarkerUnits=$biomarkerUnits, ]';
@@ -92,6 +94,15 @@ class Unit {
        });
      }
      return map;
+  }
+
+  static Unit fromLocalStorage() {
+    var json = localStorage.getItem(localStorageKey);
+    return Unit.fromJson(json ?? Map<String, dynamic>());
+  }
+
+  static void saveToLocalStorage(Unit model) {
+    localStorage.setItem(localStorageKey, model.toJson());
   }
 }
 

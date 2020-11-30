@@ -11,7 +11,7 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
   final Widget child;
   final int id;
   final String name;
-  final int value;
+  final double value;
   final String unit;
   final String status;
   final TextStyle headerMergeStyle;

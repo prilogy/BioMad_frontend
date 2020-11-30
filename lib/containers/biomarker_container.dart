@@ -1,35 +1,14 @@
-import 'package:api/api.dart';
-import 'package:biomad_frontend/containers/members_list_container.dart';
 import 'package:biomad_frontend/helpers/i18n_helper.dart';
-import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
-import 'package:biomad_frontend/helpers/age_from_date.dart';
-import 'package:biomad_frontend/helpers/color_helpers.dart';
-import 'package:biomad_frontend/helpers/custom_alert_dialog.dart';
 import 'package:biomad_frontend/helpers/i18n_helper.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
-import 'package:biomad_frontend/models/authorization.dart';
 import 'package:biomad_frontend/router/main.dart';
-import 'package:biomad_frontend/services/api.dart';
-import 'package:biomad_frontend/store/Gender/actions.dart';
 import 'package:biomad_frontend/store/main.dart';
-import 'package:biomad_frontend/store/thunks.dart';
-import 'package:biomad_frontend/styles/avatar_sizes.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
-import 'package:biomad_frontend/styles/color_alphas.dart';
 import 'package:biomad_frontend/styles/indents.dart';
-import 'package:biomad_frontend/styles/radius_values.dart';
 import 'package:biomad_frontend/widgets/block_base_widget.dart';
-import 'package:biomad_frontend/widgets/custom_circle_avatar.dart';
-import 'package:biomad_frontend/widgets/custom_list_builder.dart';
-import 'package:biomad_frontend/widgets/custom_list_tile.dart';
 import 'package:biomad_frontend/widgets/drop_text.dart';
-import 'package:biomad_frontend/widgets/member_list_tile.dart';
-import 'package:biomad_frontend/widgets/custom_divider.dart';
-import 'package:biomad_frontend/widgets/social_account_list_tile.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 
 class BiomarkerContainer extends StatefulWidget {
   @override

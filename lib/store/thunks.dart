@@ -4,14 +4,15 @@ import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/models/authorization.dart';
 import 'package:biomad_frontend/models/categoryList.dart';
 import 'package:biomad_frontend/models/helper.dart';
+import 'package:biomad_frontend/models/unitList.dart';
 import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/services/localstorage.dart';
 import 'package:biomad_frontend/store/authorization/actions.dart';
-import 'package:biomad_frontend/store/gender/actions.dart';
 import 'package:biomad_frontend/store/helper/actions.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/settings/actions.dart';
+import 'package:biomad_frontend/store/unit/actions.dart';
 import 'package:biomad_frontend/store/user/actions.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -40,6 +41,7 @@ class StoreThunks {
       store.dispatch(SetUser(res.user));
       store.dispatch(SetAuthorization(auth));
       store.dispatch(loadCategories());
+      store.dispatch(refreshUnits());
 
       await onSuccess?.call();
     };
@@ -80,6 +82,13 @@ class StoreThunks {
           genders: genders,
           cultures: cultures,
           lastUpdateDate: DateTime.now())));
+    };
+  }
+
+  static ThunkAction<AppState> refreshUnits() {
+    return (Store<AppState> store) async {
+      var res = await api.unit.info();
+      store.dispatch(SetUnitList(UnitList(units: res)));
     };
   }
 

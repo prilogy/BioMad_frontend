@@ -1,39 +1,39 @@
-import 'package:biomad_frontend/containers/account_container.dart';
-import 'package:biomad_frontend/helpers/keys.dart';
-import 'package:biomad_frontend/router/main.dart';
+import 'package:api/api.dart';
 import 'package:biomad_frontend/store/main.dart';
-import 'package:biomad_frontend/store/thunks.dart';
-import 'package:biomad_frontend/styles/avatar_sizes.dart';
-import 'package:biomad_frontend/styles/color_alphas.dart';
 import 'package:biomad_frontend/styles/indents.dart';
-import 'package:biomad_frontend/styles/radius_values.dart';
-import 'package:biomad_frontend/widgets/biomarker_alert.dart';
 import 'package:biomad_frontend/widgets/block_base_widget.dart';
-import 'package:biomad_frontend/widgets/custom_circle_avatar.dart';
-import 'package:biomad_frontend/widgets/custom_divider.dart';
-import 'package:biomad_frontend/widgets/custom_list_tile.dart';
-import 'package:biomad_frontend/widgets/custom_text_form_field.dart';
-import 'package:biomad_frontend/widgets/nav_bar.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:biomad_frontend/helpers/custom_alert_dialog.dart';
+
 //TODO: КООРДИНАЛЬНО ПЕРЕДЕЛАТЬ. ВРЕМЕННАЯ ВЕРСИЯ >
 /// Создаёт окно поиска контента
 class SearchScreen extends StatefulWidget {
   final String hintText;
+  final List<dynamic> dataList;
+  final initialValue;
+  final searchType;
 
-  SearchScreen({@required this.hintText, Key key}) : super(key: key);
+  SearchScreen(
+      {@required this.hintText,
+      this.dataList,
+      this.initialValue,
+      this.searchType,
+      Key key})
+      : super(key: key);
 
   @override
-  _SearchScreenState createState() => _SearchScreenState(hintText);
+  _SearchScreenState createState() =>
+      _SearchScreenState(hintText, dataList, initialValue, searchType);
 }
 
 class _SearchScreenState extends State<SearchScreen> {
   final String hintText;
+  final List<dynamic> dataList;
+  final initialValue;
+  final searchType;
 
-  _SearchScreenState(this.hintText);
+  _SearchScreenState(
+      this.hintText, this.dataList, this.initialValue, this.searchType);
 
   List<Widget> mass;
   bool isSearch = false;
@@ -47,8 +47,9 @@ class _SearchScreenState extends State<SearchScreen> {
         appBar: AppBar(
             title: Container(
                 height: 40,
-                child: TextField(
+                child: TextFormField(
                     autofocus: true,
+                    initialValue: initialValue,
                     decoration: InputDecoration(
                         filled: true,
                         fillColor: Theme.of(context)
@@ -73,7 +74,48 @@ class _SearchScreenState extends State<SearchScreen> {
                           onPressed: () {},
                           icon: Icon(Icons.clear,
                               color: Theme.of(context).primaryColor),
-                        ))))));
+                        ))))),
+        body: dataList != null
+            ? ListView.separated(
+                separatorBuilder: (context, index) => Divider(
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                padding: EdgeInsets.only(left: Indents.md, right: Indents.md),
+                itemCount: dataList.length,
+                itemBuilder: (context, index) => Container(
+                    padding: EdgeInsets.symmetric(vertical: Indents.sm),
+                    child: GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () {
+                          Navigator.of(context).pop(dataList.firstWhere(
+                              (element) => element.id == dataList[index].id));
+                        },
+                        child: searchType == "biomarker"
+                            ? _biomarkerItems(context, index)
+                            : searchType == "unit"
+                                ? _unitItems(context, index)
+                                : Text("Тип поиска не определен :("))))
+            : Container());
+  }
+
+  Widget _biomarkerItems(BuildContext context, index) {
+    return Text(
+      dataList[index].content.name,
+      style: Theme.of(context)
+          .textTheme
+          .bodyText2
+          .merge(TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+    );
+  }
+
+  Widget _unitItems(BuildContext context, index) {
+    return Text(
+      store.state.unit.units[index].content.name,
+      style: Theme.of(context)
+          .textTheme
+          .bodyText2
+          .merge(TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+    );
   }
 }
 
