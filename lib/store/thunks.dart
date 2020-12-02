@@ -5,6 +5,8 @@ import 'package:biomad_frontend/models/authorization.dart';
 import 'package:biomad_frontend/models/biomarkerList.dart';
 import 'package:biomad_frontend/models/categoryList.dart';
 import 'package:biomad_frontend/models/helper.dart';
+import 'package:biomad_frontend/models/labList.dart';
+import 'package:biomad_frontend/models/memberBiomarkerList.dart';
 import 'package:biomad_frontend/models/unitList.dart';
 import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/services/api.dart';
@@ -22,6 +24,8 @@ import 'package:redux_thunk/redux_thunk.dart';
 
 import 'biomarker/actions.dart';
 import 'category/actions.dart';
+import 'lab/actions.dart';
+import 'memberBiomarker/actions.dart';
 
 typedef AuthenticationResultGetter = Future<AuthenticationResult> Function();
 
@@ -42,8 +46,9 @@ class StoreThunks {
 
       store.dispatch(SetUser(res.user));
       store.dispatch(SetAuthorization(auth));
-      store.dispatch(loadCategories());
-      store.dispatch(refreshUnits());
+      store.dispatch(refreshCategoriesAndBiomarkers());
+      store.dispatch(refreshMemberBiomarkers());
+      store.dispatch(refreshUnitsAndLabs());
 
       await onSuccess?.call();
     };
@@ -74,8 +79,9 @@ class StoreThunks {
     return (Store<AppState> store) async {
       if (store.state.helper != null &&
           (store.state.helper?.lastUpdateDate
-                  ?.difference(DateTime.now())
-                  ?.inDays ?? 3) <
+                      ?.difference(DateTime.now())
+                      ?.inDays ??
+                  3) <
               2) return;
 
       var genders = await api.helper.genders();
@@ -87,19 +93,26 @@ class StoreThunks {
     };
   }
 
-  static ThunkAction<AppState> refreshUnits() {
+  static ThunkAction<AppState> refreshUnitsAndLabs() {
     return (Store<AppState> store) async {
-      var res = await api.unit.info();
-      store.dispatch(SetUnitList(UnitList(units: res)));
+      store.dispatch(SetUnitList(UnitList(units: await api.unit.info())));
+      store.dispatch(SetLabList(LabList(labs: await api.lab.info())));
     };
   }
 
-  static ThunkAction<AppState> loadCategories() {
+  static ThunkAction<AppState> refreshCategoriesAndBiomarkers() {
     return (Store<AppState> store) async {
-      var res = await api.category.info();
-      var res2 = await api.biomarker.info();
-      store.dispatch(SetCategory(CategoryList(categories: res)));
-      store.dispatch(SetBiomarkerList(BiomarkerList(biomarkers: res2)));
+      store.dispatch(
+          SetCategory(CategoryList(categories: await api.category.info())));
+      store.dispatch(SetBiomarkerList(
+          BiomarkerList(biomarkers: await api.biomarker.info())));
+    };
+  }
+
+  static ThunkAction<AppState> refreshMemberBiomarkers() {
+    return (Store<AppState> store) async {
+      store.dispatch(SetMemberBiomarkerList(
+          MemberBiomarkerList(biomarkers: await api.memberBiomarker.info())));
     };
   }
 }

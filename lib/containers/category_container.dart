@@ -19,14 +19,10 @@ class _CategoryContainerState extends State<CategoryContainer> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-//    final _tr = trWithKey('account_container');
-    final user = store.state.user;
-    final currentMember = store.state.authorization.currentMember;
 
-    store.dispatch(StoreThunks.loadCategories());
+    store.dispatch(StoreThunks.refreshCategoriesAndBiomarkers());
     var category = store.state.categoryList.categories;
 
-    //TODO: При авторизации не успевают подгружаться данные.
     return Container(
         height: MediaQuery.of(context).size.height -
             AppBar().preferredSize.height -

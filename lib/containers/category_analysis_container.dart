@@ -1,8 +1,12 @@
+import 'package:api/api.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/router/main.dart';
+import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
+import 'package:biomad_frontend/store/thunks.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
+import 'package:biomad_frontend/widgets/biomarker_item.dart';
 import 'package:biomad_frontend/widgets/block_base_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,13 +31,35 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
   _CategoryAnalysisContainerState(this.categoryId);
 
   @override
+  void initState() {
+    store.dispatch(StoreThunks.refreshMemberBiomarkers());
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-//    final _tr = trWithKey('account_container');
-    final user = store.state.user;
-    final currentMember = store.state.authorization.currentMember;
     var category = store.state.categoryList.categories
         .firstWhere((element) => element.id == categoryId);
+    var memberBiomarkerList = store.state.memberBiomarkerList.biomarkers;
+    List<MemberBiomarker> biomarkerInList = [];
+    List<MemberBiomarker> biomarkerNotInList = [];
+
+    for (var item in store.state.biomarkerList.biomarkers) {
+      biomarkerInList.add(memberBiomarkerList
+          .firstWhere((x) => x.biomarker.id == item.id, orElse: () => null));
+    }
+
+    for (var item in store.state.biomarkerList.biomarkers) {
+      biomarkerNotInList.add(memberBiomarkerList
+          .firstWhere((x) => x.biomarker.id != item.id, orElse: () => null));
+    }
+
+    biomarkerInList.removeWhere((value) => value == null);
+    biomarkerNotInList.removeWhere((value) => value == null);
+
+    print("IN " + biomarkerInList.toString());
+    print("NOT IN: " + biomarkerNotInList.toString());
 
     return Container(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -76,39 +102,53 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
                 )
               ])),
       BlockBaseWidget(
-          padding: EdgeInsets.only(
-              top: Indents.md, left: Indents.md, right: Indents.md),
-          margin: EdgeInsets.only(bottom: Indents.sm),
-          header: "Последние анализы",
-          headerMergeStyle: TextStyle(color: theme.primaryColor),
-          child: Container(
-            height: 70 * store.state.categoryList.categories.length.toDouble(),
-            width: MediaQuery.of(context).size.width,
-            child: ScrollConfiguration(
-              behavior: NoRippleScrollBehaviour(),
-              child: ListView.builder(
-                  itemCount: store.state.categoryList.categories.length,
-                  itemBuilder: (context, index) =>
-                      analysisItem(index, category)),
-            ),
-          )),
-      BlockBaseWidget(
         padding: EdgeInsets.only(
             top: Indents.md, left: Indents.md, right: Indents.md),
         margin: EdgeInsets.only(bottom: Indents.sm),
         header: "Последние биомаркеры",
         headerMergeStyle: TextStyle(color: theme.primaryColor),
         child: Container(
-          height: 70 * store.state.categoryList.categories.length.toDouble(),
-          width: MediaQuery.of(context).size.width,
-          child: ScrollConfiguration(
-            behavior: NoRippleScrollBehaviour(),
-            child: ListView.builder(
-                itemCount: store.state.categoryList.categories.length,
-                itemBuilder: (context, index) => analysisItem(index, category)),
-          ),
-        ),
-      )
+            height: 76 * biomarkerInList.length.toDouble(),
+            width: MediaQuery.of(context).size.width,
+            child: ScrollConfiguration(
+              behavior: NoRippleScrollBehaviour(),
+              child: ListView.builder(
+                  itemCount: biomarkerInList.length,
+                  itemBuilder: (context, index) => BiomarkerItem(
+                      name: biomarkerInList[index].biomarker.content.name ??
+                          "Unnamed",
+                      value: biomarkerInList[index].value ?? "null",
+                      unit:
+                          biomarkerInList[index].unit.content.name ?? "unnamed",
+                      status: "<status>",
+                      id: biomarkerInList[index].biomarker.id,
+                      withActions: false)),
+            )),
+      ),
+      BlockBaseWidget(
+          padding: EdgeInsets.only(
+              top: Indents.md, left: Indents.md, right: Indents.md),
+          margin: EdgeInsets.only(bottom: Indents.sm),
+          header: "Ещё не сдали",
+          headerMergeStyle: TextStyle(color: theme.primaryColor),
+          child: Container(
+            height: 70 * biomarkerNotInList.length.toDouble(),
+            width: MediaQuery.of(context).size.width,
+            child: ListView.separated(
+                separatorBuilder: (context, index) => Divider(
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                padding: EdgeInsets.only(left: Indents.md, right: Indents.md),
+                itemCount: biomarkerNotInList.length,
+                itemBuilder: (context, index) => Container(
+                    padding: EdgeInsets.symmetric(vertical: Indents.sm),
+                    child: GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        child: Text(biomarkerNotInList[index]
+                            .biomarker
+                            .content
+                            .name)))),
+          ))
     ]));
   }
 

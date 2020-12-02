@@ -3,6 +3,7 @@ import 'package:biomad_frontend/extensions/user_extension.dart';
 import 'package:biomad_frontend/models/authorization.dart';
 import 'package:biomad_frontend/models/biomarkerList.dart';
 import 'package:biomad_frontend/models/helper.dart';
+import 'package:biomad_frontend/models/memberBiomarkerList.dart';
 import 'package:biomad_frontend/models/settings.dart';
 import 'package:biomad_frontend/models/categoryList.dart';
 import 'package:biomad_frontend/models/unitList.dart';
@@ -17,6 +18,7 @@ import 'package:redux_thunk/redux_thunk.dart';
 
 import 'biomarker/reducers.dart';
 import 'helper/reducers.dart';
+import 'memberBiomarker/reducers.dart';
 
 class AppState {
   final User user;
@@ -26,6 +28,7 @@ class AppState {
   final CategoryList categoryList;
   final UnitList unitList;
   final BiomarkerList biomarkerList;
+  final MemberBiomarkerList memberBiomarkerList;
 
   AppState(
       {@required this.user,
@@ -34,6 +37,7 @@ class AppState {
       @required this.categoryList,
       @required this.unitList,
       @required this.biomarkerList,
+      @required this.memberBiomarkerList,
       @required this.helper
       });
 
@@ -44,6 +48,7 @@ class AppState {
         categoryList = CategoryList.fromLocalStorage(),
         unitList = UnitList.fromLocalStorage(),
         biomarkerList = BiomarkerList.fromLocalStorage(),
+        memberBiomarkerList = MemberBiomarkerList.fromLocalStorage(),
         helper = Helper.fromLocalStorage();
 }
 
@@ -59,6 +64,7 @@ AppState appStateReducer(AppState state, action) {
     categoryList: categoryReducer(state.categoryList, action),
     unitList: unitListReducer(state.unitList, action),
     biomarkerList: biomarkerListReducer(state.biomarkerList, action),
+    memberBiomarkerList: memberBiomarkerListReducer(state.memberBiomarkerList, action),
   );
 }
 

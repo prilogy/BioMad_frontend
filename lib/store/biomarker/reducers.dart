@@ -7,10 +7,10 @@ import 'package:redux/redux.dart';
 import 'actions.dart' as Actions;
 
 final biomarkerListReducer = combineReducers<BiomarkerList>([
-  TypedReducer<BiomarkerList, Actions.SetBiomarkerList>(_setUnitList),
+  TypedReducer<BiomarkerList, Actions.SetBiomarkerList>(_setBiomarkerList),
 ]);
 
-BiomarkerList _setUnitList(BiomarkerList state, Actions.SetBiomarkerList action) {
+BiomarkerList _setBiomarkerList(BiomarkerList state, Actions.SetBiomarkerList action) {
   BiomarkerList.saveToLocalStorage(action.biomarkers);
   return action.biomarkers;
 }

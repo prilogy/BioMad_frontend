@@ -115,7 +115,7 @@ class _BiomarkerAlertDialogState extends State<BiomarkerAlertDialog> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    store.dispatch(StoreThunks.refreshUnits());
+    store.dispatch(StoreThunks.refreshUnitsAndLabs());
     var txt = TextEditingController();
     return AlertDialog(
         scrollable: true,

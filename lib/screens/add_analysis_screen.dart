@@ -29,6 +29,8 @@ class AddAnalysisScreen extends StatefulWidget {
 class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
   final _analysisController = TextEditingController();
   final _dateController = TextEditingController();
+  final _labController = TextEditingController();
+
   final int _labId = 1;
   final _descriptionController = TextEditingController();
   List<MemberBiomarkerModel> _biomarkers = [];
@@ -42,6 +44,14 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
       labId: _labId,
       description: _descriptionController.text,
       biomarkers: _biomarkers);
+
+  @override
+  void initState() {
+    setState(() {
+      _dateController.text = DateTimeFormats.defaultDate.format(DateTime.now());
+    });
+    super.initState();
+  }
 
   void onChange() {
     widget.onChange(getMemberAnalysisModel());
@@ -74,23 +84,9 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                 icon: Icon(Icons.add),
                 onPressed: () {
                   MemberAnalysisModel result = getMemberAnalysisModel();
-//                  biomarkerJson = "[";
-//                  for (var elem in _biomarkers) {
-//                    biomarkerJson += elem.toJson().toString() + ', ';
-//                  }
-//                  var QueryJson ='{name: ' +
-//                      result.name +
-//                      ', description: ' +
-//                      result.description +
-//                      ', labId: ' +
-//                      result.labId.toString() +
-//                      ', date: ' +
-//                      result.date.toString() +
-//                      ', biomarkers: ' +
-//                      biomarkerJson +
-//                      ']}';
                   api.memberAnalysis.add(result);
-                  Navigator.of(context).pop();
+                  store.dispatch(StoreThunks.refreshMemberBiomarkers());
+                  Keys.rootNavigator.currentState.pushReplacementNamed(Routes.main);
                 },
               )
             ]),
@@ -103,8 +99,8 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                 child: Column(children: [
                   CustomTextFormField(
                     controller: _analysisController,
-                    icon: Icon(Icons.assignment),
-                    labelText: "Анализ",
+                    icon: Icon(Icons.assignment_outlined),
+                    labelText: "Название анализа",
                     hintText: "Введите название анализа",
                     onChange: (x) {
                       onChange();
@@ -122,9 +118,21 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                       onChange();
                     },
                   ),
+//                  CustomTextFormField(
+//                    controller: _labController,
+//                    icon: Icon(Icons.local_pharmacy_outlined),
+//                    labelText: "Название лаборатории",
+//                    hintText: "Введите название лаборатории",
+//                    onChange: (x) {
+//                      onChange();
+//                    },
+//                    formValidator: () {
+//                      return _formKey?.currentState?.validate();
+//                    },
+//                  ),
                   CustomTextFormField(
                     controller: _descriptionController,
-                    icon: Icon(Icons.comment),
+                    icon: Icon(Icons.comment_outlined),
                     labelText: "Примечание",
                     hintText: "Уточните детали",
                     onChange: (x) {
@@ -171,7 +179,7 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                                   _biomarkers.add(val[0]);
                                   _biomarkerName = val[1] ?? "Unnamed";
                                   _biomarkerUnitName = val[2] ?? "unnamed";
-                                  biomarkerId = val [3] ?? null;
+                                  biomarkerId = val[3] ?? null;
                                 });
                               });
                             },
@@ -190,7 +198,7 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                                     value: _biomarkers[index].value ?? "null",
                                     unit: _biomarkerUnitName ?? "unnamed",
                                     status: "<status>",
-                                id: biomarkerId)),
+                                    id: biomarkerId)),
                           )),
                     ],
                   )

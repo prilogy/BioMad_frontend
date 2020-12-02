@@ -4,7 +4,7 @@ import 'package:biomad_frontend/services/localstorage.dart';
 class BiomarkerList {
   List<Biomarker> biomarkers;
 
-  static String localStorageKey = "Biomarkers_state";
+  static String localStorageKey = "biomarkers_state";
 
   BiomarkerList({this.biomarkers});
 
