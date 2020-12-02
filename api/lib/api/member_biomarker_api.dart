@@ -1,32 +1,22 @@
 part of api.api;
 
-class BiomarkerApi extends ApiBase<BiomarkerApi> {
-  BiomarkerApi(Dio dio, {String version = "v1"}) : super(dio, version);
-
-  Future<List<Biomarker>> info() async {
-    try {
-      var url = '${v}/biomarker';
-      var response = await dio.get(url);
-      return Biomarker.listFromJson(response.data);
-    } on DioError catch (e) {
-      return null;
-    }
-  }
-
-  Future<Biomarker> infoById(int id) async {
-    try {
-      var url = '${v}/biomarker/${id}';
-      var response = await dio.get(url);
-      return Biomarker.fromJson(response.data);
-    } on DioError catch (e) {
-      return null;
-    }
-  }
+class MemberBiomarkerApi extends ApiBase<MemberBiomarkerApi> {
+  MemberBiomarkerApi(Dio dio, {String version = "v1"}) : super(dio, version);
 
   Future<bool> add(MemberBiomarkerModel model) async {
     try {
       var url = '${v}/member/biomarker/add';
       await dio.post(url, data: model);
+      return true;
+    } on DioError catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> edit(MemberBiomarkerModel model, int id) async {
+    try {
+      var url = '${v}/member/biomarker/${id}';
+      await dio.patch(url, data: model);
       return true;
     } on DioError catch (e) {
       return false;
@@ -43,13 +33,39 @@ class BiomarkerApi extends ApiBase<BiomarkerApi> {
     }
   }
 
-  Future<bool> edit(MemberBiomarkerModel model, int id) async {
+  Future<MemberBiomarker> infoById(int id) async {
     try {
       var url = '${v}/member/biomarker/${id}';
-      await dio.patch(url, data: model);
-      return true;
+      var response = await dio.get(url);
+      return MemberBiomarker.fromJson(response.data);
     } on DioError catch (e) {
-      return false;
+      return null;
     }
   }
+
+  Future<List<MemberBiomarker>> info() async {
+    try {
+      var url = '${v}/member/biomarker';
+      var response = await dio.get(url);
+      return MemberBiomarker.listFromJson(response.data);
+    } on DioError catch (e) {
+      return null;
+    }
+  }
+
+
+
+  Future<MemberBiomarker> history(int id) async {
+    try {
+      var url = '${v}/biomarker/${id}/history';
+      var response = await dio.get(url);
+      return MemberBiomarker.fromJson(response.data);
+    } on DioError catch (e) {
+      return null;
+    }
+  }
+
+
+
+
 }

@@ -110,7 +110,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _unitItems(BuildContext context, index) {
     return Text(
-      store.state.unit.units[index].content.name,
+      store.state.unitList.units[index].content.name,
       style: Theme.of(context)
           .textTheme
           .bodyText2

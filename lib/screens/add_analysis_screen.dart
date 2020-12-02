@@ -34,6 +34,7 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
   List<MemberBiomarkerModel> _biomarkers = [];
   var _biomarkerName;
   var _biomarkerUnitName;
+  int biomarkerId;
 
   MemberAnalysisModel getMemberAnalysisModel() => MemberAnalysisModel(
       name: _analysisController.text,
@@ -89,6 +90,7 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
 //                      biomarkerJson +
 //                      ']}';
                   api.memberAnalysis.add(result);
+                  Navigator.of(context).pop();
                 },
               )
             ]),
@@ -169,6 +171,7 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                                   _biomarkers.add(val[0]);
                                   _biomarkerName = val[1] ?? "Unnamed";
                                   _biomarkerUnitName = val[2] ?? "unnamed";
+                                  biomarkerId = val [3] ?? null;
                                 });
                               });
                             },
@@ -186,7 +189,8 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                                     name: _biomarkerName ?? "Unnamed",
                                     value: _biomarkers[index].value ?? "null",
                                     unit: _biomarkerUnitName ?? "unnamed",
-                                    status: "<status>")),
+                                    status: "<status>",
+                                id: biomarkerId)),
                           )),
                     ],
                   )

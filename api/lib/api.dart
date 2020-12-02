@@ -17,10 +17,18 @@ part 'api/member_api.dart';
 
 part 'api/helper_api.dart';
 
+part 'api/city_api.dart';
+
 part 'api/user_api.dart';
 
+part 'api/lab_api.dart';
+
 part 'api/category_api.dart';
+
 part 'api/member_biomarker_api.dart';
+
+part 'api/biomarker_api.dart';
+
 part 'api/unit_api.dart';
 
 // helpers
@@ -133,7 +141,10 @@ class Api {
   final HelperApi helper;
   final UserApi user;
   final UnitApi unit;
+  final LabApi lab;
+  final CityApi city;
   final BiomarkerApi biomarker;
+  final MemberBiomarkerApi memberBiomarker;
   final CategoryApi category;
   final MemberAnalysisApi memberAnalysis;
 
@@ -144,7 +155,10 @@ class Api {
         helper = HelperApi(dio),
         user = UserApi(dio),
         unit = UnitApi(dio),
+        lab = LabApi(dio),
+        city = CityApi(dio),
         biomarker = BiomarkerApi(dio),
+        memberBiomarker = MemberBiomarkerApi(dio),
         memberAnalysis = MemberAnalysisApi(dio),
         category = CategoryApi(dio);
 }

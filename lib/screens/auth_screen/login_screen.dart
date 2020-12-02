@@ -53,15 +53,26 @@ class _LoginScreenState extends State<LoginScreen> {
               padding:
                   EdgeInsets.only(top: MediaQuery.of(context).size.height / 4),
               child: BlockBaseWidget(
-                child: Column(
+                child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       _tr('login'),
                       style: theme.textTheme.headline5.merge(TextStyle(
                           fontWeight: FontWeight.w500,
                           color: theme.primaryColor)),
-                    )
+                    ),
+                    Container(
+                      height: 30,
+                      child: CustomButton.flat(
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (x) => SignUpScreen()));
+                        },
+                        text: _tr('sign_up'),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -99,13 +110,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         Row(
                           children: [
-                            CustomButton.flat(
-                              onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (x) => SignUpScreen()));
-                              },
-                              text: _tr('sign_up'),
-                            ),
                             CustomButton.raised(
                               onPressed: () async {
                                 if (_formKey.currentState.validate())

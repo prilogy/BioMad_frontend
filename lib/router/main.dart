@@ -43,7 +43,7 @@ final routes = [
   authRoute,
   RouteBuilder(Routes.main, (args) => MyHomePage(title: "s",)),
   RouteBuilder(Routes.member, (args) => MemberScreen(member: args as Member)),
-  RouteBuilder(Routes.biomarker, (args) => BioMarkerScreen(title: "s",)),
+  RouteBuilder(Routes.biomarker, (args) => BioMarkerScreen(biomarker: args as MemberBiomarker)),
   RouteBuilder(Routes.biomarker_list, (args) => BioMarkerListScreen(id: args as int,)),
   RouteBuilder(Routes.category_analysis, (args) => CategoryAnalysisScreen(categoryId: args as int,)),
   RouteBuilder(Routes.add_analysis, (args) => AddAnalysisScreen(title: "s",)),

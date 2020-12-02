@@ -1,7 +1,9 @@
+import 'package:api/api.dart';
 import 'package:biomad_frontend/helpers/i18n_helper.dart';
 import 'package:biomad_frontend/helpers/i18n_helper.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/router/main.dart';
+import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
@@ -11,11 +13,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class BiomarkerContainer extends StatefulWidget {
+  final int id;
+  final MemberBiomarker biomarker;
+
+  BiomarkerContainer({Key key, this.id, this.biomarker}) : super(key: key);
+
   @override
-  _BiomarkerContainerState createState() => _BiomarkerContainerState();
+  _BiomarkerContainerState createState() => _BiomarkerContainerState(id,biomarker);
 }
 
 class _BiomarkerContainerState extends State<BiomarkerContainer> {
+  final int id;
+  final MemberBiomarker biomarker;
+
+  _BiomarkerContainerState(this.id, this.biomarker);
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -23,6 +35,8 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
     final user = store.state.user;
     final currentMember = store.state.authorization.currentMember;
     //TODO: Добавить локализацию
+
+    print("[BIOMARKER CONTAINER]: " + biomarker.toString());
 
     return Container(
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -41,7 +55,11 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
                       style: theme.textTheme.bodyText1,
                     ),
                     Text(
-                      "<st> <value> <unit>, <textDesc>",
+                      "<st> " +
+                          biomarker.biomarker.content.name +
+                          " " +
+                          biomarker.value.toString() +
+                          ", <textDesc>",
                     ),
                   ],
                 ),

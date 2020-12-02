@@ -1,6 +1,8 @@
+import 'package:api/api.dart';
 import 'package:biomad_frontend/containers/biomarker_container.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/router/main.dart';
+import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
 import 'package:biomad_frontend/styles/avatar_sizes.dart';
@@ -16,17 +18,22 @@ import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class BioMarkerScreen extends StatefulWidget {
-  BioMarkerScreen({Key key, this.title}) : super(key: key);
-  final String title;
+  final MemberBiomarker biomarker;
+  BioMarkerScreen({Key key, this.biomarker}) : super(key: key);
 
   @override
-  _BioMarkerScreenState createState() => _BioMarkerScreenState();
+  _BioMarkerScreenState createState() => _BioMarkerScreenState(biomarker);
 }
 
 class _BioMarkerScreenState extends State<BioMarkerScreen> {
+  final MemberBiomarker biomarker;
+  _BioMarkerScreenState(this.biomarker);
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    print("[BIOMARKER SCREEN]: " + biomarker.toString());
 
     return Scaffold(
       appBar: AppBar(
@@ -40,10 +47,10 @@ class _BioMarkerScreenState extends State<BioMarkerScreen> {
             );
           },
         ),
-        title: Text("biomarker.name",
+        title: Text(biomarker.biomarker.content.name,
             style: TextStyle(color: Theme.of(context).primaryColor)),
       ),
-      body: ListView(children:[BiomarkerContainer()]),
+      body: ListView(children:[BiomarkerContainer(biomarker: biomarker)]),
     );
   }
 }

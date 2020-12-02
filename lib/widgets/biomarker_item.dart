@@ -1,3 +1,4 @@
+import 'package:api/api.dart';
 import 'package:biomad_frontend/helpers/indents_mixin.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/router/main.dart';
@@ -10,6 +11,7 @@ import 'biomarker_alert.dart';
 class BiomarkerItem extends StatelessWidget with IndentsMixin {
   final Widget child;
   final int id;
+  final MemberBiomarker biomarker;
   final String name;
   final double value;
   final String unit;
@@ -28,6 +30,7 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
   BiomarkerItem(
       {this.child,
       this.id,
+      this.biomarker,
       this.name = "",
       this.value,
       this.unit = "",
@@ -41,6 +44,7 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
   BiomarkerItem.forScrollingViews(
       {this.child,
       this.id,
+      this.biomarker,
       this.name,
       this.value,
       this.unit,
@@ -57,7 +61,7 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
     return GestureDetector(
       onTap: () {
         Keys.rootNavigator.currentState
-            .pushReplacementNamed(Routes.biomarker, arguments: id);
+            .pushReplacementNamed(Routes.biomarker, arguments: biomarker);
       },
       child: Container(
         margin: EdgeInsets.only(

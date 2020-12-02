@@ -211,7 +211,7 @@ class _BiomarkerAlertDialogState extends State<BiomarkerAlertDialog> {
                                         return SearchScreen(
                                           hintText: hintUnit ??
                                               "Введите единицу измерения",
-                                          dataList: store.state.unit.units,
+                                          dataList: store.state.unitList.units,
                                           initialValue:
                                               _biomarkerUnitIdController.text,
                                           searchType: "unit",
@@ -237,7 +237,7 @@ class _BiomarkerAlertDialogState extends State<BiomarkerAlertDialog> {
                                         return SearchScreen(
                                           hintText: hintUnit ??
                                               "Введите единицу измерения",
-                                          dataList: store.state.unit.units,
+                                          dataList: store.state.unitList.units,
                                           initialValue:
                                               _biomarkerUnitIdController.text,
                                           searchType: "unit",
@@ -281,6 +281,7 @@ class _BiomarkerAlertDialogState extends State<BiomarkerAlertDialog> {
               ret.add(answer);
               ret.add(_biomarkerIdController.text);
               ret.add(_biomarkerUnitIdController.text);
+              ret.add(biomarkerId);
               Navigator.of(context).pop(ret);
             },
           ),

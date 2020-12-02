@@ -2,6 +2,7 @@ import 'package:api/api.dart';
 import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/models/authorization.dart';
+import 'package:biomad_frontend/models/biomarkerList.dart';
 import 'package:biomad_frontend/models/categoryList.dart';
 import 'package:biomad_frontend/models/helper.dart';
 import 'package:biomad_frontend/models/unitList.dart';
@@ -19,6 +20,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
+import 'biomarker/actions.dart';
 import 'category/actions.dart';
 
 typedef AuthenticationResultGetter = Future<AuthenticationResult> Function();
@@ -95,7 +97,9 @@ class StoreThunks {
   static ThunkAction<AppState> loadCategories() {
     return (Store<AppState> store) async {
       var res = await api.category.info();
+      var res2 = await api.biomarker.info();
       store.dispatch(SetCategory(CategoryList(categories: res)));
+      store.dispatch(SetBiomarkerList(BiomarkerList(biomarkers: res2)));
     };
   }
 }
