@@ -1298,13 +1298,19 @@ paths:
           content:
             text/plain:
               schema:
-                $ref: '#/components/schemas/SearchResultModel'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Biomarker'
             application/json:
               schema:
-                $ref: '#/components/schemas/SearchResultModel'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Biomarker'
             text/json:
               schema:
-                $ref: '#/components/schemas/SearchResultModel'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Biomarker'
       security:
         - bearer: []
   /api/v1/Lab/search:
@@ -3629,35 +3635,6 @@ components:
           type: string
         identity:
           $ref: '#/components/schemas/SocialAuthenticationIdentity'
-      additionalProperties: false
-    SearchResultModel:
-      type: object
-      properties:
-        categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/Category'
-          nullable: true
-        units:
-          type: array
-          items:
-            $ref: '#/components/schemas/Unit'
-          nullable: true
-        biomarkers:
-          type: array
-          items:
-            $ref: '#/components/schemas/Biomarker'
-          nullable: true
-        cities:
-          type: array
-          items:
-            $ref: '#/components/schemas/City'
-          nullable: true
-        labs:
-          type: array
-          items:
-            $ref: '#/components/schemas/Lab'
-          nullable: true
       additionalProperties: false
     MemberModel:
       type: object
