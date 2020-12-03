@@ -9,7 +9,7 @@ class MemberModel {
   DateTime dateBirthday = null;
   
   String color = null;
-  MemberModel({this.name, this.color, this.genderId, this.dateBirthday});
+  MemberModel({this.name, this.genderId, this.dateBirthday, this.color});
 
   @override
   String toString() {

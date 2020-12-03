@@ -13,11 +13,13 @@ class UnitTranslation {
   int baseEntityId = null;
   
   Unit baseEntity = null;
+  
+  String shorthand = null;
   UnitTranslation();
 
   @override
   String toString() {
-    return 'UnitTranslation[id=$id, cultureId=$cultureId, culture=$culture, name=$name, baseEntityId=$baseEntityId, baseEntity=$baseEntity, ]';
+    return 'UnitTranslation[id=$id, cultureId=$cultureId, culture=$culture, name=$name, baseEntityId=$baseEntityId, baseEntity=$baseEntity, shorthand=$shorthand, ]';
   }
 
   UnitTranslation.fromJson(Map<String, dynamic> json) {
@@ -32,6 +34,7 @@ class UnitTranslation {
     baseEntity = (json['baseEntity'] == null) ?
       null :
       Unit.fromJson(json['baseEntity']);
+    shorthand = json['shorthand'];
   }
 
   Map<String, dynamic> toJson() {
@@ -47,6 +50,7 @@ class UnitTranslation {
       json['baseEntityId'] = baseEntityId;
     if (baseEntity != null)
       json['baseEntity'] = baseEntity;
+      json['shorthand'] = shorthand;
     return json;
   }
 

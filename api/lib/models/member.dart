@@ -12,9 +12,17 @@ class Member {
   
   DateTime dateBirthday = null;
   
+  int age = null;
+  
   int genderId = null;
   
   Gender gender = null;
+  
+  List<MemberAnalysis> analyzes = [];
+  
+  List<int> analysisIds = [];
+  
+  List<MemberCategoryState> categoryStates = [];
   
   int userId = null;
   
@@ -23,7 +31,7 @@ class Member {
 
   @override
   String toString() {
-    return 'Member[id=$id, name=$name, color=$color, dateCreatedAt=$dateCreatedAt, dateBirthday=$dateBirthday, genderId=$genderId, gender=$gender, userId=$userId, user=$user, ]';
+    return 'Member[id=$id, name=$name, color=$color, dateCreatedAt=$dateCreatedAt, dateBirthday=$dateBirthday, age=$age, genderId=$genderId, gender=$gender, analyzes=$analyzes, analysisIds=$analysisIds, categoryStates=$categoryStates, userId=$userId, user=$user, ]';
   }
 
   Member.fromJson(Map<String, dynamic> json) {
@@ -37,10 +45,20 @@ class Member {
     dateBirthday = (json['dateBirthday'] == null) ?
       null :
       DateTime.parse(json['dateBirthday']);
+    age = json['age'];
     genderId = json['genderId'];
     gender = (json['gender'] == null) ?
       null :
       Gender.fromJson(json['gender']);
+    analyzes = (json['analyzes'] == null) ?
+      null :
+      MemberAnalysis.listFromJson(json['analyzes']);
+    analysisIds = (json['analysisIds'] == null) ?
+      null :
+      (json['analysisIds'] as List).cast<int>();
+    categoryStates = (json['categoryStates'] == null) ?
+      null :
+      MemberCategoryState.listFromJson(json['categoryStates']);
     userId = json['userId'];
     user = (json['user'] == null) ?
       null :
@@ -57,10 +75,15 @@ class Member {
       json['dateCreatedAt'] = dateCreatedAt == null ? null : dateCreatedAt.toUtc().toIso8601String();
     if (dateBirthday != null)
       json['dateBirthday'] = dateBirthday == null ? null : dateBirthday.toUtc().toIso8601String();
+    if (age != null)
+      json['age'] = age;
     if (genderId != null)
       json['genderId'] = genderId;
     if (gender != null)
       json['gender'] = gender;
+      json['analyzes'] = analyzes;
+      json['analysisIds'] = analysisIds;
+      json['categoryStates'] = categoryStates;
     if (userId != null)
       json['userId'] = userId;
     if (user != null)

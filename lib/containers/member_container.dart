@@ -39,7 +39,7 @@ class _MemberContainerState extends State<MemberContainer> {
   MemberModel getMemberModel() => MemberModel(
       name: _nameController.text,
       genderId: _genderId,
-      color: ColorHelpers.toHex(_avatarColor, ),
+      color: ColorHelpers.toHex(_avatarColor),
       dateBirthday:
           DateTimeFormats.defaultDate.parse(_dateBirthDayController.text),);
 

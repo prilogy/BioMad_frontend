@@ -55,6 +55,8 @@ part 'models/role.dart';
 
 part 'models/sign_up_model.dart';
 
+part 'models/biomarker_reference_config_range.dart';
+
 part 'models/sign_up_with_social_account_model.dart';
 
 part 'models/social_account.dart';

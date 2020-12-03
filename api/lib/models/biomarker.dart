@@ -14,9 +14,13 @@ class Biomarker {
   
   List<Category> categories = [];
   
+  List<int> categoryIds = [];
+  
   List<Article> articles = [];
   
   List<Unit> units = [];
+  
+  List<int> unitIds = [];
   
   List<BiomarkerReference> references = [];
   
@@ -29,7 +33,7 @@ class Biomarker {
 
   @override
   String toString() {
-    return 'Biomarker[id=$id, typeId=$typeId, type=$type, translations=$translations, content=$content, categories=$categories, articles=$articles, units=$units, references=$references, categoryBiomarkers=$categoryBiomarkers, biomarkerArticles=$biomarkerArticles, biomarkerUnits=$biomarkerUnits, ]';
+    return 'Biomarker[id=$id, typeId=$typeId, type=$type, translations=$translations, content=$content, categories=$categories, categoryIds=$categoryIds, articles=$articles, units=$units, unitIds=$unitIds, references=$references, categoryBiomarkers=$categoryBiomarkers, biomarkerArticles=$biomarkerArticles, biomarkerUnits=$biomarkerUnits, ]';
   }
 
   Biomarker.fromJson(Map<String, dynamic> json) {
@@ -48,12 +52,18 @@ class Biomarker {
     categories = (json['categories'] == null) ?
       null :
       Category.listFromJson(json['categories']);
+    categoryIds = (json['categoryIds'] == null) ?
+      null :
+      (json['categoryIds'] as List).cast<int>();
     articles = (json['articles'] == null) ?
       null :
       Article.listFromJson(json['articles']);
     units = (json['units'] == null) ?
       null :
       Unit.listFromJson(json['units']);
+    unitIds = (json['unitIds'] == null) ?
+      null :
+      (json['unitIds'] as List).cast<int>();
     references = (json['references'] == null) ?
       null :
       BiomarkerReference.listFromJson(json['references']);
@@ -80,8 +90,10 @@ class Biomarker {
     if (content != null)
       json['content'] = content;
       json['categories'] = categories;
+      json['categoryIds'] = categoryIds;
       json['articles'] = articles;
       json['units'] = units;
+      json['unitIds'] = unitIds;
       json['references'] = references;
       json['categoryBiomarkers'] = categoryBiomarkers;
       json['biomarkerArticles'] = biomarkerArticles;

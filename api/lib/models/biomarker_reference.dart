@@ -4,7 +4,9 @@ class BiomarkerReference {
   
   int id = null;
   
-  double value = null;
+  double valueA = null;
+  
+  double valueB = null;
   
   int unitId = null;
   
@@ -19,15 +21,18 @@ class BiomarkerReference {
 
   @override
   String toString() {
-    return 'BiomarkerReference[id=$id, value=$value, unitId=$unitId, unit=$unit, biomarkerId=$biomarkerId, biomarker=$biomarker, config=$config, ]';
+    return 'BiomarkerReference[id=$id, valueA=$valueA, valueB=$valueB, unitId=$unitId, unit=$unit, biomarkerId=$biomarkerId, biomarker=$biomarker, config=$config, ]';
   }
 
   BiomarkerReference.fromJson(Map<String, dynamic> json) {
     if (json == null) return;
     id = json['id'];
-    value = (json['value'] == null) ?
+    valueA = (json['valueA'] == null) ?
       null :
-      json['value'].toDouble();
+      json['valueA'].toDouble();
+    valueB = (json['valueB'] == null) ?
+      null :
+      json['valueB'].toDouble();
     unitId = json['unitId'];
     unit = (json['unit'] == null) ?
       null :
@@ -45,8 +50,10 @@ class BiomarkerReference {
     Map <String, dynamic> json = {};
     if (id != null)
       json['id'] = id;
-    if (value != null)
-      json['value'] = value;
+    if (valueA != null)
+      json['valueA'] = valueA;
+    if (valueB != null)
+      json['valueB'] = valueB;
     if (unitId != null)
       json['unitId'] = unitId;
     if (unit != null)
