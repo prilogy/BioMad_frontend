@@ -7,7 +7,8 @@ class AuthApi extends ApiBase<AuthApi> {
   Future<AuthenticationResult> logIn(LogInWithCredentialsModel model) async {
     try {
       var url = '${v}/auth/logIn';
-      var response = await dio.post(url, data: model);
+      var response = await dio.post(url,
+          data: model, options: Options(headers: {"Culture": "ru"}));
       return AuthenticationResult.fromJson(response.data);
     } on DioError catch (e) {
       return null;

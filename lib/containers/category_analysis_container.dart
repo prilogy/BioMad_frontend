@@ -27,7 +27,6 @@ class CategoryAnalysisContainer extends StatefulWidget {
 
 class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
   final int categoryId;
-
   _CategoryAnalysisContainerState(this.categoryId);
 
   @override
@@ -114,11 +113,6 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
               child: ListView.builder(
                   itemCount: biomarkerStock.length,
                   itemBuilder: (context, index) => BiomarkerItem(
-                      name: biomarkerStock[index].biomarker.content.name ??
-                          "Unnamed",
-                      value: biomarkerStock[index].value ?? "null",
-                      unit:
-                          biomarkerStock[index].unit.content.name ?? "unnamed",
                       status: "<status>",
                       id: biomarkerStock[index].biomarker.id,
                       biomarker: biomarkerStock[index],

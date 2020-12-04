@@ -3,11 +3,12 @@ import 'package:biomad_frontend/helpers/i18n_helper.dart';
 import 'package:biomad_frontend/helpers/i18n_helper.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/router/main.dart';
-import 'package:biomad_frontend/screens/home_screen.dart';
+import 'package:biomad_frontend/screens/monitoring_screen.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
+import 'package:biomad_frontend/widgets/biomarker_history.dart';
 import 'package:biomad_frontend/widgets/block_base_widget.dart';
 import 'package:biomad_frontend/widgets/custom_button.dart';
 import 'package:biomad_frontend/widgets/drop_text.dart';
@@ -33,12 +34,6 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
 
   List<MemberBiomarker> biomarkerHistory = [];
 
-  List<Biomarker> _biomarker;
-
-  Future<List<Biomarker>> getBiomarkers() async {
-    return await api.biomarker.info();
-  }
-
   @override
   void initState() {
     setState(() {
@@ -47,18 +42,40 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
           biomarkerHistory.add(item);
     });
 
-    getBiomarkers().then((x) => {
-          setState(() {
-            _biomarker = x;
-            print (_biomarker);
-          })
-        });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    var color;
+    var status;
+    var icon;
+    var reference = store.state.biomarkerList.biomarkers
+        .firstWhere((element) => element.id == biomarker.biomarkerId)
+        .references;
+
+    if (reference.valueA <= biomarker.value &&
+        biomarker.value <= reference.valueB) {
+      color = BioMadColors.success;
+      status = "норма";
+    } else if (biomarker.value < reference.valueA) {
+      color = BioMadColors.warning;
+      status = "пониженный";
+      icon = Icons.keyboard_arrow_down;
+    } else {
+      color = BioMadColors.warning;
+      status = "повышенный";
+      icon = Icons.keyboard_arrow_up;
+    }
+
+    var iconContainer = Container(
+        height: 6.0,
+        width: 6.0,
+        decoration: new BoxDecoration(
+          color: color,
+          shape: BoxShape.circle,
+        ));
 
     return Container(
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -76,12 +93,23 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
                       "Ваш показатель",
                       style: theme.textTheme.bodyText1,
                     ),
-                    Text(
-                      "<st> " +
+                    Row(
+                      children: [
+                        Container(
+                            padding: EdgeInsets.only(right: Indents.sm),
+                            child: icon != null
+                                ? Icon(icon, color: color)
+                                : iconContainer),
+                        Text(
                           biomarker.biomarker.content.name +
-                          " " +
-                          biomarker.value.toString() +
-                          ", <textDesc>",
+                              " " +
+                              biomarker.value.toString() +
+                              " " +
+                              biomarker.unit.content.shorthand +
+                              ", " +
+                              status,
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -93,8 +121,26 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
                       "Норма",
                       style: theme.textTheme.bodyText1,
                     ),
-                    Text(
-                      "<st> <value> <unit>",
+                    Row(
+                      children: [
+                        Container(
+                            padding: EdgeInsets.only(right: Indents.sm),
+                            child: Container(
+                                height: 6.0,
+                                width: 6.0,
+                                decoration: new BoxDecoration(
+                                  color: BioMadColors.success,
+                                  shape: BoxShape.circle,
+                                ))),
+                        Text(
+                          biomarker.biomarker.content.name +
+                              " " +
+                              reference.valueA.toString() + "-" +
+                              reference.valueB.toString() +
+                              " " +
+                              biomarker.unit.content.shorthand
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -133,57 +179,7 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
                   )
                 ],
               ),
-              Container(
-                height: 23 * biomarkerHistory.length.toDouble() <= 90
-                    ? 23 * biomarkerHistory.length.toDouble()
-                    : 90,
-                width: MediaQuery.of(context).size.width,
-                child: ListView.builder(
-                    itemCount: biomarkerHistory.length,
-                    itemBuilder: (context, index) => Container(
-                          padding: EdgeInsets.only(top: Indents.sm),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                biomarkerHistory[index]
-                                        .dateCreatedAt
-                                        .day
-                                        .toString() +
-                                    '.' +
-                                    biomarkerHistory[index]
-                                        .dateCreatedAt
-                                        .month
-                                        .toString() +
-                                    '.' +
-                                    biomarkerHistory[index]
-                                        .dateCreatedAt
-                                        .year
-                                        .toString() +
-                                    ' ' +
-                                    biomarkerHistory[index]
-                                        .dateCreatedAt
-                                        .hour
-                                        .toString() +
-                                    ':' +
-                                    biomarkerHistory[index]
-                                        .dateCreatedAt
-                                        .minute
-                                        .toString(),
-                                style: theme.textTheme.bodyText1,
-                              ),
-                              Text(
-                                "<st> " +
-                                    biomarkerHistory[index].value.toString() +
-                                    " " +
-                                    biomarkerHistory[index].unit.content.name +
-                                    ", <textDesc>",
-                              ),
-                            ],
-                          ),
-                        )),
-              ),
+                  BiomarkerHistory(biomarkerHistory: biomarkerHistory, biomarker: biomarker,)
             ])),
         BlockBaseWidget(
             padding: EdgeInsets.only(
@@ -200,7 +196,7 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
                 ),
               ),
               Text(
-                store.state.biomarkerList.biomarkers[1].toString(),
+                biomarker.biomarker.content.description,
                 style: theme.textTheme.bodyText2,
               ),
               Container(

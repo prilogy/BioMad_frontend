@@ -2,7 +2,7 @@ import 'package:api/api.dart';
 import 'package:biomad_frontend/screens/add_analysis_screen.dart';
 import 'package:biomad_frontend/screens/auth_screen/login_screen.dart';
 import 'package:biomad_frontend/screens/auth_screen/main.dart';
-import 'package:biomad_frontend/screens/home_screen.dart';
+import 'package:biomad_frontend/screens/monitoring_screen.dart';
 import 'package:biomad_frontend/screens/member_screen.dart';
 import 'package:biomad_frontend/screens/biomarker_screen.dart';
 import 'package:biomad_frontend/screens/biomarker_list_screen.dart';

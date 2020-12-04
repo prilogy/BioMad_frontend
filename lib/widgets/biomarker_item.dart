@@ -2,6 +2,7 @@ import 'package:api/api.dart';
 import 'package:biomad_frontend/helpers/indents_mixin.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/router/main.dart';
+import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
   final String name;
   final double value;
   final String unit;
-  final String status;
+  String status;
   final TextStyle headerMergeStyle;
   final CrossAxisAlignment crossAxisAlignment;
   final bool withActions;
@@ -61,6 +62,36 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    var color;
+    var icon;
+    var reference = store.state.biomarkerList.biomarkers
+        .firstWhere((element) => element.id == biomarker.biomarker.id)
+        .references;
+
+    if (reference.valueA <= biomarker.value &&
+        biomarker.value <= reference.valueB) {
+      color = BioMadColors.success;
+      status = "норма";
+    } else if (biomarker.value < reference.valueA) {
+      color = BioMadColors.warning;
+      status = "пониженный";
+      icon = Icons.keyboard_arrow_down;
+    } else {
+      color = BioMadColors.warning;
+      status = "повышенный";
+      icon = Icons.keyboard_arrow_up;
+    }
+
+    var iconContainer = Container(
+        height: 6.0,
+        width: 6.0,
+        margin: EdgeInsets.only(right: Indents.sm),
+        decoration: new BoxDecoration(
+          color: color,
+          shape: BoxShape.circle,
+        ));
+
     return GestureDetector(
       onTap: () {
         Keys.rootNavigator.currentState
@@ -102,13 +133,16 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
                         children: [
                           Row(
                             children: [
-                              Icon(
-                                Icons.keyboard_arrow_up,
-                                size: 22.0,
-                                color: BioMadColors.warning,
-                              ),
+                              Container(
+                                  child: icon != null
+                                      ? Icon(icon, color: color, size: 22.0)
+                                      : iconContainer),
                               Text(
-                                  biomarker.value.toString() + ' ' + biomarker.unit.content.name + ', ' + status,
+                                  biomarker.value.toString() +
+                                      ' ' +
+                                      biomarker.unit.content.shorthand +
+                                      ', ' +
+                                      status,
                                   style: Theme.of(context).textTheme.bodyText2),
                             ],
                           ),

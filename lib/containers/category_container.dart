@@ -39,6 +39,7 @@ class _CategoryContainerState extends State<CategoryContainer> {
   Widget categoryItem(int index, category) {
     final theme = Theme.of(context);
     var category = store.state.categoryList.categories[index];
+    print(category);
 
     return GestureDetector(
       onTap: () {
