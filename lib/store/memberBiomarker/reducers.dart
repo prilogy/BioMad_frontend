@@ -1,5 +1,5 @@
-import 'package:biomad_frontend/models/biomarkerList.dart';
-import 'package:biomad_frontend/models/memberBiomarkerList.dart';
+import 'package:biomad_frontend/models/biomarker_list.dart';
+import 'package:biomad_frontend/models/member_biomarker_list.dart';
 import 'package:redux/redux.dart';
 import 'actions.dart' as Actions;
 

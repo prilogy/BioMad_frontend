@@ -92,7 +92,7 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      name,
+                      biomarker.biomarker.content.name,
                       style: theme.textTheme.subtitle1,
                     ),
                     Container(
@@ -108,7 +108,7 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
                                 color: BioMadColors.warning,
                               ),
                               Text(
-                                  value.toString() + ' ' + unit + ', ' + status,
+                                  biomarker.value.toString() + ' ' + biomarker.unit.content.name + ', ' + status,
                                   style: Theme.of(context).textTheme.bodyText2),
                             ],
                           ),

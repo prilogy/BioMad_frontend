@@ -1,4 +1,4 @@
-import 'package:biomad_frontend/models/labList.dart';
+import 'package:biomad_frontend/models/lab_list.dart';
 import 'package:redux/redux.dart';
 import 'actions.dart' as Actions;
 

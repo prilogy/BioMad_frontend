@@ -1,12 +1,13 @@
 import 'package:api/api.dart';
 import 'package:biomad_frontend/extensions/user_extension.dart';
 import 'package:biomad_frontend/models/authorization.dart';
-import 'package:biomad_frontend/models/biomarkerList.dart';
+import 'package:biomad_frontend/models/biomarker_list.dart';
+import 'package:biomad_frontend/models/biomarker_type_list.dart';
 import 'package:biomad_frontend/models/helper.dart';
-import 'package:biomad_frontend/models/memberBiomarkerList.dart';
+import 'package:biomad_frontend/models/member_biomarker_list.dart';
 import 'package:biomad_frontend/models/settings.dart';
-import 'package:biomad_frontend/models/categoryList.dart';
-import 'package:biomad_frontend/models/unitList.dart';
+import 'package:biomad_frontend/models/category_list.dart';
+import 'package:biomad_frontend/models/unit_list.dart';
 import 'package:biomad_frontend/store/authorization/reducers.dart';
 import 'package:biomad_frontend/store/category/reducers.dart';
 import 'package:biomad_frontend/store/settings/reducers.dart';
@@ -17,6 +18,7 @@ import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
 import 'biomarker/reducers.dart';
+import 'biomarker_type/reducers.dart';
 import 'helper/reducers.dart';
 import 'memberBiomarker/reducers.dart';
 
@@ -28,6 +30,7 @@ class AppState {
   final CategoryList categoryList;
   final UnitList unitList;
   final BiomarkerList biomarkerList;
+  final BiomarkerTypeList biomarkerTypeList;
   final MemberBiomarkerList memberBiomarkerList;
 
   AppState(
@@ -37,6 +40,7 @@ class AppState {
       @required this.categoryList,
       @required this.unitList,
       @required this.biomarkerList,
+      @required this.biomarkerTypeList,
       @required this.memberBiomarkerList,
       @required this.helper
       });
@@ -48,6 +52,7 @@ class AppState {
         categoryList = CategoryList.fromLocalStorage(),
         unitList = UnitList.fromLocalStorage(),
         biomarkerList = BiomarkerList.fromLocalStorage(),
+        biomarkerTypeList = BiomarkerTypeList.fromLocalStorage(),
         memberBiomarkerList = MemberBiomarkerList.fromLocalStorage(),
         helper = Helper.fromLocalStorage();
 }
@@ -64,6 +69,7 @@ AppState appStateReducer(AppState state, action) {
     categoryList: categoryReducer(state.categoryList, action),
     unitList: unitListReducer(state.unitList, action),
     biomarkerList: biomarkerListReducer(state.biomarkerList, action),
+    biomarkerTypeList: biomarkerTypeListReducer(state.biomarkerTypeList, action),
     memberBiomarkerList: memberBiomarkerListReducer(state.memberBiomarkerList, action),
   );
 }

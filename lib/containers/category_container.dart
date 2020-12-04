@@ -20,7 +20,7 @@ class _CategoryContainerState extends State<CategoryContainer> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    store.dispatch(StoreThunks.refreshCategoriesAndBiomarkers());
+    store.dispatch(StoreThunks.refreshCategoriesAndBiomarkersAndTypes());
     var category = store.state.categoryList.categories;
 
     return Container(

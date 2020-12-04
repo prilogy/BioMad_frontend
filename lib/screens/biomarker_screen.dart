@@ -33,8 +33,6 @@ class _BioMarkerScreenState extends State<BioMarkerScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    print("[BIOMARKER SCREEN]: " + biomarker.toString());
-
     return Scaffold(
       appBar: AppBar(
         leading: Builder(

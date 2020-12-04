@@ -1,6 +1,6 @@
 import 'package:api/api.dart';
 import 'package:biomad_frontend/extensions/gender_extension.dart';
-import 'package:biomad_frontend/models/categoryList.dart';
+import 'package:biomad_frontend/models/category_list.dart';
 import 'package:redux/redux.dart';
 import 'actions.dart' as Actions;
 

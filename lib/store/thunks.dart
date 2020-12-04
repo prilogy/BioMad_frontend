@@ -2,16 +2,18 @@ import 'package:api/api.dart';
 import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/models/authorization.dart';
-import 'package:biomad_frontend/models/biomarkerList.dart';
-import 'package:biomad_frontend/models/categoryList.dart';
+import 'package:biomad_frontend/models/biomarker_list.dart';
+import 'package:biomad_frontend/models/biomarker_type_list.dart';
+import 'package:biomad_frontend/models/category_list.dart';
 import 'package:biomad_frontend/models/helper.dart';
-import 'package:biomad_frontend/models/labList.dart';
-import 'package:biomad_frontend/models/memberBiomarkerList.dart';
-import 'package:biomad_frontend/models/unitList.dart';
+import 'package:biomad_frontend/models/lab_list.dart';
+import 'package:biomad_frontend/models/member_biomarker_list.dart';
+import 'package:biomad_frontend/models/unit_list.dart';
 import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/services/localstorage.dart';
 import 'package:biomad_frontend/store/authorization/actions.dart';
+import 'package:biomad_frontend/store/biomarker_type/actions.dart';
 import 'package:biomad_frontend/store/helper/actions.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/settings/actions.dart';
@@ -46,7 +48,7 @@ class StoreThunks {
 
       store.dispatch(SetUser(res.user));
       store.dispatch(SetAuthorization(auth));
-      store.dispatch(refreshCategoriesAndBiomarkers());
+      store.dispatch(refreshCategoriesAndBiomarkersAndTypes());
       store.dispatch(refreshMemberBiomarkers());
       store.dispatch(refreshUnitsAndLabs());
 
@@ -100,12 +102,13 @@ class StoreThunks {
     };
   }
 
-  static ThunkAction<AppState> refreshCategoriesAndBiomarkers() {
+  static ThunkAction<AppState> refreshCategoriesAndBiomarkersAndTypes() {
     return (Store<AppState> store) async {
       store.dispatch(
           SetCategory(CategoryList(categories: await api.category.info())));
       store.dispatch(SetBiomarkerList(
           BiomarkerList(biomarkers: await api.biomarker.info())));
+      store.dispatch(SetBiomarkerTypeList(BiomarkerTypeList(types: await api.biomarker.type())));
     };
   }
 

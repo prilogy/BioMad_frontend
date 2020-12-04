@@ -33,6 +33,7 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
   @override
   void initState() {
     store.dispatch(StoreThunks.refreshMemberBiomarkers());
+    print("refreshMemberBiomarkers".toUpperCase());
     super.initState();
   }
 
@@ -41,25 +42,23 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
     final theme = Theme.of(context);
     var category = store.state.categoryList.categories
         .firstWhere((element) => element.id == categoryId);
+
     var memberBiomarkerList = store.state.memberBiomarkerList.biomarkers;
-    List<MemberBiomarker> biomarkerInList = [];
-    List<MemberBiomarker> biomarkerNotInList = [];
+    List<MemberBiomarker> biomarkerStock = [];
+    List<Biomarker> biomarkerNotInStock = [];
+    MemberBiomarker memberBiomarker;
 
-    for (var item in store.state.biomarkerList.biomarkers) {
-      biomarkerInList.add(memberBiomarkerList
-          .firstWhere((x) => x.biomarker.id == item.id, orElse: () => null));
+    for (var item in category.biomarkerIds) {
+      memberBiomarker = memberBiomarkerList
+          .firstWhere((x) => x.biomarker.id == item, orElse: () => null);
+      memberBiomarker != null
+          ? biomarkerStock.add(memberBiomarker)
+          : biomarkerNotInStock.add(store.state.biomarkerList.biomarkers
+              .firstWhere((x) => x.id == item, orElse: () => null));
     }
 
-    for (var item in store.state.biomarkerList.biomarkers) {
-      biomarkerNotInList.add(memberBiomarkerList
-          .firstWhere((x) => x.biomarker.id != item.id, orElse: () => null));
-    }
-
-    biomarkerInList.removeWhere((value) => value == null);
-    biomarkerNotInList.removeWhere((value) => value == null);
-
-    print("IN " + biomarkerInList.toString());
-    print("NOT IN: " + biomarkerNotInList.toString());
+    biomarkerStock.removeWhere((value) => value == null);
+    biomarkerNotInStock.removeWhere((value) => value == null);
 
     return Container(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -108,20 +107,21 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
         header: "Последние биомаркеры",
         headerMergeStyle: TextStyle(color: theme.primaryColor),
         child: Container(
-            height: 76 * biomarkerInList.length.toDouble(),
+            height: 76 * biomarkerStock.length.toDouble(),
             width: MediaQuery.of(context).size.width,
             child: ScrollConfiguration(
               behavior: NoRippleScrollBehaviour(),
               child: ListView.builder(
-                  itemCount: biomarkerInList.length,
+                  itemCount: biomarkerStock.length,
                   itemBuilder: (context, index) => BiomarkerItem(
-                      name: biomarkerInList[index].biomarker.content.name ??
+                      name: biomarkerStock[index].biomarker.content.name ??
                           "Unnamed",
-                      value: biomarkerInList[index].value ?? "null",
+                      value: biomarkerStock[index].value ?? "null",
                       unit:
-                          biomarkerInList[index].unit.content.name ?? "unnamed",
+                          biomarkerStock[index].unit.content.name ?? "unnamed",
                       status: "<status>",
-                      id: biomarkerInList[index].biomarker.id,
+                      id: biomarkerStock[index].biomarker.id,
+                      biomarker: biomarkerStock[index],
                       withActions: false)),
             )),
       ),
@@ -131,30 +131,28 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
           margin: EdgeInsets.only(bottom: Indents.sm),
           header: "Ещё не сдали",
           headerMergeStyle: TextStyle(color: theme.primaryColor),
-          child: Container(
-            height: 70 * biomarkerNotInList.length.toDouble(),
-            width: MediaQuery.of(context).size.width,
-            child: ListView.separated(
-                separatorBuilder: (context, index) => Divider(
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                padding: EdgeInsets.only(left: Indents.md, right: Indents.md),
-                itemCount: biomarkerNotInList.length,
-                itemBuilder: (context, index) => Container(
-                    padding: EdgeInsets.symmetric(vertical: Indents.sm),
-                    child: GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        child: Text(biomarkerNotInList[index]
-                            .biomarker
-                            .content
-                            .name)))),
-          ))
+          child: biomarkerNotInStock.length != 0
+              ? Container(
+                  height: 70 * biomarkerNotInStock.length.toDouble(),
+                  width: MediaQuery.of(context).size.width,
+                  child: ListView.separated(
+                      separatorBuilder: (context, index) => Divider(
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                      itemCount: biomarkerNotInStock.length,
+                      itemBuilder: (context, index) => Container(
+                          padding: EdgeInsets.symmetric(vertical: Indents.sm),
+                          child: GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              child: Text(
+                                  biomarkerNotInStock[index].content.name)))),
+                )
+              : Text("Поздравляем, все биомаркеры сданы! :)"))
     ]));
   }
 
   Widget analysisItem(int index, category) {
     final theme = Theme.of(context);
-    var category = store.state.categoryList.categories[index];
 
     return GestureDetector(
       onTap: () {

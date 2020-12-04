@@ -30,29 +30,22 @@ class BioMarkerListScreen extends StatefulWidget {
 
 class _BioMarkerListScreenState extends State<BioMarkerListScreen> {
   final int id;
+
   _BioMarkerListScreenState(this.id);
-
-  Future<List<MemberBiomarker>> getMemberBiomarker() async {
-    return await api.memberBiomarker.info();
-  }
-
-  List<MemberBiomarker> _biomarker;
 
   @override
   void initState() {
-    getMemberBiomarker().then((x) => {
-      setState(() {
-        _biomarker = x;
-        print("[BIOMARKER LIST SCREEN]: \n" + _biomarker.toString());
-      })
-    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    var biomarkers = store.state.biomarkerList.biomarkers;
+
+    var types = store.state.biomarkerTypeList.types;
+    types.removeWhere((value) => value.content == null);
+
+    var memberBiomarkerList = store.state.memberBiomarkerList.biomarkers;
 
     return Scaffold(
       appBar: AppBar(
@@ -61,7 +54,8 @@ class _BioMarkerListScreenState extends State<BioMarkerListScreen> {
             return IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
-                Keys.rootNavigator.currentState.pushReplacementNamed(Routes.main);
+                Keys.rootNavigator.currentState
+                    .pushReplacementNamed(Routes.main);
               },
             );
           },
@@ -70,7 +64,8 @@ class _BioMarkerListScreenState extends State<BioMarkerListScreen> {
             style: TextStyle(color: Theme.of(context).primaryColor)),
       ),
       body: Container(
-          height: 76 * _biomarker.length.toDouble(),
+          height: MediaQuery.of(context).size.height -
+              AppBar().preferredSize.height,
           width: MediaQuery.of(context).size.width,
           alignment: Alignment.topLeft,
           padding: EdgeInsets.only(
@@ -79,13 +74,34 @@ class _BioMarkerListScreenState extends State<BioMarkerListScreen> {
           child: ScrollConfiguration(
             behavior: NoRippleScrollBehaviour(),
             child: ListView.builder(
-                itemCount: _biomarker.length,
-                itemBuilder: (context, index) => BiomarkerItem(
-                    name: _biomarker[index].biomarker.content.name ?? "Unnamed",
-                    value: _biomarker[index].value ?? "null",
-                    unit: _biomarker[index].unit.content.name ?? "unnamed",
-                    status: "<status>",
-                    biomarker: _biomarker[index])),
+                itemCount: types.length,
+                itemBuilder: (context, index) => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(types[index].content.name,
+                            style: theme.textTheme.subtitle1
+                                .merge(TextStyle(fontWeight: FontWeight.normal))),
+                        Container(
+                            height: 76 *
+                                types[index].biomarkerIds.length.toDouble(),
+                            width: MediaQuery.of(context).size.width,
+                            child: ScrollConfiguration(
+                              behavior: NoRippleScrollBehaviour(),
+                              child: ListView.builder(
+                                  itemCount: types[index].biomarkerIds.length,
+                                  itemBuilder: (context, index) =>
+                                      BiomarkerItem(
+                                        status: "<status>",
+                                        biomarker: memberBiomarkerList
+                                            .firstWhere((x) =>
+                                                x.biomarker.id ==
+                                                types[index]
+                                                    .biomarkerIds[index]),
+                                        withActions: false,
+                                      )),
+                            ))
+                      ],
+                    )),
           )),
     );
   }

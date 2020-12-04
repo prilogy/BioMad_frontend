@@ -1,4 +1,4 @@
-import 'package:biomad_frontend/models/labList.dart';
+import 'package:biomad_frontend/models/lab_list.dart';
 
 class SetLabList {
   final LabList labs;
