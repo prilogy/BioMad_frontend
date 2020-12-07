@@ -32,7 +32,6 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
   @override
   void initState() {
     store.dispatch(StoreThunks.refreshMemberBiomarkers());
-    print("refreshMemberBiomarkers".toUpperCase());
     super.initState();
   }
 
@@ -112,11 +111,20 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
               behavior: NoRippleScrollBehaviour(),
               child: ListView.builder(
                   itemCount: biomarkerStock.length,
-                  itemBuilder: (context, index) => BiomarkerItem(
-                      status: "<status>",
-                      id: biomarkerStock[index].biomarker.id,
-                      biomarker: biomarkerStock[index],
-                      withActions: false)),
+                  itemBuilder: (context, index) {
+                    var biomarker = biomarkerStock[index];
+                    return BiomarkerItem(
+                      name:
+                      biomarker.biomarker.content.name ??
+                          "Unnamed",
+                      value: biomarker.value ?? "null",
+                      unit:
+                      biomarker.unit.content.shorthand ??
+                          "unnamed",
+                      id: biomarker.biomarkerId,
+                      withActions: false,
+                    );
+                  }),
             )),
       ),
       BlockBaseWidget(

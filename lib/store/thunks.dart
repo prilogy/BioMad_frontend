@@ -1,6 +1,7 @@
 import 'package:api/api.dart';
 import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
+import 'package:biomad_frontend/models/analysis_list.dart';
 import 'package:biomad_frontend/models/authorization.dart';
 import 'package:biomad_frontend/models/biomarker_list.dart';
 import 'package:biomad_frontend/models/biomarker_type_list.dart';
@@ -8,6 +9,7 @@ import 'package:biomad_frontend/models/category_list.dart';
 import 'package:biomad_frontend/models/helper.dart';
 import 'package:biomad_frontend/models/lab_list.dart';
 import 'package:biomad_frontend/models/member_biomarker_list.dart';
+import 'package:biomad_frontend/models/member_biomarker_model_list.dart';
 import 'package:biomad_frontend/models/unit_list.dart';
 import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/services/api.dart';
@@ -24,10 +26,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
+import 'analysis/actions.dart';
 import 'biomarker/actions.dart';
 import 'category/actions.dart';
 import 'lab/actions.dart';
-import 'memberBiomarker/actions.dart';
+import 'member_biomarker/actions.dart';
+import 'member_biomarker_tmp/actions.dart';
 
 typedef AuthenticationResultGetter = Future<AuthenticationResult> Function();
 
@@ -108,7 +112,8 @@ class StoreThunks {
           SetCategory(CategoryList(categories: await api.category.info())));
       store.dispatch(SetBiomarkerList(
           BiomarkerList(biomarkers: await api.biomarker.info())));
-      store.dispatch(SetBiomarkerTypeList(BiomarkerTypeList(types: await api.biomarker.type())));
+      store.dispatch(SetBiomarkerTypeList(
+          BiomarkerTypeList(types: await api.biomarker.type())));
     };
   }
 
@@ -116,6 +121,20 @@ class StoreThunks {
     return (Store<AppState> store) async {
       store.dispatch(SetMemberBiomarkerList(
           MemberBiomarkerList(biomarkers: await api.memberBiomarker.info())));
+    };
+  }
+
+  static ThunkAction<AppState> refreshMemberAnalysis() {
+    return (Store<AppState> store) async {
+      store.dispatch(SetMemberAnalysisList(
+          MemberAnalysisList(analysis: await api.memberAnalysis.info())));
+    };
+  }
+
+  static ThunkAction<AppState> setMemberBiomarkerModels(biomarkerModelList) {
+    return (Store<AppState> store) async {
+      store.dispatch(SetMemberBiomarkerModelList(
+          MemberBiomarkerList(biomarkers: biomarkerModelList)));
     };
   }
 }

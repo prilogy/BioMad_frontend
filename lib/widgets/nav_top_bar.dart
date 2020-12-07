@@ -1,15 +1,22 @@
+import 'package:biomad_frontend/helpers/keys.dart';
+import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:flutter/material.dart';
 
 class NavTopBar extends StatefulWidget {
+  final index;
+  NavTopBar({Key key, this.index}) : super(key: key);
+
   @override
-  _NavTopBarState createState() => _NavTopBarState();
+  _NavTopBarState createState() => _NavTopBarState(index);
 }
 
 class _NavTopBarState extends State<NavTopBar> {
-  List<String> navTopBar = ["Мониторинг", "Анализы", "Заказать"];
-  int selectedIndex = 0;
+  List<String> navTopBar = ["Мониторинг", "Анализы"];
+  var navTopBarLink = [Routes.main, Routes.analysis_list];
+  int selectedIndex;
+  _NavTopBarState(this.selectedIndex);
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +34,8 @@ class _NavTopBarState extends State<NavTopBar> {
         setState(() {
           selectedIndex = index;
         });
+        Keys.rootNavigator.currentState
+            .pushReplacementNamed(navTopBarLink[index]);
       },
       child: Padding(
         padding: const EdgeInsets.only(right: Indents.lg),

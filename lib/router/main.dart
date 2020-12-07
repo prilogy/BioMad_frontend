@@ -1,5 +1,7 @@
 import 'package:api/api.dart';
 import 'package:biomad_frontend/screens/add_analysis_screen.dart';
+import 'package:biomad_frontend/screens/analysis_list_screen.dart';
+import 'package:biomad_frontend/screens/analysis_screen.dart';
 import 'package:biomad_frontend/screens/auth_screen/login_screen.dart';
 import 'package:biomad_frontend/screens/auth_screen/main.dart';
 import 'package:biomad_frontend/screens/monitoring_screen.dart';
@@ -35,6 +37,8 @@ class Routes {
   static const biomarker_list = '/biomarker_list';
   static const category_analysis = '/category_analysis';
   static const add_analysis = '/add_analysis';
+  static const analysis_list = '/analysis_list';
+  static const analysis = '/analysis';
 }
 
 final authRoute = RouteBuilder(Routes.auth, (args) => AuthScreen(), false);
@@ -46,6 +50,8 @@ final routes = [
   RouteBuilder(Routes.biomarker, (args) => BioMarkerScreen(biomarker: args as MemberBiomarker)),
   RouteBuilder(Routes.biomarker_list, (args) => BioMarkerListScreen(id: args as int,)),
   RouteBuilder(Routes.category_analysis, (args) => CategoryAnalysisScreen(categoryId: args as int,)),
+  RouteBuilder(Routes.analysis_list, (args) => AnalysisListScreen(index: args as int,)),
+  RouteBuilder(Routes.analysis, (args) => AnalysisScreen(analysis: args as MemberAnalysis,)),
   RouteBuilder(Routes.add_analysis, (args) => AddAnalysisScreen(title: "s",)),
 ];
 

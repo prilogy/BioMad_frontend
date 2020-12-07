@@ -70,7 +70,6 @@ class _MemberScreenState extends State<MemberScreen> {
                     SnackBarExtension.error(_tr('add_error'));
                     return;
                   }
-
                   store.dispatch(StoreThunks.authorizeWithRefreshToken());
                   SnackBarExtension.success(_tr('add_success'));
                   Navigator.of(context).pop();

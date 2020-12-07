@@ -38,10 +38,6 @@ class MyApp extends StatelessWidget {
     initializeDateFormatting("ru", null);
     initializeDateFormatting("en", null);
 
-    //ВЫВОД ХЕЛПЕРА
-    //print(store.state.helper.toJson());
-    //print(store.state.category.toJson());
-
     if (!connectionChecked)
       WidgetsBinding.instance.addPostFrameCallback(initAction);
 

@@ -19,11 +19,13 @@ class MemberBiomarker {
   int analysisId = null;
   
   MemberAnalysis analysis = null;
-  MemberBiomarker();
+
+  MemberBiomarkerModel memberBiomarkerModel = null;
+  MemberBiomarker({this.memberBiomarkerModel});
 
   @override
   String toString() {
-    return 'MemberBiomarker[id=$id, value=$value, dateCreatedAt=$dateCreatedAt, unitId=$unitId, unit=$unit, biomarkerId=$biomarkerId, biomarker=$biomarker, analysisId=$analysisId, analysis=$analysis, ]';
+    return 'MemberBiomarker[id=$id, value=$value, dateCreatedAt=$dateCreatedAt, unitId=$unitId, unit=$unit, biomarkerId=$biomarkerId, biomarker=$biomarker, analysisId=$analysisId, analysis=$analysis, memberBiomarkerModel=$memberBiomarkerModel]';
   }
 
   MemberBiomarker.fromJson(Map<String, dynamic> json) {

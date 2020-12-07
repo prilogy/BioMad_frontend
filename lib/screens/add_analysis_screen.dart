@@ -2,6 +2,8 @@ import 'package:api/api.dart';
 import 'package:biomad_frontend/helpers/date_time_formats.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
+import 'package:biomad_frontend/models/member_biomarker_list.dart';
+import 'package:biomad_frontend/models/member_biomarker_model_list.dart';
 import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
@@ -13,6 +15,7 @@ import 'package:biomad_frontend/widgets/biomarker_item.dart';
 import 'package:biomad_frontend/widgets/custom_date_form_field.dart';
 import 'package:biomad_frontend/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 
 class AddAnalysisScreen extends StatefulWidget {
   final String title;
@@ -33,10 +36,8 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
 
   final int _labId = 1;
   final _descriptionController = TextEditingController();
-  List<MemberBiomarkerModel> _biomarkers = [];
-  var _biomarkerName;
-  var _biomarkerUnitName;
-  int biomarkerId;
+  List<MemberBiomarker> _biomarkers =
+      store.state.memberBiomarkerModelList.biomarkers;
 
   MemberAnalysisModel getMemberAnalysisModel() => MemberAnalysisModel(
       name: _analysisController.text,
@@ -47,6 +48,7 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
 
   @override
   void initState() {
+    store.dispatch(StoreThunks.setMemberBiomarkerModels(_biomarkers));
     setState(() {
       _dateController.text = DateTimeFormats.defaultDate.format(DateTime.now());
     });
@@ -71,6 +73,8 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                 return IconButton(
                   icon: Icon(Icons.arrow_back),
                   onPressed: () {
+                    store.dispatch(
+                        store.state.memberBiomarkerModelList.biomarkers = []);
                     Keys.rootNavigator.currentState
                         .pushReplacementNamed(Routes.main);
                   },
@@ -86,7 +90,11 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                   MemberAnalysisModel result = getMemberAnalysisModel();
                   api.memberAnalysis.add(result);
                   store.dispatch(StoreThunks.refreshMemberBiomarkers());
-                  Keys.rootNavigator.currentState.pushReplacementNamed(Routes.main);
+                  store.dispatch(
+                      store.state.memberBiomarkerModelList.biomarkers = []);
+
+                  Keys.rootNavigator.currentState
+                      .pushReplacementNamed(Routes.main);
                 },
               )
             ]),
@@ -135,6 +143,7 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                     icon: Icon(Icons.comment_outlined),
                     labelText: "Примечание",
                     hintText: "Уточните детали",
+                    maxLines: 5,
                     onChange: (x) {
                       onChange();
                     },
@@ -174,32 +183,39 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                                         vertical: Indents.md),
                                   );
                                 },
-                              ).then((val) {
-                                setState(() {
-                                  _biomarkers.add(val[0]);
-                                  _biomarkerName = val[1] ?? "Unnamed";
-                                  _biomarkerUnitName = val[2] ?? "unnamed";
-                                  biomarkerId = val[3] ?? null;
-                                });
-                              });
+                              );
                             },
                           )
                         ],
                       ),
-                      Container(
-                          height: 76 * _biomarkers.length.toDouble(),
-                          width: MediaQuery.of(context).size.width,
-                          child: ScrollConfiguration(
-                            behavior: NoRippleScrollBehaviour(),
-                            child: ListView.builder(
-                                itemCount: _biomarkers.length,
-                                itemBuilder: (context, index) => BiomarkerItem(
-                                    name: _biomarkerName ?? "Unnamed",
-                                    value: _biomarkers[index].value ?? "null",
-                                    unit: _biomarkerUnitName ?? "unnamed",
-                                    status: "<status>",
-                                    id: biomarkerId)),
-                          )),
+                      StoreConnector<AppState, MemberBiomarkerList>(
+                        converter: (store) =>
+                            store.state.memberBiomarkerModelList,
+                        builder: (ctx, state) {
+                          print(_biomarkers);
+                          return Container(
+                              height: 76 * _biomarkers.length.toDouble(),
+                              width: MediaQuery.of(context).size.width,
+                              child: ScrollConfiguration(
+                                behavior: NoRippleScrollBehaviour(),
+                                child: ListView.builder(
+                                    itemCount: _biomarkers.length,
+                                    itemBuilder: (context, index) =>
+                                        BiomarkerItem(
+                                          name: _biomarkers[index]
+                                                  .memberBiomarkerModel.biomarkerName ??
+                                              "Unnamed",
+                                          inList: "model",
+                                          value: _biomarkers[index].memberBiomarkerModel.value ??
+                                              null,
+                                          unit: _biomarkers[index].memberBiomarkerModel.biomarkerUnitName ??
+                                              "unnamed",
+                                          status: "<status>",
+                                          id: _biomarkers[index].memberBiomarkerModel.biomarkerId,
+                                        )),
+                              ));
+                        },
+                      )
                     ],
                   )
                 ]))));

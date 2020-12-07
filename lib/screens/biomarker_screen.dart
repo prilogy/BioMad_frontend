@@ -40,7 +40,7 @@ class _BioMarkerScreenState extends State<BioMarkerScreen> {
             return IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
-                Keys.rootNavigator.currentState.pushReplacementNamed(Routes.main);
+                Navigator.of(context).pop();
               },
             );
           },

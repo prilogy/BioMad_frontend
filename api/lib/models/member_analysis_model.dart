@@ -10,7 +10,7 @@ class MemberAnalysisModel {
   
   DateTime date = null;
   
-  List<MemberBiomarkerModel> biomarkers = [];
+  List<MemberBiomarker> biomarkers = [];
   MemberAnalysisModel({this.name, this.description, this.labId, this.date, this.biomarkers});
 
   @override
@@ -28,7 +28,7 @@ class MemberAnalysisModel {
       DateTime.parse(json['date']);
     biomarkers = (json['biomarkers'] == null) ?
       null :
-      MemberBiomarkerModel.listFromJson(json['biomarkers']);
+      MemberBiomarker.listFromJson(json['biomarkers']);
   }
 
   Map<String, dynamic> toJson() {

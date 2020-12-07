@@ -129,7 +129,11 @@ class _AccountContainerState extends State<AccountContainer> {
                                 ),
                               ),
                               Text(
-                                  _ttr((gender[currentMember.genderId].key ??
+                                  _ttr((gender
+                                              .firstWhere((x) =>
+                                                  x.id ==
+                                                  currentMember.genderId)
+                                              .key ??
                                           'neutral')) +
                                       ', ' +
                                       getAgeFromDate(currentMember.dateBirthday)

@@ -1,11 +1,16 @@
+import 'package:api/api.dart';
 import 'package:biomad_frontend/containers/account_container.dart';
+import 'package:biomad_frontend/containers/analysis_container.dart';
+import 'package:biomad_frontend/containers/analysis_list_container.dart';
 import 'package:biomad_frontend/containers/category_container.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/screens/search_screen.dart';
+import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
 import 'package:biomad_frontend/styles/avatar_sizes.dart';
+import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/color_alphas.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:biomad_frontend/styles/radius_values.dart';
@@ -25,15 +30,18 @@ import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:biomad_frontend/helpers/custom_alert_dialog.dart';
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
+class AnalysisScreen extends StatefulWidget {
+  final MemberAnalysis analysis;
+  AnalysisScreen({Key key, this.analysis}) : super(key: key);
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _AnalysisScreenState createState() => _AnalysisScreenState(analysis);
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _AnalysisScreenState extends State<AnalysisScreen> {
+  final MemberAnalysis analysis;
+  _AnalysisScreenState(this.analysis);
+
   PanelController _panelController = PanelController();
 
   final double _initFabHeight = 120.0;
@@ -44,19 +52,17 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    store.dispatch(store.state.memberBiomarkerModelList.biomarkers=[]);
-    store.dispatch(StoreThunks.refreshMemberAnalysis());
 
     return Scaffold(
       appBar: AppBar(
-        title: NavTopBar(index: 0),
+        title: Text("Анализ - " + analysis.name, style: TextStyle(fontSize: 18, color: theme.primaryColor),),
       ),
       body: Stack(children: [
         Scaffold(
             body: Container(
                 //tmpBiomarker(context)
                 child: Column(
-          children: [NavPageBar(), CategoryContainer()],
+          children: [AnalysisContainer(analysis: analysis)],
         ))),
         Positioned(
             bottom: NavBar.indent,

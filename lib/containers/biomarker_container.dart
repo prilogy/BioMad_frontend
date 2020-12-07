@@ -85,33 +85,36 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
             margin: EdgeInsets.only(bottom: Indents.sm),
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Ваш показатель",
-                      style: theme.textTheme.bodyText1,
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                            padding: EdgeInsets.only(right: Indents.sm),
-                            child: icon != null
-                                ? Icon(icon, color: color)
-                                : iconContainer),
-                        Text(
-                          biomarker.biomarker.content.name +
-                              " " +
-                              biomarker.value.toString() +
-                              " " +
-                              biomarker.unit.content.shorthand +
-                              ", " +
-                              status,
-                        ),
-                      ],
-                    ),
-                  ],
+                Container(
+                  margin: EdgeInsets.only(bottom: Indents.sm),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Ваш показатель",
+                        style: theme.textTheme.bodyText1,
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                              padding: EdgeInsets.only(right: Indents.sm),
+                              child: icon != null
+                                  ? Icon(icon, color: color)
+                                  : iconContainer),
+                          Text(
+                            biomarker.biomarker.content.name +
+                                " " +
+                                biomarker.value.toString() +
+                                " " +
+                                biomarker.unit.content.shorthand +
+                                ", " +
+                                status,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -163,20 +166,21 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
                           .merge(TextStyle(color: theme.primaryColor)),
                     ),
                   ),
-                  Container(
-                    height: 30,
-                    child: FlatButton(
-                      color: Colors.transparent,
-                      splashColor: Colors.black26,
-                      padding: EdgeInsets.all(0),
-                      onPressed: () {},
-                      child: Text(
-                        'показать всю'.toUpperCase(),
-                        style: theme.textTheme.bodyText1
-                            .merge(TextStyle(color: theme.primaryColor)),
-                      ),
-                    ),
-                  )
+//ПОКАЗАТЬ ВСЮ
+//                  Container(
+//                    height: 30,
+//                    child: FlatButton(
+//                      color: Colors.transparent,
+//                      splashColor: Colors.black26,
+//                      padding: EdgeInsets.all(0),
+//                      onPressed: () {},
+//                      child: Text(
+//                        'показать всю'.toUpperCase(),
+//                        style: theme.textTheme.bodyText1
+//                            .merge(TextStyle(color: theme.primaryColor)),
+//                      ),
+//                    ),
+//                  )
                 ],
               ),
                   BiomarkerHistory(biomarkerHistory: biomarkerHistory, biomarker: biomarker,)

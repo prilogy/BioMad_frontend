@@ -1,5 +1,7 @@
+import 'package:api/api.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/router/main.dart';
+import 'package:biomad_frontend/screens/analysis_screen.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
@@ -10,18 +12,16 @@ import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:flutter/material.dart';
 
-class CategoryContainer extends StatefulWidget {
+class AnalysisListContainer extends StatefulWidget {
   @override
-  _CategoryContainerState createState() => _CategoryContainerState();
+  _AnalysisListContainerState createState() => _AnalysisListContainerState();
 }
 
-class _CategoryContainerState extends State<CategoryContainer> {
+class _AnalysisListContainerState extends State<AnalysisListContainer> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
-    store.dispatch(StoreThunks.refreshCategoriesAndBiomarkersAndTypes());
-    var category = store.state.categoryList.categories;
+    List<MemberAnalysis> analysis = store.state.memberAnalysisList.analysis;
 
     return Container(
         height: MediaQuery.of(context).size.height -
@@ -31,20 +31,21 @@ class _CategoryContainerState extends State<CategoryContainer> {
         child: ScrollConfiguration(
           behavior: NoRippleScrollBehaviour(),
           child: ListView.builder(
-              itemCount: store.state.categoryList.categories.length,
-              itemBuilder: (context, index) => categoryItem(index, category)),
+              itemCount: analysis.length,
+              itemBuilder: (context, index) => analysisItem(index, analysis)),
         ));
   }
 
-  Widget categoryItem(int index, category) {
+  Widget analysisItem(int index, List<MemberAnalysis> analysis) {
     final theme = Theme.of(context);
-    var category = store.state.categoryList.categories[index];
 
     return GestureDetector(
       onTap: () {
-        Keys.rootNavigator.currentState.pushReplacementNamed(
-            Routes.category_analysis,
-            arguments: category.id);
+        return showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AnalysisScreen(analysis: analysis[index]);
+            });
       },
       child: Container(
         padding: EdgeInsets.only(left: Indents.md, right: Indents.sm),
@@ -69,7 +70,7 @@ class _CategoryContainerState extends State<CategoryContainer> {
           children: [
             Row(children: [
               Icon(
-                Icons.favorite,
+                Icons.assignment_outlined,
                 color: BioMadColors.success,
                 size: 32.0,
               ),
@@ -79,15 +80,16 @@ class _CategoryContainerState extends State<CategoryContainer> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      category.content.name,
+                      analysis[index].name,
                       style: theme.textTheme.bodyText2,
                     ),
                     Container(
                       padding: EdgeInsets.only(top: 2),
                       child: Text(
-                        "Состояние: 80%",
-                        style: theme.textTheme.caption
-                            .merge(TextStyle(color: BioMadColors.success)),
+                        analysis[index].date.day.toString() + "." +
+                            analysis[index].date.month.toString()+ "." +
+                            analysis[index].date.year.toString(),
+                        style: theme.textTheme.caption,
                       ),
                     )
                   ],

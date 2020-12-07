@@ -2,6 +2,7 @@ import 'package:api/api.dart';
 import 'package:biomad_frontend/helpers/indents_mixin.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/router/main.dart';
+import 'package:biomad_frontend/screens/biomarker_screen.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
@@ -12,7 +13,7 @@ import 'biomarker_alert.dart';
 class BiomarkerItem extends StatelessWidget with IndentsMixin {
   final Widget child;
   final int id;
-  final MemberBiomarker biomarker;
+  final String inList;
   final String name;
   final double value;
   final String unit;
@@ -27,37 +28,35 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
   final EdgeInsetsGeometry headerPadding;
 
   static const EdgeInsetsGeometry _defaultMargin =
-      const EdgeInsets.only(bottom: Indents.md);
+  const EdgeInsets.only(bottom: Indents.md);
 
-  BiomarkerItem(
-      {this.child,
-      this.id,
-      this.biomarker,
-      this.name = "",
-      this.value,
-      this.unit = "",
-      this.status = "",
-      this.headerMergeStyle,
-      this.headerPadding = const EdgeInsets.all(0),
-      this.crossAxisAlignment = CrossAxisAlignment.start,
-      this.padding = const EdgeInsets.symmetric(horizontal: Indents.md),
-      this.withActions = true,
-      this.margin = _defaultMargin});
+  BiomarkerItem({this.child,
+    this.id,
+    this.inList,
+    this.name = "",
+    this.value,
+    this.unit = "",
+    this.status = "",
+    this.headerMergeStyle,
+    this.headerPadding = const EdgeInsets.all(0),
+    this.crossAxisAlignment = CrossAxisAlignment.start,
+    this.padding = const EdgeInsets.symmetric(horizontal: Indents.md),
+    this.withActions = true,
+    this.margin = _defaultMargin});
 
-  BiomarkerItem.forScrollingViews(
-      {this.child,
-      this.id,
-      this.biomarker,
-      this.name,
-      this.value,
-      this.unit,
-      this.status,
-      this.withActions,
-      this.headerMergeStyle,
-      this.crossAxisAlignment = CrossAxisAlignment.start,
-      this.headerPadding = const EdgeInsets.only(left: Indents.md),
-      this.padding = const EdgeInsets.all(0),
-      this.margin = _defaultMargin});
+  BiomarkerItem.forScrollingViews({this.child,
+    this.id,
+    this.inList,
+    this.name,
+    this.value,
+    this.unit,
+    this.status,
+    this.withActions,
+    this.headerMergeStyle,
+    this.crossAxisAlignment = CrossAxisAlignment.start,
+    this.headerPadding = const EdgeInsets.only(left: Indents.md),
+    this.padding = const EdgeInsets.all(0),
+    this.margin = _defaultMargin});
 
   @override
   Widget build(BuildContext context) {
@@ -66,14 +65,13 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
     var color;
     var icon;
     var reference = store.state.biomarkerList.biomarkers
-        .firstWhere((element) => element.id == biomarker.biomarker.id)
+        .firstWhere((element) => element.id == id)
         .references;
 
-    if (reference.valueA <= biomarker.value &&
-        biomarker.value <= reference.valueB) {
+    if (reference.valueA <= value && value <= reference.valueB) {
       color = BioMadColors.success;
       status = "норма";
-    } else if (biomarker.value < reference.valueA) {
+    } else if (value < reference.valueA) {
       color = BioMadColors.warning;
       status = "пониженный";
       icon = Icons.keyboard_arrow_down;
@@ -92,10 +90,24 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
           shape: BoxShape.circle,
         ));
 
+    MemberBiomarker _biomarker;
+    if (inList == "model") {
+      _biomarker =
+          store.state.memberBiomarkerModelList.biomarkers.firstWhere(
+                  (element) => element.memberBiomarkerModel.biomarkerId == id);
+    }
+    else {
+      _biomarker = store.state.memberBiomarkerList.biomarkers
+          .firstWhere((element) => element.biomarkerId == id);
+    }
+
     return GestureDetector(
       onTap: () {
-        Keys.rootNavigator.currentState
-            .pushReplacementNamed(Routes.biomarker, arguments: biomarker);
+        return showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return BioMarkerScreen(biomarker: _biomarker);
+            });
       },
       child: Container(
         margin: EdgeInsets.only(
@@ -123,7 +135,7 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      biomarker.biomarker.content.name,
+                      name,
                       style: theme.textTheme.subtitle1,
                     ),
                     Container(
@@ -138,12 +150,11 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
                                       ? Icon(icon, color: color, size: 22.0)
                                       : iconContainer),
                               Text(
-                                  biomarker.value.toString() +
-                                      ' ' +
-                                      biomarker.unit.content.shorthand +
-                                      ', ' +
-                                      status,
-                                  style: Theme.of(context).textTheme.bodyText2),
+                                  value.toString() + ' ' + unit + ', ' + status,
+                                  style: Theme
+                                      .of(context)
+                                      .textTheme
+                                      .bodyText2),
                             ],
                           ),
                         ],
@@ -155,62 +166,65 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
             ]),
             withActions
                 ? Row(
-                    children: [
-                      IconButton(
-                        icon: Icon(
-                          Icons.edit,
-                          color: BioMadColors.primary,
-                          size: 24.0,
-                        ),
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return BiomarkerAlertDialog(
-                                context,
-                                title: "Изменить биомаркер",
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: Text('Отмена'),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                  TextButton(
-                                    child: Text('Изменить'),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ],
-                                //contentHeight: h,
-                                contentPadding:
-                                    EdgeInsets.symmetric(vertical: Indents.md),
-                              );
-                            },
-                          );
-                        },
-                      ),
-                      IconButton(
-                          icon: Icon(
-                            Icons.close,
-                            color: BioMadColors.error,
-                            size: 24.0,
-                          ),
-                          onPressed: null)
-                    ],
-                  )
-                : IconButton(
+              children: [
+                IconButton(
+                  icon: Icon(
+                    Icons.edit,
+                    color: BioMadColors.primary,
+                    size: 24.0,
+                  ),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return BiomarkerAlertDialog(
+                          context,
+                          biomarker: _biomarker,
+                          title: "Изменить биомаркер",
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text('Отмена'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            TextButton(
+                              child: Text('Изменить'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                          //contentHeight: h,
+                          contentPadding:
+                          EdgeInsets.symmetric(vertical: Indents.md),
+                        );
+                      },
+                    );
+                  },
+                ),
+                IconButton(
                     icon: Icon(
-                      Icons.arrow_forward,
-                      color: BioMadColors.primary,
+                      Icons.close,
+                      color: BioMadColors.error,
                       size: 24.0,
                     ),
-                    onPressed: () {
-                      Keys.rootNavigator.currentState.pushReplacementNamed(
-                          Routes.biomarker,
-                          arguments: biomarker);
-                    }),
+                    onPressed: null)
+              ],
+            )
+                : IconButton(
+                icon: Icon(
+                  Icons.arrow_forward,
+                  color: BioMadColors.primary,
+                  size: 24.0,
+                ),
+                onPressed: () {
+                  return showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return BioMarkerScreen(biomarker: _biomarker);
+                      });
+                }),
           ],
         ),
       ),

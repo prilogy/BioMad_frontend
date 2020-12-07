@@ -10,10 +10,15 @@ class CustomTextFormField extends StatelessWidget with IndentsMixin {
   final TextEditingController controller;
   final InputDecoration inputDecoration;
   final String labelText;
+  final String disableLabelText;
   final String hintText;
-  final Icon icon;
+  final icon;
   final initialValue;
   final keyboardType;
+  var enabled;
+  var maxLines;
+  var focusNode;
+  var enableInteractiveSelection;
   final String Function(String) validator;
   final void Function(String) onChange;
   final void Function() onTap;
@@ -22,6 +27,7 @@ class CustomTextFormField extends StatelessWidget with IndentsMixin {
   final EdgeInsetsGeometry margin;
   final bool obscureText;
   final Color enabledColor;
+  final Color disabledColor;
 
   CustomTextFormField(
       {@required this.controller,
@@ -29,14 +35,20 @@ class CustomTextFormField extends StatelessWidget with IndentsMixin {
       this.obscureText = false,
       @required this.labelText,
       this.hintText = '',
+      this.disableLabelText = '',
       this.icon,
       this.onChange,
+      this.enabled = true,
+      this.maxLines,
       this.onTap,
+      this.focusNode,
+      this.enableInteractiveSelection = true,
       this.initialValue,
       this.keyboardType,
       this.formValidator,
       this.validator,
       this.enabledColor,
+      this.disabledColor,
       this.margin = const EdgeInsets.only(bottom: Indents.md),
       this.padding});
 
@@ -54,18 +66,33 @@ class CustomTextFormField extends StatelessWidget with IndentsMixin {
                         color: enabledColor, width: AppTheme.borderWidth),
                   )
                 : baseDecoration.enabledBorder,
+            disabledBorder: OutlineInputBorder(
+              borderRadius: Decorations.borderRadius,
+              borderSide: BorderSide(
+                  color: theme.disabledColor.withOpacity(0.2),
+                  width: AppTheme.borderWidth),
+            ),
             errorBorder: baseDecoration.errorBorder,
             focusedErrorBorder: baseDecoration.focusedErrorBorder,
             hintText: hintText,
-            prefixIcon: icon,
-            labelText: labelText,
-            errorStyle: baseDecoration.errorStyle);
+            prefixIcon: maxLines == null ? icon : null,
+            labelText: enabled ? labelText : disableLabelText,
+            errorStyle: baseDecoration.errorStyle,
+            alignLabelWithHint: true,
+        );
 
     return withIndents(
       child: Padding(
         padding: const EdgeInsets.only(top: 2.0),
         child: TextFormField(
           obscureText: obscureText,
+          focusNode: focusNode,
+          style: enabled
+              ? null
+              : TextStyle(color: theme.disabledColor.withOpacity(0.37)),
+          enableInteractiveSelection: enableInteractiveSelection,
+          enabled: enabled,
+            maxLines: maxLines,
           onFieldSubmitted: (x) {
             formValidator?.call();
           },

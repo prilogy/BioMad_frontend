@@ -79,27 +79,34 @@ class _BioMarkerListScreenState extends State<BioMarkerListScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(types[index].content.name,
-                            style: theme.textTheme.subtitle1
-                                .merge(TextStyle(fontWeight: FontWeight.normal))),
+                            style: theme.textTheme.subtitle1.merge(
+                                TextStyle(fontWeight: FontWeight.normal))),
                         Container(
                             height: 76 *
                                 types[index].biomarkerIds.length.toDouble(),
                             width: MediaQuery.of(context).size.width,
                             child: ScrollConfiguration(
-                              behavior: NoRippleScrollBehaviour(),
-                              child: ListView.builder(
-                                  itemCount: types[index].biomarkerIds.length,
-                                  itemBuilder: (context, index) =>
-                                      BiomarkerItem(
-                                        status: "<status>",
-                                        biomarker: memberBiomarkerList
-                                            .firstWhere((x) =>
-                                                x.biomarker.id ==
-                                                types[index]
-                                                    .biomarkerIds[index]),
+                                behavior: NoRippleScrollBehaviour(),
+                                child: ListView.builder(
+                                    itemCount: types[index].biomarkerIds.length,
+                                    itemBuilder: (context, i) {
+                                      var biomarker =
+                                          memberBiomarkerList.firstWhere((x) =>
+                                              x.biomarker.id ==
+                                              types[index]
+                                                  .biomarkerIds[i]);
+                                      return BiomarkerItem(
+                                        name:
+                                        biomarker.biomarker.content.name ??
+                                            "Unnamed",
+                                        value: biomarker.value ?? "null",
+                                        unit:
+                                        biomarker.unit.content.shorthand ??
+                                            "unnamed",
+                                        id: biomarker.biomarkerId,
                                         withActions: false,
-                                      )),
-                            ))
+                                      );
+                                    })))
                       ],
                     )),
           )),

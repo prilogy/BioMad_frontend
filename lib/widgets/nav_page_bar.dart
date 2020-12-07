@@ -10,7 +10,7 @@ class NavPageBar extends StatefulWidget {
 }
 
 class _NavPageBarState extends State<NavPageBar> {
-  List<String> navPageBar = ["Моё здоровье", "Тенденция", "Биомаркеры"];
+  List<String> navPageBar = ["Моё здоровье", "Биомаркеры"];
   int selectedIndex = 0;
 
   @override
