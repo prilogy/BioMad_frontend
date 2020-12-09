@@ -8,16 +8,12 @@ class Lab {
   
   int cityId = null;
   
-  City city = null;
-  
-  List<LabTranslation> translations = [];
-  
   LabTranslation content = null;
   Lab();
 
   @override
   String toString() {
-    return 'Lab[id=$id, phoneNumber=$phoneNumber, cityId=$cityId, city=$city, translations=$translations, content=$content, ]';
+    return 'Lab[id=$id, phoneNumber=$phoneNumber, cityId=$cityId, content=$content, ]';
   }
 
   Lab.fromJson(Map<String, dynamic> json) {
@@ -25,12 +21,6 @@ class Lab {
     id = json['id'];
     phoneNumber = json['phoneNumber'];
     cityId = json['cityId'];
-    city = (json['city'] == null) ?
-      null :
-      City.fromJson(json['city']);
-    translations = (json['translations'] == null) ?
-      null :
-      LabTranslation.listFromJson(json['translations']);
     content = (json['content'] == null) ?
       null :
       LabTranslation.fromJson(json['content']);
@@ -43,9 +33,6 @@ class Lab {
       json['phoneNumber'] = phoneNumber;
     if (cityId != null)
       json['cityId'] = cityId;
-    if (city != null)
-      json['city'] = city;
-      json['translations'] = translations;
     if (content != null)
       json['content'] = content;
     return json;

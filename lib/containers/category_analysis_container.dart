@@ -48,7 +48,7 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
 
     for (var item in category.biomarkerIds) {
       memberBiomarker = memberBiomarkerList
-          .firstWhere((x) => x.biomarker.id == item, orElse: () => null);
+          .firstWhere((x) => x.biomarkerId == item, orElse: () => null);
       memberBiomarker != null
           ? biomarkerStock.add(memberBiomarker)
           : biomarkerNotInStock.add(store.state.biomarkerList.biomarkers
@@ -114,9 +114,6 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
                   itemBuilder: (context, index) {
                     var biomarker = biomarkerStock[index];
                     return BiomarkerItem(
-                      name:
-                      biomarker.biomarker.content.name ??
-                          "Unnamed",
                       value: biomarker.value ?? "null",
                       unit:
                       biomarker.unit.content.shorthand ??

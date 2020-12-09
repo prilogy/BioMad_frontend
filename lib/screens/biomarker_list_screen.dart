@@ -63,53 +63,57 @@ class _BioMarkerListScreenState extends State<BioMarkerListScreen> {
         title: Text("Последние биомаркеры",
             style: TextStyle(color: Theme.of(context).primaryColor)),
       ),
-      body: Container(
-          height: MediaQuery.of(context).size.height -
-              AppBar().preferredSize.height,
-          width: MediaQuery.of(context).size.width,
-          alignment: Alignment.topLeft,
-          padding: EdgeInsets.only(
-              top: Indents.md, left: Indents.md, right: Indents.md),
-          margin: EdgeInsets.only(bottom: Indents.sm),
-          child: ScrollConfiguration(
-            behavior: NoRippleScrollBehaviour(),
-            child: ListView.builder(
-                itemCount: types.length,
-                itemBuilder: (context, index) => Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(types[index].content.name,
-                            style: theme.textTheme.subtitle1.merge(
-                                TextStyle(fontWeight: FontWeight.normal))),
-                        Container(
-                            height: 76 *
-                                types[index].biomarkerIds.length.toDouble(),
-                            width: MediaQuery.of(context).size.width,
-                            child: ScrollConfiguration(
-                                behavior: NoRippleScrollBehaviour(),
-                                child: ListView.builder(
-                                    itemCount: types[index].biomarkerIds.length,
-                                    itemBuilder: (context, i) {
-                                      var biomarker =
-                                          memberBiomarkerList.firstWhere((x) =>
-                                              x.biomarker.id ==
-                                              types[index]
-                                                  .biomarkerIds[i]);
-                                      return BiomarkerItem(
-                                        name:
-                                        biomarker.biomarker.content.name ??
-                                            "Unnamed",
-                                        value: biomarker.value ?? "null",
-                                        unit:
-                                        biomarker.unit.content.shorthand ??
-                                            "unnamed",
-                                        id: biomarker.biomarkerId,
-                                        withActions: false,
-                                      );
-                                    })))
-                      ],
-                    )),
-          )),
+      body: store.state.memberBiomarkerList.biomarkers != []
+          ? Container(
+              height: MediaQuery.of(context).size.height -
+                  AppBar().preferredSize.height,
+              width: MediaQuery.of(context).size.width,
+              alignment: Alignment.topLeft,
+              padding: EdgeInsets.only(
+                  top: Indents.md, left: Indents.md, right: Indents.md),
+              margin: EdgeInsets.only(bottom: Indents.sm),
+              child: ScrollConfiguration(
+                behavior: NoRippleScrollBehaviour(),
+                child: ListView.builder(
+                    itemCount: types.length,
+                    itemBuilder: (context, index) => Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(types[index].content.name,
+                                style: theme.textTheme.subtitle1.merge(
+                                    TextStyle(fontWeight: FontWeight.normal))),
+                            Container(
+                                height: 76 *
+                                    types[index].biomarkerIds.length.toDouble(),
+                                width: MediaQuery.of(context).size.width,
+                                child: ScrollConfiguration(
+                                    behavior: NoRippleScrollBehaviour(),
+                                    child: ListView.builder(
+                                        itemCount:
+                                            types[index].biomarkerIds.length,
+                                        itemBuilder: (context, i) {
+                                          var biomarker = memberBiomarkerList
+                                              .firstWhere((x) =>
+                                                  x.biomarkerId ==
+                                                  types[index].biomarkerIds[i]);
+                                          return BiomarkerItem(
+                                            value: biomarker.value ?? "null",
+                                            unit: biomarker
+                                                    .unit.content.shorthand ??
+                                                "unnamed",
+                                            id: biomarker.biomarkerId,
+                                            withActions: false,
+                                          );
+                                        })))
+                          ],
+                        )),
+              ))
+          : Container(
+              padding: EdgeInsets.only(
+                  top: Indents.md, left: Indents.md, right: Indents.md),
+              margin: EdgeInsets.only(bottom: Indents.sm),
+              child:
+                  Text("Тут пусто. Вы ещё не сдали ни одного биомаркера :(")),
     );
   }
 }

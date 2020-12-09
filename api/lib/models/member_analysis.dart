@@ -12,8 +12,6 @@ class MemberAnalysis {
   
   int memberId = null;
   
-  Member member = null;
-  
   int labId = null;
   
   Lab lab = null;
@@ -25,7 +23,7 @@ class MemberAnalysis {
 
   @override
   String toString() {
-    return 'MemberAnalysis[id=$id, name=$name, description=$description, date=$date, memberId=$memberId, member=$member, labId=$labId, lab=$lab, biomarkers=$biomarkers, dateCreatedAt=$dateCreatedAt, ]';
+    return 'MemberAnalysis[id=$id, name=$name, description=$description, date=$date, memberId=$memberId, labId=$labId, lab=$lab, biomarkers=$biomarkers, dateCreatedAt=$dateCreatedAt, ]';
   }
 
   MemberAnalysis.fromJson(Map<String, dynamic> json) {
@@ -37,9 +35,6 @@ class MemberAnalysis {
       null :
       DateTime.parse(json['date']);
     memberId = json['memberId'];
-    member = (json['member'] == null) ?
-      null :
-      Member.fromJson(json['member']);
     labId = json['labId'];
     lab = (json['lab'] == null) ?
       null :
@@ -62,8 +57,6 @@ class MemberAnalysis {
       json['date'] = date == null ? null : date.toUtc().toIso8601String();
     if (memberId != null)
       json['memberId'] = memberId;
-    if (member != null)
-      json['member'] = member;
       json['labId'] = labId;
     if (lab != null)
       json['lab'] = lab;

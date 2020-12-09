@@ -4,32 +4,22 @@ class BiomarkerType {
   
   int id = null;
   
-  List<BiomarkerTypeTranslation> translations = [];
-  
   BiomarkerTypeTranslation content = null;
-  
-  List<Biomarker> biomarkers = [];
   
   List<int> biomarkerIds = [];
   BiomarkerType();
 
   @override
   String toString() {
-    return 'BiomarkerType[id=$id, translations=$translations, content=$content, biomarkers=$biomarkers, biomarkerIds=$biomarkerIds, ]';
+    return 'BiomarkerType[id=$id, content=$content, biomarkerIds=$biomarkerIds, ]';
   }
 
   BiomarkerType.fromJson(Map<String, dynamic> json) {
     if (json == null) return;
     id = json['id'];
-    translations = (json['translations'] == null) ?
-      null :
-      BiomarkerTypeTranslation.listFromJson(json['translations']);
     content = (json['content'] == null) ?
       null :
       BiomarkerTypeTranslation.fromJson(json['content']);
-    biomarkers = (json['biomarkers'] == null) ?
-      null :
-      Biomarker.listFromJson(json['biomarkers']);
     biomarkerIds = (json['biomarkerIds'] == null) ?
       null :
       (json['biomarkerIds'] as List).cast<int>();
@@ -39,10 +29,8 @@ class BiomarkerType {
     Map <String, dynamic> json = {};
     if (id != null)
       json['id'] = id;
-      json['translations'] = translations;
     if (content != null)
       json['content'] = content;
-      json['biomarkers'] = biomarkers;
       json['biomarkerIds'] = biomarkerIds;
     return json;
   }

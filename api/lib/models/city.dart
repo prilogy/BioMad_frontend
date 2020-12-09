@@ -4,32 +4,22 @@ class City {
   
   int id = null;
   
-  List<CityTranslation> translations = [];
-  
   CityTranslation content = null;
-  
-  List<Lab> labs = [];
   
   List<int> labIds = [];
   City();
 
   @override
   String toString() {
-    return 'City[id=$id, translations=$translations, content=$content, labs=$labs, labIds=$labIds, ]';
+    return 'City[id=$id, content=$content, labIds=$labIds, ]';
   }
 
   City.fromJson(Map<String, dynamic> json) {
     if (json == null) return;
     id = json['id'];
-    translations = (json['translations'] == null) ?
-      null :
-      CityTranslation.listFromJson(json['translations']);
     content = (json['content'] == null) ?
       null :
       CityTranslation.fromJson(json['content']);
-    labs = (json['labs'] == null) ?
-      null :
-      Lab.listFromJson(json['labs']);
     labIds = (json['labIds'] == null) ?
       null :
       (json['labIds'] as List).cast<int>();
@@ -39,10 +29,8 @@ class City {
     Map <String, dynamic> json = {};
     if (id != null)
       json['id'] = id;
-      json['translations'] = translations;
     if (content != null)
       json['content'] = content;
-      json['labs'] = labs;
       json['labIds'] = labIds;
     return json;
   }

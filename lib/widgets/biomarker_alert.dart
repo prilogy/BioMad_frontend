@@ -17,12 +17,12 @@ class BiomarkerAlertDialog extends StatefulWidget {
   final String title;
   final String hintBiomarker;
   final String hintUnit;
-  final MemberBiomarker biomarker;
+  final MemberBiomarkerModel biomarker;
   final List<Widget> actions;
   final EdgeInsetsGeometry contentPadding;
   final EdgeInsetsGeometry titlePadding;
   final double contentHeight;
-  final void Function(MemberBiomarker) onChange;
+  final void Function(MemberBiomarkerModel) onChange;
 
   BiomarkerAlertDialog(BuildContext context,
       {Key key,
@@ -57,7 +57,7 @@ class _BiomarkerAlertDialogState extends State<BiomarkerAlertDialog> {
   final String hintBiomarker;
   final String hintUnit;
   final List<Widget> actions;
-  MemberBiomarker biomarker;
+  MemberBiomarkerModel biomarker;
   EdgeInsetsGeometry contentPadding = const EdgeInsets.all(Indents.md);
   EdgeInsetsGeometry titlePadding = const EdgeInsets.only(
     top: Indents.md,
@@ -85,52 +85,37 @@ class _BiomarkerAlertDialogState extends State<BiomarkerAlertDialog> {
   var _biomarkerUnitIdController = TextEditingController();
   var _biomarkerFormKey = GlobalKey<FormState>();
 
-  List<Biomarker> _biomarker;
   Unit _unit;
   Biomarker choosedBiomarker;
   int biomarkerId;
   int unitId;
 
-  //TODO: Добавить валидаторы
-  MemberBiomarker getMemberBiomarkerModel() => MemberBiomarker(
-          memberBiomarkerModel: MemberBiomarkerModel(
-        biomarkerName: _biomarkerIdController.text,
-        biomarkerUnitName: _unit.content.shorthand,
-        value: double.parse(_biomarkerValueController.text),
-        biomarkerId: biomarkerId,
-        unitId: unitId,
-      ));
-
-  void onBiomarkerChange() {
-    widget.onChange(getMemberBiomarkerModel());
-  }
-
-  Future<List<Biomarker>> getBiomarkers() async {
-    return await api.biomarker.info();
-  }
-
   @override
   void initState() {
-    getBiomarkers().then((x) => {
-          setState(() {
-            _biomarker = x;
-          })
-        });
-
     if (biomarker != null) {
-      _biomarkerIdController.text =
-          biomarker.memberBiomarkerModel.biomarkerName;
-      biomarkerId = biomarker.memberBiomarkerModel.biomarkerId;
-      choosedBiomarker = store.state.biomarkerList.biomarkers.firstWhere(
-          (element) =>
-              element.id == biomarker.memberBiomarkerModel.biomarkerId);
-      _biomarkerValueController.text =
-          biomarker.memberBiomarkerModel.value.toString();
-      _biomarkerUnitIdController.text =
-          biomarker.memberBiomarkerModel.biomarkerUnitName;
+      biomarkerId = biomarker.biomarkerId;
+      choosedBiomarker = store.state.biomarkerList.biomarkers
+          .firstWhere((element) => element.id == biomarker.biomarkerId);
+      _biomarkerIdController.text = choosedBiomarker.content.name;
+      _biomarkerValueController.text = biomarker.value.toString();
+      _biomarkerUnitIdController.text = store.state.unitList.units
+          .firstWhere((element) => element.id == biomarker.unitId)
+          .content
+          .shorthand;
     }
 
     super.initState();
+  }
+
+  //TODO: Добавить валидаторы
+  MemberBiomarkerModel getMemberBiomarkerModel() => MemberBiomarkerModel(
+        value: double.parse(_biomarkerValueController.text),
+        biomarkerId: biomarkerId,
+        unitId: unitId,
+      );
+
+  void onBiomarkerChange() {
+    widget.onChange(getMemberBiomarkerModel());
   }
 
   @override
@@ -168,7 +153,8 @@ class _BiomarkerAlertDialogState extends State<BiomarkerAlertDialog> {
                                         return SearchScreen(
                                           hintText: hintBiomarker ??
                                               "Введите биомаркер",
-                                          dataList: _biomarker,
+                                          dataList: store
+                                              .state.biomarkerList.biomarkers,
                                           initialValue:
                                               _biomarkerIdController.text,
                                           searchType: "biomarker",
@@ -196,7 +182,8 @@ class _BiomarkerAlertDialogState extends State<BiomarkerAlertDialog> {
                                         return SearchScreen(
                                           hintText: hintBiomarker ??
                                               "Введите биомаркер",
-                                          dataList: _biomarker,
+                                          dataList: store
+                                              .state.biomarkerList.biomarkers,
                                           initialValue:
                                               _biomarkerIdController.text,
                                           searchType: "biomarker",
@@ -314,19 +301,16 @@ class _BiomarkerAlertDialogState extends State<BiomarkerAlertDialog> {
           TextButton(
             child: biomarker != null ? Text('Изменить') : Text('Добавить'),
             onPressed: () {
-              MemberBiomarker answer = getMemberBiomarkerModel();
+              MemberBiomarkerModel answer = getMemberBiomarkerModel();
               if (biomarker != null) {
-                var bio = store.state.memberBiomarkerModelList.biomarkers
-                    .firstWhere((element) =>
-                        element.memberBiomarkerModel.biomarkerId ==
-                        biomarkerId);
-                bio.memberBiomarkerModel.value = answer.memberBiomarkerModel.value;
-                bio.memberBiomarkerModel.biomarkerUnitName =
-                    answer.memberBiomarkerModel.biomarkerUnitName;
-                bio.memberBiomarkerModel.unitId = answer.unitId;
+                MemberBiomarkerModel bio =
+                    store.state.memberBiomarkerModelList.biomarkers.firstWhere(
+                        (element) => element.biomarkerId == biomarkerId);
+                bio = answer;
               } else {
                 store.state.memberBiomarkerModelList.biomarkers.add(answer);
               }
+
               store.dispatch(StoreThunks.setMemberBiomarkerModels(
                   store.state.memberBiomarkerModelList.biomarkers));
 

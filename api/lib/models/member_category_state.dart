@@ -14,14 +14,12 @@ class MemberCategoryState {
   
   int memberId = null;
   
-  Member member = null;
-  
   DateTime dateCreatedAt = null;
   MemberCategoryState();
 
   @override
   String toString() {
-    return 'MemberCategoryState[id=$id, state=$state, difference=$difference, categoryId=$categoryId, category=$category, memberId=$memberId, member=$member, dateCreatedAt=$dateCreatedAt, ]';
+    return 'MemberCategoryState[id=$id, state=$state, difference=$difference, categoryId=$categoryId, category=$category, memberId=$memberId, dateCreatedAt=$dateCreatedAt, ]';
   }
 
   MemberCategoryState.fromJson(Map<String, dynamic> json) {
@@ -38,9 +36,6 @@ class MemberCategoryState {
       null :
       Category.fromJson(json['category']);
     memberId = json['memberId'];
-    member = (json['member'] == null) ?
-      null :
-      Member.fromJson(json['member']);
     dateCreatedAt = (json['dateCreatedAt'] == null) ?
       null :
       DateTime.parse(json['dateCreatedAt']);
@@ -60,8 +55,6 @@ class MemberCategoryState {
       json['category'] = category;
     if (memberId != null)
       json['memberId'] = memberId;
-    if (member != null)
-      json['member'] = member;
     if (dateCreatedAt != null)
       json['dateCreatedAt'] = dateCreatedAt == null ? null : dateCreatedAt.toUtc().toIso8601String();
     return json;

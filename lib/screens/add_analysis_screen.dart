@@ -36,7 +36,7 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
 
   final int _labId = 1;
   final _descriptionController = TextEditingController();
-  List<MemberBiomarker> _biomarkers =
+  List<MemberBiomarkerModel> _biomarkers =
       store.state.memberBiomarkerModelList.biomarkers;
 
   MemberAnalysisModel getMemberAnalysisModel() => MemberAnalysisModel(
@@ -90,9 +90,6 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                   MemberAnalysisModel result = getMemberAnalysisModel();
                   api.memberAnalysis.add(result);
                   store.dispatch(StoreThunks.refreshMemberBiomarkers());
-                  store.dispatch(
-                      store.state.memberBiomarkerModelList.biomarkers = []);
-
                   Keys.rootNavigator.currentState
                       .pushReplacementNamed(Routes.main);
                 },
@@ -188,7 +185,7 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                           )
                         ],
                       ),
-                      StoreConnector<AppState, MemberBiomarkerList>(
+                      StoreConnector<AppState, MemberBiomarkerModelList>(
                         converter: (store) =>
                             store.state.memberBiomarkerModelList,
                         builder: (ctx, state) {
@@ -202,16 +199,16 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                                     itemCount: _biomarkers.length,
                                     itemBuilder: (context, index) =>
                                         BiomarkerItem(
-                                          name: _biomarkers[index]
-                                                  .memberBiomarkerModel.biomarkerName ??
-                                              "Unnamed",
-                                          inList: "model",
-                                          value: _biomarkers[index].memberBiomarkerModel.value ??
-                                              null,
-                                          unit: _biomarkers[index].memberBiomarkerModel.biomarkerUnitName ??
+                                          value:
+                                              _biomarkers[index].value ?? null,
+                                          unit: store.state.unitList.units
+                                                  .firstWhere((element) =>
+                                                      element.id ==
+                                                      _biomarkers[index].unitId)
+                                                  .content
+                                                  .shorthand ??
                                               "unnamed",
-                                          status: "<status>",
-                                          id: _biomarkers[index].memberBiomarkerModel.biomarkerId,
+                                          id: _biomarkers[index].biomarkerId,
                                         )),
                               ));
                         },

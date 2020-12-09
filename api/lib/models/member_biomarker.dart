@@ -14,18 +14,14 @@ class MemberBiomarker {
   
   int biomarkerId = null;
   
-  Biomarker biomarker = null;
+  BiomarkerTranslation biomarkerContent = null;
   
   int analysisId = null;
-  
-  MemberAnalysis analysis = null;
-
-  MemberBiomarkerModel memberBiomarkerModel = null;
-  MemberBiomarker({this.memberBiomarkerModel});
+  MemberBiomarker();
 
   @override
   String toString() {
-    return 'MemberBiomarker[id=$id, value=$value, dateCreatedAt=$dateCreatedAt, unitId=$unitId, unit=$unit, biomarkerId=$biomarkerId, biomarker=$biomarker, analysisId=$analysisId, analysis=$analysis, memberBiomarkerModel=$memberBiomarkerModel]';
+    return 'MemberBiomarker[id=$id, value=$value, dateCreatedAt=$dateCreatedAt, unitId=$unitId, unit=$unit, biomarkerId=$biomarkerId, biomarkerContent=$biomarkerContent, analysisId=$analysisId, ]';
   }
 
   MemberBiomarker.fromJson(Map<String, dynamic> json) {
@@ -42,13 +38,10 @@ class MemberBiomarker {
       null :
       Unit.fromJson(json['unit']);
     biomarkerId = json['biomarkerId'];
-    biomarker = (json['biomarker'] == null) ?
+    biomarkerContent = (json['biomarkerContent'] == null) ?
       null :
-      Biomarker.fromJson(json['biomarker']);
+      BiomarkerTranslation.fromJson(json['biomarkerContent']);
     analysisId = json['analysisId'];
-    analysis = (json['analysis'] == null) ?
-      null :
-      MemberAnalysis.fromJson(json['analysis']);
   }
 
   Map<String, dynamic> toJson() {
@@ -65,12 +58,10 @@ class MemberBiomarker {
       json['unit'] = unit;
     if (biomarkerId != null)
       json['biomarkerId'] = biomarkerId;
-    if (biomarker != null)
-      json['biomarker'] = biomarker;
+    if (biomarkerContent != null)
+      json['biomarkerContent'] = biomarkerContent;
     if (analysisId != null)
       json['analysisId'] = analysisId;
-    if (analysis != null)
-      json['analysis'] = analysis;
     return json;
   }
 

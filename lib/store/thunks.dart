@@ -31,7 +31,7 @@ import 'biomarker/actions.dart';
 import 'category/actions.dart';
 import 'lab/actions.dart';
 import 'member_biomarker/actions.dart';
-import 'member_biomarker_tmp/actions.dart';
+import 'member_biomarker_model/actions.dart';
 
 typedef AuthenticationResultGetter = Future<AuthenticationResult> Function();
 
@@ -134,7 +134,7 @@ class StoreThunks {
   static ThunkAction<AppState> setMemberBiomarkerModels(biomarkerModelList) {
     return (Store<AppState> store) async {
       store.dispatch(SetMemberBiomarkerModelList(
-          MemberBiomarkerList(biomarkers: biomarkerModelList)));
+          MemberBiomarkerModelList(biomarkers: biomarkerModelList)));
     };
   }
 }

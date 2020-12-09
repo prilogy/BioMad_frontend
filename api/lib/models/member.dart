@@ -16,22 +16,12 @@ class Member {
   
   int genderId = null;
   
-  Gender gender = null;
-  
-  List<MemberAnalysis> analyzes = [];
-  
   List<int> analysisIds = [];
-  
-  List<MemberCategoryState> categoryStates = [];
-  
-  int userId = null;
-  
-  User user = null;
   Member();
 
   @override
   String toString() {
-    return 'Member[id=$id, name=$name, color=$color, dateCreatedAt=$dateCreatedAt, dateBirthday=$dateBirthday, age=$age, genderId=$genderId, gender=$gender, analyzes=$analyzes, analysisIds=$analysisIds, categoryStates=$categoryStates, userId=$userId, user=$user, ]';
+    return 'Member[id=$id, name=$name, color=$color, dateCreatedAt=$dateCreatedAt, dateBirthday=$dateBirthday, age=$age, genderId=$genderId, analysisIds=$analysisIds, ]';
   }
 
   Member.fromJson(Map<String, dynamic> json) {
@@ -47,22 +37,9 @@ class Member {
       DateTime.parse(json['dateBirthday']);
     age = json['age'];
     genderId = json['genderId'];
-    gender = (json['gender'] == null) ?
-      null :
-      Gender.fromJson(json['gender']);
-    analyzes = (json['analyzes'] == null) ?
-      null :
-      MemberAnalysis.listFromJson(json['analyzes']);
     analysisIds = (json['analysisIds'] == null) ?
       null :
       (json['analysisIds'] as List).cast<int>();
-    categoryStates = (json['categoryStates'] == null) ?
-      null :
-      MemberCategoryState.listFromJson(json['categoryStates']);
-    userId = json['userId'];
-    user = (json['user'] == null) ?
-      null :
-      User.fromJson(json['user']);
   }
 
   Map<String, dynamic> toJson() {
@@ -79,15 +56,7 @@ class Member {
       json['age'] = age;
     if (genderId != null)
       json['genderId'] = genderId;
-    if (gender != null)
-      json['gender'] = gender;
-      json['analyzes'] = analyzes;
       json['analysisIds'] = analysisIds;
-      json['categoryStates'] = categoryStates;
-    if (userId != null)
-      json['userId'] = userId;
-    if (user != null)
-      json['user'] = user;
     return json;
   }
 

@@ -17,20 +17,21 @@ import 'package:flutter/material.dart';
 
 class BiomarkerContainer extends StatefulWidget {
   final int id;
-  final MemberBiomarker biomarker;
+  final MemberBiomarker memberBiomarker;
 
-  BiomarkerContainer({Key key, this.id, this.biomarker}) : super(key: key);
+  BiomarkerContainer({Key key, this.id, this.memberBiomarker})
+      : super(key: key);
 
   @override
   _BiomarkerContainerState createState() =>
-      _BiomarkerContainerState(id, biomarker);
+      _BiomarkerContainerState(id, memberBiomarker);
 }
 
 class _BiomarkerContainerState extends State<BiomarkerContainer> {
   final int id;
-  final MemberBiomarker biomarker;
+  final MemberBiomarker memberBiomarker;
 
-  _BiomarkerContainerState(this.id, this.biomarker);
+  _BiomarkerContainerState(this.id, this.memberBiomarker);
 
   List<MemberBiomarker> biomarkerHistory = [];
 
@@ -38,7 +39,7 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
   void initState() {
     setState(() {
       for (var item in store.state.memberBiomarkerList.biomarkers)
-        if (item.biomarker.id == biomarker.biomarkerId)
+        if (item.biomarkerId == memberBiomarker.biomarkerId)
           biomarkerHistory.add(item);
     });
 
@@ -51,15 +52,15 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
     var color;
     var status;
     var icon;
-    var reference = store.state.biomarkerList.biomarkers
-        .firstWhere((element) => element.id == biomarker.biomarkerId)
-        .references;
+    Biomarker biomarker = store.state.biomarkerList.biomarkers
+        .firstWhere((element) => element.id == memberBiomarker.biomarkerId);
+    BiomarkerReference reference = biomarker.reference;
 
-    if (reference.valueA <= biomarker.value &&
-        biomarker.value <= reference.valueB) {
+    if (reference.valueA <= memberBiomarker.value &&
+        memberBiomarker.value <= reference.valueB) {
       color = BioMadColors.success;
       status = "норма";
-    } else if (biomarker.value < reference.valueA) {
+    } else if (memberBiomarker.value < reference.valueA) {
       color = BioMadColors.warning;
       status = "пониженный";
       icon = Icons.keyboard_arrow_down;
@@ -98,16 +99,13 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
                       Row(
                         children: [
                           Container(
-                              padding: EdgeInsets.only(right: Indents.sm),
                               child: icon != null
                                   ? Icon(icon, color: color)
                                   : iconContainer),
                           Text(
-                            biomarker.biomarker.content.name +
+                            memberBiomarker.value.toString() +
                                 " " +
-                                biomarker.value.toString() +
-                                " " +
-                                biomarker.unit.content.shorthand +
+                                memberBiomarker.unit.content.shorthand +
                                 ", " +
                                 status,
                           ),
@@ -135,14 +133,11 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
                                   color: BioMadColors.success,
                                   shape: BoxShape.circle,
                                 ))),
-                        Text(
-                          biomarker.biomarker.content.name +
-                              " " +
-                              reference.valueA.toString() + "-" +
-                              reference.valueB.toString() +
-                              " " +
-                              biomarker.unit.content.shorthand
-                        ),
+                        Text(reference.valueA.toString() +
+                            "-" +
+                            reference.valueB.toString() +
+                            " " +
+                            memberBiomarker.unit.content.shorthand),
                       ],
                     ),
                   ],
@@ -183,7 +178,10 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
 //                  )
                 ],
               ),
-                  BiomarkerHistory(biomarkerHistory: biomarkerHistory, biomarker: biomarker,)
+              BiomarkerHistory(
+                biomarkerHistory: biomarkerHistory,
+                biomarker: memberBiomarker,
+              )
             ])),
         BlockBaseWidget(
             padding: EdgeInsets.only(
@@ -200,7 +198,8 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
                 ),
               ),
               Text(
-                biomarker.biomarker.content.description,
+                biomarker.content.description ??
+                    "Описание к маркеру не добавлено :(",
                 style: theme.textTheme.bodyText2,
               ),
               Container(
@@ -250,14 +249,15 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
                     color: BioMadColors.success,
                   ),
                   RaisedButton(
+                    color: theme.primaryColor,
+                    child: Icon(
+                      Icons.share,
+                      color: theme.colorScheme.background,
+                    ),
                     onPressed: () {
                       Keys.rootNavigator.currentState
-                          .pushReplacementNamed(Routes.main);
+                          .pushReplacementNamed(Routes.add_analysis);
                     },
-                    child: Text('ПОДЕЛИТЬСЯ',
-                        style: theme.textTheme.bodyText2.merge(
-                            TextStyle(color: theme.colorScheme.onPrimary))),
-                    color: BioMadColors.primary,
                   ),
                 ],
               )

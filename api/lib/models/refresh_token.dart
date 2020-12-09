@@ -11,13 +11,11 @@ class RefreshToken {
   bool isValid = null;
   
   int userId = null;
-  
-  User user = null;
   RefreshToken();
 
   @override
   String toString() {
-    return 'RefreshToken[id=$id, token=$token, dateExpiration=$dateExpiration, isValid=$isValid, userId=$userId, user=$user, ]';
+    return 'RefreshToken[id=$id, token=$token, dateExpiration=$dateExpiration, isValid=$isValid, userId=$userId, ]';
   }
 
   RefreshToken.fromJson(Map<String, dynamic> json) {
@@ -29,9 +27,6 @@ class RefreshToken {
       DateTime.parse(json['dateExpiration']);
     isValid = json['isValid'];
     userId = json['userId'];
-    user = (json['user'] == null) ?
-      null :
-      User.fromJson(json['user']);
   }
 
   Map<String, dynamic> toJson() {
@@ -45,8 +40,6 @@ class RefreshToken {
       json['isValid'] = isValid;
     if (userId != null)
       json['userId'] = userId;
-    if (user != null)
-      json['user'] = user;
     return json;
   }
 

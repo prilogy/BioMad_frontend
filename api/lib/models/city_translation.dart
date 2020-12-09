@@ -2,51 +2,39 @@ part of api.api;
 
 class CityTranslation {
   
-  int id = null;
-  
-  int cultureId = null;
-  
-  Culture culture = null;
-  
   String name = null;
   
   int baseEntityId = null;
   
   City baseEntity = null;
+  
+  int cultureId = null;
   CityTranslation();
 
   @override
   String toString() {
-    return 'CityTranslation[id=$id, cultureId=$cultureId, culture=$culture, name=$name, baseEntityId=$baseEntityId, baseEntity=$baseEntity, ]';
+    return 'CityTranslation[name=$name, baseEntityId=$baseEntityId, baseEntity=$baseEntity, cultureId=$cultureId, ]';
   }
 
   CityTranslation.fromJson(Map<String, dynamic> json) {
     if (json == null) return;
-    id = json['id'];
-    cultureId = json['cultureId'];
-    culture = (json['culture'] == null) ?
-      null :
-      Culture.fromJson(json['culture']);
     name = json['name'];
     baseEntityId = json['baseEntityId'];
     baseEntity = (json['baseEntity'] == null) ?
       null :
       City.fromJson(json['baseEntity']);
+    cultureId = json['cultureId'];
   }
 
   Map<String, dynamic> toJson() {
     Map <String, dynamic> json = {};
-    if (id != null)
-      json['id'] = id;
-    if (cultureId != null)
-      json['cultureId'] = cultureId;
-    if (culture != null)
-      json['culture'] = culture;
       json['name'] = name;
     if (baseEntityId != null)
       json['baseEntityId'] = baseEntityId;
     if (baseEntity != null)
       json['baseEntity'] = baseEntity;
+    if (cultureId != null)
+      json['cultureId'] = cultureId;
     return json;
   }
 

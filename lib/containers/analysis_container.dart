@@ -99,16 +99,13 @@ class _AnalysisContainerState extends State<AnalysisContainer> {
           Container(
               height: MediaQuery.of(context).size.height -
                   AppBar().preferredSize.height -
-                  160,
+                  162,
               width: MediaQuery.of(context).size.width,
               child: ScrollConfiguration(
                 behavior: NoRippleScrollBehaviour(),
                 child: ListView.builder(
                     itemCount: analysis.biomarkers.length,
                     itemBuilder: (context, index) => BiomarkerItem(
-                          name: analysis
-                                  .biomarkers[index].biomarker.content.name ??
-                              "Unnamed",
                           value: analysis.biomarkers[index].value ?? "null",
                           unit: analysis
                                   .biomarkers[index].unit.content.shorthand ??

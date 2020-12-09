@@ -24,7 +24,7 @@ import 'biomarker/reducers.dart';
 import 'biomarker_type/reducers.dart';
 import 'helper/reducers.dart';
 import 'member_biomarker/reducers.dart';
-import 'member_biomarker_tmp/reducers.dart';
+import 'member_biomarker_model/reducers.dart';
 
 class AppState {
   final User user;
@@ -36,7 +36,7 @@ class AppState {
   final BiomarkerList biomarkerList;
   final BiomarkerTypeList biomarkerTypeList;
   final MemberBiomarkerList memberBiomarkerList;
-  final MemberBiomarkerList memberBiomarkerModelList;
+  final MemberBiomarkerModelList memberBiomarkerModelList;
   final MemberAnalysisList memberAnalysisList;
 
   AppState(
@@ -62,7 +62,7 @@ class AppState {
         biomarkerList = BiomarkerList.fromLocalStorage(),
         biomarkerTypeList = BiomarkerTypeList.fromLocalStorage(),
         memberBiomarkerList = MemberBiomarkerList.fromLocalStorage(),
-        memberBiomarkerModelList = MemberBiomarkerList.fromLocalStorage(),
+        memberBiomarkerModelList = MemberBiomarkerModelList.fromLocalStorage(),
         memberAnalysisList = MemberAnalysisList.fromLocalStorage(),
         helper = Helper.fromLocalStorage();
 }

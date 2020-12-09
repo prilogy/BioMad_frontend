@@ -6,37 +6,27 @@ class BiomarkerReferenceConfig {
   
   int referenceId = null;
   
-  BiomarkerReference reference = null;
-  
   int ageRangeId = null;
   
   BiomarkerReferenceConfigRange ageRange = null;
   
   int genderId = null;
-  
-  Gender gender = null;
   BiomarkerReferenceConfig();
 
   @override
   String toString() {
-    return 'BiomarkerReferenceConfig[id=$id, referenceId=$referenceId, reference=$reference, ageRangeId=$ageRangeId, ageRange=$ageRange, genderId=$genderId, gender=$gender, ]';
+    return 'BiomarkerReferenceConfig[id=$id, referenceId=$referenceId, ageRangeId=$ageRangeId, ageRange=$ageRange, genderId=$genderId, ]';
   }
 
   BiomarkerReferenceConfig.fromJson(Map<String, dynamic> json) {
     if (json == null) return;
     id = json['id'];
     referenceId = json['referenceId'];
-    reference = (json['reference'] == null) ?
-      null :
-      BiomarkerReference.fromJson(json['reference']);
     ageRangeId = json['ageRangeId'];
     ageRange = (json['ageRange'] == null) ?
       null :
       BiomarkerReferenceConfigRange.fromJson(json['ageRange']);
     genderId = json['genderId'];
-    gender = (json['gender'] == null) ?
-      null :
-      Gender.fromJson(json['gender']);
   }
 
   Map<String, dynamic> toJson() {
@@ -45,15 +35,11 @@ class BiomarkerReferenceConfig {
       json['id'] = id;
     if (referenceId != null)
       json['referenceId'] = referenceId;
-    if (reference != null)
-      json['reference'] = reference;
       json['ageRangeId'] = ageRangeId;
     if (ageRange != null)
       json['ageRange'] = ageRange;
     if (genderId != null)
       json['genderId'] = genderId;
-    if (gender != null)
-      json['gender'] = gender;
     return json;
   }
 

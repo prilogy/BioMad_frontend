@@ -53,6 +53,14 @@ part 'models/refresh_token_authentication_model.dart';
 
 part 'models/role.dart';
 
+part 'models/biomarker_state_type.dart';
+
+part 'models/member_biomarker_reference_model.dart';
+
+part 'models/shared.dart';
+
+part 'models/shared_model.dart';
+
 part 'models/sign_up_model.dart';
 
 part 'models/biomarker_reference_config_range.dart';

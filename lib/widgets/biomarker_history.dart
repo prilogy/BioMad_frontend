@@ -65,6 +65,7 @@ class BiomarkerHistory extends StatelessWidget with IndentsMixin {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return Container(
       height: 23 * biomarkerHistory.length.toDouble() <= 90
           ? 23 * biomarkerHistory.length.toDouble()
@@ -83,14 +84,15 @@ class BiomarkerHistory extends StatelessWidget with IndentsMixin {
     var status;
     var icon;
     var reference = store.state.biomarkerList.biomarkers
-        .firstWhere((element) => element.id ==  biomarkerHistory[index].biomarkerId)
-        .references;
+        .firstWhere(
+            (element) => element.id == biomarkerHistory[index].biomarkerId)
+        .reference;
 
-    if (reference.valueA <=  biomarkerHistory[index].value &&
+    if (reference.valueA <= biomarkerHistory[index].value &&
         biomarkerHistory[index].value <= reference.valueB) {
       color = BioMadColors.success;
       status = "норма";
-    } else if ( biomarkerHistory[index].value < reference.valueA) {
+    } else if (biomarkerHistory[index].value < reference.valueA) {
       color = BioMadColors.warning;
       status = "пониженный";
       icon = Icons.keyboard_arrow_down;
@@ -108,6 +110,10 @@ class BiomarkerHistory extends StatelessWidget with IndentsMixin {
           shape: BoxShape.circle,
         ));
 
+    String zeroAdding(int value) {
+      return value > 10 ? value.toString() : "0" + value.toString();
+    }
+
     return Container(
       padding: EdgeInsets.only(top: Indents.sm),
       child: Row(
@@ -117,25 +123,23 @@ class BiomarkerHistory extends StatelessWidget with IndentsMixin {
           Text(
             biomarkerHistory[index].dateCreatedAt.day.toString() +
                 '.' +
-                biomarkerHistory[index].dateCreatedAt.month.toString() +
+                zeroAdding(biomarkerHistory[index].dateCreatedAt.month) +
                 '.' +
                 biomarkerHistory[index].dateCreatedAt.year.toString() +
                 ' ' +
                 biomarkerHistory[index].dateCreatedAt.hour.toString() +
                 ':' +
-                biomarkerHistory[index].dateCreatedAt.minute.toString(),
+                zeroAdding(biomarkerHistory[index].dateCreatedAt.minute),
             style: theme.textTheme.bodyText1,
           ),
           Row(
             children: [
               Container(
-                  padding: EdgeInsets.only(right: Indents.sm),
-                  child:
-                      icon != null ? Icon(icon, color: color, size: 17.0) : iconContainer),
+                  child: icon != null
+                      ? Icon(icon, color: color, size: 18.0)
+                      : iconContainer),
               Text(
-                biomarkerHistory[index].biomarker.content.name +
-                    " " +
-                    biomarkerHistory[index].value.toString() +
+                biomarkerHistory[index].value.toString() +
                     " " +
                     biomarkerHistory[index].unit.content.shorthand +
                     ", " +

@@ -39,7 +39,7 @@ class CustomTextFormField extends StatelessWidget with IndentsMixin {
       this.icon,
       this.onChange,
       this.enabled = true,
-      this.maxLines,
+      this.maxLines = 1,
       this.onTap,
       this.focusNode,
       this.enableInteractiveSelection = true,
@@ -75,7 +75,7 @@ class CustomTextFormField extends StatelessWidget with IndentsMixin {
             errorBorder: baseDecoration.errorBorder,
             focusedErrorBorder: baseDecoration.focusedErrorBorder,
             hintText: hintText,
-            prefixIcon: maxLines == null ? icon : null,
+            prefixIcon: maxLines == 1 ? icon : null,
             labelText: enabled ? labelText : disableLabelText,
             errorStyle: baseDecoration.errorStyle,
             alignLabelWithHint: true,
@@ -92,7 +92,7 @@ class CustomTextFormField extends StatelessWidget with IndentsMixin {
               : TextStyle(color: theme.disabledColor.withOpacity(0.37)),
           enableInteractiveSelection: enableInteractiveSelection,
           enabled: enabled,
-            maxLines: maxLines,
+          maxLines: maxLines,
           onFieldSubmitted: (x) {
             formValidator?.call();
           },

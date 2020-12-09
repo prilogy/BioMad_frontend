@@ -6,23 +6,18 @@ class Gender {
   
   String key = null;
   
-  List<GenderTranslation> translations = [];
-  
   GenderTranslation content = null;
   Gender();
 
   @override
   String toString() {
-    return 'Gender[id=$id, key=$key, translations=$translations, content=$content, ]';
+    return 'Gender[id=$id, key=$key, content=$content, ]';
   }
 
   Gender.fromJson(Map<String, dynamic> json) {
     if (json == null) return;
     id = json['id'];
     key = json['key'];
-    translations = (json['translations'] == null) ?
-      null :
-      GenderTranslation.listFromJson(json['translations']);
     content = (json['content'] == null) ?
       null :
       GenderTranslation.fromJson(json['content']);
@@ -33,7 +28,6 @@ class Gender {
     if (id != null)
       json['id'] = id;
       json['key'] = key;
-      json['translations'] = translations;
     if (content != null)
       json['content'] = content;
     return json;

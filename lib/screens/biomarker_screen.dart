@@ -18,20 +18,29 @@ import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class BioMarkerScreen extends StatefulWidget {
-  final MemberBiomarker biomarker;
-  BioMarkerScreen({Key key, this.biomarker}) : super(key: key);
+  final int biomarkerId;
+
+  BioMarkerScreen({Key key, this.biomarkerId}) : super(key: key);
 
   @override
-  _BioMarkerScreenState createState() => _BioMarkerScreenState(biomarker);
+  _BioMarkerScreenState createState() => _BioMarkerScreenState(biomarkerId);
 }
 
 class _BioMarkerScreenState extends State<BioMarkerScreen> {
-  final MemberBiomarker biomarker;
-  _BioMarkerScreenState(this.biomarker);
+  final int biomarkerId;
+
+  _BioMarkerScreenState(this.biomarkerId);
+
+  MemberBiomarker memberBiomarker;
+  Biomarker biomarker;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    memberBiomarker = store.state.memberBiomarkerList.biomarkers
+        .firstWhere((element) => element.biomarkerId == biomarkerId);
+    biomarker = store.state.biomarkerList.biomarkers
+        .firstWhere((element) => element.id == biomarkerId);
 
     return Scaffold(
       appBar: AppBar(
@@ -45,10 +54,12 @@ class _BioMarkerScreenState extends State<BioMarkerScreen> {
             );
           },
         ),
-        title: Text(biomarker.biomarker.content.name,
-            style: TextStyle(color: Theme.of(context).primaryColor)),
+        title: Text(biomarker.content.name,
+            style: TextStyle(color: Theme
+                .of(context)
+                .primaryColor)),
       ),
-      body: ListView(children:[BiomarkerContainer(biomarker: biomarker)]),
+      body: ListView(children: [BiomarkerContainer(memberBiomarker: memberBiomarker)]),
     );
   }
 }

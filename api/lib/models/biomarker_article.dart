@@ -4,11 +4,7 @@ class BiomarkerArticle {
   
   int biomarkerId = null;
   
-  Biomarker biomarker = null;
-  
   int articleId = null;
-  
-  Article article = null;
   
   int typeId = null;
   
@@ -17,19 +13,13 @@ class BiomarkerArticle {
 
   @override
   String toString() {
-    return 'BiomarkerArticle[biomarkerId=$biomarkerId, biomarker=$biomarker, articleId=$articleId, article=$article, typeId=$typeId, type=$type, ]';
+    return 'BiomarkerArticle[biomarkerId=$biomarkerId, articleId=$articleId, typeId=$typeId, type=$type, ]';
   }
 
   BiomarkerArticle.fromJson(Map<String, dynamic> json) {
     if (json == null) return;
     biomarkerId = json['biomarkerId'];
-    biomarker = (json['biomarker'] == null) ?
-      null :
-      Biomarker.fromJson(json['biomarker']);
     articleId = json['articleId'];
-    article = (json['article'] == null) ?
-      null :
-      Article.fromJson(json['article']);
     typeId = json['typeId'];
     type = (json['type'] == null) ?
       null :
@@ -40,12 +30,8 @@ class BiomarkerArticle {
     Map <String, dynamic> json = {};
     if (biomarkerId != null)
       json['biomarkerId'] = biomarkerId;
-    if (biomarker != null)
-      json['biomarker'] = biomarker;
     if (articleId != null)
       json['articleId'] = articleId;
-    if (article != null)
-      json['article'] = article;
     if (typeId != null)
       json['typeId'] = typeId;
     if (type != null)
