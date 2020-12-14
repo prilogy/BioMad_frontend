@@ -32,6 +32,7 @@ import 'package:biomad_frontend/helpers/custom_alert_dialog.dart';
 
 class AnalysisScreen extends StatefulWidget {
   final MemberAnalysis analysis;
+
   AnalysisScreen({Key key, this.analysis}) : super(key: key);
 
   @override
@@ -40,6 +41,7 @@ class AnalysisScreen extends StatefulWidget {
 
 class _AnalysisScreenState extends State<AnalysisScreen> {
   final MemberAnalysis analysis;
+
   _AnalysisScreenState(this.analysis);
 
   PanelController _panelController = PanelController();
@@ -55,7 +57,10 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Анализ - " + analysis.name, style: TextStyle(fontSize: 18, color: theme.primaryColor),),
+        title: Text(
+          "Анализ - " + analysis.name,
+          style: TextStyle(fontSize: 18, color: theme.primaryColor),
+        ),
       ),
       body: Stack(children: [
         Scaffold(

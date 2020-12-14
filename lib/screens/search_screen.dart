@@ -1,4 +1,6 @@
 import 'package:api/api.dart';
+import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
+import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:biomad_frontend/widgets/block_base_widget.dart';
@@ -28,7 +30,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final String hintText;
-  final List<dynamic> dataList;
+  List<dynamic> dataList;
   final initialValue;
   final searchType;
 
@@ -41,6 +43,19 @@ class _SearchScreenState extends State<SearchScreen> {
   TextEditingController _searchController = TextEditingController();
   FocusNode focusNode = FocusNode();
 
+  Future<List<Biomarker>> getBiomarkers(String _query) async {
+    print("SENT");
+    return await api.biomarker.search(_query);
+  }
+
+  List<Biomarker> _biomarkers;
+
+  @override
+  void initState() {
+    _searchController.text = initialValue;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +64,15 @@ class _SearchScreenState extends State<SearchScreen> {
                 height: 40,
                 child: TextFormField(
                     autofocus: true,
-                    initialValue: initialValue,
+                    controller: _searchController,
+                    onChanged: (val) {
+                      getBiomarkers(val).then((x) => {
+                            print(val),
+                            setState(() {
+                              dataList = x;
+                            })
+                          });
+                    },
                     decoration: InputDecoration(
                         filled: true,
                         fillColor: Theme.of(context)
@@ -71,7 +94,9 @@ class _SearchScreenState extends State<SearchScreen> {
                         disabledBorder: InputBorder.none,
                         hintText: hintText ?? "Начните набирать",
                         suffixIcon: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            _searchController.text = "";
+                          },
                           icon: Icon(Icons.clear,
                               color: Theme.of(context).primaryColor),
                         ))))),
@@ -80,42 +105,91 @@ class _SearchScreenState extends State<SearchScreen> {
                 separatorBuilder: (context, index) => Divider(
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
-                padding: EdgeInsets.only(left: Indents.md, right: Indents.md),
+                padding: EdgeInsets.only(
+                  left: Indents.md,
+                  right: Indents.md,
+                ),
                 itemCount: dataList.length,
                 itemBuilder: (context, index) => Container(
-                    padding: EdgeInsets.symmetric(vertical: Indents.sm),
-                    child: GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () {
-                          Navigator.of(context).pop(dataList.firstWhere(
-                              (element) => element.id == dataList[index].id));
-                        },
-                        child: searchType == "biomarker"
-                            ? _biomarkerItems(context, index)
-                            : searchType == "unit"
-                                ? _unitItems(context, index)
-                                : Text("Тип поиска не определен :("))))
+                    child: searchType == "biomarker"
+                        ? _biomarkerItems(context, dataList[index])
+                        : searchType == "unit"
+                            ? _unitItems(context, dataList[index])
+                            : Text("Тип поиска не определен :(")))
             : Container());
   }
 
-  Widget _biomarkerItems(BuildContext context, index) {
-    return Text(
-      dataList[index].content.name,
-      style: Theme.of(context)
-          .textTheme
-          .bodyText2
-          .merge(TextStyle(color: Theme.of(context).colorScheme.onSurface)),
-    );
+  Widget _biomarkerItems(BuildContext context, Biomarker data) {
+    bool isAdded;
+    try {
+      store.state.memberBiomarkerModelList.biomarkers?.firstWhere(
+          (element) => element.biomarkerId == data.id,
+          orElse: null);
+      isAdded = true;
+    } catch (e) {
+      isAdded = false;
+    }
+    return isAdded
+        ? GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              SnackBarExtension.dark(
+                  "Нельзя выбрать уже добавленный биомаркер!",
+                  duration: Duration(seconds: 4));
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: Indents.sm),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    data.content.name,
+                    style: Theme.of(context).textTheme.bodyText2.merge(
+                        TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface)),
+                  ),
+                  Text(
+                    ("(добавлен)"),
+                    style: Theme.of(context).textTheme.bodyText2.merge(
+                        TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface)),
+                  ),
+                ],
+              ),
+            ))
+        : GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              Navigator.of(context)
+                  .pop(dataList.firstWhere((element) => element.id == data.id));
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: Indents.sm),
+              child: Text(
+                data.content.name,
+                style: Theme.of(context).textTheme.bodyText2.merge(
+                    TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+              ),
+            ));
   }
 
-  Widget _unitItems(BuildContext context, index) {
-    return Text(
-      dataList[index].content.name,
-      style: Theme.of(context)
-          .textTheme
-          .bodyText2
-          .merge(TextStyle(color: Theme.of(context).colorScheme.onSurface)),
-    );
+  Widget _unitItems(BuildContext context, data) {
+    return GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          Navigator.of(context)
+              .pop(dataList.firstWhere((element) => element.id == data.id));
+        },
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: Indents.sm),
+          child: Text(
+            data.content.name,
+            style: Theme.of(context)
+                .textTheme
+                .bodyText2
+                .merge(TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+          ),
+        ));
   }
 }
 

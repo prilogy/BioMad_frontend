@@ -1,29 +1,14 @@
 import 'package:biomad_frontend/containers/account_container.dart';
 import 'package:biomad_frontend/containers/category_container.dart';
-import 'package:biomad_frontend/helpers/keys.dart';
-import 'package:biomad_frontend/router/main.dart';
-import 'package:biomad_frontend/screens/search_screen.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
-import 'package:biomad_frontend/styles/avatar_sizes.dart';
-import 'package:biomad_frontend/styles/color_alphas.dart';
-import 'package:biomad_frontend/styles/indents.dart';
 import 'package:biomad_frontend/styles/radius_values.dart';
-import 'package:biomad_frontend/widgets/biomarker_alert.dart';
-import 'package:biomad_frontend/widgets/biomarker_form_field.dart';
-import 'package:biomad_frontend/widgets/block_base_widget.dart';
-import 'package:biomad_frontend/widgets/custom_circle_avatar.dart';
-import 'package:biomad_frontend/widgets/custom_divider.dart';
-import 'package:biomad_frontend/widgets/custom_list_tile.dart';
-import 'package:biomad_frontend/widgets/custom_text_form_field.dart';
 import 'package:biomad_frontend/widgets/nav_bar.dart';
 import 'package:biomad_frontend/widgets/nav_page_bar.dart';
 import 'package:biomad_frontend/widgets/nav_top_bar.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:biomad_frontend/helpers/custom_alert_dialog.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -43,9 +28,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    store.dispatch(store.state.memberBiomarkerModelList.biomarkers=[]);
-    store.dispatch(StoreThunks.refreshMemberAnalysis());
+    store.dispatch(StoreThunks.refreshCategoriesAndTypes());
+    store.dispatch(StoreThunks.refreshMemberBiomarkers());
+    store.dispatch(StoreThunks.refreshBiomarkers());
+    store.dispatch(StoreThunks.setMemberBiomarkerModels([]));
+    //TODO ОШИБКА ОБНОВЛЕНИЯ - ИНСТАНС
+    //store.dispatch(StoreThunks.refreshBiomarkers());
 
     return Scaffold(
       appBar: AppBar(

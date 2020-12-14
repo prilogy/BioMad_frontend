@@ -52,4 +52,17 @@ class BiomarkerApi extends ApiBase<BiomarkerApi> {
       return null;
     }
   }
+
+  Future<List<Biomarker>> search(String query) async {
+    try {
+      var url = '${v}/biomarker/search';
+      print("SENT ON SERVER");
+      var response = await dio.post(url, data: query);
+      print("QUERY: " + response.toString());
+      return Biomarker.listFromJson(response.data);
+    } on DioError catch (e) {
+      print("ERROR: " + e.toString());
+      return null;
+    }
+  }
 }

@@ -1,4 +1,5 @@
 import 'package:api/api.dart';
+import 'package:biomad_frontend/containers/account_container.dart';
 import 'package:biomad_frontend/containers/biomarker_container.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
@@ -38,6 +39,12 @@ class _BioMarkerListScreenState extends State<BioMarkerListScreen> {
     super.initState();
   }
 
+  final double _initFabHeight = 120.0;
+  double _fabHeight;
+  double _panelHeightOpen = 500;
+  double _panelHeightClosed = 0;
+  PanelController _panelController = PanelController();
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -46,74 +53,128 @@ class _BioMarkerListScreenState extends State<BioMarkerListScreen> {
     types.removeWhere((value) => value.content == null);
 
     var memberBiomarkerList = store.state.memberBiomarkerList.biomarkers;
+    MemberBiomarker biomarker;
+    bool isBiomarkerInType = false;
 
     return Scaffold(
-      appBar: AppBar(
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                Keys.rootNavigator.currentState
-                    .pushReplacementNamed(Routes.main);
-              },
-            );
-          },
+        appBar: AppBar(
+          leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () {
+                  Keys.rootNavigator.currentState
+                      .pushReplacementNamed(Routes.main);
+                },
+              );
+            },
+          ),
+          title: Text("Последние биомаркеры",
+              style: TextStyle(color: Theme.of(context).primaryColor)),
         ),
-        title: Text("Последние биомаркеры",
-            style: TextStyle(color: Theme.of(context).primaryColor)),
-      ),
-      body: store.state.memberBiomarkerList.biomarkers != []
-          ? Container(
-              height: MediaQuery.of(context).size.height -
-                  AppBar().preferredSize.height,
-              width: MediaQuery.of(context).size.width,
-              alignment: Alignment.topLeft,
-              padding: EdgeInsets.only(
-                  top: Indents.md, left: Indents.md, right: Indents.md),
-              margin: EdgeInsets.only(bottom: Indents.sm),
-              child: ScrollConfiguration(
-                behavior: NoRippleScrollBehaviour(),
-                child: ListView.builder(
-                    itemCount: types.length,
-                    itemBuilder: (context, index) => Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(types[index].content.name,
-                                style: theme.textTheme.subtitle1.merge(
-                                    TextStyle(fontWeight: FontWeight.normal))),
-                            Container(
-                                height: 76 *
-                                    types[index].biomarkerIds.length.toDouble(),
-                                width: MediaQuery.of(context).size.width,
-                                child: ScrollConfiguration(
-                                    behavior: NoRippleScrollBehaviour(),
-                                    child: ListView.builder(
-                                        itemCount:
-                                            types[index].biomarkerIds.length,
-                                        itemBuilder: (context, i) {
-                                          var biomarker = memberBiomarkerList
-                                              .firstWhere((x) =>
-                                                  x.biomarkerId ==
-                                                  types[index].biomarkerIds[i]);
-                                          return BiomarkerItem(
-                                            value: biomarker.value ?? "null",
-                                            unit: biomarker
-                                                    .unit.content.shorthand ??
-                                                "unnamed",
-                                            id: biomarker.biomarkerId,
-                                            withActions: false,
-                                          );
-                                        })))
-                          ],
-                        )),
-              ))
-          : Container(
-              padding: EdgeInsets.only(
-                  top: Indents.md, left: Indents.md, right: Indents.md),
-              margin: EdgeInsets.only(bottom: Indents.sm),
-              child:
-                  Text("Тут пусто. Вы ещё не сдали ни одного биомаркера :(")),
-    );
+        body: Stack(children: [
+          store.state.memberBiomarkerList.biomarkers != []
+              ? Container(
+                  height: MediaQuery.of(context).size.height -
+                      AppBar().preferredSize.height,
+                  width: MediaQuery.of(context).size.width,
+                  alignment: Alignment.topLeft,
+                  padding: EdgeInsets.only(
+                      top: Indents.md, left: Indents.md, right: Indents.md),
+                  margin: EdgeInsets.only(bottom: Indents.sm),
+                  child: ScrollConfiguration(
+                    behavior: NoRippleScrollBehaviour(),
+                    child: ListView.builder(
+                        itemCount: types.length,
+                        itemBuilder: (context, index) {
+                          try {
+                            biomarker = memberBiomarkerList.firstWhere((x) =>
+                                types[index]
+                                    .biomarkerIds
+                                    .contains(x.biomarkerId));
+                            isBiomarkerInType = true;
+                          } catch (e) {
+                            biomarker = null;
+                            isBiomarkerInType = false;
+                          }
+                          return isBiomarkerInType
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(types[index].content.name,
+                                        style: theme.textTheme.subtitle1.merge(
+                                            TextStyle(
+                                                fontWeight:
+                                                    FontWeight.normal))),
+                                    Container(
+                                        height: 76 *
+                                            types[index]
+                                                .biomarkerIds
+                                                .length
+                                                .toDouble(),
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: ScrollConfiguration(
+                                            behavior: NoRippleScrollBehaviour(),
+                                            child: ListView.builder(
+                                                itemCount: types[index]
+                                                    .biomarkerIds
+                                                    .length,
+                                                itemBuilder: (context, i) {
+                                                  return BiomarkerItem(
+                                                    value: biomarker.value ??
+                                                        "null",
+                                                    unit: biomarker.unit.content
+                                                            .shorthand ??
+                                                        "unnamed",
+                                                    id: biomarker.biomarkerId,
+                                                    withActions: false,
+                                                  );
+                                                })))
+                                  ],
+                                )
+                              : Container(
+                                  padding: EdgeInsets.only(
+                                      left: Indents.sm, right: Indents.md),
+                                  child:
+                                      Text("Биомаркеры ещё не добавлены :("));
+                        }),
+                  ))
+              : Container(
+                  padding: EdgeInsets.only(
+                      top: Indents.md, left: Indents.md, right: Indents.md),
+                  margin: EdgeInsets.only(bottom: Indents.sm),
+                  child: Text(
+                      "Тут пусто. Вы ещё не сдали ни одного биомаркера :(")),
+          Positioned(
+              bottom: NavBar.indent,
+              right: NavBar.indent,
+              child: NavBar(
+                onAvatarTap: () {
+                  _panelController.open();
+                },
+              )),
+          SlidingUpPanel(
+            backdropEnabled: true,
+            controller: _panelController,
+            maxHeight: _panelHeightOpen,
+            minHeight: _panelHeightClosed,
+            parallaxEnabled: true,
+            parallaxOffset: .5,
+            panelBuilder: (sc) => ListView(
+              padding: EdgeInsets.symmetric(vertical: 0),
+              children: [
+                AccountContainer(),
+              ],
+            ),
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(RadiusValues.main),
+                topRight: Radius.circular(RadiusValues.main)),
+            onPanelSlide: (double pos) => setState(() {
+              _fabHeight = pos * (_panelHeightOpen - _panelHeightClosed) +
+                  _initFabHeight;
+            }),
+          ),
+        ])); // This trailin);
   }
 }

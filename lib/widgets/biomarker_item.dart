@@ -4,6 +4,7 @@ import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/screens/biomarker_screen.dart';
 import 'package:biomad_frontend/store/main.dart';
+import 'package:biomad_frontend/store/thunks.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
   final double value;
   final String unit;
   final bool isModel;
+  final int index;
   final TextStyle headerMergeStyle;
   final CrossAxisAlignment crossAxisAlignment;
   final bool withActions;
@@ -34,6 +36,7 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
       this.value,
       this.unit = "",
       this.isModel = false,
+      this.index,
       this.headerMergeStyle,
       this.headerPadding = const EdgeInsets.all(0),
       this.crossAxisAlignment = CrossAxisAlignment.start,
@@ -47,6 +50,7 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
       this.value,
       this.unit,
       this.isModel,
+      this.index,
       this.withActions,
       this.headerMergeStyle,
       this.crossAxisAlignment = CrossAxisAlignment.start,
@@ -92,9 +96,9 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
     if (isModel)
       _biomarkerModel = store.state.memberBiomarkerModelList.biomarkers
           .firstWhere((element) => element.biomarkerId == id);
-    else
-      biomarker = store.state.biomarkerList.biomarkers
-          .firstWhere((element) => element.id == id);
+
+    biomarker = store.state.biomarkerList.biomarkers
+        .firstWhere((element) => element.id == id);
 
     return GestureDetector(
       onTap: () {
@@ -144,7 +148,7 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
                             children: [
                               Container(
                                   child: icon != null
-                                      ? Icon(icon, color: color, size: 22.0)
+                                      ? Icon(icon, color: color, size: 16.0)
                                       : iconContainer),
                               Text(
                                   value.toString() + ' ' + unit + ', ' + status,
@@ -203,7 +207,12 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
                             color: BioMadColors.error,
                             size: 24.0,
                           ),
-                          onPressed: null)
+                          onPressed: () {
+                            store.state.memberBiomarkerModelList.biomarkers
+                                .removeAt(index);
+                            store.dispatch(StoreThunks.setMemberBiomarkerModels(
+                                store.state.memberBiomarkerModelList.biomarkers));
+                          })
                     ],
                   )
                 : IconButton(

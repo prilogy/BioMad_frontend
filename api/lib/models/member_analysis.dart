@@ -33,7 +33,7 @@ class MemberAnalysis {
     description = json['description'];
     date = (json['date'] == null) ?
       null :
-      DateTime.parse(json['date']);
+      DateTime.parse(json['date']).toLocal();
     memberId = json['memberId'];
     labId = json['labId'];
     lab = (json['lab'] == null) ?
@@ -44,7 +44,7 @@ class MemberAnalysis {
       MemberBiomarker.listFromJson(json['biomarkers']);
     dateCreatedAt = (json['dateCreatedAt'] == null) ?
       null :
-      DateTime.parse(json['dateCreatedAt']);
+      DateTime.parse(json['dateCreatedAt']).toLocal();
   }
 
   Map<String, dynamic> toJson() {

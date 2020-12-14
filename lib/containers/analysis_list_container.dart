@@ -1,5 +1,6 @@
 import 'package:api/api.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
+import 'package:biomad_frontend/models/analysis_list.dart';
 import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/screens/analysis_screen.dart';
 import 'package:biomad_frontend/store/main.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 
 class AnalysisListContainer extends StatefulWidget {
   @override
@@ -20,23 +22,36 @@ class AnalysisListContainer extends StatefulWidget {
 class _AnalysisListContainerState extends State<AnalysisListContainer> {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     List<MemberAnalysis> analysis = store.state.memberAnalysisList.analysis;
 
-    return Container(
-        height: MediaQuery.of(context).size.height -
-            AppBar().preferredSize.height -
-            61,
-        width: MediaQuery.of(context).size.width,
-        child: ScrollConfiguration(
-          behavior: NoRippleScrollBehaviour(),
-          child: ListView.builder(
-              itemCount: analysis.length,
-              itemBuilder: (context, index) => analysisItem(index, analysis)),
-        ));
+    return analysis.length > 0
+        ? Container(
+            height: MediaQuery.of(context).size.height -
+                AppBar().preferredSize.height -
+                61,
+            width: MediaQuery.of(context).size.width,
+            child: StoreConnector<AppState, List<MemberAnalysis>>(
+                converter: (store) => store.state.memberAnalysisList.analysis,
+                builder: (ctx, state) {
+                  return ScrollConfiguration(
+                    behavior: NoRippleScrollBehaviour(),
+                    child: ListView.builder(
+                        itemCount: analysis.length,
+                        itemBuilder: (context, index) =>
+                            analysisItem(index, analysis[index])),
+                  );
+                }))
+        : Container(
+            padding: EdgeInsets.only(left: Indents.sm, right: Indents.sm),
+            margin: EdgeInsets.only(left: Indents.md, right: Indents.md),
+            child: Text("Анализы еще не добавлены :("));
   }
 
-  Widget analysisItem(int index, List<MemberAnalysis> analysis) {
+  String zeroAdding(int value) {
+    return value > 10 ? value.toString() : "0" + value.toString();
+  }
+
+  Widget analysisItem(int index, MemberAnalysis analysis) {
     final theme = Theme.of(context);
 
     return GestureDetector(
@@ -44,7 +59,7 @@ class _AnalysisListContainerState extends State<AnalysisListContainer> {
         return showDialog(
             context: context,
             builder: (BuildContext context) {
-              return AnalysisScreen(analysis: analysis[index]);
+              return AnalysisScreen(analysis: analysis);
             });
       },
       child: Container(
@@ -80,15 +95,21 @@ class _AnalysisListContainerState extends State<AnalysisListContainer> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      analysis[index].name,
+                      analysis.name,
                       style: theme.textTheme.bodyText2,
                     ),
                     Container(
                       padding: EdgeInsets.only(top: 2),
                       child: Text(
-                        analysis[index].date.day.toString() + "." +
-                            analysis[index].date.month.toString()+ "." +
-                            analysis[index].date.year.toString(),
+                        analysis.dateCreatedAt.day.toString() +
+                            "." +
+                            zeroAdding(analysis.dateCreatedAt.month) +
+                            "." +
+                            analysis.dateCreatedAt.year.toString() +
+                            " в " +
+                            analysis.dateCreatedAt.hour.toString() +
+                            ":" +
+                            zeroAdding(analysis.dateCreatedAt.minute),
                         style: theme.textTheme.caption,
                       ),
                     )

@@ -81,8 +81,7 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
     return Container(
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         BlockBaseWidget(
-            padding: EdgeInsets.only(
-                top: Indents.md, left: Indents.md, right: Indents.md),
+            padding: EdgeInsets.only(left: Indents.md, right: Indents.md),
             margin: EdgeInsets.only(bottom: Indents.sm),
             child: Column(
               children: [
@@ -99,6 +98,9 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
                       Row(
                         children: [
                           Container(
+                              padding: status == "норма"
+                                  ? EdgeInsets.only(right: Indents.sm)
+                                  : null,
                               child: icon != null
                                   ? Icon(icon, color: color)
                                   : iconContainer),

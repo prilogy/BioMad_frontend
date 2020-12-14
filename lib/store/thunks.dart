@@ -52,8 +52,10 @@ class StoreThunks {
 
       store.dispatch(SetUser(res.user));
       store.dispatch(SetAuthorization(auth));
-      store.dispatch(refreshCategoriesAndBiomarkersAndTypes());
+      store.dispatch(refreshCategoriesAndTypes());
+      store.dispatch(refreshBiomarkers());
       store.dispatch(refreshMemberBiomarkers());
+      store.dispatch(refreshMemberAnalysis());
       store.dispatch(refreshUnitsAndLabs());
 
       await onSuccess?.call();
@@ -106,14 +108,19 @@ class StoreThunks {
     };
   }
 
-  static ThunkAction<AppState> refreshCategoriesAndBiomarkersAndTypes() {
+  static ThunkAction<AppState> refreshCategoriesAndTypes() {
     return (Store<AppState> store) async {
       store.dispatch(
           SetCategory(CategoryList(categories: await api.category.info())));
-      store.dispatch(SetBiomarkerList(
-          BiomarkerList(biomarkers: await api.biomarker.info())));
       store.dispatch(SetBiomarkerTypeList(
           BiomarkerTypeList(types: await api.biomarker.type())));
+    };
+  }
+
+  static ThunkAction<AppState> refreshBiomarkers() {
+    return (Store<AppState> store) async {
+      store.dispatch(SetBiomarkerList(
+          BiomarkerList(biomarkers: await api.biomarker.info())));
     };
   }
 
@@ -131,7 +138,8 @@ class StoreThunks {
     };
   }
 
-  static ThunkAction<AppState> setMemberBiomarkerModels(biomarkerModelList) {
+  static ThunkAction<AppState> setMemberBiomarkerModels(
+      List<MemberBiomarkerModel> biomarkerModelList) {
     return (Store<AppState> store) async {
       store.dispatch(SetMemberBiomarkerModelList(
           MemberBiomarkerModelList(biomarkers: biomarkerModelList)));

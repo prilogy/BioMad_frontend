@@ -58,27 +58,27 @@ class CustomTextFormField extends StatelessWidget with IndentsMixin {
     var baseDecoration = Decorations.input(context);
     final decoration = inputDecoration ??
         InputDecoration(
-            focusedBorder: baseDecoration.focusedBorder,
-            enabledBorder: enabledColor != null
-                ? OutlineInputBorder(
-                    borderRadius: Decorations.borderRadius,
-                    borderSide: BorderSide(
-                        color: enabledColor, width: AppTheme.borderWidth),
-                  )
-                : baseDecoration.enabledBorder,
-            disabledBorder: OutlineInputBorder(
-              borderRadius: Decorations.borderRadius,
-              borderSide: BorderSide(
-                  color: theme.disabledColor.withOpacity(0.2),
-                  width: AppTheme.borderWidth),
-            ),
-            errorBorder: baseDecoration.errorBorder,
-            focusedErrorBorder: baseDecoration.focusedErrorBorder,
-            hintText: hintText,
-            prefixIcon: maxLines == 1 ? icon : null,
-            labelText: enabled ? labelText : disableLabelText,
-            errorStyle: baseDecoration.errorStyle,
-            alignLabelWithHint: true,
+          focusedBorder: baseDecoration.focusedBorder,
+          enabledBorder: enabledColor != null
+              ? OutlineInputBorder(
+                  borderRadius: Decorations.borderRadius,
+                  borderSide: BorderSide(
+                      color: enabledColor, width: AppTheme.borderWidth),
+                )
+              : baseDecoration.enabledBorder,
+          disabledBorder: OutlineInputBorder(
+            borderRadius: Decorations.borderRadius,
+            borderSide: BorderSide(
+                color: theme.disabledColor.withOpacity(0.2),
+                width: AppTheme.borderWidth),
+          ),
+          errorBorder: baseDecoration.errorBorder,
+          focusedErrorBorder: baseDecoration.focusedErrorBorder,
+          hintText: hintText,
+          prefixIcon: maxLines == 1 ? icon : null,
+          labelText: enabled ? labelText : disableLabelText,
+          errorStyle: baseDecoration.errorStyle,
+          alignLabelWithHint: true,
         );
 
     return withIndents(
@@ -98,8 +98,7 @@ class CustomTextFormField extends StatelessWidget with IndentsMixin {
           },
           onTap: onTap ?? null,
           onChanged: onChange ?? (x) {},
-          validator: (v) =>
-              validator?.call(v) ?? TextFieldValidators.isNotEmpty(v),
+          validator: (v) => validator?.call(v),
           controller: controller,
           decoration: decoration,
           initialValue: initialValue ?? null,

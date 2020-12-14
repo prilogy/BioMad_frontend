@@ -2,7 +2,7 @@ import 'package:api/api.dart';
 import 'package:biomad_frontend/services/localstorage.dart';
 
 class MemberBiomarkerList {
-  List<MemberBiomarker> biomarkers;
+  List<MemberBiomarker> biomarkers = [];
 
   static String localStorageKey = "memberBiomarkers_state";
 

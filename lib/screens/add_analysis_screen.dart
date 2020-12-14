@@ -1,7 +1,9 @@
 import 'package:api/api.dart';
+import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
 import 'package:biomad_frontend/helpers/date_time_formats.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
+import 'package:biomad_frontend/helpers/text_field_validators.dart';
 import 'package:biomad_frontend/models/member_biomarker_list.dart';
 import 'package:biomad_frontend/models/member_biomarker_model_list.dart';
 import 'package:biomad_frontend/router/main.dart';
@@ -14,6 +16,7 @@ import 'package:biomad_frontend/widgets/biomarker_alert.dart';
 import 'package:biomad_frontend/widgets/biomarker_item.dart';
 import 'package:biomad_frontend/widgets/custom_date_form_field.dart';
 import 'package:biomad_frontend/widgets/custom_text_form_field.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
@@ -39,12 +42,23 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
   List<MemberBiomarkerModel> _biomarkers =
       store.state.memberBiomarkerModelList.biomarkers;
 
+  String biomarkerJson;
+  final _formKey = GlobalKey<FormState>();
+
   MemberAnalysisModel getMemberAnalysisModel() => MemberAnalysisModel(
-      name: _analysisController.text,
-      date: DateTimeFormats.defaultDate.parse(_dateController.text),
+      name: _analysisController.text ?? "Неопределено",
+      date: DateTimeFormats.defaultDate.parse(_dateController.text) ??
+          DateTimeFormats.defaultDate.format(DateTime.now()),
       labId: _labId,
-      description: _descriptionController.text,
-      biomarkers: _biomarkers);
+      description: _descriptionController.text == "" ||
+              _descriptionController.text == null
+          ? "Примечаний нет"
+          : _descriptionController.text,
+      biomarkers: _biomarkers ?? []);
+
+  void onChange() {
+    widget.onChange(getMemberAnalysisModel());
+  }
 
   @override
   void initState() {
@@ -55,12 +69,13 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
     super.initState();
   }
 
-  void onChange() {
-    widget.onChange(getMemberAnalysisModel());
+  @override
+  void dispose() {
+    _analysisController?.dispose();
+    _dateController?.dispose();
+    _descriptionController?.dispose();
+    super.dispose();
   }
-
-  String biomarkerJson;
-  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +90,7 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                   onPressed: () {
                     store.dispatch(
                         store.state.memberBiomarkerModelList.biomarkers = []);
+                    store.dispatch(StoreThunks.refreshMemberAnalysis());
                     Keys.rootNavigator.currentState
                         .pushReplacementNamed(Routes.main);
                   },
@@ -87,11 +103,19 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
               IconButton(
                 icon: Icon(Icons.add),
                 onPressed: () {
-                  MemberAnalysisModel result = getMemberAnalysisModel();
-                  api.memberAnalysis.add(result);
-                  store.dispatch(StoreThunks.refreshMemberBiomarkers());
-                  Keys.rootNavigator.currentState
-                      .pushReplacementNamed(Routes.main);
+                  if (_formKey.currentState.validate()) {
+                    MemberAnalysisModel result = getMemberAnalysisModel();
+                    api.memberAnalysis.add(result);
+                    try {
+                      print(_biomarkers[0].value);
+                      store.dispatch(StoreThunks.refreshMemberBiomarkers());
+                      Keys.rootNavigator.currentState
+                          .pushReplacementNamed(Routes.main);
+                    } catch (e) {
+                      SnackBarExtension.warning("Добавьте биомаркеры к анализу",
+                          duration: Duration(seconds: 4));
+                    }
+                  }
                 },
               )
             ]),
@@ -104,6 +128,7 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                 child: Column(children: [
                   CustomTextFormField(
                     controller: _analysisController,
+                    validator: TextFieldValidators.isNotEmpty,
                     icon: Icon(Icons.assignment_outlined),
                     labelText: "Название анализа",
                     hintText: "Введите название анализа",
@@ -116,6 +141,13 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                   ),
                   CustomDateFormField(
                     type: CustomDateFormFieldType.date,
+                    validator: (v) {
+                      if (_dateController.text.isEmpty) {
+                        return tr('input_hint.not_empty');
+                      }
+                      print(v);
+                      return null;
+                    },
                     labelText: "Дата сдачи анализа",
                     controller: _dateController,
                     icon: Icon(Icons.date_range),
@@ -143,9 +175,6 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                     maxLines: 5,
                     onChange: (x) {
                       onChange();
-                    },
-                    formValidator: () {
-                      return _formKey?.currentState?.validate();
                     },
                   ),
                   Column(
@@ -185,11 +214,10 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                           )
                         ],
                       ),
-                      StoreConnector<AppState, MemberBiomarkerModelList>(
+                      StoreConnector<AppState, List<MemberBiomarkerModel>>(
                         converter: (store) =>
-                            store.state.memberBiomarkerModelList,
+                            store.state.memberBiomarkerModelList.biomarkers,
                         builder: (ctx, state) {
-                          print(_biomarkers);
                           return Container(
                               height: 76 * _biomarkers.length.toDouble(),
                               width: MediaQuery.of(context).size.width,
@@ -209,6 +237,8 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                                                   .shorthand ??
                                               "unnamed",
                                           id: _biomarkers[index].biomarkerId,
+                                          isModel: true,
+                                          index: index,
                                         )),
                               ));
                         },

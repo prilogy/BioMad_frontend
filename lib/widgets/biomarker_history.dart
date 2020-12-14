@@ -135,6 +135,7 @@ class BiomarkerHistory extends StatelessWidget with IndentsMixin {
           Row(
             children: [
               Container(
+                  padding: status == "норма" ? EdgeInsets.only(right: Indents.sm) : null,
                   child: icon != null
                       ? Icon(icon, color: color, size: 18.0)
                       : iconContainer),

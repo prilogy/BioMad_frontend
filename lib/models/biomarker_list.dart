@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:api/api.dart';
 import 'package:biomad_frontend/services/localstorage.dart';
 
@@ -9,14 +11,14 @@ class BiomarkerList {
   BiomarkerList({this.biomarkers});
 
   BiomarkerList.fromJson(Map<String, dynamic> json) {
-    biomarkers = (json['Biomarkers'] == null)
+    biomarkers = (json['Biomarker'] == null)
         ? null
-        : Biomarker.listFromJson(json['Biomarkers']);
+        : Biomarker.listFromJson(json['Biomarker']);
   }
 
   Map<String, dynamic> toJson() {
     var json = <String, dynamic>{};
-    json['Biomarkers'] = biomarkers;
+    json['Biomarker'] = biomarkers;
     return json;
   }
 

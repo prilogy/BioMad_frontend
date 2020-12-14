@@ -89,19 +89,21 @@ class _BiomarkerAlertDialogState extends State<BiomarkerAlertDialog> {
   Biomarker choosedBiomarker;
   int biomarkerId;
   int unitId;
+  Unit unit;
 
   @override
   void initState() {
     if (biomarker != null) {
       biomarkerId = biomarker.biomarkerId;
+      unitId = biomarker.unitId;
+
       choosedBiomarker = store.state.biomarkerList.biomarkers
           .firstWhere((element) => element.id == biomarker.biomarkerId);
       _biomarkerIdController.text = choosedBiomarker.content.name;
       _biomarkerValueController.text = biomarker.value.toString();
-      _biomarkerUnitIdController.text = store.state.unitList.units
-          .firstWhere((element) => element.id == biomarker.unitId)
-          .content
-          .shorthand;
+      unit = store.state.unitList.units
+          .firstWhere((element) => element.id == biomarker.unitId);
+      _biomarkerUnitIdController.text = unit.content.name;
     }
 
     super.initState();
@@ -236,8 +238,7 @@ class _BiomarkerAlertDialogState extends State<BiomarkerAlertDialog> {
                                           hintText: hintUnit ??
                                               "Введите единицу измерения",
                                           dataList: dataList,
-                                          initialValue:
-                                              _biomarkerUnitIdController.text,
+                                          initialValue: _biomarkerUnitIdController.text,
                                           searchType: "unit",
                                         );
                                       }).then((val) {
@@ -302,17 +303,20 @@ class _BiomarkerAlertDialogState extends State<BiomarkerAlertDialog> {
             child: biomarker != null ? Text('Изменить') : Text('Добавить'),
             onPressed: () {
               MemberBiomarkerModel answer = getMemberBiomarkerModel();
+
               if (biomarker != null) {
                 MemberBiomarkerModel bio =
                     store.state.memberBiomarkerModelList.biomarkers.firstWhere(
                         (element) => element.biomarkerId == biomarkerId);
-                bio = answer;
+                bio.value = answer.value;
+                bio.unitId = answer.unitId;
               } else {
                 store.state.memberBiomarkerModelList.biomarkers.add(answer);
               }
 
               store.dispatch(StoreThunks.setMemberBiomarkerModels(
                   store.state.memberBiomarkerModelList.biomarkers));
+              print(store.state.memberBiomarkerModelList.biomarkers);
 
               Navigator.of(context).pop();
             },

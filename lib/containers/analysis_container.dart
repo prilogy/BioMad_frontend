@@ -30,12 +30,16 @@ class _AnalysisContainerState extends State<AnalysisContainer> {
 
   _AnalysisContainerState(this.analysis);
 
+  String zeroAdding(int value) {
+    return value > 10 ? value.toString() : "0" + value.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
       padding:
-          EdgeInsets.only(top: Indents.md, left: Indents.md, right: Indents.md),
+          EdgeInsets.only(left: Indents.md, right: Indents.md),
       margin: EdgeInsets.only(bottom: Indents.sm),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,15 +51,19 @@ class _AnalysisContainerState extends State<AnalysisContainer> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  "Дата сдачи анализа",
+                  "Дата и время сдачи",
                   style: theme.textTheme.bodyText1,
                 ),
                 Text(
-                  analysis.date.day.toString() +
+                  analysis.dateCreatedAt.day.toString() +
                       "." +
-                      analysis.date.month.toString() +
+                      zeroAdding(analysis.dateCreatedAt.month) +
                       "." +
-                      analysis.date.year.toString(),
+                      analysis.dateCreatedAt.year.toString() +
+                      " в " +
+                      analysis.dateCreatedAt.hour.toString() +
+                      ":" +
+                      zeroAdding(analysis.dateCreatedAt.minute),
                 ),
               ],
             ),
@@ -78,7 +86,7 @@ class _AnalysisContainerState extends State<AnalysisContainer> {
             margin: EdgeInsets.only(bottom: Indents.sm),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   "Примечание",
