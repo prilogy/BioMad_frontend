@@ -1,17 +1,15 @@
 import 'package:api/api.dart';
 import 'package:biomad_frontend/helpers/color_helpers.dart';
-import 'package:biomad_frontend/helpers/keys.dart';
-import 'package:biomad_frontend/helpers/string_helpers.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/styles/avatar_sizes.dart';
 import 'package:biomad_frontend/styles/indents.dart';
-import 'package:biomad_frontend/widgets/custom_circle_avatar.dart';
-import 'package:biomad_frontend/widgets/custom_list_tile.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'custom_divider.dart';
+import 'custom/custom_circle_avatar.dart';
+import 'custom/custom_divider.dart';
+import 'custom/custom_list_tile.dart';
 
 class MemberListTile extends StatelessWidget {
   final Member model;

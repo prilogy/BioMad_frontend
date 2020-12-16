@@ -7,10 +7,8 @@ import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:biomad_frontend/styles/radius_values.dart';
+import 'package:biomad_frontend/widgets/custom/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
-
-import 'biomarker_form_field.dart';
-import 'custom_text_form_field.dart';
 
 class BiomarkerAlertDialog extends StatefulWidget {
   final Widget child;

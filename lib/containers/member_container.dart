@@ -6,13 +6,12 @@ import 'package:biomad_frontend/helpers/random.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
-import 'package:biomad_frontend/widgets/custom_circle_avatar.dart';
-import 'package:biomad_frontend/widgets/custom_date_form_field.dart';
-import 'package:biomad_frontend/widgets/custom_select_form_field.dart';
-import 'package:biomad_frontend/widgets/custom_text_form_field.dart';
+import 'package:biomad_frontend/widgets/custom/custom_circle_avatar.dart';
+import 'package:biomad_frontend/widgets/custom/custom_date_form_field.dart';
+import 'package:biomad_frontend/widgets/custom/custom_select_form_field.dart';
+import 'package:biomad_frontend/widgets/custom/custom_text_form_field.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-
 
 class MemberContainer extends StatefulWidget {
   final Member member;
@@ -20,7 +19,8 @@ class MemberContainer extends StatefulWidget {
   final String prefilledName;
   final void Function(MemberModel) onChange;
 
-  MemberContainer(this.member, {this.changeColor = true, this.onChange, this.prefilledName});
+  MemberContainer(this.member,
+      {this.changeColor = true, this.onChange, this.prefilledName});
 
   @override
   _MemberContainerState createState() => _MemberContainerState();
@@ -37,12 +37,12 @@ class _MemberContainerState extends State<MemberContainer> {
   int _profilePreviewAge;
 
   MemberModel getMemberModel() => MemberModel(
-      name: _nameController.text,
-      genderId: _genderId,
-      color: ColorHelpers.toHex(_avatarColor),
-      dateBirthday:
-          DateTimeFormats.defaultDate.parse(_dateBirthDayController.text),);
-
+        name: _nameController.text,
+        genderId: _genderId,
+        color: ColorHelpers.toHex(_avatarColor),
+        dateBirthday:
+            DateTimeFormats.defaultDate.parse(_dateBirthDayController.text),
+      );
 
   void onChange() {
     widget.onChange(getMemberModel());
@@ -50,7 +50,7 @@ class _MemberContainerState extends State<MemberContainer> {
 
   @override
   void initState() {
-    if(widget.prefilledName != null)
+    if (widget.prefilledName != null)
       setState(() {
         _nameController.text = widget.prefilledName;
         _profilePreviewName = widget.prefilledName;
@@ -62,11 +62,11 @@ class _MemberContainerState extends State<MemberContainer> {
         final name = widget.member.name;
         _nameController.text = name;
         _profilePreviewName = name;
-        _dateBirthDayController.text =
-            DateTimeFormats.defaultDate.format(widget.member.dateBirthday ?? DateTime.now());
+        _dateBirthDayController.text = DateTimeFormats.defaultDate
+            .format(widget.member.dateBirthday ?? DateTime.now());
         _profilePreviewAge = getAgeFromDate(widget.member.dateBirthday);
         _genderId = widget.member.genderId;
-        if(widget.member.color != null)
+        if (widget.member.color != null)
           _avatarColor = ColorHelpers.fromHex(widget.member.color);
       });
 
@@ -133,21 +133,22 @@ class _MemberContainerState extends State<MemberContainer> {
                     children: [
                       Row(
                         children: [
-                          if(_profilePreviewName == null || _profilePreviewName == '')
-                            Text(tr('member_container.your_name_or_alias'), style: theme.textTheme.headline6
-                                .merge(TextStyle(color: theme.canvasColor)))
+                          if (_profilePreviewName == null ||
+                              _profilePreviewName == '')
+                            Text(tr('member_container.your_name_or_alias'),
+                                style: theme.textTheme.headline6
+                                    .merge(TextStyle(color: theme.canvasColor)))
                           else
                             Text(
-                            _nameController.text,
-                            softWrap: false,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: theme.textTheme.headline6,
-                          ),
+                              _nameController.text,
+                              softWrap: false,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.headline6,
+                            ),
                           if (_profilePreviewAge != null)
                             Text(
-                              ', ' +
-                                  _profilePreviewAge.toString(),
+                              ', ' + _profilePreviewAge.toString(),
                               style: theme.textTheme.headline6
                                   .merge(TextStyle(color: theme.canvasColor)),
                             ),
@@ -212,7 +213,8 @@ class _MemberContainerState extends State<MemberContainer> {
                     onChange();
                   },
                   items: _genders,
-                  itemBuilder: (x) => DropdownMenuItem(child: Text(x.content?.name ?? x.key)))
+                  itemBuilder: (x) =>
+                      DropdownMenuItem(child: Text(x.content?.name ?? x.key)))
               : Container()
         ],
       ),

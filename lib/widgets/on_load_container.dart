@@ -1,6 +1,5 @@
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
-import 'package:biomad_frontend/widgets/custom_divider.dart';
 import 'package:flutter/material.dart';
 
 class OnLoadContainer extends StatelessWidget {

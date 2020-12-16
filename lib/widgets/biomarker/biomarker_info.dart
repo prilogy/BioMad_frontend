@@ -9,7 +9,7 @@ import 'package:biomad_frontend/styles/indents.dart';
 import 'package:flutter/material.dart';
 
 import 'biomarker_alert.dart';
-import 'drop_text.dart';
+import '../drop_text.dart';
 
 // ignore: must_be_immutable
 class BiomarkerInfo extends StatelessWidget {

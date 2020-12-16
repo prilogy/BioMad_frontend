@@ -4,7 +4,7 @@ import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/styles/indents.dart';
-import 'package:biomad_frontend/widgets/biomarker_item.dart';
+import 'package:biomad_frontend/widgets/biomarker/biomarker_item.dart';
 import 'package:biomad_frontend/widgets/block_base_widget.dart';
 import 'package:biomad_frontend/widgets/category_item.dart';
 import 'package:flutter/cupertino.dart';

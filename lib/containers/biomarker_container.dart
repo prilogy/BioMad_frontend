@@ -1,18 +1,11 @@
 import 'package:api/api.dart';
-import 'package:biomad_frontend/helpers/i18n_helper.dart';
-import 'package:biomad_frontend/helpers/i18n_helper.dart';
-import 'package:biomad_frontend/helpers/keys.dart';
-import 'package:biomad_frontend/router/main.dart';
-import 'package:biomad_frontend/screens/monitoring_screen.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
-import 'package:biomad_frontend/widgets/biomarker_history.dart';
-import 'package:biomad_frontend/widgets/biomarker_info.dart';
+import 'package:biomad_frontend/widgets/biomarker/biomarker_history.dart';
+import 'package:biomad_frontend/widgets/biomarker/biomarker_info.dart';
 import 'package:biomad_frontend/widgets/block_base_widget.dart';
-import 'package:biomad_frontend/widgets/custom_button.dart';
-import 'package:biomad_frontend/widgets/drop_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

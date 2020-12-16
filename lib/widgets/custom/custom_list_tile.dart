@@ -1,5 +1,4 @@
 import 'package:biomad_frontend/styles/indents.dart';
-import 'package:biomad_frontend/widgets/custom_divider.dart';
 import 'package:flutter/material.dart';
 
 class CustomListTile extends StatelessWidget {
