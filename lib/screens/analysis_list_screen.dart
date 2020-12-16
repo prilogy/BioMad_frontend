@@ -43,8 +43,8 @@ class _AnalysisListScreenState extends State<AnalysisListScreen> {
             body: Container(
                 //tmpBiomarker(context)
                 child: Column(
-          children: [AnalysisListContainer()],
-        ))),
+                  children: [AnalysisListContainer()],
+                ))),
         Positioned(
             bottom: NavBar.indent,
             right: NavBar.indent,

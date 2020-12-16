@@ -11,6 +11,8 @@ class Biomarker {
 
   BiomarkerType type = null;
 
+  int defaultUnitId = null;
+
   BiomarkerTranslation content = null;
 
   List<int> categoryIds = [];
@@ -28,17 +30,19 @@ class Biomarker {
 
   @override
   String toString() {
-    return 'Biomarker[reference=$reference, currentValue=$currentValue, id=$id, typeId=$typeId, type=$type, content=$content, categoryIds=$categoryIds, unitIds=$unitIds, biomarkerArticles=$biomarkerArticles, unitGroupId=$unitGroupId, state=$state, ]';
+    return 'Biomarker[defaultUnit =$defaultUnitId, reference=$reference, currentValue=$currentValue, id=$id, typeId=$typeId, type=$type, content=$content, categoryIds=$categoryIds, unitIds=$unitIds, biomarkerArticles=$biomarkerArticles, unitGroupId=$unitGroupId, state=$state, ]';
   }
 
   Biomarker.fromJson(Map<String, dynamic> json) {
     if (json == null) return;
+
     reference = (json['reference'] == null)
         ? null
         : BiomarkerReference.fromJson(json['reference']);
     currentValue = (json['currentValue'] == null)
         ? null
         : MemberBiomarker.fromJson(json['currentValue']);
+    defaultUnitId = json['defaultUnitId'];
     id = json['id'];
     typeId = json['typeId'];
     type = (json['type'] == null) ? null : BiomarkerType.fromJson(json['type']);
@@ -63,6 +67,7 @@ class Biomarker {
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
     if (reference != null) json['reference'] = reference;
+    if (defaultUnitId != null) json['defaultUnitId'] = defaultUnitId;
     if (currentValue != null) json['currentValue'] = currentValue;
     if (id != null) json['id'] = id;
     if (typeId != null) json['typeId'] = typeId;

@@ -68,20 +68,20 @@ class _AnalysisContainerState extends State<AnalysisContainer> {
               ],
             ),
           ),
-          Container(
-            margin: EdgeInsets.only(bottom: Indents.sm),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  "Лаборатория",
-                  style: theme.textTheme.bodyText1,
-                ),
-                Text(analysis.lab.content.name),
-              ],
-            ),
-          ),
+//          Container(
+//            margin: EdgeInsets.only(bottom: Indents.sm),
+//            child: Row(
+//              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//              crossAxisAlignment: CrossAxisAlignment.center,
+//              children: [
+//                Text(
+//                  "Лаборатория",
+//                  style: theme.textTheme.bodyText1,
+//                ),
+//                Text(analysis.lab.content.name),
+//              ],
+//            ),
+//          ),
           Container(
             margin: EdgeInsets.only(bottom: Indents.sm),
             child: Column(

@@ -22,4 +22,14 @@ class UnitApi extends ApiBase<UnitApi> {
       return null;
     }
   }
+
+  Future<List<Unit>> search(String query) async {
+    try {
+      var url = '${v}/unit/search';
+      var response = await dio.post(url, data: query);
+      return Unit.listFromJson(response.data);
+    } on DioError catch (e) {
+      return null;
+    }
+  }
 }

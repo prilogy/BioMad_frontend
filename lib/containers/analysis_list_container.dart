@@ -24,27 +24,30 @@ class _AnalysisListContainerState extends State<AnalysisListContainer> {
   Widget build(BuildContext context) {
     List<MemberAnalysis> analysis = store.state.memberAnalysisList.analysis;
 
-    return analysis.length > 0
-        ? Container(
-            height: MediaQuery.of(context).size.height -
-                AppBar().preferredSize.height -
-                61,
-            width: MediaQuery.of(context).size.width,
-            child: StoreConnector<AppState, List<MemberAnalysis>>(
-                converter: (store) => store.state.memberAnalysisList.analysis,
-                builder: (ctx, state) {
-                  return ScrollConfiguration(
+    return StoreConnector<AppState, List<MemberAnalysis>>(
+        converter: (store) => store.state.memberAnalysisList.analysis,
+        builder: (ctx, state) {
+          return analysis.length > 0
+              ? Container(
+                  height: MediaQuery.of(context).size.height -
+                      AppBar().preferredSize.height -
+                      61,
+                  width: MediaQuery.of(context).size.width,
+                  child: ScrollConfiguration(
                     behavior: NoRippleScrollBehaviour(),
                     child: ListView.builder(
                         itemCount: analysis.length,
                         itemBuilder: (context, index) =>
                             analysisItem(index, analysis[index])),
-                  );
-                }))
-        : Container(
-            padding: EdgeInsets.only(left: Indents.sm, right: Indents.sm),
-            margin: EdgeInsets.only(left: Indents.md, right: Indents.md),
-            child: Text("Анализы еще не добавлены :("));
+                  ))
+              : Container(
+                  height: MediaQuery.of(context).size.height -
+                      AppBar().preferredSize.height -
+                      61,
+                  padding: EdgeInsets.only(left: Indents.sm, right: Indents.sm),
+                  margin: EdgeInsets.only(left: Indents.md, right: Indents.md),
+                  child: Text("Анализы еще не добавлены :("));
+        });
   }
 
   String zeroAdding(int value) {
@@ -65,7 +68,7 @@ class _AnalysisListContainerState extends State<AnalysisListContainer> {
       child: Container(
         padding: EdgeInsets.only(left: Indents.md, right: Indents.sm),
         margin: EdgeInsets.only(
-            top: index == 0 ? Indents.md : Indents.smd,
+            top: index == 0 ? 0 : Indents.smd,
             left: Indents.md,
             right: Indents.md),
         decoration: BoxDecoration(

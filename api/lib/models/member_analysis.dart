@@ -11,11 +11,7 @@ class MemberAnalysis {
   DateTime date = null;
   
   int memberId = null;
-  
-  int labId = null;
-  
-  Lab lab = null;
-  
+
   List<MemberBiomarker> biomarkers = [];
   
   DateTime dateCreatedAt = null;
@@ -23,7 +19,7 @@ class MemberAnalysis {
 
   @override
   String toString() {
-    return 'MemberAnalysis[id=$id, name=$name, description=$description, date=$date, memberId=$memberId, labId=$labId, lab=$lab, biomarkers=$biomarkers, dateCreatedAt=$dateCreatedAt, ]';
+    return 'MemberAnalysis[id=$id, name=$name, description=$description, date=$date, memberId=$memberId, biomarkers=$biomarkers, dateCreatedAt=$dateCreatedAt, ]';
   }
 
   MemberAnalysis.fromJson(Map<String, dynamic> json) {
@@ -35,10 +31,6 @@ class MemberAnalysis {
       null :
       DateTime.parse(json['date']).toLocal();
     memberId = json['memberId'];
-    labId = json['labId'];
-    lab = (json['lab'] == null) ?
-      null :
-      Lab.fromJson(json['lab']);
     biomarkers = (json['biomarkers'] == null) ?
       null :
       MemberBiomarker.listFromJson(json['biomarkers']);
@@ -57,10 +49,6 @@ class MemberAnalysis {
       json['date'] = date == null ? null : date.toUtc().toIso8601String();
     if (memberId != null)
       json['memberId'] = memberId;
-      json['labId'] = labId;
-    if (lab != null)
-      json['lab'] = lab;
-      json['biomarkers'] = biomarkers;
     if (dateCreatedAt != null)
       json['dateCreatedAt'] = dateCreatedAt == null ? null : dateCreatedAt.toUtc().toIso8601String();
     return json;

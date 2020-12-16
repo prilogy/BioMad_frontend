@@ -52,11 +52,13 @@ class StoreThunks {
 
       store.dispatch(SetUser(res.user));
       store.dispatch(SetAuthorization(auth));
-      store.dispatch(refreshCategoriesAndTypes());
-      store.dispatch(refreshBiomarkers());
+
+      store.dispatch(refreshCategories());
+      store.dispatch(refreshTypes());
+      store.dispatch(refreshBiomarkers(false));
       store.dispatch(refreshMemberBiomarkers());
       store.dispatch(refreshMemberAnalysis());
-      store.dispatch(refreshUnitsAndLabs());
+      store.dispatch(refreshUnits());
 
       await onSuccess?.call();
     };
@@ -101,33 +103,68 @@ class StoreThunks {
     };
   }
 
-  static ThunkAction<AppState> refreshUnitsAndLabs() {
+  static ThunkAction<AppState> refreshUnits() {
     return (Store<AppState> store) async {
-      store.dispatch(SetUnitList(UnitList(units: await api.unit.info())));
-      store.dispatch(SetLabList(LabList(labs: await api.lab.info())));
+      if (store.state.unitList != null &&
+          (store.state.unitList?.lastUpdateDate
+                      ?.difference(DateTime.now())
+                      ?.inDays ??
+                  3) <
+              2) return;
+
+      store.dispatch(SetUnitList(UnitList(
+          units: await api.unit.info(), lastUpdateDate: DateTime.now())));
     };
   }
 
-  static ThunkAction<AppState> refreshCategoriesAndTypes() {
+  static ThunkAction<AppState> refreshCategories() {
     return (Store<AppState> store) async {
-      store.dispatch(
-          SetCategory(CategoryList(categories: await api.category.info())));
-      store.dispatch(SetBiomarkerTypeList(
-          BiomarkerTypeList(types: await api.biomarker.type())));
+      if (store.state.categoryList != null &&
+          (store.state.categoryList?.lastUpdateDate
+                      ?.difference(DateTime.now())
+                      ?.inDays ??
+                  3) <
+              2) return;
+
+      store.dispatch(SetCategory(CategoryList(
+          categories: await api.category.info(),
+          lastUpdateDate: DateTime.now())));
     };
   }
 
-  static ThunkAction<AppState> refreshBiomarkers() {
+  static ThunkAction<AppState> refreshTypes() {
     return (Store<AppState> store) async {
-      store.dispatch(SetBiomarkerList(
-          BiomarkerList(biomarkers: await api.biomarker.info())));
+      if (store.state.biomarkerTypeList != null &&
+          (store.state.biomarkerTypeList?.lastUpdateDate
+                      ?.difference(DateTime.now())
+                      ?.inDays ??
+                  3) <
+              2) return;
+
+      store.dispatch(SetBiomarkerTypeList(BiomarkerTypeList(
+          types: await api.biomarker.type(), lastUpdateDate: DateTime.now())));
+    };
+  }
+
+  static ThunkAction<AppState> refreshBiomarkers(bool flag) {
+    return (Store<AppState> store) async {
+//      if ((store.state.biomarkerList != null &&
+//          (store.state.biomarkerList?.lastUpdateDate
+//                      ?.difference(DateTime.now())
+//                      ?.inDays ??
+//                  3) <
+//              2) || flag == false) return;
+
+      store.dispatch(SetBiomarkerList(BiomarkerList(
+          biomarkers: await api.biomarker.info(),
+          lastUpdateDate: DateTime.now())));
     };
   }
 
   static ThunkAction<AppState> refreshMemberBiomarkers() {
     return (Store<AppState> store) async {
-      store.dispatch(SetMemberBiomarkerList(
-          MemberBiomarkerList(biomarkers: await api.memberBiomarker.info())));
+      store.dispatch(SetMemberBiomarkerList(MemberBiomarkerList(
+          biomarkers: await api.memberBiomarker.info(), isLoaded: true)));
     };
   }
 

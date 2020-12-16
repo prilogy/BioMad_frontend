@@ -9,6 +9,7 @@ import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:biomad_frontend/widgets/biomarker_history.dart';
+import 'package:biomad_frontend/widgets/biomarker_info.dart';
 import 'package:biomad_frontend/widgets/block_base_widget.dart';
 import 'package:biomad_frontend/widgets/custom_button.dart';
 import 'package:biomad_frontend/widgets/drop_text.dart';
@@ -29,19 +30,32 @@ class BiomarkerContainer extends StatefulWidget {
 
 class _BiomarkerContainerState extends State<BiomarkerContainer> {
   final int id;
-  final MemberBiomarker memberBiomarker;
+  MemberBiomarker memberBiomarker;
+  Biomarker biomarker;
 
   _BiomarkerContainerState(this.id, this.memberBiomarker);
 
-  List<MemberBiomarker> biomarkerHistory = [];
+  Future<Biomarker> getBiomarker(int id) async {
+    return await api.biomarker.infoById(id, memberBiomarker.unitId);
+  }
+
+  Future<MemberBiomarker> getMemberBiomarker(int id) async {
+    return await api.memberBiomarker.infoById(id, memberBiomarker.unitId);
+  }
 
   @override
   void initState() {
-    setState(() {
-      for (var item in store.state.memberBiomarkerList.biomarkers)
-        if (item.biomarkerId == memberBiomarker.biomarkerId)
-          biomarkerHistory.add(item);
-    });
+    getBiomarker(memberBiomarker.biomarkerId).then((x) => {
+          setState(() {
+            biomarker = x;
+          })
+        });
+
+    getMemberBiomarker(memberBiomarker.id).then((x) => {
+          setState(() {
+            memberBiomarker = x;
+          })
+        });
 
     super.initState();
   }
@@ -54,20 +68,21 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
     var icon;
     Biomarker biomarker = store.state.biomarkerList.biomarkers
         .firstWhere((element) => element.id == memberBiomarker.biomarkerId);
-    BiomarkerReference reference = biomarker.reference;
 
-    if (reference.valueA <= memberBiomarker.value &&
-        memberBiomarker.value <= reference.valueB) {
+    if (biomarker.state == BiomarkerStateType.number2_) {
       color = BioMadColors.success;
       status = "норма";
-    } else if (memberBiomarker.value < reference.valueA) {
+    } else if (biomarker.state == BiomarkerStateType.number1_) {
       color = BioMadColors.warning;
       status = "пониженный";
       icon = Icons.keyboard_arrow_down;
-    } else {
+    } else if (biomarker.state == BiomarkerStateType.number0_) {
       color = BioMadColors.warning;
       status = "повышенный";
       icon = Icons.keyboard_arrow_up;
+    } else {
+      status = "не определено";
+      icon = Icons.keyboard_arrow_right;
     }
 
     var iconContainer = Container(
@@ -135,9 +150,9 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
                                   color: BioMadColors.success,
                                   shape: BoxShape.circle,
                                 ))),
-                        Text(reference.valueA.toString() +
+                        Text(biomarker.reference.valueA.toString() +
                             "-" +
-                            reference.valueB.toString() +
+                            biomarker.reference.valueB.toString() +
                             " " +
                             memberBiomarker.unit.content.shorthand),
                       ],
@@ -150,120 +165,14 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
             padding: EdgeInsets.only(
                 top: Indents.md, left: Indents.md, right: Indents.md),
             margin: EdgeInsets.only(bottom: Indents.sm),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(bottom: Indents.sm),
-                    child: Text(
-                      "История",
-                      style: theme.textTheme.headline6
-                          .merge(TextStyle(color: theme.primaryColor)),
-                    ),
-                  ),
-//ПОКАЗАТЬ ВСЮ
-//                  Container(
-//                    height: 30,
-//                    child: FlatButton(
-//                      color: Colors.transparent,
-//                      splashColor: Colors.black26,
-//                      padding: EdgeInsets.all(0),
-//                      onPressed: () {},
-//                      child: Text(
-//                        'показать всю'.toUpperCase(),
-//                        style: theme.textTheme.bodyText1
-//                            .merge(TextStyle(color: theme.primaryColor)),
-//                      ),
-//                    ),
-//                  )
-                ],
-              ),
-              BiomarkerHistory(
-                biomarkerHistory: biomarkerHistory,
-                biomarker: memberBiomarker,
-              )
-            ])),
+            child: BiomarkerHistory(
+              memberBiomarker: memberBiomarker,
+            )),
         BlockBaseWidget(
             padding: EdgeInsets.only(
                 top: Indents.md, left: Indents.md, right: Indents.md),
             margin: EdgeInsets.only(bottom: Indents.sm),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Container(
-                margin: EdgeInsets.only(bottom: Indents.sm),
-                child: Text(
-                  "Информация",
-                  style: theme.textTheme.headline6
-                      .merge(TextStyle(color: theme.primaryColor)),
-                ),
-              ),
-              Text(
-                biomarker.content.description ??
-                    "Описание к маркеру не добавлено :(",
-                style: theme.textTheme.bodyText2,
-              ),
-              Container(
-                  padding: EdgeInsets.only(top: Indents.md),
-                  margin: EdgeInsets.only(bottom: Indents.sm),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                            margin: EdgeInsets.only(bottom: Indents.sm),
-                            child: Text("Чем опасен",
-                                style: theme.textTheme.subtitle1.merge(
-                                    TextStyle(color: theme.primaryColor)))),
-                        DropText(
-                            header: "Пониженный показатель",
-                            inside:
-                                "При пониженном показателе происходит так называемый разнообразный и богатый опыт новая модель организационной деятельности представляет собой интересный эксперимент проверки систем массового участия. Товарищи! дальнейшее развитие различных форм деятельности способствует подготовки и реализации форм развития.",
-                            color: theme.colorScheme.onBackground),
-                        DropText(
-                            header: "Повышенный показатель",
-                            inside:
-                                "При повышенном показателе происходит так называемый разнообразный и богатый опыт новая модель организационной деятельности представляет собой интересный эксперимент проверки систем массового участия. Товарищи! дальнейшее развитие различных форм деятельности способствует подготовки и реализации форм развития.",
-                            color: theme.errorColor),
-                      ])),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  RaisedButton(
-                    onPressed: () {
-                      Keys.rootNavigator.currentState
-                          .pushReplacementNamed(Routes.main);
-                    },
-                    child: Text('ПОВЫСИТЬ',
-                        style: theme.textTheme.bodyText2.merge(
-                            TextStyle(color: theme.colorScheme.onPrimary))),
-                    color: theme.errorColor,
-                  ),
-                  RaisedButton(
-                    onPressed: () {
-                      Keys.rootNavigator.currentState
-                          .pushReplacementNamed(Routes.main);
-                    },
-                    child: Text('ПОНИЗИТЬ',
-                        style: theme.textTheme.bodyText2.merge(
-                            TextStyle(color: theme.colorScheme.onPrimary))),
-                    color: BioMadColors.success,
-                  ),
-                  RaisedButton(
-                    color: theme.primaryColor,
-                    child: Icon(
-                      Icons.share,
-                      color: theme.colorScheme.background,
-                    ),
-                    onPressed: () {
-                      Keys.rootNavigator.currentState
-                          .pushReplacementNamed(Routes.add_analysis);
-                    },
-                  ),
-                ],
-              )
-            ])),
+            child: BiomarkerInfo(biomarker: biomarker)),
       ]),
     );
   }

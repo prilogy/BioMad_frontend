@@ -3,20 +3,29 @@ import 'package:biomad_frontend/services/localstorage.dart';
 
 class MemberBiomarkerList {
   List<MemberBiomarker> biomarkers = [];
+  DateTime lastUpdateDate;
+  bool isLoaded = true;
 
   static String localStorageKey = "memberBiomarkers_state";
 
-  MemberBiomarkerList({this.biomarkers});
+  MemberBiomarkerList({this.biomarkers, this.isLoaded});
 
   MemberBiomarkerList.fromJson(Map<String, dynamic> json) {
-    biomarkers = (json['Biomarkers'] == null)
+    biomarkers = (json['memberBiomarkers'] == null)
         ? null
         : MemberBiomarker.listFromJson(json['Biomarkers']);
+    lastUpdateDate = (json['lastUpdateDate'] == null)
+        ? null
+        : DateTime.parse(json['lastUpdateDate']);
+    isLoaded = json['isLoaded'];
   }
 
   Map<String, dynamic> toJson() {
-    var json = <String, dynamic>{};
-    json['Biomarkers'] = biomarkers;
+    Map <String, dynamic> json = {};
+    json['memberBiomarkers'] = biomarkers;
+    json['isLoaded'] = isLoaded;
+    if (lastUpdateDate != null)
+      json['lastUpdateDate'] = lastUpdateDate == null ? null : lastUpdateDate.toUtc().toIso8601String();
     return json;
   }
 

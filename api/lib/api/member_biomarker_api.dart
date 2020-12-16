@@ -33,9 +33,11 @@ class MemberBiomarkerApi extends ApiBase<MemberBiomarkerApi> {
     }
   }
 
-  Future<MemberBiomarker> infoById(int id) async {
+  Future<MemberBiomarker> infoById(int id, int unitId) async {
     try {
-      var url = '${v}/member/biomarker/${id}';
+      var url = unitId != null
+          ? '${v}/member/biomarker/${id}?unitId=$unitId'
+          : '${v}/member/biomarker/${id}';
       var response = await dio.get(url);
       return MemberBiomarker.fromJson(response.data);
     } on DioError catch (e) {
@@ -53,19 +55,36 @@ class MemberBiomarkerApi extends ApiBase<MemberBiomarkerApi> {
     }
   }
 
-
-
-  Future<MemberBiomarker> history(int id) async {
+  Future<List<MemberBiomarker>> history(int id, int unitId) async {
     try {
-      var url = '${v}/biomarker/${id}/history';
+      var url = unitId != null
+          ? '${v}/biomarker/${id}/history?unitId=$unitId'
+          : '${v}/biomarker/${id}/history';
       var response = await dio.get(url);
-      return MemberBiomarker.fromJson(response.data);
+      return MemberBiomarker.listFromJson(response.data);
     } on DioError catch (e) {
       return null;
     }
   }
 
+  Future<bool> addReference(MemberBiomarkerReferenceModel model) async {
+    try {
+      var url = '${v}/member/biomarker/reference';
+      await dio.post(url, data: model);
+      return true;
+    } on DioError catch (e) {
+      print(e);
+      return false;
+    }
+  }
 
-
-
+  Future<bool> deleteReference(int id) async {
+    try {
+      var url = '${v}/member/biomarker/reference/${id}';
+      await dio.delete(url);
+      return true;
+    } on DioError catch (e) {
+      return false;
+    }
+  }
 }

@@ -22,4 +22,14 @@ class HelperApi extends ApiBase<HelperApi> {
       return null;
     }
   }
+
+  Future<SearchResultModel> search(String query) async {
+    try {
+      var url = '${v}/helper/search';
+      var response = await dio.post(url, data: query);
+      return SearchResultModel.fromJson(response.data);
+    } on DioError catch (e) {
+      return null;
+    }
+  }
 }

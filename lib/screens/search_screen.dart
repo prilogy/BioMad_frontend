@@ -1,9 +1,12 @@
 import 'package:api/api.dart';
+import 'package:biomad_frontend/containers/category_container.dart';
 import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/styles/indents.dart';
+import 'package:biomad_frontend/widgets/biomarker_item.dart';
 import 'package:biomad_frontend/widgets/block_base_widget.dart';
+import 'package:biomad_frontend/widgets/category_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,12 +15,14 @@ import 'package:flutter/material.dart';
 class SearchScreen extends StatefulWidget {
   final String hintText;
   final List<dynamic> dataList;
+  final SearchResultModel allData;
   final initialValue;
   final searchType;
 
   SearchScreen(
       {@required this.hintText,
       this.dataList,
+      this.allData,
       this.initialValue,
       this.searchType,
       Key key})
@@ -25,17 +30,18 @@ class SearchScreen extends StatefulWidget {
 
   @override
   _SearchScreenState createState() =>
-      _SearchScreenState(hintText, dataList, initialValue, searchType);
+      _SearchScreenState(hintText, dataList, allData, initialValue, searchType);
 }
 
 class _SearchScreenState extends State<SearchScreen> {
   final String hintText;
   List<dynamic> dataList;
+  SearchResultModel allData;
   final initialValue;
   final searchType;
 
-  _SearchScreenState(
-      this.hintText, this.dataList, this.initialValue, this.searchType);
+  _SearchScreenState(this.hintText, this.dataList, this.allData,
+      this.initialValue, this.searchType);
 
   List<Widget> mass;
   bool isSearch = false;
@@ -44,8 +50,30 @@ class _SearchScreenState extends State<SearchScreen> {
   FocusNode focusNode = FocusNode();
 
   Future<List<Biomarker>> getBiomarkers(String _query) async {
-    print("SENT");
-    return await api.biomarker.search(_query);
+    var res = await api.biomarker.search("\"" + _query + "\"");
+    if (res != null) {
+      return res;
+    } else {
+      return store.state.biomarkerList.biomarkers;
+    }
+  }
+
+  Future<SearchResultModel> getAll(String _query) async {
+    var res = await api.helper.search("\"" + _query + "\"");
+    if (res != null) {
+      return res;
+    } else {
+      return null;
+    }
+  }
+
+  Future<List<Unit>> getUnits(String _query) async {
+    var res = await api.unit.search("\"" + _query + "\"");
+    if (res != null) {
+      return res;
+    } else {
+      return store.state.unitList.units;
+    }
   }
 
   List<Biomarker> _biomarkers;
@@ -66,12 +94,27 @@ class _SearchScreenState extends State<SearchScreen> {
                     autofocus: true,
                     controller: _searchController,
                     onChanged: (val) {
-                      getBiomarkers(val).then((x) => {
-                            print(val),
-                            setState(() {
-                              dataList = x;
-                            })
-                          });
+                      if (searchType == "biomarker" || searchType == "memberBiomarker")
+                        getBiomarkers(val).then((x) => {
+                              print(val),
+                              setState(() {
+                                dataList = x;
+                              })
+                            });
+                      else if (searchType == "unit")
+                        getUnits(val).then((x) => {
+                              print(val),
+                              setState(() {
+                                dataList = x;
+                              })
+                            });
+                      else
+                        getAll(val).then((x) => {
+                              print(val),
+                              setState(() {
+                                allData = x;
+                              })
+                            });
                     },
                     decoration: InputDecoration(
                         filled: true,
@@ -96,31 +139,131 @@ class _SearchScreenState extends State<SearchScreen> {
                         suffixIcon: IconButton(
                           onPressed: () {
                             _searchController.text = "";
+                            setState(() {
+                              if (searchType == "biomarker" || searchType == "memberBiomarker")
+                                dataList = store.state.biomarkerList.biomarkers;
+                              else if (searchType == "unit")
+                                dataList = store.state.unitList.units;
+                              else{
+                                allData = null;
+                                dataList = null;
+                              }
+                            });
                           },
                           icon: Icon(Icons.clear,
                               color: Theme.of(context).primaryColor),
                         ))))),
-        body: dataList != null
-            ? ListView.separated(
-                separatorBuilder: (context, index) => Divider(
-                      color: Theme.of(context).colorScheme.onSurface,
+        body: Container(
+            height: MediaQuery.of(context).size.height -
+                AppBar().preferredSize.height -
+                61,
+            child: dataList != null
+                ? ListView.separated(
+                    separatorBuilder: (context, index) => Divider(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                    padding: EdgeInsets.only(
+                      left: Indents.md,
+                      right: Indents.md,
                     ),
-                padding: EdgeInsets.only(
-                  left: Indents.md,
-                  right: Indents.md,
-                ),
-                itemCount: dataList.length,
-                itemBuilder: (context, index) => Container(
-                    child: searchType == "biomarker"
-                        ? _biomarkerItems(context, dataList[index])
-                        : searchType == "unit"
-                            ? _unitItems(context, dataList[index])
-                            : Text("Тип поиска не определен :(")))
-            : Container());
+                    itemCount: dataList.length,
+                    itemBuilder: (context, index) => Container(
+                        child: searchType == "biomarker"
+                            ? _biomarkerItems(context, dataList[index])
+                            : searchType == "unit"
+                                ? _unitItems(context, dataList[index])
+                                : searchType == "memberBiomarker"
+                                    ? _memberBiomarkerItem(
+                                        context, dataList[index])
+                                    : Text("Тип поиска не определен :(")))
+                : allData != null
+                    ? _allItems(context, allData)
+                    : Container()));
+  }
+
+  Widget _allItems(BuildContext context, SearchResultModel data) {
+    print(data);
+    return Column(children: [
+      data.biomarkers.isNotEmpty &&
+              store.state.memberBiomarkerList.biomarkers.isNotEmpty
+          ? _memberBiomarkerList(context, data.biomarkers)
+          : Container(),
+      data.categories.isNotEmpty
+          ? _categoryList(context, data.categories)
+          : Container(),
+    ]);
+  }
+
+  Widget _memberBiomarkerList(BuildContext context, List<Biomarker> data) {
+    return Container(
+      padding:
+          EdgeInsets.only(top: Indents.sm, left: Indents.md, right: Indents.md),
+      margin: EdgeInsets.only(bottom: Indents.md),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: EdgeInsets.only(bottom: Indents.sm),
+            child: Text(
+              "Биомаркеры",
+              style: Theme.of(context)
+                  .textTheme
+                  .headline6
+                  .merge(TextStyle(color: Theme.of(context).primaryColor)),
+            ),
+          ),
+          Container(
+              height: data.length * 76.0,
+              child: ListView.builder(
+                  itemCount: data.length,
+                  itemBuilder: (context, index) =>
+                      _memberBiomarkerItem(context, data[index]))),
+        ],
+      ),
+    );
+  }
+
+  Widget _categoryList(BuildContext context, List<Category> data) {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: EdgeInsets.only(bottom: Indents.sm),
+            padding: EdgeInsets.only(left: Indents.md, right: Indents.md),
+            child: Text(
+              "Категории",
+              style: Theme.of(context)
+                  .textTheme
+                  .headline6
+                  .merge(TextStyle(color: Theme.of(context).primaryColor)),
+            ),
+          ),
+          Container(
+              height: data.length * 76.0,
+              child: ListView.builder(
+                  itemCount: data.length,
+                  itemBuilder: (context, index) =>
+                      CategoryItem(index: index, category: data[index]))),
+        ],
+      ),
+    );
+  }
+
+  Widget _memberBiomarkerItem(BuildContext context, Biomarker data) {
+    MemberBiomarker memberBiomarker = store.state.memberBiomarkerList.biomarkers
+        .firstWhere((element) => element.biomarkerId == data.id);
+    return BiomarkerItem(
+      value: memberBiomarker.value ?? "null",
+      unit: memberBiomarker.unit.content.shorthand ?? "unnamed",
+      id: memberBiomarker.biomarkerId,
+      withActions: false,
+    );
   }
 
   Widget _biomarkerItems(BuildContext context, Biomarker data) {
     bool isAdded;
+    print(data);
     try {
       store.state.memberBiomarkerModelList.biomarkers?.firstWhere(
           (element) => element.biomarkerId == data.id,
@@ -184,10 +327,8 @@ class _SearchScreenState extends State<SearchScreen> {
           padding: EdgeInsets.symmetric(vertical: Indents.sm),
           child: Text(
             data.content.name,
-            style: Theme.of(context)
-                .textTheme
-                .bodyText2
-                .merge(TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+            style: Theme.of(context).textTheme.bodyText2.merge(
+                TextStyle(color: Theme.of(context).colorScheme.onSurface)),
           ),
         ));
   }

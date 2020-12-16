@@ -5,13 +5,19 @@ import 'package:biomad_frontend/styles/indents.dart';
 import 'package:flutter/material.dart';
 
 class NavPageBar extends StatefulWidget {
+  final index;
+
+  NavPageBar({Key key, this.index}) : super(key: key);
+
   @override
-  _NavPageBarState createState() => _NavPageBarState();
+  _NavPageBarState createState() => _NavPageBarState(index);
 }
 
 class _NavPageBarState extends State<NavPageBar> {
   List<String> navPageBar = ["Моё здоровье", "Биомаркеры"];
-  int selectedIndex = 0;
+  int selectedIndex;
+
+  _NavPageBarState(this.selectedIndex);
 
   @override
   Widget build(BuildContext context) {
@@ -22,13 +28,17 @@ class _NavPageBarState extends State<NavPageBar> {
             itemCount: navPageBar.length,
             itemBuilder: (context, index) => buildNavTopBar(index)));
   }
+
   Widget buildNavTopBar(int index) {
     return GestureDetector(
       onTap: () {
         setState(() {
           selectedIndex = index;
-          if (navPageBar[index] == "Биомаркеры"){
-            Keys.rootNavigator.currentState.pushReplacementNamed(Routes.biomarker_list);
+          if (navPageBar[index] == "Биомаркеры") {
+            Keys.rootNavigator.currentState
+                .pushReplacementNamed(Routes.biomarker_list);
+          } else {
+            Keys.rootNavigator.currentState.pushReplacementNamed(Routes.main);
           }
         });
       },

@@ -43,9 +43,11 @@ class BiomarkerApi extends ApiBase<BiomarkerApi> {
     }
   }
 
-  Future<Biomarker> infoById(int id) async {
+  Future<Biomarker> infoById(int id, int unitId) async {
     try {
-      var url = '${v}/biomarker/${id}';
+      var url = unitId != null
+          ? '${v}/biomarker/${id}?unitId=$unitId'
+          : '${v}/biomarker/${id}';
       var response = await dio.get(url);
       return Biomarker.fromJson(response.data);
     } on DioError catch (e) {
@@ -56,12 +58,9 @@ class BiomarkerApi extends ApiBase<BiomarkerApi> {
   Future<List<Biomarker>> search(String query) async {
     try {
       var url = '${v}/biomarker/search';
-      print("SENT ON SERVER");
       var response = await dio.post(url, data: query);
-      print("QUERY: " + response.toString());
       return Biomarker.listFromJson(response.data);
     } on DioError catch (e) {
-      print("ERROR: " + e.toString());
       return null;
     }
   }

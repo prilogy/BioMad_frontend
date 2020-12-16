@@ -8,12 +8,16 @@ import 'package:biomad_frontend/helpers/i18n_helper.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/models/authorization.dart';
 import 'package:biomad_frontend/router/main.dart';
+import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
 import 'package:biomad_frontend/styles/avatar_sizes.dart';
+import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/color_alphas.dart';
 import 'package:biomad_frontend/styles/indents.dart';
+import 'package:biomad_frontend/widgets/add_reference_alert.dart';
 import 'package:biomad_frontend/widgets/block_base_widget.dart';
+import 'package:biomad_frontend/widgets/custom_button.dart';
 import 'package:biomad_frontend/widgets/custom_circle_avatar.dart';
 import 'package:biomad_frontend/widgets/custom_list_tile.dart';
 import 'package:biomad_frontend/widgets/custom_divider.dart';
@@ -36,6 +40,8 @@ class _AccountContainerState extends State<AccountContainer> {
     final _ttr = trWithKey('gender');
     final user = store.state.user;
     final currentMember = store.state.authorization.currentMember;
+    List<Biomarker> customBiomarker = [];
+
     //Добавить локализацию
     //gendersAsync(); //Подгрузка гендеров
 
@@ -149,6 +155,122 @@ class _AccountContainerState extends State<AccountContainer> {
                   ],
                 ),
               );
+            }),
+        CustomDivider(
+          text: "Собственные референсы",
+          dividerPadding: EdgeInsets.symmetric(vertical: Indents.smd),
+        ),
+        StoreConnector<AppState, List<Biomarker>>(
+            converter: (store) => store.state.biomarkerList.biomarkers,
+            builder: (ctx, state) {
+              customBiomarker = [];
+              for (var item in store.state.biomarkerList.biomarkers) {
+                if (item.reference.isOwnReference) customBiomarker.add(item);
+              }
+              return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    customBiomarker.length != 0
+                        ? Container(
+                            height: customBiomarker.length * 30.0,
+                            child: ListView.separated(
+                              separatorBuilder: (context, index) => Divider(
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                              padding: EdgeInsets.only(
+                                left: Indents.md,
+                                right: Indents.md,
+                              ),
+                              itemCount: customBiomarker.length,
+                              itemBuilder: (context, index) => Container(
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                    Text(
+                                      customBiomarker[index].content.name,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText2
+                                          .merge(TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface)),
+                                    ),
+                                    Row(children: [
+                                      Text(
+                                        customBiomarker[index]
+                                                .reference
+                                                .valueA
+                                                .toString() +
+                                            " - " +
+                                            customBiomarker[index]
+                                                .reference
+                                                .valueB
+                                                .toString() +
+                                            " " +
+                                            store.state.unitList.units
+                                                .firstWhere((element) =>
+                                                    element.id ==
+                                                    customBiomarker[index]
+                                                        .reference
+                                                        .unitId)
+                                                .content
+                                                .shorthand,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText2
+                                            .merge(TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface)),
+                                      ),
+                                      Container(
+                                        width: 20,
+                                        height: 20,
+                                        child: FittedBox(
+                                            alignment: Alignment.center,
+                                            fit: BoxFit.fitWidth,
+                                            child: IconButton(
+                                                icon: Icon(
+                                                  Icons.close,
+                                                  size: 40,
+                                                  color: BioMadColors.error,
+                                                ),
+                                                onPressed: () {
+                                                  api.memberBiomarker
+                                                      .deleteReference(
+                                                          customBiomarker[index]
+                                                              .id);
+                                                })),
+                                      ),
+                                    ])
+                                  ])),
+                            ))
+                        : Container(
+                            margin: EdgeInsets.only(left: Indents.slg),
+                            child: Text(
+                                "Собственные референсы пока что не добавлены.")),
+                    Container(
+                      padding: EdgeInsets.zero,
+                      width: 220,
+                      child: CustomButton.flat(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AddReferenceAlertDialog(context,
+                                  title: "Указать референс",
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: Indents.md));
+                            },
+                          );
+                        },
+                        text: "Добавить или изменить",
+                      ),
+                    )
+                  ]);
             }),
         CustomDivider(
           text: _tr('socials'),

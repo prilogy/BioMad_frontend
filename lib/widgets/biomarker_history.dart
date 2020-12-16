@@ -2,6 +2,7 @@ import 'package:api/api.dart';
 import 'package:biomad_frontend/helpers/indents_mixin.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/router/main.dart';
+import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
@@ -9,90 +10,79 @@ import 'package:flutter/material.dart';
 
 import 'biomarker_alert.dart';
 
-class BiomarkerHistory extends StatelessWidget with IndentsMixin {
-  final Widget child;
-  final int id;
-  final MemberBiomarker biomarker;
-  final String name;
-  final double value;
-  final String unit;
-  final String status;
-  final TextStyle headerMergeStyle;
-  final CrossAxisAlignment crossAxisAlignment;
-  final bool withActions;
-  final List<MemberBiomarker> biomarkerHistory;
+// ignore: must_be_immutable
+class BiomarkerHistory extends StatelessWidget {
+  final MemberBiomarker memberBiomarker;
+  final String title;
 
-  final EdgeInsetsGeometry margin;
-  final EdgeInsetsGeometry padding;
+  BiomarkerHistory({
+    this.memberBiomarker,
+    this.title,
+  });
 
-  final EdgeInsetsGeometry headerPadding;
+  BiomarkerHistory.forScrollingViews({
+    this.memberBiomarker,
+    this.title,
+  });
 
-  static const EdgeInsetsGeometry _defaultMargin =
-      const EdgeInsets.only(bottom: Indents.md);
+  Future<List<MemberBiomarker>> getBiomarkerHistory(int id) async {
+    return await api.memberBiomarker.history(id, memberBiomarker.unitId);
+  }
 
-  BiomarkerHistory(
-      {this.child,
-      this.id,
-      this.biomarker,
-      this.name = "",
-      this.value,
-      this.biomarkerHistory,
-      this.unit = "",
-      this.status = "",
-      this.headerMergeStyle,
-      this.headerPadding = const EdgeInsets.all(0),
-      this.crossAxisAlignment = CrossAxisAlignment.start,
-      this.padding = const EdgeInsets.symmetric(horizontal: Indents.md),
-      this.withActions = true,
-      this.margin = _defaultMargin});
-
-  BiomarkerHistory.forScrollingViews(
-      {this.child,
-      this.id,
-      this.biomarker,
-      this.name,
-      this.value,
-      this.biomarkerHistory,
-      this.unit,
-      this.status,
-      this.withActions,
-      this.headerMergeStyle,
-      this.crossAxisAlignment = CrossAxisAlignment.start,
-      this.headerPadding = const EdgeInsets.only(left: Indents.md),
-      this.padding = const EdgeInsets.all(0),
-      this.margin = _defaultMargin});
+  Future<List<MemberBiomarker>> biomarkerHistory;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    var theme = Theme.of(context);
 
-    return Container(
-      height: 23 * biomarkerHistory.length.toDouble() <= 90
-          ? 23 * biomarkerHistory.length.toDouble()
-          : 90,
-      width: MediaQuery.of(context).size.width,
-      child: ListView.builder(
-          itemCount: biomarkerHistory.length,
-          itemBuilder: (context, index) => historyItem(context, index)),
-    );
+    biomarkerHistory = getBiomarkerHistory(memberBiomarker.biomarkerId);
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Container(
+        margin: EdgeInsets.only(bottom: Indents.sm),
+        child: Text(
+          "История",
+          style: theme.textTheme.headline6
+              .merge(TextStyle(color: theme.primaryColor)),
+        ),
+      ),
+      FutureBuilder(
+          future: biomarkerHistory,
+          builder:
+              (context, AsyncSnapshot<List<MemberBiomarker>> biomarkerHistory) {
+            if (biomarkerHistory.hasData) {
+              return Container(
+                height: 23 * biomarkerHistory.data.length.toDouble() <= 90
+                    ? 23 * biomarkerHistory.data.length.toDouble()
+                    : 90,
+                width: MediaQuery.of(context).size.width,
+                child: ListView.builder(
+                    itemCount: biomarkerHistory.data.length,
+                    itemBuilder: (context, index) => historyItem(
+                        context, index, biomarkerHistory.data[index])),
+              );
+            } else {
+              return Container(
+                child: Text("Загрузка истории"),
+              );
+            }
+          })
+    ]);
   }
 
-  Widget historyItem(context, int index) {
+  Widget historyItem(context, int index, MemberBiomarker data) {
     final theme = Theme.of(context);
 
     var color;
     var status;
     var icon;
     var reference = store.state.biomarkerList.biomarkers
-        .firstWhere(
-            (element) => element.id == biomarkerHistory[index].biomarkerId)
+        .firstWhere((element) => element.id == data.biomarkerId)
         .reference;
 
-    if (reference.valueA <= biomarkerHistory[index].value &&
-        biomarkerHistory[index].value <= reference.valueB) {
+    if (reference.valueA <= data.value && data.value <= reference.valueB) {
       color = BioMadColors.success;
       status = "норма";
-    } else if (biomarkerHistory[index].value < reference.valueA) {
+    } else if (data.value < reference.valueA) {
       color = BioMadColors.warning;
       status = "пониженный";
       icon = Icons.keyboard_arrow_down;
@@ -121,28 +111,30 @@ class BiomarkerHistory extends StatelessWidget with IndentsMixin {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            biomarkerHistory[index].dateCreatedAt.day.toString() +
+            data.dateCreatedAt.day.toString() +
                 '.' +
-                zeroAdding(biomarkerHistory[index].dateCreatedAt.month) +
+                zeroAdding(data.dateCreatedAt.month) +
                 '.' +
-                biomarkerHistory[index].dateCreatedAt.year.toString() +
+                data.dateCreatedAt.year.toString() +
                 ' ' +
-                biomarkerHistory[index].dateCreatedAt.hour.toString() +
+                data.dateCreatedAt.hour.toString() +
                 ':' +
-                zeroAdding(biomarkerHistory[index].dateCreatedAt.minute),
+                zeroAdding(data.dateCreatedAt.minute),
             style: theme.textTheme.bodyText1,
           ),
           Row(
             children: [
               Container(
-                  padding: status == "норма" ? EdgeInsets.only(right: Indents.sm) : null,
+                  padding: status == "норма"
+                      ? EdgeInsets.only(right: Indents.sm)
+                      : null,
                   child: icon != null
                       ? Icon(icon, color: color, size: 18.0)
                       : iconContainer),
               Text(
-                biomarkerHistory[index].value.toString() +
+                data.value.toString() +
                     " " +
-                    biomarkerHistory[index].unit.content.shorthand +
+                    data.unit.content.shorthand +
                     ", " +
                     status,
               ),

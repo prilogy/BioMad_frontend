@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'biomarker_form_field.dart';
 import 'custom_text_form_field.dart';
 
-class BiomarkerAlertDialog extends StatefulWidget {
+class AddReferenceAlertDialog extends StatefulWidget {
   final Widget child;
   final String title;
   final String hintBiomarker;
@@ -22,9 +22,9 @@ class BiomarkerAlertDialog extends StatefulWidget {
   final EdgeInsetsGeometry contentPadding;
   final EdgeInsetsGeometry titlePadding;
   final double contentHeight;
-  final void Function(MemberBiomarkerModel) onChange;
+  final void Function(MemberBiomarkerReferenceModel) onChange;
 
-  BiomarkerAlertDialog(BuildContext context,
+  AddReferenceAlertDialog(BuildContext context,
       {Key key,
       this.child,
       this.title,
@@ -39,7 +39,7 @@ class BiomarkerAlertDialog extends StatefulWidget {
       : super(key: key);
 
   @override
-  _BiomarkerAlertDialogState createState() => _BiomarkerAlertDialogState(
+  _AddReferenceAlertDialogState createState() => _AddReferenceAlertDialogState(
       child,
       title,
       hintBiomarker,
@@ -51,7 +51,7 @@ class BiomarkerAlertDialog extends StatefulWidget {
       contentHeight);
 }
 
-class _BiomarkerAlertDialogState extends State<BiomarkerAlertDialog> {
+class _AddReferenceAlertDialogState extends State<AddReferenceAlertDialog> {
   final Widget child;
   final String title;
   final String hintBiomarker;
@@ -66,7 +66,7 @@ class _BiomarkerAlertDialogState extends State<BiomarkerAlertDialog> {
   );
   final double contentHeight;
 
-  _BiomarkerAlertDialogState(
+  _AddReferenceAlertDialogState(
       this.child,
       this.title,
       this.hintBiomarker,
@@ -78,7 +78,8 @@ class _BiomarkerAlertDialogState extends State<BiomarkerAlertDialog> {
       this.contentHeight);
 
   //Форма биомаркеров
-  var _biomarkerValueController = TextEditingController();
+  var _biomarkerValueAController = TextEditingController();
+  var _biomarkerValueBController = TextEditingController();
 
   //analysisId;
   var _biomarkerIdController = TextEditingController();
@@ -100,7 +101,10 @@ class _BiomarkerAlertDialogState extends State<BiomarkerAlertDialog> {
       choosedBiomarker = store.state.biomarkerList.biomarkers
           .firstWhere((element) => element.id == biomarker.biomarkerId);
       _biomarkerIdController.text = choosedBiomarker.content.name;
-      _biomarkerValueController.text = biomarker.value.toString();
+      _biomarkerValueAController.text =
+          choosedBiomarker.reference.valueA.toString();
+      _biomarkerValueBController.text =
+          choosedBiomarker.reference.valueB.toString();
       unit = store.state.unitList.units
           .firstWhere((element) => element.id == biomarker.unitId);
       _biomarkerUnitIdController.text = unit.content.name;
@@ -110,14 +114,16 @@ class _BiomarkerAlertDialogState extends State<BiomarkerAlertDialog> {
   }
 
   //TODO: Добавить валидаторы
-  MemberBiomarkerModel getMemberBiomarkerModel() => MemberBiomarkerModel(
-        value: double.parse(_biomarkerValueController.text),
-        biomarkerId: biomarkerId,
+  MemberBiomarkerReferenceModel getMemberBiomarkerReferenceModel() =>
+      MemberBiomarkerReferenceModel(
+        valueA: double.parse(_biomarkerValueAController.text),
+        valueB: double.parse(_biomarkerValueBController.text),
         unitId: unitId,
+        biomarkerId: biomarkerId,
       );
 
   void onBiomarkerChange() {
-    widget.onChange(getMemberBiomarkerModel());
+    widget.onChange(getMemberBiomarkerReferenceModel());
   }
 
   @override
@@ -129,7 +135,7 @@ class _BiomarkerAlertDialogState extends State<BiomarkerAlertDialog> {
         scrollable: true,
         insetPadding: EdgeInsets.symmetric(horizontal: Indents.lg),
         content: Container(
-          height: contentHeight ?? MediaQuery.of(context).size.height / 3 - 40,
+          height: contentHeight ?? MediaQuery.of(context).size.height / 2.6,
           width: MediaQuery.of(context).size.width,
           child: ScrollConfiguration(
               behavior: NoRippleScrollBehaviour(),
@@ -207,10 +213,16 @@ class _BiomarkerAlertDialogState extends State<BiomarkerAlertDialog> {
                                 },
                               ),
                               CustomTextFormField(
-                                  controller: _biomarkerValueController,
+                                  controller: _biomarkerValueAController,
                                   validator: null,
                                   keyboardType: TextInputType.number,
-                                  labelText: "Значение",
+                                  labelText: "Нижняя граница",
+                                  onTap: () {}),
+                              CustomTextFormField(
+                                  controller: _biomarkerValueBController,
+                                  validator: null,
+                                  keyboardType: TextInputType.number,
+                                  labelText: "Верхняя граница",
                                   onTap: () {}),
                               CustomTextFormField(
                                 controller: _biomarkerUnitIdController,
@@ -238,7 +250,8 @@ class _BiomarkerAlertDialogState extends State<BiomarkerAlertDialog> {
                                           hintText: hintUnit ??
                                               "Введите единицу измерения",
                                           dataList: dataList,
-                                          initialValue: _biomarkerUnitIdController.text,
+                                          initialValue:
+                                              _biomarkerUnitIdController.text,
                                           searchType: "unit",
                                         );
                                       }).then((val) {
@@ -300,24 +313,15 @@ class _BiomarkerAlertDialogState extends State<BiomarkerAlertDialog> {
             },
           ),
           TextButton(
-            child: biomarker != null ? Text('Изменить') : Text('Добавить'),
+            child: Text('Сохранить'),
             onPressed: () {
-              MemberBiomarkerModel answer = getMemberBiomarkerModel();
-
-              if (biomarker != null) {
-                MemberBiomarkerModel bio =
-                    store.state.memberBiomarkerModelList.biomarkers.firstWhere(
-                        (element) => element.biomarkerId == biomarkerId);
-                bio.value = answer.value;
-                bio.unitId = answer.unitId;
-              } else {
-                store.state.memberBiomarkerModelList.biomarkers.add(answer);
-              }
-
-              store.dispatch(StoreThunks.setMemberBiomarkerModels(
-                  store.state.memberBiomarkerModelList.biomarkers));
-              print(store.state.memberBiomarkerModelList.biomarkers);
-
+              MemberBiomarkerReferenceModel answer =
+                  getMemberBiomarkerReferenceModel();
+              api.memberBiomarker
+                  .addReference(answer)
+                  .then((value) => print("REQUEST STATE: " + value.toString()));
+              store.dispatch(StoreThunks.refreshBiomarkers(true));
+              print(answer);
               Navigator.of(context).pop();
             },
           ),

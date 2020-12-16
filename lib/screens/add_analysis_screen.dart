@@ -49,7 +49,7 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
       name: _analysisController.text ?? "Неопределено",
       date: DateTimeFormats.defaultDate.parse(_dateController.text) ??
           DateTimeFormats.defaultDate.format(DateTime.now()),
-      labId: _labId,
+      //labId: _labId,
       description: _descriptionController.text == "" ||
               _descriptionController.text == null
           ? "Примечаний нет"
@@ -107,8 +107,11 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                     MemberAnalysisModel result = getMemberAnalysisModel();
                     api.memberAnalysis.add(result);
                     try {
+                      _biomarkers =
+                          store.state.memberBiomarkerModelList.biomarkers;
                       print(_biomarkers[0].value);
                       store.dispatch(StoreThunks.refreshMemberBiomarkers());
+                      store.dispatch(StoreThunks.refreshMemberAnalysis());
                       Keys.rootNavigator.currentState
                           .pushReplacementNamed(Routes.main);
                     } catch (e) {
@@ -218,6 +221,8 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                         converter: (store) =>
                             store.state.memberBiomarkerModelList.biomarkers,
                         builder: (ctx, state) {
+                          _biomarkers =
+                              store.state.memberBiomarkerModelList.biomarkers;
                           return Container(
                               height: 76 * _biomarkers.length.toDouble(),
                               width: MediaQuery.of(context).size.width,

@@ -5,25 +5,22 @@ class MemberAnalysisModel {
 
   String description = null;
 
-  int labId = null;
-
   DateTime date = null;
 
   List<MemberBiomarkerModel> biomarkers = [];
 
   MemberAnalysisModel(
-      {this.name, this.description, this.labId, this.date, this.biomarkers});
+      {this.name, this.description, this.date, this.biomarkers});
 
   @override
   String toString() {
-    return 'MemberAnalysisModel[name=$name, description=$description, labId=$labId, date=$date, biomarkers=$biomarkers, ]';
+    return 'MemberAnalysisModel[name=$name, description=$description, date=$date, biomarkers=$biomarkers, ]';
   }
 
   MemberAnalysisModel.fromJson(Map<String, dynamic> json) {
     if (json == null) return;
     name = json['name'];
     description = json['description'];
-    labId = json['labId'];
     date = (json['date'] == null) ? null : DateTime.parse(json['date']);
     biomarkers = (json['biomarkers'] == null)
         ? null
@@ -34,7 +31,6 @@ class MemberAnalysisModel {
     Map<String, dynamic> json = {};
     json['name'] = name;
     json['description'] = description;
-    if (labId != null) json['labId'] = labId;
     if (date != null)
       json['date'] = date == null ? null : date.toUtc().toIso8601String();
     json['biomarkers'] = biomarkers;
