@@ -3,6 +3,7 @@ import 'package:biomad_frontend/helpers/indents_mixin.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/screens/biomarker_screen.dart';
+import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
@@ -14,6 +15,7 @@ import 'biomarker_alert.dart';
 class BiomarkerItem extends StatelessWidget with IndentsMixin {
   final Widget child;
   final int id;
+  final int unitId;
   final double value;
   final String unit;
   final bool isModel;
@@ -32,7 +34,8 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
 
   BiomarkerItem(
       {this.child,
-      this.id,
+      @required this.id,
+      @required this.unitId,
       this.value,
       this.unit = "",
       this.isModel = false,
@@ -46,7 +49,8 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
 
   BiomarkerItem.forScrollingViews(
       {this.child,
-      this.id,
+      @required this.id,
+      @required this.unitId,
       this.value,
       this.unit,
       this.isModel,
@@ -65,172 +69,192 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
     String status;
     var color;
     var icon;
-    var reference = store.state.biomarkerList.biomarkers
-        .firstWhere((element) => element.id == id)
-        .reference;
 
-    if (reference.valueA <= value && value <= reference.valueB) {
-      color = BioMadColors.success;
-      status = "норма";
-    } else if (value < reference.valueA) {
-      color = BioMadColors.warning;
-      status = "пониженный";
-      icon = Icons.keyboard_arrow_down;
-    } else {
-      color = BioMadColors.warning;
-      status = "повышенный";
-      icon = Icons.keyboard_arrow_up;
+    Future<Biomarker> getBiomarkerById(int id, int unitId) async {
+      return await api.biomarker.infoById(id, unitId);
     }
 
-    var iconContainer = Container(
-        height: 6.0,
-        width: 6.0,
-        margin: EdgeInsets.only(right: Indents.sm),
-        decoration: new BoxDecoration(
-          color: color,
-          shape: BoxShape.circle,
-        ));
-
     MemberBiomarkerModel _biomarkerModel;
-    Biomarker biomarker;
     if (isModel)
       _biomarkerModel = store.state.memberBiomarkerModelList.biomarkers
           .firstWhere((element) => element.biomarkerId == id);
 
-    biomarker = store.state.biomarkerList.biomarkers
-        .firstWhere((element) => element.id == id);
+    Future<Biomarker> biomarker = getBiomarkerById(id, unitId);
 
-    return GestureDetector(
-      onTap: () {
-        return withActions
-            ? null
-            : showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return BioMarkerScreen(biomarkerId: id);
-                });
-      },
-      child: Container(
-        margin: EdgeInsets.only(
-          top: Indents.smd,
-        ),
-        decoration: BoxDecoration(
-          color: BioMadColors.base[100],
-          borderRadius: BorderRadius.all(Radius.circular(4)),
-          boxShadow: [
-            BoxShadow(
-              color: BioMadColors.base.withOpacity(0.06),
-              blurRadius: 7,
-              offset: Offset(0, 2), // changes position of shadow
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(children: [
-              Container(
-                padding: EdgeInsets.all(Indents.md),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      biomarker.content.name,
-                      style: theme.textTheme.subtitle1,
+    return FutureBuilder(
+        future: biomarker,
+        builder: (context, AsyncSnapshot<Biomarker> biomarker) {
+          if (biomarker.hasData) {
+            if (biomarker.data.state == BiomarkerStateType.number2_) {
+              color = BioMadColors.success;
+              status = "норма";
+            } else if (biomarker.data.state == BiomarkerStateType.number1_) {
+              color = BioMadColors.warning;
+              status = "пониженный";
+              icon = Icons.keyboard_arrow_down;
+            } else if (biomarker.data.state == BiomarkerStateType.number0_) {
+              color = BioMadColors.warning;
+              status = "повышенный";
+              icon = Icons.keyboard_arrow_up;
+            } else {
+              status = "не определено";
+              icon = Icons.keyboard_arrow_right;
+            }
+
+            var iconContainer = Container(
+                height: 6.0,
+                width: 6.0,
+                decoration: new BoxDecoration(
+                  color: color,
+                  shape: BoxShape.circle,
+                ));
+
+            return GestureDetector(
+              onTap: () {
+                return withActions
+                    ? null
+                    : showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return BioMarkerScreen(biomarkerId: id);
+                        });
+              },
+              child: Container(
+                margin: EdgeInsets.only(
+                  top: Indents.smd,
+                ),
+                decoration: BoxDecoration(
+                  color: BioMadColors.base[100],
+                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: BioMadColors.base.withOpacity(0.06),
+                      blurRadius: 7,
+                      offset: Offset(0, 2), // changes position of shadow
                     ),
-                    Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                  child: icon != null
-                                      ? Icon(icon, color: color, size: 16.0)
-                                      : iconContainer),
-                              Text(
-                                  value.toString() + ' ' + unit + ', ' + status,
-                                  style: Theme.of(context).textTheme.bodyText2),
-                            ],
-                          ),
-                        ],
-                      ),
-                    )
                   ],
                 ),
-              )
-            ]),
-            withActions
-                ? Row(
-                    children: [
-                      IconButton(
-                        icon: Icon(
-                          Icons.edit,
-                          color: BioMadColors.primary,
-                          size: 24.0,
-                        ),
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return BiomarkerAlertDialog(
-                                context,
-                                biomarker: _biomarkerModel,
-                                title: "Изменить биомаркер",
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: Text('Отмена'),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                  TextButton(
-                                    child: Text('Изменить'),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(children: [
+                      Container(
+                        padding: EdgeInsets.all(Indents.md),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              biomarker.data.content.name,
+                              style: theme.textTheme.subtitle1,
+                            ),
+                            Container(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Container(
+                                          child: icon != null
+                                              ? Icon(icon,
+                                                  color: color, size: 16.0)
+                                              : iconContainer),
+                                      Text(
+                                          value.toString() +
+                                              ' ' +
+                                              unit +
+                                              ', ' +
+                                              status,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText2),
+                                    ],
                                   ),
                                 ],
-                                //contentHeight: h,
-                                contentPadding:
-                                    EdgeInsets.symmetric(vertical: Indents.md),
-                              );
-                            },
-                          );
-                        },
-                      ),
-                      IconButton(
-                          icon: Icon(
-                            Icons.close,
-                            color: BioMadColors.error,
-                            size: 24.0,
-                          ),
-                          onPressed: () {
-                            store.state.memberBiomarkerModelList.biomarkers
-                                .removeAt(index);
-                            store.dispatch(StoreThunks.setMemberBiomarkerModels(
-                                store.state.memberBiomarkerModelList.biomarkers));
-                          })
-                    ],
-                  )
-                : IconButton(
-                    icon: Icon(
-                      Icons.arrow_forward,
-                      color: BioMadColors.primary,
-                      size: 24.0,
-                    ),
-                    onPressed: () {
-                      return showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return BioMarkerScreen(biomarkerId: id);
-                          });
-                    }),
-          ],
-        ),
-      ),
-    );
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ]),
+                    withActions
+                        ? Row(
+                            children: [
+                              IconButton(
+                                icon: Icon(
+                                  Icons.edit,
+                                  color: BioMadColors.primary,
+                                  size: 24.0,
+                                ),
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return BiomarkerAlertDialog(
+                                        context,
+                                        biomarker: _biomarkerModel,
+                                        title: "Изменить биомаркер",
+                                        actions: <Widget>[
+                                          TextButton(
+                                            child: Text('Отмена'),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                          TextButton(
+                                            child: Text('Изменить'),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ],
+                                        //contentHeight: h,
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: Indents.md),
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                              IconButton(
+                                  icon: Icon(
+                                    Icons.close,
+                                    color: BioMadColors.error,
+                                    size: 24.0,
+                                  ),
+                                  onPressed: () {
+                                    store.state.memberBiomarkerModelList
+                                        .biomarkers
+                                        .removeAt(index);
+                                    store.dispatch(
+                                        StoreThunks.setMemberBiomarkerModels(
+                                            store.state.memberBiomarkerModelList
+                                                .biomarkers));
+                                  })
+                            ],
+                          )
+                        : IconButton(
+                            icon: Icon(
+                              Icons.arrow_forward,
+                              color: BioMadColors.primary,
+                              size: 24.0,
+                            ),
+                            onPressed: () {
+                              return showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return BioMarkerScreen(biomarkerId: id);
+                                  });
+                            }),
+                  ],
+                ),
+              ),
+            );
+          } else {
+            return Container(
+                child: Text("Биомаркеры ещё не загружены"));
+          }
+        });
   }
 }

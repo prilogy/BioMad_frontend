@@ -1,30 +1,28 @@
+import 'package:api/api.dart';
 import 'package:biomad_frontend/containers/category_analysis_container.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/router/main.dart';
+import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:flutter/material.dart';
 
 class CategoryAnalysisScreen extends StatefulWidget {
-  final int categoryId;
+  final Category category;
 
-  CategoryAnalysisScreen({Key key, this.categoryId}) : super(key: key);
+  CategoryAnalysisScreen({Key key, this.category}) : super(key: key);
 
   @override
   _CategoryAnalysisScreenState createState() =>
-      _CategoryAnalysisScreenState(categoryId);
+      _CategoryAnalysisScreenState(category);
 }
 
 class _CategoryAnalysisScreenState extends State<CategoryAnalysisScreen> {
-  final int categoryId;
+  final Category category;
 
-  _CategoryAnalysisScreenState(this.categoryId);
+  _CategoryAnalysisScreenState(this.category);
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    var category = store.state.categoryList.categories
-        .firstWhere((element) => element.id == categoryId);
-
     return Scaffold(
       appBar: AppBar(
         leading: Builder(
@@ -41,7 +39,7 @@ class _CategoryAnalysisScreenState extends State<CategoryAnalysisScreen> {
         title: Text(category.content.name,
             style: TextStyle(color: Theme.of(context).primaryColor)),
       ),
-      body: CategoryAnalysisContainer(categoryId: categoryId,),
+      body: CategoryAnalysisContainer(category: category,),
     );
   }
 }

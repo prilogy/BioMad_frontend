@@ -59,8 +59,6 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
     var color;
     var status;
     var icon;
-    Biomarker biomarker = store.state.biomarkerList.biomarkers
-        .firstWhere((element) => element.id == memberBiomarker.biomarkerId);
 
     if (biomarker.state == BiomarkerStateType.number2_) {
       color = BioMadColors.success;

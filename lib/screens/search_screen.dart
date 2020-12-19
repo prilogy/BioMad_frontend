@@ -51,32 +51,31 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Future<List<Biomarker>> getBiomarkers(String _query) async {
     var res = await api.biomarker.search("\"" + _query + "\"");
-    if (res != null) {
+    if (res != null)
       return res;
-    } else {
-      return store.state.biomarkerList.biomarkers;
-    }
+    else
+      return await api.biomarker.info();
+  }
+
+  Future<List<MemberBiomarker>> getMemberBiomarkers(String _query) async {
+    return await api.memberBiomarker.info();
   }
 
   Future<SearchResultModel> getAll(String _query) async {
     var res = await api.helper.search("\"" + _query + "\"");
-    if (res != null) {
+    if (res != null)
       return res;
-    } else {
+    else
       return null;
-    }
   }
 
   Future<List<Unit>> getUnits(String _query) async {
     var res = await api.unit.search("\"" + _query + "\"");
-    if (res != null) {
+    if (res != null)
       return res;
-    } else {
+    else
       return store.state.unitList.units;
-    }
   }
-
-  List<Biomarker> _biomarkers;
 
   @override
   void initState() {
@@ -94,11 +93,13 @@ class _SearchScreenState extends State<SearchScreen> {
                     autofocus: true,
                     controller: _searchController,
                     onChanged: (val) {
-                      if (searchType == "biomarker" || searchType == "memberBiomarker")
+                      if (searchType == "biomarker" ||
+                          searchType == "memberBiomarker")
                         getBiomarkers(val).then((x) => {
                               print(val),
                               setState(() {
                                 dataList = x;
+                                print(dataList);
                               })
                             });
                       else if (searchType == "unit")
@@ -140,11 +141,16 @@ class _SearchScreenState extends State<SearchScreen> {
                           onPressed: () {
                             _searchController.text = "";
                             setState(() {
-                              if (searchType == "biomarker" || searchType == "memberBiomarker")
-                                dataList = store.state.biomarkerList.biomarkers;
+                              if (searchType == "biomarker" ||
+                                  searchType == "memberBiomarker")
+                                getBiomarkers("").then((x) => {
+                                      setState(() {
+                                        dataList = x;
+                                      })
+                                    });
                               else if (searchType == "unit")
                                 dataList = store.state.unitList.units;
-                              else{
+                              else {
                                 allData = null;
                                 dataList = null;
                               }
@@ -183,9 +189,14 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _allItems(BuildContext context, SearchResultModel data) {
     print(data);
+    List<MemberBiomarker> memberBiomarker;
+    getMemberBiomarkers("").then((x) => {
+          setState(() {
+            memberBiomarker = x;
+          })
+        });
     return Column(children: [
-      data.biomarkers.isNotEmpty &&
-              store.state.memberBiomarkerList.biomarkers.isNotEmpty
+      data.biomarkers.isNotEmpty && memberBiomarker.isNotEmpty
           ? _memberBiomarkerList(context, data.biomarkers)
           : Container(),
       data.categories.isNotEmpty
@@ -251,11 +262,18 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget _memberBiomarkerItem(BuildContext context, Biomarker data) {
-    MemberBiomarker memberBiomarker = store.state.memberBiomarkerList.biomarkers
+    List<MemberBiomarker> memberBiomarkers;
+    getMemberBiomarkers("").then((x) => {
+          setState(() {
+            memberBiomarkers = x;
+          })
+        });
+    MemberBiomarker memberBiomarker = memberBiomarkers
         .firstWhere((element) => element.biomarkerId == data.id);
     return BiomarkerItem(
       value: memberBiomarker.value ?? "null",
       unit: memberBiomarker.unit.content.shorthand ?? "unnamed",
+      unitId: memberBiomarker.unitId,
       id: memberBiomarker.biomarkerId,
       withActions: false,
     );

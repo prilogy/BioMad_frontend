@@ -20,6 +20,10 @@ class BiomarkerHistory extends StatelessWidget {
     this.title,
   });
 
+  Future<Biomarker> getBiomarkerById(int id, int unitId) async {
+    return await api.biomarker.infoById(id, unitId);
+  }
+
   Future<List<MemberBiomarker>> getBiomarkerHistory(int id) async {
     return await api.memberBiomarker.history(id, memberBiomarker.unitId);
   }
@@ -70,73 +74,86 @@ class BiomarkerHistory extends StatelessWidget {
     var color;
     var status;
     var icon;
-    var reference = store.state.biomarkerList.biomarkers
-        .firstWhere((element) => element.id == data.biomarkerId)
-        .reference;
-
-    if (reference.valueA <= data.value && data.value <= reference.valueB) {
-      color = BioMadColors.success;
-      status = "норма";
-    } else if (data.value < reference.valueA) {
-      color = BioMadColors.warning;
-      status = "пониженный";
-      icon = Icons.keyboard_arrow_down;
-    } else {
-      color = BioMadColors.warning;
-      status = "повышенный";
-      icon = Icons.keyboard_arrow_up;
-    }
-
-    var iconContainer = Container(
-        height: 6.0,
-        width: 6.0,
-        decoration: new BoxDecoration(
-          color: color,
-          shape: BoxShape.circle,
-        ));
 
     String zeroAdding(int value) {
       return value > 10 ? value.toString() : "0" + value.toString();
     }
 
-    return Container(
-      padding: EdgeInsets.only(top: Indents.sm),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            data.dateCreatedAt.day.toString() +
-                '.' +
-                zeroAdding(data.dateCreatedAt.month) +
-                '.' +
-                data.dateCreatedAt.year.toString() +
-                ' ' +
-                data.dateCreatedAt.hour.toString() +
-                ':' +
-                zeroAdding(data.dateCreatedAt.minute),
-            style: theme.textTheme.bodyText1,
-          ),
-          Row(
-            children: [
-              Container(
-                  padding: status == "норма"
-                      ? EdgeInsets.only(right: Indents.sm)
-                      : null,
-                  child: icon != null
-                      ? Icon(icon, color: color, size: 18.0)
-                      : iconContainer),
-              Text(
-                data.value.toString() +
-                    " " +
-                    data.unit.content.shorthand +
-                    ", " +
-                    status,
+    Future<Biomarker> biomarker = getBiomarkerById(data.biomarkerId, data.unitId);
+
+    return FutureBuilder(
+        future: biomarker,
+        builder: (context, AsyncSnapshot<Biomarker> biomarker) {
+          if (biomarker.hasData) {
+            if (biomarker.data.state == BiomarkerStateType.number2_) {
+              color = BioMadColors.success;
+              status = "норма";
+            } else if (biomarker.data.state == BiomarkerStateType.number1_) {
+              color = BioMadColors.warning;
+              status = "пониженный";
+              icon = Icons.keyboard_arrow_down;
+            } else if (biomarker.data.state == BiomarkerStateType.number0_) {
+              color = BioMadColors.warning;
+              status = "повышенный";
+              icon = Icons.keyboard_arrow_up;
+            } else {
+              status = "не определено";
+              icon = Icons.keyboard_arrow_right;
+            }
+
+            var iconContainer = Container(
+                height: 6.0,
+                width: 6.0,
+                decoration: new BoxDecoration(
+                  color: color,
+                  shape: BoxShape.circle,
+                ));
+            return Container(
+              padding: EdgeInsets.only(top: Indents.sm),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    data.dateCreatedAt.day.toString() +
+                        '.' +
+                        zeroAdding(data.dateCreatedAt.month) +
+                        '.' +
+                        data.dateCreatedAt.year.toString() +
+                        ' ' +
+                        data.dateCreatedAt.hour.toString() +
+                        ':' +
+                        zeroAdding(data.dateCreatedAt.minute),
+                    style: theme.textTheme.bodyText1,
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                          padding: status == "норма"
+                              ? EdgeInsets.only(right: Indents.sm)
+                              : null,
+                          child: icon != null
+                              ? Icon(icon, color: color, size: 18.0)
+                              : iconContainer),
+                      Text(
+                        data.value.toString() +
+                            " " +
+                            data.unit.content.shorthand +
+                            ", " +
+                            status,
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ],
-          ),
-        ],
-      ),
-    );
+            );
+          } else {
+            return Container(
+                padding: EdgeInsets.only(
+                    top: Indents.md, left: Indents.slg, right: Indents.md),
+                margin: EdgeInsets.only(bottom: Indents.sm),
+                child: Text("Элемент истории загружается..."));
+          }
+        });
   }
 }

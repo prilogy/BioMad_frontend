@@ -32,8 +32,7 @@ class _AnalysisContainerState extends State<AnalysisContainer> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
-      padding:
-          EdgeInsets.only(left: Indents.md, right: Indents.md),
+      padding: EdgeInsets.only(left: Indents.md, right: Indents.md),
       margin: EdgeInsets.only(bottom: Indents.sm),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,6 +111,7 @@ class _AnalysisContainerState extends State<AnalysisContainer> {
                           unit: analysis
                                   .biomarkers[index].unit.content.shorthand ??
                               "unnamed",
+                          unitId: analysis.biomarkers[index].unitId,
                           id: analysis.biomarkers[index].biomarkerId,
                           withActions: false,
                         )),

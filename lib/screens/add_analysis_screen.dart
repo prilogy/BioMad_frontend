@@ -110,7 +110,6 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                       _biomarkers =
                           store.state.memberBiomarkerModelList.biomarkers;
                       print(_biomarkers[0].value);
-                      store.dispatch(StoreThunks.refreshMemberBiomarkers());
                       store.dispatch(StoreThunks.refreshMemberAnalysis());
                       Keys.rootNavigator.currentState
                           .pushReplacementNamed(Routes.main);
@@ -241,6 +240,7 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                                                   .content
                                                   .shorthand ??
                                               "unnamed",
+                                          unitId:_biomarkers[index].unitId,
                                           id: _biomarkers[index].biomarkerId,
                                           isModel: true,
                                           index: index,

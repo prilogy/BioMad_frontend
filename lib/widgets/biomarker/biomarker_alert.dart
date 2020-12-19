@@ -89,13 +89,25 @@ class _BiomarkerAlertDialogState extends State<BiomarkerAlertDialog> {
   int unitId;
   Unit unit;
 
+  Future<List<Biomarker>> getBiomarkers() async {
+    return await api.biomarker.info();
+  }
+
+  List<Biomarker> biomarkers;
+
   @override
   void initState() {
     if (biomarker != null) {
+      getBiomarkers().then((x) => {
+            setState(() {
+              biomarkers = x;
+            })
+          });
+
       biomarkerId = biomarker.biomarkerId;
       unitId = biomarker.unitId;
 
-      choosedBiomarker = store.state.biomarkerList.biomarkers
+      choosedBiomarker = biomarkers
           .firstWhere((element) => element.id == biomarker.biomarkerId);
       _biomarkerIdController.text = choosedBiomarker.content.name;
       _biomarkerValueController.text = biomarker.value.toString();
@@ -153,8 +165,7 @@ class _BiomarkerAlertDialogState extends State<BiomarkerAlertDialog> {
                                         return SearchScreen(
                                           hintText: hintBiomarker ??
                                               "Введите биомаркер",
-                                          dataList: store
-                                              .state.biomarkerList.biomarkers,
+                                          dataList: biomarkers,
                                           initialValue:
                                               _biomarkerIdController.text,
                                           searchType: "biomarker",
@@ -182,8 +193,7 @@ class _BiomarkerAlertDialogState extends State<BiomarkerAlertDialog> {
                                         return SearchScreen(
                                           hintText: hintBiomarker ??
                                               "Введите биомаркер",
-                                          dataList: store
-                                              .state.biomarkerList.biomarkers,
+                                          dataList: biomarkers,
                                           initialValue:
                                               _biomarkerIdController.text,
                                           searchType: "biomarker",
@@ -236,7 +246,8 @@ class _BiomarkerAlertDialogState extends State<BiomarkerAlertDialog> {
                                           hintText: hintUnit ??
                                               "Введите единицу измерения",
                                           dataList: dataList,
-                                          initialValue: _biomarkerUnitIdController.text,
+                                          initialValue:
+                                              _biomarkerUnitIdController.text,
                                           searchType: "unit",
                                         );
                                       }).then((val) {

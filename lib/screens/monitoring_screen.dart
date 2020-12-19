@@ -38,10 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    store.dispatch(StoreThunks.refreshCategories());
     store.dispatch(StoreThunks.refreshTypes());
-    store.dispatch(StoreThunks.refreshMemberBiomarkers());
-    store.dispatch(StoreThunks.refreshBiomarkers(false));
 
     return Scaffold(
       appBar: AppBar(

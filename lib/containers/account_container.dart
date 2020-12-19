@@ -279,11 +279,35 @@ class _AccountContainerState extends State<AccountContainer> {
                       )
                     ]);
               } else {
-                return Container(
-                    padding: EdgeInsets.only(
-                        top: Indents.md, left: Indents.slg, right: Indents.md),
-                    margin: EdgeInsets.only(bottom: Indents.sm),
-                    child: Text("Ожидаем загрузки биомаркеров..."));
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        padding: EdgeInsets.only(
+                            left: Indents.md, right: Indents.md),
+                        child: Text(
+                            "Собственные референсы пока что не добавлены.")),
+                    Container(
+                      padding: EdgeInsets.zero,
+                      width: 220,
+                      child: CustomButton.flat(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AddReferenceAlertDialog(context,
+                                  title: "Указать референс",
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: Indents.md));
+                            },
+                          );
+                        },
+                        text: "Добавить или изменить",
+                      ),
+                    )
+                  ],
+                );
               }
               ;
             }),

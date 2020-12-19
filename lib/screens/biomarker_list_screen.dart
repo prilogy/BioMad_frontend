@@ -132,6 +132,7 @@ class _BioMarkerListScreenState extends State<BioMarkerListScreen> {
                                                                     .content
                                                                     .shorthand ??
                                                                 "unnamed",
+                                                            unitId: biomarker.unitId,
                                                             id: biomarker
                                                                 .biomarkerId,
                                                             withActions: false,

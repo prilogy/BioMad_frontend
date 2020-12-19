@@ -90,7 +90,7 @@ class CategoryItem extends StatelessWidget {
                     onTap: () {
                       Keys.rootNavigator.currentState.pushReplacementNamed(
                           Routes.category_analysis,
-                          arguments: category.id);
+                          arguments: category);
                     },
                     child: Container(
                       padding:
