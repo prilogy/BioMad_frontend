@@ -31,6 +31,10 @@ class CategoryItem extends StatelessWidget {
     return await api.memberBiomarker.info();
   }
 
+  Future<List<Category>> getCategories() async {
+    return await api.category.info();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
