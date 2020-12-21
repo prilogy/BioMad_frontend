@@ -1,6 +1,8 @@
 import 'package:api/api.dart';
+import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:biomad_frontend/widgets/biomarker/biomarker_item.dart';
+import 'package:biomad_frontend/widgets/on_load_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
@@ -28,15 +30,18 @@ class _AnalysisContainerState extends State<AnalysisContainer> {
     return value > 9 ? value.toString() : "0" + value.toString();
   }
 
+  Future<List<Biomarker>> getBiomarker() async {
+    return await api.biomarker.info();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    Future<List<Biomarker>> biomarkers = getBiomarker();
     return Container(
-      padding: EdgeInsets.only(left: Indents.md, right: Indents.md),
-      margin: EdgeInsets.only(bottom: Indents.sm),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        padding: EdgeInsets.only(left: Indents.md, right: Indents.md),
+        margin: EdgeInsets.only(bottom: Indents.sm),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Container(
             margin: EdgeInsets.only(bottom: Indents.sm),
             child: Row(
@@ -61,20 +66,6 @@ class _AnalysisContainerState extends State<AnalysisContainer> {
               ],
             ),
           ),
-//          Container(
-//            margin: EdgeInsets.only(bottom: Indents.sm),
-//            child: Row(
-//              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//              crossAxisAlignment: CrossAxisAlignment.center,
-//              children: [
-//                Text(
-//                  "Лаборатория",
-//                  style: theme.textTheme.bodyText1,
-//                ),
-//                Text(analysis.lab.content.name),
-//              ],
-//            ),
-//          ),
           Container(
             margin: EdgeInsets.only(bottom: Indents.sm),
             child: Column(
@@ -93,31 +84,42 @@ class _AnalysisContainerState extends State<AnalysisContainer> {
             margin: EdgeInsets.only(top: Indents.sm),
             child: Text(
               "Биомаркеры",
-              style: theme.textTheme.subtitle1.merge(TextStyle(
-                  color: theme.primaryColor, fontWeight: FontWeight.normal)),
+              style:
+                  theme.textTheme.subtitle1.merge(TextStyle(color: theme.primaryColor, fontWeight: FontWeight.normal)),
             ),
           ),
           Container(
-              height: MediaQuery.of(context).size.height -
-                  AppBar().preferredSize.height -
-                  162,
+              height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - 162,
               width: MediaQuery.of(context).size.width,
               child: ScrollConfiguration(
-                behavior: NoRippleScrollBehaviour(),
-                child: ListView.builder(
-                    itemCount: analysis.biomarkers.length,
-                    itemBuilder: (context, index) => BiomarkerItem(
-                          value: analysis.biomarkers[index].value ?? "null",
-                          unit: analysis
-                                  .biomarkers[index].unit.content.shorthand ??
-                              "unnamed",
-                          unitId: analysis.biomarkers[index].unitId,
-                          id: analysis.biomarkers[index].biomarkerId,
-                          withActions: false,
-                        )),
-              )),
-        ],
-      ),
-    );
+                  behavior: NoRippleScrollBehaviour(),
+                  child: ListView.builder(
+                      itemCount: analysis.biomarkers.length,
+                      itemBuilder: (context, index) {
+                        return FutureBuilder(
+                            future: biomarkers,
+                            builder: (context, AsyncSnapshot<List<Biomarker>> biomarkers) {
+                              if (biomarkers.hasData) {
+                                MemberBiomarker memberBiomarkerItem = analysis.biomarkers[index];
+                                Biomarker biomarkerItem = biomarkers.data
+                                    .firstWhere((element) => element.id == memberBiomarkerItem.biomarkerId);
+                                return BiomarkerItem(
+                                  value: memberBiomarkerItem.value ?? "null",
+                                  unit: memberBiomarkerItem.unit.content.shorthand ?? "unnamed",
+                                  biomarkerState: biomarkerItem.state,
+                                  biomarkerName: biomarkerItem.content.name,
+                                  unitId: memberBiomarkerItem.unitId,
+                                  id: memberBiomarkerItem.biomarkerId,
+                                  withActions: false,
+                                );
+                              } else {
+                                return OnLoadContainer(
+                                  index: index,
+                                  padding: EdgeInsets.zero,
+                                );
+                              }
+                            });
+                      })))
+        ]));
   }
 }

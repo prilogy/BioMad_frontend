@@ -5,14 +5,16 @@ import 'package:flutter/material.dart';
 class OnLoadContainer extends StatelessWidget {
   final int index;
   final color;
+  final EdgeInsetsGeometry padding;
+  final EdgeInsetsGeometry margin;
 
-  OnLoadContainer({this.index, this.color});
+  OnLoadContainer({this.index, this.color, this.padding, this.margin});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: Indents.md, right: Indents.sm),
-      margin: EdgeInsets.only(
+      padding: padding ?? EdgeInsets.only(left: Indents.md, right: Indents.sm),
+      margin: margin ?? EdgeInsets.only(
           top: index == 0 ? Indents.md : Indents.smd,
           left: Indents.md,
           right: Indents.md),

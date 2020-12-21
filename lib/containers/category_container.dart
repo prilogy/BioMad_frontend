@@ -41,32 +41,75 @@ class _CategoryContainerState extends State<CategoryContainer> {
     return await api.category.info();
   }
 
+  Future<List<Biomarker>> getBiomarker() async {
+    return await api.biomarker.info();
+  }
+
+  Future<List<MemberBiomarker>> getMemberBiomarker() async {
+    return await api.memberBiomarker.info();
+  }
+
   Future<List<Category>> categories;
+  Future<List<MemberBiomarker>> memberBiomarkers;
+  Future<List<Biomarker>> biomarkers;
 
   @override
   void initState() {
-    categories = getCategories();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    categories = getCategories();
+    memberBiomarkers = getMemberBiomarker();
+    biomarkers = getBiomarker();
     return Container(
-        height: MediaQuery.of(context).size.height -
-            AppBar().preferredSize.height -
-            61,
+        height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - 61,
         width: MediaQuery.of(context).size.width,
         child: Stack(children: [
           FutureBuilder(
               future: categories,
               builder: (context, AsyncSnapshot<List<Category>> categories) {
                 if (categories.hasData) {
-                  return ScrollConfiguration(
-                      behavior: NoRippleScrollBehaviour(),
-                      child: ListView.builder(
-                          itemCount: categories.data.length,
-                          itemBuilder: (context, index) => CategoryItem(
-                              index: index, category: categories.data[index])));
+                  return FutureBuilder(
+                      future: memberBiomarkers,
+                      builder: (context, AsyncSnapshot<List<MemberBiomarker>> memberBiomarkersSnap) {
+                        if (memberBiomarkersSnap.hasData) {
+                          return FutureBuilder(
+                              future: biomarkers,
+                              builder: (context, AsyncSnapshot<List<Biomarker>> biomarkersSnap) {
+                                if (biomarkersSnap.hasData) {
+                                  return ScrollConfiguration(
+                                      behavior: NoRippleScrollBehaviour(),
+                                      child: ListView.builder(
+                                          itemCount: categories.data.length,
+                                          itemBuilder: (context, index) => CategoryItem(
+                                              index: index,
+                                              category: categories.data[index],
+                                              memberBiomarkers: memberBiomarkersSnap.data,
+                                              biomarkers: biomarkersSnap.data)));
+                                } else {
+
+                                  return ScrollConfiguration(
+                                      behavior: NoRippleScrollBehaviour(),
+                                      child: ListView.builder(
+                                          itemCount: 4,
+                                          itemBuilder: (context, index) => OnLoadContainer(
+                                            index: index,
+                                            color: BioMadColors.base[200],
+                                          )));
+                                }
+                              });
+                        } else {
+                          return ScrollConfiguration(
+                              behavior: NoRippleScrollBehaviour(),
+                              child: ListView.builder(
+                                  itemCount: 4,
+                                  itemBuilder: (context, index) => OnLoadContainer(
+                                    index: index,
+                                  )));
+                        }
+                      });
                 } else {
                   return ScrollConfiguration(
                       behavior: NoRippleScrollBehaviour(),
@@ -99,11 +142,9 @@ class _CategoryContainerState extends State<CategoryContainer> {
               ],
             ),
             borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(RadiusValues.main),
-                topRight: Radius.circular(RadiusValues.main)),
+                topLeft: Radius.circular(RadiusValues.main), topRight: Radius.circular(RadiusValues.main)),
             onPanelSlide: (double pos) => setState(() {
-              _fabHeight = pos * (_panelHeightOpen - _panelHeightClosed) +
-                  _initFabHeight;
+              _fabHeight = pos * (_panelHeightOpen - _panelHeightClosed) + _initFabHeight;
             }),
           ),
         ]));

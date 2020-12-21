@@ -37,20 +37,19 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: NavTopBar(index: 0),
       ),
-      body:
-        Scaffold(
-            body: Container(
-                child: Column(
-          children: [
-            SizedBox(
-                height: 25,
-                child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: navPageBar.length,
-                    itemBuilder: (context, index) => buildNavTopBar(index))),
-            selectedIndex == 0 ? CategoryContainer() : BioMarkerListScreen()
-          ],
-        ))), // This trailing comma makes auto-formatting nicer for build methods.
+      body: Scaffold(
+          body: Container(
+              child: Column(
+        children: [
+          SizedBox(
+              height: 25,
+              child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: navPageBar.length,
+                  itemBuilder: (context, index) => buildNavTopBar(index))),
+          selectedIndex == 0 ? CategoryContainer() : BioMarkerListScreen()
+        ],
+      ))), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
@@ -72,17 +71,13 @@ class _MyHomePageState extends State<MyHomePage> {
               navPageBar[index],
               style: TextStyle(
                   fontWeight: FontWeight.normal,
-                  color: selectedIndex == index
-                      ? BioMadColors.base
-                      : BioMadColors.base.withOpacity(0.7)),
+                  color: selectedIndex == index ? BioMadColors.base : BioMadColors.base.withOpacity(0.7)),
             ),
             Container(
                 margin: EdgeInsets.only(top: Indents.sm),
                 height: 2,
                 width: 40,
-                color: selectedIndex == index
-                    ? BioMadColors.primary
-                    : Colors.transparent),
+                color: selectedIndex == index ? BioMadColors.primary : Colors.transparent),
           ],
         ),
       ),

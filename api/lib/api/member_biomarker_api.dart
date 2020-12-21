@@ -61,6 +61,7 @@ class MemberBiomarkerApi extends ApiBase<MemberBiomarkerApi> {
           ? '${v}/biomarker/${id}/history?unitId=$unitId'
           : '${v}/biomarker/${id}/history';
       var response = await dio.get(url);
+      print(response.data.toString());
       return MemberBiomarker.listFromJson(response.data);
     } on DioError catch (e) {
       return null;

@@ -23,7 +23,6 @@ class _ArticleScreenState extends State<ArticleScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(article.content.name);
     return Scaffold(
       appBar: AppBar(
           leading: Builder(
@@ -36,9 +35,9 @@ class _ArticleScreenState extends State<ArticleScreen> {
               );
             },
           ),
-          title: Text(article.content.name)),
+          title: Text(article.content.name, style: TextStyle(color: Theme.of(context).primaryColor))),
       body: ListView(children: [
-        BlockBaseWidget(header: article.content.name,child: Text(article.content.text)),
+        BlockBaseWidget(child: Text(article.content.text)),
       ]),
     );
   }

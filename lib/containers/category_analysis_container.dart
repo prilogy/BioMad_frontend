@@ -1,6 +1,7 @@
 import 'package:api/api.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/router/main.dart';
+import 'package:biomad_frontend/screens/all_biomarkers_screen.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
@@ -175,31 +176,72 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
                                           )
                                         ])),
                                 memberBiomarker != null
-                                    ? BlockBaseWidget(
+                                    ? Container(
                                         padding: EdgeInsets.only(top: Indents.md, left: Indents.md, right: Indents.md),
                                         margin: EdgeInsets.only(bottom: Indents.sm),
-                                        header: "Последние биомаркеры",
-                                        headerMergeStyle: TextStyle(color: theme.primaryColor),
-                                        child: Container(
-                                            height: 65 * biomarkerStock.length.toDouble() < 390
-                                                ? 65 * biomarkerStock.length.toDouble() < 390
-                                                : 390, //153
-                                            width: MediaQuery.of(context).size.width,
-                                            child: ScrollConfiguration(
-                                              behavior: NoRippleScrollBehaviour(),
-                                              child: ListView.builder(
-                                                  itemCount: biomarkerStock.length,
-                                                  itemBuilder: (context, index) {
-                                                    var biomarker = biomarkerStock[index];
-                                                    return BiomarkerItem(
-                                                      value: biomarker.value ?? "null",
-                                                      unit: biomarker.unit.content.shorthand ?? "unnamed",
-                                                      unitId: biomarker.unitId,
-                                                      id: biomarker.biomarkerId,
-                                                      withActions: false,
-                                                    );
-                                                  }),
-                                            )),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Container(
+                                                    alignment: Alignment.topLeft,
+                                                    margin: EdgeInsets.only(bottom: Indents.sm),
+                                                    child: Text("Последние биомаркеры",
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .headline6
+                                                            .merge(TextStyle(color: theme.primaryColor)))),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    Keys.rootNavigator.currentState.pushReplacementNamed(
+                                                        Routes.all_biomarkers,
+                                                        arguments: biomarkerStock);
+//                                                    return showDialog(
+////                                                        context: context,
+////                                                        builder: (BuildContext context) {
+////                                                          return AllBiomarkersScreen(
+////                                                            memberBiomarkers: biomarkerStock,
+////                                                          );
+////                                                        });
+                                                  },
+                                                  child: Container(
+                                                      child: Text("ВСЕ (" + biomarkerStock.length.toString() + ")",
+                                                          style: Theme.of(context)
+                                                              .textTheme
+                                                              .subtitle1
+                                                              .merge(TextStyle(color: theme.primaryColor)))),
+                                                )
+                                              ],
+                                            ),
+                                            Container(
+                                                height: biomarkerStock.length <= 3
+                                                    ? 68 * biomarkerStock.length.toDouble()
+                                                    : 68 * 3.0, //153
+                                                width: MediaQuery.of(context).size.width,
+                                                child: ScrollConfiguration(
+                                                  behavior: NoRippleScrollBehaviour(),
+                                                  child: ListView.builder(
+                                                      itemCount: biomarkerStock.length <= 3 ? biomarkerStock.length : 3,
+                                                      itemBuilder: (context, index) {
+                                                        MemberBiomarker memberBiomarkerItem = biomarkerStock[index];
+                                                        Biomarker biomarkerItem = biomarkers.data.firstWhere(
+                                                                (element) => element.id == memberBiomarkerItem.biomarkerId);
+
+                                                        return BiomarkerItem(
+                                                          value: memberBiomarkerItem.value ?? "null",
+                                                          unit: memberBiomarkerItem.unit.content.shorthand ?? "unnamed",
+                                                          unitId: memberBiomarkerItem.unitId,
+                                                          biomarkerState: biomarkerItem.state,
+                                                          biomarkerName: biomarkerItem.content.name,
+                                                          id: memberBiomarkerItem.biomarkerId,
+                                                          withActions: false,
+                                                        );
+                                                      }),
+                                                )),
+                                          ],
+                                        ),
                                       )
                                     : Container(),
                                 BlockBaseWidget(
@@ -209,9 +251,15 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
                                     headerMergeStyle: TextStyle(color: theme.primaryColor),
                                     child: biomarkerNotInStock.length != 0
                                         ? Container(
-                                            height: biomarkerNotInStock.length < 7
-                                                ? 70 * biomarkerNotInStock.length.toDouble()
-                                                : 490,
+                                            height: (biomarkerNotInStock.length < 7
+                                                    ? 70 * biomarkerNotInStock.length.toDouble()
+                                                    : MediaQuery.of(context).size.height -
+                                                        AppBar().preferredSize.height -
+                                                        154 -
+                                                        (biomarkerStock.length <= 3
+                                                            ? 68.0 * biomarkerStock.length
+                                                            : 68 * 3.0)) -
+                                                (biomarkerStock.length == 0 ? 0 : 48),
                                             width: MediaQuery.of(context).size.width,
                                             child: ListView.separated(
                                                 separatorBuilder: (context, index) => Divider(
