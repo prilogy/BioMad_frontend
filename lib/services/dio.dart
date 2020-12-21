@@ -12,7 +12,7 @@ final Dio dio = new Dio();
 
 void init() {
   dio.options.baseUrl = env.API_BASE_URL;
-  dio.options.connectTimeout = 6000;
+  dio.options.connectTimeout = 10000;
   dio.interceptors.add(InterceptorsWrapper(
       onRequest: (RequestOptions options) async {
         var customHeaders = {
@@ -25,7 +25,7 @@ void init() {
       },
       onError: (e) async {
         if(e.type == DioErrorType.CONNECT_TIMEOUT) {
-          SnackBarExtension.dark(tr('snack_bar.offline_mode'), duration: Duration(hours: 2));
+          SnackBarExtension.dark(tr('snack_bar.offline_mode'), duration: Duration(seconds: 10));
         }
       },
       onResponse: (r) async {

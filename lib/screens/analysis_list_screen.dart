@@ -49,6 +49,7 @@ class _AnalysisListScreenState extends State<AnalysisListScreen> {
             bottom: NavBar.indent,
             right: NavBar.indent,
             child: NavBar(
+              isSearch: false,
               onAvatarTap: () {
                 _panelController.open();
               },

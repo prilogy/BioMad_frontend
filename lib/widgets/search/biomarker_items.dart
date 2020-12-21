@@ -30,19 +30,21 @@ Widget biomarkerItems(BuildContext context, Biomarker data) {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  data.content.name,
+                  data.content.name.length > 44
+                      ? data.content.name.substring(0, 44) + "..."
+                      : data.content.name,
                   style: Theme.of(context)
                       .textTheme
                       .bodyText2
-                      .merge(TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                      .merge(TextStyle(color: BioMadColors.base[300])),
                 ),
-                Text(
-                  ("(добавлен)"),
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText2
-                      .merge(TextStyle(color: Theme.of(context).colorScheme.onSurface)),
-                ),
+//                Text(
+//                  ("(✔)"),
+//                  style: Theme.of(context)
+//                      .textTheme
+//                      .bodyText2
+//                      .merge(TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+//                ),
               ],
             ),
           ))
@@ -55,11 +57,13 @@ Widget biomarkerItems(BuildContext context, Biomarker data) {
           child: Container(
             padding: EdgeInsets.symmetric(vertical: Indents.sm),
             child: Text(
-              data.content.name,
+              data.content.name.length > 44
+                  ? data.content.name.substring(0, 44) + "..."
+                  : data.content.name,
               style: Theme.of(context)
                   .textTheme
                   .bodyText2
-                  .merge(TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                  .merge(TextStyle(color: BioMadColors.base[500])),
             ),
           ));
 }

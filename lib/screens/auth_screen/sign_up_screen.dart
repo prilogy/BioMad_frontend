@@ -65,6 +65,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         children: [
                           MemberContainer(
                             null,
+                            isRegistration: true,
                             prefilledName: widget.socialIdentity?.name,
                             onChange: (x) {
                               setState(() {

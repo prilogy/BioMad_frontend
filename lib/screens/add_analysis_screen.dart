@@ -25,8 +25,7 @@ class AddAnalysisScreen extends StatefulWidget {
   final Member member;
   final void Function(MemberAnalysisModel) onChange;
 
-  AddAnalysisScreen({Key key, this.title, this.member, this.onChange})
-      : super(key: key);
+  AddAnalysisScreen({Key key, this.title, this.member, this.onChange}) : super(key: key);
 
   @override
   _AddAnalysisScreenState createState() => _AddAnalysisScreenState();
@@ -39,19 +38,17 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
 
   final int _labId = 1;
   final _descriptionController = TextEditingController();
-  List<MemberBiomarkerModel> _biomarkers =
-      store.state.memberBiomarkerModelList.biomarkers;
+  List<MemberBiomarkerModel> _biomarkers = store.state.memberBiomarkerModelList.biomarkers;
 
   String biomarkerJson;
   final _formKey = GlobalKey<FormState>();
 
   MemberAnalysisModel getMemberAnalysisModel() => MemberAnalysisModel(
       name: _analysisController.text ?? "Неопределено",
-      date: DateTimeFormats.defaultDate.parse(_dateController.text) ??
-          DateTimeFormats.defaultDate.format(DateTime.now()),
+      date:
+          DateTimeFormats.defaultDate.parse(_dateController.text) ?? DateTimeFormats.defaultDate.format(DateTime.now()),
       //labId: _labId,
-      description: _descriptionController.text == "" ||
-              _descriptionController.text == null
+      description: _descriptionController.text == "" || _descriptionController.text == null
           ? "Примечаний нет"
           : _descriptionController.text,
       biomarkers: _biomarkers ?? []);
@@ -88,17 +85,14 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                 return IconButton(
                   icon: Icon(Icons.arrow_back),
                   onPressed: () {
-                    store.dispatch(
-                        store.state.memberBiomarkerModelList.biomarkers = []);
+                    store.dispatch(store.state.memberBiomarkerModelList.biomarkers = []);
                     store.dispatch(StoreThunks.refreshMemberAnalysis());
-                    Keys.rootNavigator.currentState
-                        .pushReplacementNamed(Routes.main);
+                    Keys.rootNavigator.currentState.pushReplacementNamed(Routes.main);
                   },
                 );
               },
             ),
-            title: Text("Добавить анализ",
-                style: TextStyle(color: Theme.of(context).primaryColor)),
+            title: Text("Добавить анализ", style: TextStyle(color: Theme.of(context).primaryColor)),
             actions: [
               IconButton(
                 icon: Icon(Icons.add),
@@ -107,23 +101,19 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                     MemberAnalysisModel result = getMemberAnalysisModel();
                     api.memberAnalysis.add(result);
                     try {
-                      _biomarkers =
-                          store.state.memberBiomarkerModelList.biomarkers;
+                      _biomarkers = store.state.memberBiomarkerModelList.biomarkers;
                       print(_biomarkers[0].value);
                       store.dispatch(StoreThunks.refreshMemberAnalysis());
-                      Keys.rootNavigator.currentState
-                          .pushReplacementNamed(Routes.main);
+                      Keys.rootNavigator.currentState.pushReplacementNamed(Routes.main);
                     } catch (e) {
-                      SnackBarExtension.warning("Добавьте биомаркеры к анализу",
-                          duration: Duration(seconds: 4));
+                      SnackBarExtension.warning("Добавьте биомаркеры к анализу", duration: Duration(seconds: 4));
                     }
                   }
                 },
               )
             ]),
         body: Container(
-            padding: EdgeInsets.only(
-                top: Indents.md, left: Indents.md, right: Indents.md),
+            padding: EdgeInsets.only(top: Indents.md, left: Indents.md, right: Indents.md),
             margin: EdgeInsets.only(bottom: Indents.sm),
             child: Form(
                 key: _formKey,
@@ -192,8 +182,7 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline6
-                                      .merge(TextStyle(
-                                          color: theme.primaryColor)))),
+                                      .merge(TextStyle(color: theme.primaryColor)))),
                           SizedBox(
                             height: 30,
                             width: 30,
@@ -211,8 +200,7 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                                     return BiomarkerAlertDialog(
                                       context,
                                       title: "Добавить биомаркер",
-                                      contentPadding: EdgeInsets.symmetric(
-                                          vertical: Indents.md),
+                                      contentPadding: EdgeInsets.symmetric(vertical: Indents.md),
                                     );
                                   },
                                 );
@@ -222,30 +210,26 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                         ],
                       ),
                       StoreConnector<AppState, List<MemberBiomarkerModel>>(
-                        converter: (store) =>
-                            store.state.memberBiomarkerModelList.biomarkers,
+                        converter: (store) => store.state.memberBiomarkerModelList.biomarkers,
                         builder: (ctx, state) {
-                          _biomarkers =
-                              store.state.memberBiomarkerModelList.biomarkers;
+                          _biomarkers = store.state.memberBiomarkerModelList.biomarkers;
                           return Container(
-                              height: 76 * _biomarkers.length.toDouble(),
+                              height:
+                                  76 * _biomarkers.length.toDouble() < 304 ? 76 * _biomarkers.length.toDouble() : MediaQuery.of(context).size.height -
+                                      AppBar().preferredSize.height - 372,
                               width: MediaQuery.of(context).size.width,
                               child: ScrollConfiguration(
                                 behavior: NoRippleScrollBehaviour(),
                                 child: ListView.builder(
                                     itemCount: _biomarkers.length,
-                                    itemBuilder: (context, index) =>
-                                        BiomarkerItem(
-                                          value:
-                                              _biomarkers[index].value ?? null,
+                                    itemBuilder: (context, index) => BiomarkerItem(
+                                          value: _biomarkers[index].value ?? null,
                                           unit: store.state.unitList.units
-                                                  .firstWhere((element) =>
-                                                      element.id ==
-                                                      _biomarkers[index].unitId)
+                                                  .firstWhere((element) => element.id == _biomarkers[index].unitId)
                                                   .content
                                                   .shorthand ??
                                               "unnamed",
-                                          unitId:_biomarkers[index].unitId,
+                                          unitId: _biomarkers[index].unitId,
                                           id: _biomarkers[index].biomarkerId,
                                           isModel: true,
                                           index: index,

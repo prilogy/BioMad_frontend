@@ -12,15 +12,20 @@ class NavBar extends StatefulWidget {
   static double indent = Indents.md;
   static double size = 55.0;
 
+  final bool isSearch;
   final VoidCallback onAvatarTap;
 
-  NavBar({this.onAvatarTap});
+  NavBar({this.onAvatarTap, this.isSearch = true});
 
   @override
-  _NavBarState createState() => _NavBarState();
+  _NavBarState createState() => _NavBarState(isSearch);
 }
 
 class _NavBarState extends State<NavBar> {
+  final bool isSearch;
+
+  _NavBarState(this.isSearch);
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -29,7 +34,7 @@ class _NavBarState extends State<NavBar> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
+        isSearch ? Container(
           width: NavBar.size / 1.4,
           decoration: BoxDecoration(
             color: BioMadColors.base[100],
@@ -52,14 +57,13 @@ class _NavBarState extends State<NavBar> {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return SearchScreen(
-                        hintText: "Начните набирать", searchType: "all");
+                    return SearchScreen(hintText: "Начните набирать", searchType: "all");
                   },
                 );
               },
             ),
           ),
-        ),
+        ) : Container(),
         Container(
           width: NavBar.size / 1.4,
           margin: EdgeInsets.symmetric(horizontal: Indents.md),
@@ -81,10 +85,8 @@ class _NavBarState extends State<NavBar> {
                 color: theme.primaryColor,
               ),
               onPressed: () {
-                store.dispatch(
-                    store.state.memberBiomarkerModelList.biomarkers = []);
-                Keys.rootNavigator.currentState
-                    .pushReplacementNamed(Routes.add_analysis);
+                store.dispatch(store.state.memberBiomarkerModelList.biomarkers = []);
+                Keys.rootNavigator.currentState.pushReplacementNamed(Routes.add_analysis);
               },
             ),
           ),
@@ -104,15 +106,13 @@ class _NavBarState extends State<NavBar> {
           child: FittedBox(
             child: FloatingActionButton(
               elevation: 0.0,
-              backgroundColor:
-                  ColorHelpers.fromHex(member.color) ?? theme.primaryColor,
+              backgroundColor: ColorHelpers.fromHex(member.color) ?? theme.primaryColor,
               onPressed: () {
                 widget.onAvatarTap();
               },
               child: Text(
                 letterInButton,
-                style: theme.textTheme.headline5
-                    .merge(TextStyle(color: theme.colorScheme.onPrimary)),
+                style: theme.textTheme.headline5.merge(TextStyle(color: theme.colorScheme.onPrimary)),
               ),
             ),
           ),

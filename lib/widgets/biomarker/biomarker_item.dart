@@ -156,8 +156,10 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              biomarker.data.content.name,
-                              style: theme.textTheme.subtitle1,
+                              biomarker.data.content.name.length > 30
+                                  ? biomarker.data.content.name.substring(0, 30) + "..."
+                                  : biomarker.data.content.name,
+                              style: theme.textTheme.subtitle2,
                             ),
                             Container(
                               child: Column(

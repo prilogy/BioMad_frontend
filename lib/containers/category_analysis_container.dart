@@ -181,7 +181,9 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
                                         header: "Последние биомаркеры",
                                         headerMergeStyle: TextStyle(color: theme.primaryColor),
                                         child: Container(
-                                            height: 70 * biomarkerStock.length.toDouble(),
+                                            height: 65 * biomarkerStock.length.toDouble() < 390
+                                                ? 65 * biomarkerStock.length.toDouble() < 390
+                                                : 390, //153
                                             width: MediaQuery.of(context).size.width,
                                             child: ScrollConfiguration(
                                               behavior: NoRippleScrollBehaviour(),

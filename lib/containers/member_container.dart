@@ -19,18 +19,22 @@ class MemberContainer extends StatefulWidget {
   final bool changeColor;
   final String prefilledName;
   final void Function(MemberModel) onChange;
+  final bool isRegistration;
 
   MemberContainer(this.member,
-      {this.changeColor = true, this.onChange, this.prefilledName});
+      {this.changeColor = true, this.onChange, this.prefilledName, this.isRegistration = false});
 
   @override
-  _MemberContainerState createState() => _MemberContainerState();
+  _MemberContainerState createState() => _MemberContainerState(isRegistration);
 }
 
 class _MemberContainerState extends State<MemberContainer> {
   final _nameController = TextEditingController();
   final _dateBirthDayController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final bool isRegistration;
+
+  _MemberContainerState(this.isRegistration);
 
   int _genderId;
   Color _avatarColor = BioMadColors.primary;
@@ -41,8 +45,7 @@ class _MemberContainerState extends State<MemberContainer> {
         name: _nameController.text,
         genderId: _genderId,
         color: ColorHelpers.toHex(_avatarColor),
-        dateBirthday:
-            DateTimeFormats.defaultDate.parse(_dateBirthDayController.text),
+        dateBirthday: DateTimeFormats.defaultDate.parse(_dateBirthDayController.text),
       );
 
   void onChange() {
@@ -63,12 +66,10 @@ class _MemberContainerState extends State<MemberContainer> {
         final name = widget.member.name;
         _nameController.text = name;
         _profilePreviewName = name;
-        _dateBirthDayController.text = DateTimeFormats.defaultDate
-            .format(widget.member.dateBirthday ?? DateTime.now());
+        _dateBirthDayController.text = DateTimeFormats.defaultDate.format(widget.member.dateBirthday ?? DateTime.now());
         _profilePreviewAge = getAgeFromDate(widget.member.dateBirthday);
         _genderId = widget.member.genderId;
-        if (widget.member.color != null)
-          _avatarColor = ColorHelpers.fromHex(widget.member.color);
+        if (widget.member.color != null) _avatarColor = ColorHelpers.fromHex(widget.member.color);
       });
 
     getGenders().then((x) => {
@@ -115,7 +116,6 @@ class _MemberContainerState extends State<MemberContainer> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final _ttr = trWithKey('gender');
-
     return Form(
       key: _formKey,
       child: Column(
@@ -135,11 +135,9 @@ class _MemberContainerState extends State<MemberContainer> {
                     children: [
                       Row(
                         children: [
-                          if (_profilePreviewName == null ||
-                              _profilePreviewName == '')
+                          if (_profilePreviewName == null || _profilePreviewName == '')
                             Text(tr('member_container.your_name_or_alias'),
-                                style: theme.textTheme.headline6
-                                    .merge(TextStyle(color: theme.canvasColor)))
+                                style: theme.textTheme.headline6.merge(TextStyle(color: theme.canvasColor)))
                           else
                             Text(
                               _nameController.text,
@@ -151,18 +149,14 @@ class _MemberContainerState extends State<MemberContainer> {
                           if (_profilePreviewAge != null)
                             Text(
                               ', ' + _profilePreviewAge.toString(),
-                              style: theme.textTheme.headline6
-                                  .merge(TextStyle(color: theme.canvasColor)),
+                              style: theme.textTheme.headline6.merge(TextStyle(color: theme.canvasColor)),
                             ),
                           if (_genderId != null && _genders != null)
                             Text(
                               (_genderId != null ? ', ' : '') +
-                                      _genders
-                                          .firstWhere((x) => x.id == _genderId)
-                                          ?.key ??
+                                      _ttr(_genders.firstWhere((x) => x.id == _genderId)?.key).toLowerCase() ??
                                   '',
-                              style: theme.textTheme.headline6
-                                  .merge(TextStyle(color: theme.canvasColor)),
+                              style: theme.textTheme.headline6.merge(TextStyle(color: theme.canvasColor)),
                             )
                         ],
                       ),
@@ -178,8 +172,7 @@ class _MemberContainerState extends State<MemberContainer> {
             onChange: (x) {
               setState(() {
                 _profilePreviewName = x;
-                if (widget.changeColor == true)
-                  _avatarColor = colors[randomInRange(0, colors.length - 1)];
+                if (widget.changeColor == true) _avatarColor = colors[randomInRange(0, colors.length - 1)];
               });
               onChange();
             },
@@ -204,10 +197,7 @@ class _MemberContainerState extends State<MemberContainer> {
               ? CustomSelectFormField<Gender>(
                   icon: Icon(Icons.face),
                   labelText: tr('input_hint.sex'),
-                  value: widget.member == null
-                      ? null
-                      : _genders
-                          .firstWhere((x) => x.id == widget.member.genderId),
+                  value: widget.member == null ? null : _genders.firstWhere((x) => x.id == widget.member.genderId),
                   onChanged: (x) {
                     setState(() {
                       _genderId = x.id;
@@ -216,8 +206,7 @@ class _MemberContainerState extends State<MemberContainer> {
                   },
                   items: _genders,
                   itemBuilder: (x) => DropdownMenuItem(
-                      child:
-                          Text(_ttr(x.content?.name?.toLowerCase()) ?? x.key)))
+                      child: Text(isRegistration ? _ttr(x.content?.name?.toLowerCase()) : x.content?.name ?? x.key)))
               : Container()
         ],
       ),
