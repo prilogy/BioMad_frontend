@@ -170,8 +170,14 @@ class _AccountContainerState extends State<AccountContainer> {
               customBiomarker = [];
               if (biomarkers.hasData) {
                 for (var item in biomarkers.data) {
-                  if (item.reference.isOwnReference) customBiomarker.add(item);
+                  try {
+                    if (item.reference.isOwnReference)
+                      customBiomarker.add(item);
+                  } catch (e) {
+                    print(item.content.name);
+                  }
                 }
+
                 return Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,

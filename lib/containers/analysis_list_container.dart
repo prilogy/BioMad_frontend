@@ -3,10 +3,12 @@ import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/models/analysis_list.dart';
 import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/screens/analysis_screen.dart';
+import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
+import 'package:biomad_frontend/widgets/on_load_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
@@ -20,33 +22,54 @@ class AnalysisListContainer extends StatefulWidget {
 }
 
 class _AnalysisListContainerState extends State<AnalysisListContainer> {
+  Future<List<MemberAnalysis>> getAnalysis() async {
+    return await api.memberAnalysis.info();
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<MemberAnalysis> analysis = store.state.memberAnalysisList.analysis;
+    Future<List<MemberAnalysis>> analysis = getAnalysis();
 
-    return StoreConnector<AppState, List<MemberAnalysis>>(
-        converter: (store) => store.state.memberAnalysisList.analysis,
-        builder: (ctx, state) {
-          return analysis.length > 0
-              ? Container(
-                  height: MediaQuery.of(context).size.height -
-                      AppBar().preferredSize.height -
-                      61,
-                  width: MediaQuery.of(context).size.width,
-                  child: ScrollConfiguration(
-                    behavior: NoRippleScrollBehaviour(),
-                    child: ListView.builder(
-                        itemCount: analysis.length,
-                        itemBuilder: (context, index) =>
-                            analysisItem(index, analysis[index])),
-                  ))
-              : Container(
-                  height: MediaQuery.of(context).size.height -
-                      AppBar().preferredSize.height -
-                      61,
-                  padding: EdgeInsets.only(left: Indents.sm, right: Indents.sm),
-                  margin: EdgeInsets.only(left: Indents.md, right: Indents.md),
-                  child: Text("Анализы еще не добавлены :("));
+    return FutureBuilder(
+        future: analysis,
+        builder: (context, AsyncSnapshot<List<MemberAnalysis>> analysis) {
+          if (analysis.hasData) {
+            return analysis.data.length > 0
+                ? Container(
+                    height: MediaQuery.of(context).size.height -
+                        AppBar().preferredSize.height -
+                        61,
+                    width: MediaQuery.of(context).size.width,
+                    child: ScrollConfiguration(
+                      behavior: NoRippleScrollBehaviour(),
+                      child: ListView.builder(
+                          itemCount: analysis.data.length,
+                          itemBuilder: (context, index) =>
+                              analysisItem(index, analysis.data[index])),
+                    ))
+                : Container(
+                    height: MediaQuery.of(context).size.height -
+                        AppBar().preferredSize.height -
+                        61,
+                    padding:
+                        EdgeInsets.only(left: Indents.sm, right: Indents.sm),
+                    margin:
+                        EdgeInsets.only(left: Indents.md, right: Indents.md),
+                    child: Text("Анализы еще не добавлены :("));
+          } else {
+            return Container(
+              height: MediaQuery.of(context).size.height -
+                  AppBar().preferredSize.height -
+                  61,
+              child: ScrollConfiguration(
+                  behavior: NoRippleScrollBehaviour(),
+                  child: ListView.builder(
+                      itemCount: 4,
+                      itemBuilder: (context, index) => OnLoadContainer(
+                            index: index,
+                          ))),
+            );
+          }
         });
   }
 

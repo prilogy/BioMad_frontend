@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 
 class OnLoadContainer extends StatelessWidget {
   final int index;
+  final color;
 
-  OnLoadContainer({this.index});
+  OnLoadContainer({this.index, this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +33,7 @@ class OnLoadContainer extends StatelessWidget {
         children: [
           Row(children: [
             onLoadContainerItem(
+              color: color,
               height: 32.0,
               width: 32.0,
             ),
@@ -41,11 +43,13 @@ class OnLoadContainer extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   onLoadContainerItem(
+                    color: color,
                     height: 14.0,
                     width: 160.0,
                   ),
                   onLoadContainerItem(
                     margin: EdgeInsets.only(top: Indents.sm),
+                    color: color,
                     height: 12.0,
                     width: 80.0,
                   )
@@ -66,14 +70,14 @@ class OnLoadContainer extends StatelessWidget {
   }
 
   Widget onLoadContainerItem({double height, double width,
-      EdgeInsetsGeometry padding, EdgeInsetsGeometry margin}) {
+      EdgeInsetsGeometry padding, EdgeInsetsGeometry margin, color}) {
     return Container(
       padding: padding,
       margin: margin,
       height: height,
       width: width,
       decoration: BoxDecoration(
-        color: BioMadColors.base[200].withOpacity(0.8),
+        color: color ?? BioMadColors.base[200].withOpacity(0.8),
         borderRadius: BorderRadius.all(Radius.circular(4)),
       ),
     );

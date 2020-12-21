@@ -39,6 +39,7 @@ class BiomarkerApi extends ApiBase<BiomarkerApi> {
       var response = await dio.get(url);
       return Biomarker.listFromJson(response.data);
     } on DioError catch (e) {
+      print("INFO: " + e.toString());
       return null;
     }
   }
@@ -61,7 +62,7 @@ class BiomarkerApi extends ApiBase<BiomarkerApi> {
       var response = await dio.post(url, data: query);
       return Biomarker.listFromJson(response.data);
     } on DioError catch (e) {
-      print(e);
+      print("SEARCH: " + e.toString());
       return null;
     }
   }

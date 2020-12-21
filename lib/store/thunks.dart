@@ -99,13 +99,6 @@ class StoreThunks {
 
   static ThunkAction<AppState> refreshUnits() {
     return (Store<AppState> store) async {
-      if (store.state.unitList != null &&
-          (store.state.unitList?.lastUpdateDate
-                      ?.difference(DateTime.now())
-                      ?.inDays ??
-                  3) <
-              2) return;
-
       store.dispatch(SetUnitList(UnitList(
           units: await api.unit.info(), lastUpdateDate: DateTime.now())));
     };

@@ -26,13 +26,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  PanelController _panelController = PanelController();
-
-  final double _initFabHeight = 120.0;
-  double _fabHeight;
-  double _panelHeightOpen = 500;
-  double _panelHeightClosed = 0;
-
   List<String> navPageBar = ["Моё здоровье", "Биомаркеры"];
   int selectedIndex = 0;
 
@@ -44,53 +37,20 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: NavTopBar(index: 0),
       ),
-      body: Stack(children: [
+      body:
         Scaffold(
             body: Container(
                 child: Column(
-                  children: [
-                    SizedBox(
-                        height: 25,
-                        child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: navPageBar.length,
-                            itemBuilder: (context, index) =>
-                                buildNavTopBar(index))),
-                    selectedIndex == 0
-                        ? CategoryContainer()
-                        : BioMarkerListScreen()
-                  ],
-                ))),
-        Positioned(
-            bottom: NavBar.indent,
-            right: NavBar.indent,
-            child: NavBar(
-              onAvatarTap: () {
-                _panelController.open();
-              },
-            )),
-        SlidingUpPanel(
-          backdropEnabled: true,
-          controller: _panelController,
-          maxHeight: _panelHeightOpen,
-          minHeight: _panelHeightClosed,
-          parallaxEnabled: true,
-          parallaxOffset: .5,
-          panelBuilder: (sc) => ListView(
-            padding: EdgeInsets.symmetric(vertical: 0),
-            children: [
-              AccountContainer(),
-            ],
-          ),
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(RadiusValues.main),
-              topRight: Radius.circular(RadiusValues.main)),
-          onPanelSlide: (double pos) => setState(() {
-            _fabHeight =
-                pos * (_panelHeightOpen - _panelHeightClosed) + _initFabHeight;
-          }),
-        ),
-      ]), // This trailing comma makes auto-formatting nicer for build methods.
+          children: [
+            SizedBox(
+                height: 25,
+                child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: navPageBar.length,
+                    itemBuilder: (context, index) => buildNavTopBar(index))),
+            selectedIndex == 0 ? CategoryContainer() : BioMarkerListScreen()
+          ],
+        ))), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 

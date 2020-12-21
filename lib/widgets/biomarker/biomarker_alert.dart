@@ -2,6 +2,7 @@ import 'package:api/api.dart';
 import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
 import 'package:biomad_frontend/models/member_biomarker_model_list.dart';
 import 'package:biomad_frontend/screens/search_screen.dart';
+import 'package:biomad_frontend/screens/search_screen1.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
@@ -101,16 +102,16 @@ class _BiomarkerAlertDialogState extends State<BiomarkerAlertDialog> {
       getBiomarkers().then((x) => {
             setState(() {
               biomarkers = x;
+              choosedBiomarker = biomarkers
+                  .firstWhere((element) => element.id == biomarker.biomarkerId);
+              _biomarkerIdController.text = choosedBiomarker.content.name;
+              _biomarkerValueController.text = biomarker.value.toString();
             })
           });
 
       biomarkerId = biomarker.biomarkerId;
       unitId = biomarker.unitId;
 
-      choosedBiomarker = biomarkers
-          .firstWhere((element) => element.id == biomarker.biomarkerId);
-      _biomarkerIdController.text = choosedBiomarker.content.name;
-      _biomarkerValueController.text = biomarker.value.toString();
       unit = store.state.unitList.units
           .firstWhere((element) => element.id == biomarker.unitId);
       _biomarkerUnitIdController.text = unit.content.name;
@@ -325,7 +326,6 @@ class _BiomarkerAlertDialogState extends State<BiomarkerAlertDialog> {
 
               store.dispatch(StoreThunks.setMemberBiomarkerModels(
                   store.state.memberBiomarkerModelList.biomarkers));
-              print(store.state.memberBiomarkerModelList.biomarkers);
 
               Navigator.of(context).pop();
             },

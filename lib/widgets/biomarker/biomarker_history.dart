@@ -50,9 +50,9 @@ class BiomarkerHistory extends StatelessWidget {
               (context, AsyncSnapshot<List<MemberBiomarker>> biomarkerHistory) {
             if (biomarkerHistory.hasData) {
               return Container(
-                height: 23 * biomarkerHistory.data.length.toDouble() <= 90
-                    ? 23 * biomarkerHistory.data.length.toDouble()
-                    : 90,
+                height: 20 * biomarkerHistory.data.length.toDouble() <= 80
+                    ? 20 * biomarkerHistory.data.length.toDouble()
+                    : 80,
                 width: MediaQuery.of(context).size.width,
                 child: ListView.builder(
                     itemCount: biomarkerHistory.data.length,
@@ -109,7 +109,6 @@ class BiomarkerHistory extends StatelessWidget {
                   shape: BoxShape.circle,
                 ));
             return Container(
-              padding: EdgeInsets.only(top: Indents.sm),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -149,9 +148,6 @@ class BiomarkerHistory extends StatelessWidget {
             );
           } else {
             return Container(
-                padding: EdgeInsets.only(
-                    top: Indents.md, left: Indents.slg, right: Indents.md),
-                margin: EdgeInsets.only(bottom: Indents.sm),
                 child: Text("Элемент истории загружается..."));
           }
         });

@@ -30,6 +30,13 @@ class BiomarkerInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
 
+    String biomarkerDescription;
+    try {
+      biomarkerDescription =
+          biomarker.content.description ?? "Описание к маркеру не добавлено :(";
+    } catch (e) {
+      biomarkerDescription = "Загружаем описание биомаркера...";
+    }
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Container(
         margin: EdgeInsets.only(bottom: Indents.sm),
@@ -40,7 +47,7 @@ class BiomarkerInfo extends StatelessWidget {
         ),
       ),
       Text(
-        biomarker.content.description ?? "Описание к маркеру не добавлено :(",
+        biomarkerDescription,
         style: theme.textTheme.bodyText2,
       ),
       Container(

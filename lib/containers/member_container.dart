@@ -2,6 +2,7 @@ import 'package:api/api.dart';
 import 'package:biomad_frontend/helpers/age_from_date.dart';
 import 'package:biomad_frontend/helpers/color_helpers.dart';
 import 'package:biomad_frontend/helpers/date_time_formats.dart';
+import 'package:biomad_frontend/helpers/i18n_helper.dart';
 import 'package:biomad_frontend/helpers/random.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
@@ -113,6 +114,7 @@ class _MemberContainerState extends State<MemberContainer> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final _ttr = trWithKey('gender');
 
     return Form(
       key: _formKey,
@@ -213,8 +215,9 @@ class _MemberContainerState extends State<MemberContainer> {
                     onChange();
                   },
                   items: _genders,
-                  itemBuilder: (x) =>
-                      DropdownMenuItem(child: Text(x.content?.name ?? x.key)))
+                  itemBuilder: (x) => DropdownMenuItem(
+                      child:
+                          Text(_ttr(x.content?.name?.toLowerCase()) ?? x.key)))
               : Container()
         ],
       ),

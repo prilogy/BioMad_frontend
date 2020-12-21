@@ -59,20 +59,31 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
     var color;
     var status;
     var icon;
-
-    if (biomarker.state == BiomarkerStateType.number2_) {
-      color = BioMadColors.success;
-      status = "норма";
-    } else if (biomarker.state == BiomarkerStateType.number1_) {
-      color = BioMadColors.warning;
-      status = "пониженный";
-      icon = Icons.keyboard_arrow_down;
-    } else if (biomarker.state == BiomarkerStateType.number0_) {
-      color = BioMadColors.warning;
-      status = "повышенный";
-      icon = Icons.keyboard_arrow_up;
-    } else {
-      status = "не определено";
+    String referenceRange;
+    try {
+      if (biomarker.state == BiomarkerStateType.number2_) {
+        color = BioMadColors.success;
+        status = "норма";
+      } else if (biomarker.state == BiomarkerStateType.number1_) {
+        color = BioMadColors.warning;
+        status = "пониженный";
+        icon = Icons.keyboard_arrow_down;
+      } else if (biomarker.state == BiomarkerStateType.number0_) {
+        color = BioMadColors.warning;
+        status = "повышенный";
+        icon = Icons.keyboard_arrow_up;
+      } else {
+        status = "не определено";
+        icon = Icons.keyboard_arrow_right;
+      }
+      referenceRange = biomarker.reference.valueA.toString() +
+          "-" +
+          biomarker.reference.valueB.toString() +
+          " " +
+          memberBiomarker.unit.content.shorthand;
+    } catch (e) {
+      status = "Загружаем данные...";
+      referenceRange = "Загружаем референсы...";
       icon = Icons.keyboard_arrow_right;
     }
 
@@ -141,11 +152,7 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
                                   color: BioMadColors.success,
                                   shape: BoxShape.circle,
                                 ))),
-                        Text(biomarker.reference.valueA.toString() +
-                            "-" +
-                            biomarker.reference.valueB.toString() +
-                            " " +
-                            memberBiomarker.unit.content.shorthand),
+                        Text(referenceRange),
                       ],
                     ),
                   ],
@@ -155,7 +162,7 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
         BlockBaseWidget(
             padding: EdgeInsets.only(
                 top: Indents.md, left: Indents.md, right: Indents.md),
-            margin: EdgeInsets.only(bottom: Indents.sm),
+            margin: EdgeInsets.only(bottom: 0),
             child: BiomarkerHistory(
               memberBiomarker: memberBiomarker,
             )),

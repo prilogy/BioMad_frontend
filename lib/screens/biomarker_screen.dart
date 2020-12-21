@@ -50,7 +50,6 @@ class _BioMarkerScreenState extends State<BioMarkerScreen> {
         title: FutureBuilder(
             future: biomarkers,
             builder: (context, AsyncSnapshot<List<Biomarker>> biomarkers) {
-              print(biomarkers.data);
               if (biomarkers.hasData) {
                 biomarker = biomarkers.data
                     .firstWhere((element) => element.id == biomarkerId);

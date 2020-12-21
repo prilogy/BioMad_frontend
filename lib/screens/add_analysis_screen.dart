@@ -147,7 +147,6 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                       if (_dateController.text.isEmpty) {
                         return tr('input_hint.not_empty');
                       }
-                      print(v);
                       return null;
                     },
                     labelText: "Дата сдачи анализа",
@@ -182,7 +181,7 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                   Column(
                     children: [
                       Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
@@ -195,24 +194,30 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                                       .headline6
                                       .merge(TextStyle(
                                           color: theme.primaryColor)))),
-                          IconButton(
-                            icon: Icon(Icons.add),
-                            color: BioMadColors.primary,
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  //_biomarkerFormKey
-                                  //======= ЛИСТ БИОМАРКЕРОВ ========//
-                                  return BiomarkerAlertDialog(
-                                    context,
-                                    title: "Добавить биомаркер",
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: Indents.md),
-                                  );
-                                },
-                              );
-                            },
+                          SizedBox(
+                            height: 30,
+                            width: 30,
+                            child: IconButton(
+                              padding: EdgeInsets.only(right: Indents.sm),
+                              icon: Icon(Icons.add),
+                              color: BioMadColors.primary,
+                              iconSize: 24,
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    //_biomarkerFormKey
+                                    //======= ЛИСТ БИОМАРКЕРОВ ========//
+                                    return BiomarkerAlertDialog(
+                                      context,
+                                      title: "Добавить биомаркер",
+                                      contentPadding: EdgeInsets.symmetric(
+                                          vertical: Indents.md),
+                                    );
+                                  },
+                                );
+                              },
+                            ),
                           )
                         ],
                       ),
