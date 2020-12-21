@@ -16,6 +16,7 @@ import 'package:biomad_frontend/widgets/biomarker/biomarker_alert.dart';
 import 'package:biomad_frontend/widgets/biomarker/biomarker_item.dart';
 import 'package:biomad_frontend/widgets/custom/custom_date_form_field.dart';
 import 'package:biomad_frontend/widgets/custom/custom_text_form_field.dart';
+import 'package:biomad_frontend/widgets/on_load_container.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -57,6 +58,10 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
     widget.onChange(getMemberAnalysisModel());
   }
 
+  Future<List<Biomarker>> getBiomarker() async {
+    return await api.biomarker.info();
+  }
+
   @override
   void initState() {
     store.dispatch(StoreThunks.setMemberBiomarkerModels(_biomarkers));
@@ -77,7 +82,7 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
+    Future<List<Biomarker>> biomarkers = getBiomarker();
     return Scaffold(
         appBar: AppBar(
             leading: Builder(
@@ -214,27 +219,44 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                         builder: (ctx, state) {
                           _biomarkers = store.state.memberBiomarkerModelList.biomarkers;
                           return Container(
-                              height:
-                                  76 * _biomarkers.length.toDouble() < 304 ? 76 * _biomarkers.length.toDouble() : MediaQuery.of(context).size.height -
-                                      AppBar().preferredSize.height - 372,
+                              height: 76 * _biomarkers.length.toDouble() < 304
+                                  ? 76 * _biomarkers.length.toDouble()
+                                  : MediaQuery.of(context).size.height - AppBar().preferredSize.height - 372,
                               width: MediaQuery.of(context).size.width,
                               child: ScrollConfiguration(
-                                behavior: NoRippleScrollBehaviour(),
-                                child: ListView.builder(
-                                    itemCount: _biomarkers.length,
-                                    itemBuilder: (context, index) => BiomarkerItem(
-                                          value: _biomarkers[index].value ?? null,
-                                          unit: store.state.unitList.units
-                                                  .firstWhere((element) => element.id == _biomarkers[index].unitId)
-                                                  .content
-                                                  .shorthand ??
-                                              "unnamed",
-                                          unitId: _biomarkers[index].unitId,
-                                          id: _biomarkers[index].biomarkerId,
-                                          isModel: true,
-                                          index: index,
-                                        )),
-                              ));
+                                  behavior: NoRippleScrollBehaviour(),
+                                  child: ListView.builder(
+                                      itemCount: _biomarkers.length,
+                                      itemBuilder: (context, index) {
+                                        return FutureBuilder(
+                                            future: biomarkers,
+                                            builder: (context, AsyncSnapshot<List<Biomarker>> biomarkers) {
+                                              if (biomarkers.hasData) {
+                                                Biomarker biomarkerItem = biomarkers.data.firstWhere(
+                                                    (element) => element.id == _biomarkers[index].biomarkerId);
+                                                return BiomarkerItem(
+                                                  value: _biomarkers[index].value ?? null,
+                                                  unit: store.state.unitList.units
+                                                          .firstWhere(
+                                                              (element) => element.id == _biomarkers[index].unitId)
+                                                          .content
+                                                          .shorthand ??
+                                                      "unnamed",
+                                                  unitId: _biomarkers[index].unitId,
+                                                  id: _biomarkers[index].biomarkerId,
+                                                  biomarkerState: biomarkerItem.state,
+                                                  biomarkerName: biomarkerItem.content.name,
+                                                  isModel: true,
+                                                  index: index,
+                                                );
+                                              } else {
+                                                return OnLoadContainer(
+                                                  index: index,
+                                                  padding: EdgeInsets.zero,
+                                                );
+                                              }
+                                            });
+                                      })));
                         },
                       )
                     ],

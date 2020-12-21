@@ -9,6 +9,7 @@ import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:biomad_frontend/widgets/biomarker/biomarker_item.dart';
+import 'package:biomad_frontend/widgets/on_load_container.dart';
 import 'package:flutter/material.dart';
 
 class AllBiomarkersScreen extends StatefulWidget {
@@ -27,8 +28,13 @@ class _AllBiomarkersScreenState extends State<AllBiomarkersScreen> {
 
   _AllBiomarkersScreenState(this.memberBiomarkers, this.categoryName);
 
+  Future<List<Biomarker>> getBiomarker() async {
+    return await api.biomarker.info();
+  }
+
   @override
   Widget build(BuildContext context) {
+    Future<List<Biomarker>> biomarkers = getBiomarker();
     return Scaffold(
       appBar: AppBar(
         leading: Builder(
@@ -36,8 +42,7 @@ class _AllBiomarkersScreenState extends State<AllBiomarkersScreen> {
             return IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
-                Keys.rootNavigator.currentState.pushReplacementNamed(
-                    Routes.main);
+                Navigator.of(context).pop();
               },
             );
           },
@@ -51,14 +56,29 @@ class _AllBiomarkersScreenState extends State<AllBiomarkersScreen> {
         child: ListView.builder(
             itemCount: memberBiomarkers.length,
             itemBuilder: (context, index) {
-              var biomarker = memberBiomarkers[index];
-              return BiomarkerItem(
-                value: biomarker.value ?? "null",
-                unit: biomarker.unit.content.shorthand ?? "unnamed",
-                unitId: biomarker.unitId,
-                id: biomarker.biomarkerId,
-                withActions: false,
-              );
+              return FutureBuilder(
+                  future: biomarkers,
+                  builder: (context, AsyncSnapshot<List<Biomarker>> biomarkers) {
+                    if (biomarkers.hasData) {
+                      MemberBiomarker memberBiomarkerItem = memberBiomarkers[index];
+                      Biomarker biomarkerItem =
+                          biomarkers.data.firstWhere((element) => element.id == memberBiomarkerItem.biomarkerId);
+                      return BiomarkerItem(
+                        value: memberBiomarkerItem.value ?? "null",
+                        unit: memberBiomarkerItem.unit.content.shorthand ?? "unnamed",
+                        unitId: memberBiomarkerItem.unitId,
+                        id: memberBiomarkerItem.biomarkerId,
+                        biomarkerState: biomarkerItem.state,
+                        biomarkerName: biomarkerItem.content.name,
+                        withActions: false,
+                      );
+                    } else {
+                      return OnLoadContainer(
+                        index: index,
+                        padding: EdgeInsets.zero,
+                      );
+                    }
+                  });
             }),
       ),
     );

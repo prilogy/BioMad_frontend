@@ -106,10 +106,10 @@ class _AnalysisContainerState extends State<AnalysisContainer> {
                                 return BiomarkerItem(
                                   value: memberBiomarkerItem.value ?? "null",
                                   unit: memberBiomarkerItem.unit.content.shorthand ?? "unnamed",
-                                  biomarkerState: biomarkerItem.state,
-                                  biomarkerName: biomarkerItem.content.name,
                                   unitId: memberBiomarkerItem.unitId,
                                   id: memberBiomarkerItem.biomarkerId,
+                                  biomarkerState: biomarkerItem.state,
+                                  biomarkerName: biomarkerItem.content.name,
                                   withActions: false,
                                 );
                               } else {

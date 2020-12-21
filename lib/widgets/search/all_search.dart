@@ -12,6 +12,7 @@ import 'package:biomad_frontend/widgets/biomarker/biomarker_item.dart';
 import 'package:flutter/material.dart';
 
 import '../category_item.dart';
+import '../on_load_container.dart';
 import 'biomarker_items.dart';
 
 class AllSearch extends StatefulWidget {
@@ -41,6 +42,10 @@ class _AllSearchState extends State<AllSearch> {
 
   Future<List<MemberBiomarker>> getMemberBiomarkers() async {
     return await api.memberBiomarker.info();
+  }
+
+  Future<List<Biomarker>> getBiomarker() async {
+    return await api.biomarker.info();
   }
 
   @override
@@ -99,7 +104,10 @@ class _AllSearchState extends State<AllSearch> {
                                       ? _categoryList(context, searchSnap.data.categories)
                                       : Container(),
                                   searchSnap.data.biomarkers.isNotEmpty
-                                      ? _memberBiomarkerList(context, searchSnap.data.biomarkers)
+                                      ? searchSnap.data.categories.isNotEmpty
+                                          ? _memberBiomarkerList(context, searchSnap.data.biomarkers,
+                                              category: searchSnap.data.categories)
+                                          : _memberBiomarkerList(context, searchSnap.data.biomarkers)
                                       : Container(),
                                 ])
                               : Container(
@@ -137,9 +145,9 @@ class _AllSearchState extends State<AllSearch> {
     );
   }
 
-  Widget _memberBiomarkerList(BuildContext context, List<Biomarker> data) {
+  Widget _memberBiomarkerList(BuildContext context, List<Biomarker> data, {List<Category> category}) {
     Future<List<MemberBiomarker>> memberBiomarkers = getMemberBiomarkers();
-
+    Future<List<Biomarker>> biomarkers = getBiomarker();
     return FutureBuilder(
         future: memberBiomarkers,
         builder: (context, AsyncSnapshot<List<MemberBiomarker>> memberBiomarkersSnap) {
@@ -170,17 +178,39 @@ class _AllSearchState extends State<AllSearch> {
                   ),
                   memberBiomarker.isNotEmpty
                       ? Container(
-                          height: memberBiomarker.length * 76.0,
+                          height: MediaQuery.of(context).size.height -
+                              AppBar().preferredSize.height -
+                              (category != null
+                                  ? category.isNotEmpty
+                                      ? category.length * 65 + 116
+                                      : 0
+                                  : 71),
                           child: ListView.builder(
                               itemCount: memberBiomarker.length,
                               itemBuilder: (context, index) {
-                                return BiomarkerItem(
-                                  value: memberBiomarker[index].value ?? "null",
-                                  unit: memberBiomarker[index].unit.content.shorthand ?? "unnamed",
-                                  unitId: memberBiomarker[index].unitId,
-                                  id: memberBiomarker[index].biomarkerId,
-                                  withActions: false,
-                                );
+                                return FutureBuilder(
+                                    future: biomarkers,
+                                    builder: (context, AsyncSnapshot<List<Biomarker>> biomarkers) {
+                                      if (biomarkers.hasData) {
+                                        MemberBiomarker memberBiomarkerItem = memberBiomarker[index];
+                                        Biomarker biomarkerItem = biomarkers.data
+                                            .firstWhere((element) => element.id == memberBiomarkerItem.biomarkerId);
+                                        return BiomarkerItem(
+                                          value: memberBiomarkerItem.value ?? "null",
+                                          unit: memberBiomarkerItem.unit.content.shorthand ?? "unnamed",
+                                          unitId: memberBiomarkerItem.unitId,
+                                          id: memberBiomarkerItem.biomarkerId,
+                                          biomarkerState: biomarkerItem.state,
+                                          biomarkerName: biomarkerItem.content.name,
+                                          withActions: false,
+                                        );
+                                      } else {
+                                        return OnLoadContainer(
+                                          index: index,
+                                          padding: EdgeInsets.zero,
+                                        );
+                                      }
+                                    });
                               }))
                       : Container(
                           width: MediaQuery.of(context).size.width - 2 * Indents.md,

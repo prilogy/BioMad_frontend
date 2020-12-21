@@ -195,16 +195,16 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
                                                             .merge(TextStyle(color: theme.primaryColor)))),
                                                 GestureDetector(
                                                   onTap: () {
-                                                    Keys.rootNavigator.currentState.pushReplacementNamed(
-                                                        Routes.all_biomarkers,
-                                                        arguments: biomarkerStock);
-//                                                    return showDialog(
-////                                                        context: context,
-////                                                        builder: (BuildContext context) {
-////                                                          return AllBiomarkersScreen(
-////                                                            memberBiomarkers: biomarkerStock,
-////                                                          );
-////                                                        });
+//                                                    Keys.rootNavigator.currentState.pushReplacementNamed(
+//                                                        Routes.all_biomarkers,
+//                                                        arguments: biomarkerStock);
+                                                    return showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext context) {
+                                                          return AllBiomarkersScreen(
+                                                            memberBiomarkers: biomarkerStock,
+                                                          );
+                                                        });
                                                   },
                                                   child: Container(
                                                       child: Text("ВСЕ (" + biomarkerStock.length.toString() + ")",
@@ -227,15 +227,15 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
                                                       itemBuilder: (context, index) {
                                                         MemberBiomarker memberBiomarkerItem = biomarkerStock[index];
                                                         Biomarker biomarkerItem = biomarkers.data.firstWhere(
-                                                                (element) => element.id == memberBiomarkerItem.biomarkerId);
+                                                            (element) => element.id == memberBiomarkerItem.biomarkerId);
 
                                                         return BiomarkerItem(
                                                           value: memberBiomarkerItem.value ?? "null",
                                                           unit: memberBiomarkerItem.unit.content.shorthand ?? "unnamed",
                                                           unitId: memberBiomarkerItem.unitId,
+                                                          id: memberBiomarkerItem.biomarkerId,
                                                           biomarkerState: biomarkerItem.state,
                                                           biomarkerName: biomarkerItem.content.name,
-                                                          id: memberBiomarkerItem.biomarkerId,
                                                           withActions: false,
                                                         );
                                                       }),
