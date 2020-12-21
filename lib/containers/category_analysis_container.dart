@@ -17,12 +17,10 @@ import 'package:flutter/material.dart';
 class CategoryAnalysisContainer extends StatefulWidget {
   final Category category;
 
-  CategoryAnalysisContainer({Key key, @required this.category})
-      : super(key: key);
+  CategoryAnalysisContainer({Key key, @required this.category}) : super(key: key);
 
   @override
-  _CategoryAnalysisContainerState createState() =>
-      _CategoryAnalysisContainerState(category);
+  _CategoryAnalysisContainerState createState() => _CategoryAnalysisContainerState(category);
 }
 
 class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
@@ -62,8 +60,7 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
 
     return FutureBuilder(
         future: memberBiomarkers,
-        builder:
-            (context, AsyncSnapshot<List<MemberBiomarker>> memberBiomarkers) {
+        builder: (context, AsyncSnapshot<List<MemberBiomarker>> memberBiomarkers) {
           if (memberBiomarkers.hasData) {
             int allBiomarkers = 0;
             int successfulBiomarkers = 0;
@@ -74,22 +71,19 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
                     //Выясняем сданные и не сданные биомаркеры
                     try {
                       biomarkerNotInStock = [];
+                      biomarkerStock = [];
                       for (var item in category.biomarkerIds) {
-                        memberBiomarker = memberBiomarkers.data.firstWhere(
-                            (x) => x.biomarkerId == item,
-                            orElse: () => null);
+                        memberBiomarker =
+                            memberBiomarkers.data.firstWhere((x) => x.biomarkerId == item, orElse: () => null);
                         memberBiomarker != null
                             ? biomarkerStock.add(memberBiomarker)
-                            : biomarkerNotInStock.add(biomarkers.data
-                                .firstWhere((x) => x.id == item,
-                                    orElse: () => null));
+                            : biomarkerNotInStock
+                                .add(biomarkers.data.firstWhere((x) => x.id == item, orElse: () => null));
                       }
                     } catch (e) {
                       biomarkerStock = [];
                       for (var item in category.biomarkerIds) {
-                        biomarkerNotInStock.add(biomarkers.data.firstWhere(
-                            (x) => x.id == item,
-                            orElse: () => null));
+                        biomarkerNotInStock.add(biomarkers.data.firstWhere((x) => x.id == item, orElse: () => null));
                       }
                     }
                     biomarkerStock.removeWhere((value) => value == null);
@@ -97,236 +91,150 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
 
                     //Выясняем сосотояние категории
                     try {
-                      for (var id in category.biomarkerIds) {
-                        memberBiomarker = memberBiomarkers.data
-                            .firstWhere((element) => element.biomarkerId == id);
-                        if (memberBiomarker != null) {
+                      allBiomarkers = 0;
+                      successfulBiomarkers = 0;
+                      for (var item in memberBiomarkers.data) {
+                        if (category.biomarkerIds.contains(item.biomarkerId)) {
                           allBiomarkers++;
-                          Biomarker biomarkerItem = biomarkers.data
-                              .firstWhere((element) => element.id == id);
-                          if (biomarkerItem?.state?.value == 2)
-                            successfulBiomarkers += 1;
+                          Biomarker biomarkerItem =
+                              biomarkers.data.firstWhere((element) => element.id == item.biomarkerId);
+                          if (biomarkerItem?.state == BiomarkerStateType.number2_) successfulBiomarkers++;
+                          if (item.dateCreatedAt.millisecondsSinceEpoch > epochTime)
+                            dateOfChanged = item.dateCreatedAt.toLocal();
                         }
                       }
-                      state = successfulBiomarkers != 0 && allBiomarkers != 0
+                      state = allBiomarkers != 0 && successfulBiomarkers != 0
                           ? successfulBiomarkers / allBiomarkers * 100
-                          : 0;
-
-                      if (state >= 80) {
-                        color = BioMadColors.success;
-                        status = "отличное";
-                      } else if (state >= 40) {
-                        color = BioMadColors.warning;
-                        status = "удовлетворительное";
-                      } else if (state > 0 && state < 40) {
-                        color = BioMadColors.error;
-                        status = "ужасное";
-                      } else {
-                        color = BioMadColors.base[400];
-                        status = "не определено";
-                      }
+                          : allBiomarkers != 0
+                              ? 0.1
+                              : 0;
                     } catch (e) {
-                      state = 0;
+                      print("CATEGORY ITEM: " + e.toString());
+                      state = -1;
+                    }
+
+                    if (state >= 80.0) {
+                      color = BioMadColors.success;
+                      status = "отличное";
+                    } else if (state >= 40.0) {
+                      color = BioMadColors.warning;
+                      status = "удовлетворительное";
+                    } else if (state > 0.0 && state < 40.0) {
+                      color = BioMadColors.error;
+                      status = "ужасное";
+                    } else {
                       color = BioMadColors.base[400];
                       status = "не определено";
                     }
 
                     return Container(
-                        height: MediaQuery.of(context).size.height -
-                            AppBar().preferredSize.height,
+                        height: MediaQuery.of(context).size.height - AppBar().preferredSize.height,
                         child: ScrollConfiguration(
                             behavior: NoRippleScrollBehaviour(),
                             child: ListView(children: [
-                              Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    BlockBaseWidget(
-                                        padding: EdgeInsets.only(
-                                            left: Indents.md,
-                                            right: Indents.md),
-                                        margin:
-                                            EdgeInsets.only(bottom: Indents.sm),
-                                        header: "Общее состояние",
-                                        headerMergeStyle: TextStyle(
-                                            color: theme.primaryColor),
-                                        child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                  state.round().toString() +
-                                                      "%",
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headline3
-                                                      .merge(TextStyle(
-                                                          color: color))),
-                                              Container(
-                                                padding: EdgeInsets.only(
-                                                    left: Indents.sm),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.end,
+                              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                BlockBaseWidget(
+                                    padding: EdgeInsets.only(left: Indents.md, right: Indents.md),
+                                    margin: EdgeInsets.only(bottom: Indents.sm),
+                                    header: "Общее состояние",
+                                    headerMergeStyle: TextStyle(color: theme.primaryColor),
+                                    child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          Text(state.round().toString() + "%",
+                                              style:
+                                                  Theme.of(context).textTheme.headline3.merge(TextStyle(color: color))),
+                                          Container(
+                                            padding: EdgeInsets.only(left: Indents.sm),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              children: [
+                                                Text(status, style: Theme.of(context).textTheme.bodyText1),
+                                                Row(
                                                   children: [
-                                                    Text(status,
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyText1),
-                                                    Row(
-                                                      children: [
-                                                        Text(
-                                                            dateOfChanged !=
-                                                                    null
-                                                                ? "Обновлено: " +
-                                                                    dateOfChanged
-                                                                        .day
-                                                                        .toString() +
-                                                                    '.' +
-                                                                    zeroAdding(dateOfChanged
-                                                                        .month) +
-                                                                    '.' +
-                                                                    dateOfChanged
-                                                                        .year
-                                                                        .toString() +
-                                                                    ' в ' +
-                                                                    dateOfChanged
-                                                                        .hour
-                                                                        .toString() +
-                                                                    ':' +
-                                                                    zeroAdding(
-                                                                        dateOfChanged
-                                                                            .minute)
-                                                                : "Анализы не загружены",
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodyText2),
-                                                      ],
-                                                    ),
+                                                    Text(
+                                                        dateOfChanged != null
+                                                            ? "Обновлено: " +
+                                                                dateOfChanged.day.toString() +
+                                                                '.' +
+                                                                zeroAdding(dateOfChanged.month) +
+                                                                '.' +
+                                                                dateOfChanged.year.toString() +
+                                                                ' в ' +
+                                                                dateOfChanged.hour.toString() +
+                                                                ':' +
+                                                                zeroAdding(dateOfChanged.minute)
+                                                            : "Анализы не загружены",
+                                                        style: Theme.of(context).textTheme.bodyText2),
                                                   ],
                                                 ),
-                                              )
-                                            ])),
-                                    memberBiomarker != null
-                                        ? BlockBaseWidget(
-                                            padding: EdgeInsets.only(
-                                                top: Indents.md,
-                                                left: Indents.md,
-                                                right: Indents.md),
-                                            margin: EdgeInsets.only(
-                                                bottom: Indents.sm),
-                                            header: "Последние биомаркеры",
-                                            headerMergeStyle: TextStyle(
-                                                color: theme.primaryColor),
-                                            child: Container(
-                                                height: 76 *
-                                                    biomarkerStock.length
-                                                        .toDouble(),
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                child: ScrollConfiguration(
-                                                  behavior:
-                                                      NoRippleScrollBehaviour(),
-                                                  child: ListView.builder(
-                                                      itemCount:
-                                                          biomarkerStock.length,
-                                                      itemBuilder:
-                                                          (context, index) {
-                                                        var biomarker =
-                                                            biomarkerStock[
-                                                                index];
-                                                        return BiomarkerItem(
-                                                          value:
-                                                              biomarker.value ??
-                                                                  "null",
-                                                          unit: biomarker
-                                                                  .unit
-                                                                  .content
-                                                                  .shorthand ??
-                                                              "unnamed",
-                                                          unitId:
-                                                              biomarker.unitId,
-                                                          id: biomarker
-                                                              .biomarkerId,
-                                                          withActions: false,
-                                                        );
-                                                      }),
-                                                )),
+                                              ],
+                                            ),
                                           )
-                                        : Container(),
-                                    BlockBaseWidget(
-                                        padding: EdgeInsets.only(
-                                            top: Indents.md,
-                                            left: Indents.md,
-                                            right: Indents.md),
-                                        margin:
-                                            EdgeInsets.only(bottom: Indents.sm),
-                                        header: "Ещё не сдали",
-                                        headerMergeStyle: TextStyle(
-                                            color: theme.primaryColor),
-                                        child: biomarkerNotInStock.length != 0
-                                            ? Container(
-                                                height:
-                                                    biomarkerNotInStock.length <
-                                                            7
-                                                        ? 70 *
-                                                            biomarkerNotInStock
-                                                                .length
-                                                                .toDouble()
-                                                        : 490,
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                child: ListView.separated(
-                                                    separatorBuilder:
-                                                        (context, index) =>
-                                                            Divider(
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .colorScheme
-                                                                  .onSurface,
-                                                            ),
-                                                    itemCount:
-                                                        biomarkerNotInStock
-                                                            .length,
-                                                    itemBuilder: (context, index) => Container(
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                vertical:
-                                                                    Indents.sm),
-                                                        child: GestureDetector(
-                                                            behavior:
-                                                                HitTestBehavior
-                                                                    .opaque,
-                                                            child: Text(
-                                                                biomarkerNotInStock[
-                                                                        index]
-                                                                    .content
-                                                                    .name)))),
-                                              )
-                                            : Text(
-                                                "Поздравляем, все биомаркеры сданы! :)"))
-                                  ]),
+                                        ])),
+                                memberBiomarker != null
+                                    ? BlockBaseWidget(
+                                        padding: EdgeInsets.only(top: Indents.md, left: Indents.md, right: Indents.md),
+                                        margin: EdgeInsets.only(bottom: Indents.sm),
+                                        header: "Последние биомаркеры",
+                                        headerMergeStyle: TextStyle(color: theme.primaryColor),
+                                        child: Container(
+                                            height: 70 * biomarkerStock.length.toDouble(),
+                                            width: MediaQuery.of(context).size.width,
+                                            child: ScrollConfiguration(
+                                              behavior: NoRippleScrollBehaviour(),
+                                              child: ListView.builder(
+                                                  itemCount: biomarkerStock.length,
+                                                  itemBuilder: (context, index) {
+                                                    var biomarker = biomarkerStock[index];
+                                                    return BiomarkerItem(
+                                                      value: biomarker.value ?? "null",
+                                                      unit: biomarker.unit.content.shorthand ?? "unnamed",
+                                                      unitId: biomarker.unitId,
+                                                      id: biomarker.biomarkerId,
+                                                      withActions: false,
+                                                    );
+                                                  }),
+                                            )),
+                                      )
+                                    : Container(),
+                                BlockBaseWidget(
+                                    padding: EdgeInsets.only(top: Indents.md, left: Indents.md, right: Indents.md),
+                                    margin: EdgeInsets.only(bottom: Indents.sm),
+                                    header: "Ещё не сдали",
+                                    headerMergeStyle: TextStyle(color: theme.primaryColor),
+                                    child: biomarkerNotInStock.length != 0
+                                        ? Container(
+                                            height: biomarkerNotInStock.length < 7
+                                                ? 70 * biomarkerNotInStock.length.toDouble()
+                                                : 490,
+                                            width: MediaQuery.of(context).size.width,
+                                            child: ListView.separated(
+                                                separatorBuilder: (context, index) => Divider(
+                                                      color: Theme.of(context).colorScheme.onSurface,
+                                                    ),
+                                                itemCount: biomarkerNotInStock.length,
+                                                itemBuilder: (context, index) => Container(
+                                                    padding: EdgeInsets.symmetric(vertical: Indents.sm),
+                                                    child: GestureDetector(
+                                                        behavior: HitTestBehavior.opaque,
+                                                        child: Text(biomarkerNotInStock[index].content.name)))),
+                                          )
+                                        : Text("Поздравляем, все биомаркеры сданы! :)"))
+                              ]),
                             ])));
                   } else {
                     return Container(
-                        padding: EdgeInsets.only(
-                            top: Indents.md,
-                            left: Indents.slg,
-                            right: Indents.md),
+                        padding: EdgeInsets.only(top: Indents.md, left: Indents.slg, right: Indents.md),
                         margin: EdgeInsets.only(bottom: Indents.sm),
                         child: Text("Ожидаем загрузки биомаркеров..."));
                   }
                 });
           } else {
             return Container(
-                padding: EdgeInsets.only(
-                    top: Indents.md, left: Indents.slg, right: Indents.md),
+                padding: EdgeInsets.only(top: Indents.md, left: Indents.slg, right: Indents.md),
                 margin: EdgeInsets.only(bottom: Indents.sm),
                 child: Text("Ожидаем загрузки сданных биомаркеров..."));
           }
@@ -338,9 +246,7 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
 
     return GestureDetector(
       onTap: () {
-        Keys.rootNavigator.currentState.pushReplacementNamed(
-            Routes.category_analysis,
-            arguments: category.id);
+        Keys.rootNavigator.currentState.pushReplacementNamed(Routes.category_analysis, arguments: category.id);
       },
       child: Container(
         padding: EdgeInsets.only(left: Indents.md, right: Indents.sm),
@@ -381,8 +287,7 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
                       padding: EdgeInsets.only(top: 2),
                       child: Text(
                         "Состояние: 80%",
-                        style: theme.textTheme.caption
-                            .merge(TextStyle(color: BioMadColors.success)),
+                        style: theme.textTheme.caption.merge(TextStyle(color: BioMadColors.success)),
                       ),
                     )
                   ],

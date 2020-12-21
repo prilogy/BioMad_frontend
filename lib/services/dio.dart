@@ -12,7 +12,7 @@ final Dio dio = new Dio();
 
 void init() {
   dio.options.baseUrl = env.API_BASE_URL;
-  dio.options.connectTimeout = 4000;
+  dio.options.connectTimeout = 6000;
   dio.interceptors.add(InterceptorsWrapper(
       onRequest: (RequestOptions options) async {
         var customHeaders = {

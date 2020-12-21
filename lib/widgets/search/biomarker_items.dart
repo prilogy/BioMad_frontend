@@ -22,8 +22,7 @@ Widget biomarkerItems(BuildContext context, Biomarker data) {
       ? GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () {
-            SnackBarExtension.dark("Нельзя выбрать уже добавленный биомаркер!",
-                duration: Duration(seconds: 4));
+            SnackBarExtension.dark("Нельзя выбрать уже добавленный биомаркер!", duration: Duration(seconds: 4));
           },
           child: Container(
             padding: EdgeInsets.symmetric(vertical: Indents.sm),
@@ -32,13 +31,17 @@ Widget biomarkerItems(BuildContext context, Biomarker data) {
               children: [
                 Text(
                   data.content.name,
-                  style: Theme.of(context).textTheme.bodyText2.merge(TextStyle(
-                      color: Theme.of(context).colorScheme.onSurface)),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText2
+                      .merge(TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                 ),
                 Text(
                   ("(добавлен)"),
-                  style: Theme.of(context).textTheme.bodyText2.merge(TextStyle(
-                      color: Theme.of(context).colorScheme.onSurface)),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText2
+                      .merge(TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                 ),
               ],
             ),
@@ -46,16 +49,17 @@ Widget biomarkerItems(BuildContext context, Biomarker data) {
       : GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () {
-            Navigator.of(context)
-                .pop(data);
+            Navigator.of(context).pop(data);
             //dataList.firstWhere((element) => element.id == data.id)
           },
           child: Container(
             padding: EdgeInsets.symmetric(vertical: Indents.sm),
             child: Text(
               data.content.name,
-              style: Theme.of(context).textTheme.bodyText2.merge(
-                  TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText2
+                  .merge(TextStyle(color: Theme.of(context).colorScheme.onSurface)),
             ),
           ));
 }

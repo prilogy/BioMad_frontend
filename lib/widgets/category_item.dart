@@ -52,40 +52,36 @@ class CategoryItem extends StatelessWidget {
                 if (biomarkers.hasData) {
                   int allBiomarkers;
                   int successfulBiomarkers;
+
                   try {
                     allBiomarkers = 0;
                     successfulBiomarkers = 0;
-                    for (var id in category.biomarkerIds) {
-                      if (memberBiomarkers.data.firstWhere(
-                              (element) => element.biomarkerId == id, orElse: null) !=
-                          null) {
-                        print(category.content.name);
+
+                    for (var item in memberBiomarkers.data) {
+                      if (category.biomarkerIds.contains(item.biomarkerId)) {
                         allBiomarkers++;
-                        Biomarker biomarkerItem = biomarkers.data
-                            .firstWhere((element) => element.id == id);
-                        if (biomarkerItem?.state?.value == 2)
-                          successfulBiomarkers += 1;
+                        Biomarker biomarkerItem = biomarkers.data.firstWhere(
+                            (element) => element.id == item.biomarkerId);
+                        if (biomarkerItem?.state == BiomarkerStateType.number2_)
+                          successfulBiomarkers++;
                       }
                     }
-                    print(successfulBiomarkers);
-                    print(allBiomarkers);
-                    state = allBiomarkers != 0
+                    state = allBiomarkers != 0 && successfulBiomarkers != 0
                         ? successfulBiomarkers / allBiomarkers * 100
-                        : 0;
+                        : allBiomarkers != 0
+                            ? 0.1
+                            : 0;
                   } catch (e) {
-                    print(memberBiomarkers.data);
-                    print(e);
-                    print(category.biomarkerIds);
-                    print(allBiomarkers);
+                    print("CATEGORY ITEM: " + e.toString());
                     state = -1;
                   }
-                  if (state >= 80) {
+                  if (state >= 80.0) {
                     color = BioMadColors.success;
                     status = "отличное";
-                  } else if (state >= 40) {
+                  } else if (state >= 40.0) {
                     color = BioMadColors.warning;
                     status = "удовлетворительное";
-                  } else if (state >= 0 && state < 40) {
+                  } else if (state > 0.0 && state < 40.0) {
                     color = BioMadColors.error;
                     status = "ужасное";
                   } else {
@@ -160,7 +156,10 @@ class CategoryItem extends StatelessWidget {
                     ),
                   );
                 } else {
-                  return OnLoadContainer(index: index, color: BioMadColors.base[200],);
+                  return OnLoadContainer(
+                    index: index,
+                    color: BioMadColors.base[200],
+                  );
                 }
               });
         } else {

@@ -9,17 +9,20 @@ import 'package:flutter/material.dart';
 
 class UnitSearch extends StatefulWidget {
   final String hintText;
+  final List<int> unitIds;
 
-  UnitSearch({@required this.hintText, Key key}) : super(key: key);
+  UnitSearch({@required this.hintText, this.unitIds, Key key})
+      : super(key: key);
 
   @override
-  _UnitSearchState createState() => _UnitSearchState(hintText);
+  _UnitSearchState createState() => _UnitSearchState(hintText, unitIds);
 }
 
 class _UnitSearchState extends State<UnitSearch> {
   final String hintText;
+  final List<int> unitIds;
 
-  _UnitSearchState(this.hintText);
+  _UnitSearchState(this.hintText, this.unitIds);
 
   TextEditingController _searchController = TextEditingController();
 
@@ -95,36 +98,42 @@ class _UnitSearchState extends State<UnitSearch> {
                 return FutureBuilder(
                     future: snap.data,
                     builder: (context, AsyncSnapshot<List<Unit>> unitsSnap) {
-                      return unitsSnap.hasData
-                          ? unitsSnap.data.isNotEmpty
-                              ? Container(
-                                  height: MediaQuery.of(context).size.height -
-                                      AppBar().preferredSize.height -
-                                      61,
-                                  child: ListView.separated(
-                                      separatorBuilder: (context, index) =>
-                                          Divider(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSurface,
-                                          ),
-                                      padding: EdgeInsets.only(
-                                        left: Indents.md,
-                                        right: Indents.md,
+                      if (unitsSnap.hasData) {
+                        if (unitsSnap.data.isNotEmpty) {
+                          List<Unit> unitList = [];
+                          for (var unit in unitsSnap.data)
+                            for (var unitId in unitIds)
+                              if (unitId == unit.id) unitList.add(unit);
+                          return Container(
+                              height: MediaQuery.of(context).size.height -
+                                  AppBar().preferredSize.height -
+                                  61,
+                              child: ListView.separated(
+                                  separatorBuilder: (context, index) => Divider(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface,
                                       ),
-                                      itemCount: unitsSnap.data.length,
-                                      itemBuilder: (context, index) =>
-                                          Container(
-                                              child: unitItems(context,
-                                                  unitsSnap.data[index]))))
-                              : Container(
                                   padding: EdgeInsets.only(
                                     left: Indents.md,
                                     right: Indents.md,
                                   ),
-                                  child: Text(
-                                      "Извините, такая единица измерения пока что не добавлена в систему :("))
-                          : Container();
+                                  itemCount: unitList.length,
+                                  itemBuilder: (context, index) => Container(
+                                      child: unitItems(
+                                          context, unitList[index]))));
+                        } else {
+                          return Container(
+                              padding: EdgeInsets.only(
+                                left: Indents.md,
+                                right: Indents.md,
+                              ),
+                              child: Text(
+                                  "Извините, такая единица измерения пока что не добавлена в систему :("));
+                        }
+                      } else {
+                        return Container();
+                      }
                     });
               } else
                 return Container();

@@ -73,7 +73,7 @@ class MemberBiomarkerApi extends ApiBase<MemberBiomarkerApi> {
       await dio.post(url, data: model);
       return true;
     } on DioError catch (e) {
-      print(e);
+      print("MEMBER REFERENCE: " + e.toString());
       return false;
     }
   }
@@ -82,8 +82,10 @@ class MemberBiomarkerApi extends ApiBase<MemberBiomarkerApi> {
     try {
       var url = '${v}/member/biomarker/reference/${id}';
       await dio.delete(url);
+      print("REFERENCE DELETED!");
       return true;
     } on DioError catch (e) {
+      print("REFERENCE DELETE ERROR!" + e.toString());
       return false;
     }
   }

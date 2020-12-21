@@ -247,6 +247,7 @@ class _BiomarkerAlertDialogState extends State<BiomarkerAlertDialog> {
                                           hintText: hintUnit ??
                                               "Введите единицу измерения",
                                           dataList: dataList,
+                                          unitIds: choosedBiomarker.unitIds,
                                           initialValue:
                                               _biomarkerUnitIdController.text,
                                           searchType: "unit",
@@ -270,12 +271,21 @@ class _BiomarkerAlertDialogState extends State<BiomarkerAlertDialog> {
                                   return showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
+                                        List<Unit> dataList = [];
+                                        for (var unit
+                                        in store.state.unitList.units)
+                                          for (var unitId
+                                          in choosedBiomarker.unitIds)
+                                            if (unitId == unit.id)
+                                              dataList.add(unit);
+
                                         return SearchScreen(
                                           hintText: hintUnit ??
                                               "Введите единицу измерения",
-                                          dataList: store.state.unitList.units,
+                                          dataList: dataList,
+                                          unitIds: choosedBiomarker.unitIds,
                                           initialValue:
-                                              _biomarkerUnitIdController.text,
+                                          _biomarkerUnitIdController.text,
                                           searchType: "unit",
                                         );
                                       }).then((val) {

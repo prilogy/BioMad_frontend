@@ -85,14 +85,14 @@ class BiomarkerHistory extends StatelessWidget {
         future: biomarker,
         builder: (context, AsyncSnapshot<Biomarker> biomarker) {
           if (biomarker.hasData) {
-            if (biomarker.data.state == BiomarkerStateType.number2_) {
+            if (data.value >= biomarker.data.reference.valueA && data.value <= biomarker.data.reference.valueB) {
               color = BioMadColors.success;
               status = "норма";
-            } else if (biomarker.data.state == BiomarkerStateType.number1_) {
+            } else if (data.value < biomarker.data.reference.valueA) {
               color = BioMadColors.warning;
               status = "пониженный";
               icon = Icons.keyboard_arrow_down;
-            } else if (biomarker.data.state == BiomarkerStateType.number0_) {
+            } else if (data.value > biomarker.data.reference.valueB) {
               color = BioMadColors.warning;
               status = "повышенный";
               icon = Icons.keyboard_arrow_up;

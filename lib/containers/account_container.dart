@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:api/api.dart';
 import 'package:biomad_frontend/containers/members_list_container.dart';
 import 'package:biomad_frontend/helpers/i18n_helper.dart';
@@ -37,6 +39,19 @@ class _AccountContainerState extends State<AccountContainer> {
     return await api.biomarker.info();
   }
 
+  StreamController<Future<List<Biomarker>>> searchStream;
+  Future<List<Biomarker>> biomarkers;
+
+  void _loadBiomarkers(biomarkers) async => searchStream.add(biomarkers);
+
+  @override
+  void initState() {
+    searchStream = StreamController<Future<List<Biomarker>>>();
+    biomarkers = getBiomarker();
+    _loadBiomarkers(biomarkers);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -45,15 +60,13 @@ class _AccountContainerState extends State<AccountContainer> {
     final user = store.state.user;
     final currentMember = store.state.authorization.currentMember;
     List<Biomarker> customBiomarker = [];
-    Future<List<Biomarker>> biomarkers = getBiomarker();
     //Добавить локализацию
     //gendersAsync(); //Подгрузка гендеров
 
     return Container(
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         BlockBaseWidget(
-          padding: EdgeInsets.only(
-              top: Indents.md, left: Indents.md, right: Indents.md),
+          padding: EdgeInsets.only(top: Indents.md, left: Indents.md, right: Indents.md),
           margin: EdgeInsets.only(bottom: Indents.sm),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -61,8 +74,7 @@ class _AccountContainerState extends State<AccountContainer> {
             children: [
               Text(
                 user.email,
-                style: theme.textTheme.headline6
-                    .merge(TextStyle(color: theme.primaryColor)),
+                style: theme.textTheme.headline6.merge(TextStyle(color: theme.primaryColor)),
               ),
               SizedBox(
                 height: 30,
@@ -74,18 +86,15 @@ class _AccountContainerState extends State<AccountContainer> {
                       color: theme.primaryColor,
                     ),
                     onPressed: () {
-                      var h = CustomListTile.baseHeight *
-                              (store.state.user?.members?.length ?? 1) +
+                      var h = CustomListTile.baseHeight * (store.state.user?.members?.length ?? 1) +
                           CustomListTile.baseHeight +
                           10;
-                      if (h > MediaQuery.of(context).size.height)
-                        h = MediaQuery.of(context).size.height / 2;
+                      if (h > MediaQuery.of(context).size.height) h = MediaQuery.of(context).size.height / 2;
 
                       var alert = customAlertDialog(context,
                           title: tr('member_list_container.title'),
                           contentHeight: h,
-                          contentPadding:
-                              EdgeInsets.symmetric(vertical: Indents.md),
+                          contentPadding: EdgeInsets.symmetric(vertical: Indents.md),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [MembersListContainer()],
@@ -121,8 +130,7 @@ class _AccountContainerState extends State<AccountContainer> {
                         CustomCircleAvatar(
                           radius: AvatarSizes.xl,
                           text: currentMember.name,
-                          backgroundColor:
-                              ColorHelpers.fromHex(currentMember.color),
+                          backgroundColor: ColorHelpers.fromHex(currentMember.color),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: Indents.smd),
@@ -131,26 +139,17 @@ class _AccountContainerState extends State<AccountContainer> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding:
-                                    const EdgeInsets.only(bottom: Indents.sm),
+                                padding: const EdgeInsets.only(bottom: Indents.sm),
                                 child: Text(
                                   currentMember.name,
                                   style: theme.textTheme.headline6,
                                 ),
                               ),
                               Text(
-                                  _ttr((gender
-                                              .firstWhere((x) =>
-                                                  x.id ==
-                                                  currentMember.genderId)
-                                              .key ??
-                                          'neutral')) +
+                                  _ttr((gender.firstWhere((x) => x.id == currentMember.genderId).key ?? 'neutral')) +
                                       ', ' +
-                                      getAgeFromDate(currentMember.dateBirthday)
-                                          .toString(),
-                                  style: theme.textTheme.bodyText2.merge(
-                                      TextStyle(
-                                          color: theme.colorScheme.onSurface)))
+                                      getAgeFromDate(currentMember.dateBirthday).toString(),
+                                  style: theme.textTheme.bodyText2.merge(TextStyle(color: theme.colorScheme.onSurface)))
                             ],
                           ),
                         )
@@ -164,158 +163,144 @@ class _AccountContainerState extends State<AccountContainer> {
           text: "Собственные референсы",
           dividerPadding: EdgeInsets.symmetric(vertical: Indents.smd),
         ),
-        FutureBuilder(
-            future: biomarkers,
-            builder: (context, AsyncSnapshot<List<Biomarker>> biomarkers) {
-              customBiomarker = [];
-              if (biomarkers.hasData) {
-                for (var item in biomarkers.data) {
-                  try {
-                    if (item.reference.isOwnReference)
-                      customBiomarker.add(item);
-                  } catch (e) {
-                    print(item.content.name);
-                  }
-                }
-
-                return Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      customBiomarker.length != 0
-                          ? Container(
-                              height: customBiomarker.length * 30.0,
-                              child: ListView.separated(
-                                separatorBuilder: (context, index) => Divider(
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
-                                ),
-                                padding: EdgeInsets.only(
-                                  left: Indents.md,
-                                  right: Indents.md,
-                                ),
-                                itemCount: customBiomarker.length,
-                                itemBuilder: (context, index) => Container(
-                                    child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                      Text(
-                                        customBiomarker[index].content.name,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText2
-                                            .merge(TextStyle(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .onSurface)),
-                                      ),
-                                      Row(children: [
-                                        Text(
-                                          customBiomarker[index]
-                                                  .reference
-                                                  .valueA
-                                                  .toString() +
-                                              " - " +
-                                              customBiomarker[index]
-                                                  .reference
-                                                  .valueB
-                                                  .toString() +
-                                              " " +
-                                              store.state.unitList.units
-                                                  .firstWhere((element) =>
-                                                      element.id ==
-                                                      customBiomarker[index]
-                                                          .reference
-                                                          .unitId)
-                                                  .content
-                                                  .shorthand,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText2
-                                              .merge(TextStyle(
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .onSurface)),
+        StreamBuilder(
+            stream: searchStream.stream,
+            builder: (context, snap) {
+              if (snap.hasData) {
+                return FutureBuilder(
+                    future: snap.data,
+                    builder: (context, AsyncSnapshot<List<Biomarker>> biomarkersSnap) {
+                      customBiomarker = [];
+                      if (biomarkersSnap.hasData) {
+                        for (var item in biomarkersSnap.data) {
+                          try {
+                            if (item.reference.isOwnReference) customBiomarker.add(item);
+                          } catch (e) {
+                            print("NO REFERENCE: " + item.content.name);
+                          }
+                        }
+                        return Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              customBiomarker.length != 0
+                                  ? Container(
+                                      height: customBiomarker.length * 30.0,
+                                      child: ListView.separated(
+                                        separatorBuilder: (context, index) => Divider(
+                                          color: Theme.of(context).colorScheme.onSurface,
                                         ),
-                                        Container(
-                                          width: 20,
-                                          height: 20,
-                                          child: FittedBox(
-                                              alignment: Alignment.center,
-                                              fit: BoxFit.fitWidth,
-                                              child: IconButton(
-                                                  icon: Icon(
-                                                    Icons.close,
-                                                    size: 40,
-                                                    color: BioMadColors.error,
-                                                  ),
-                                                  onPressed: () {
-                                                    api.memberBiomarker
-                                                        .deleteReference(
-                                                            customBiomarker[
-                                                                    index]
-                                                                .id);
-                                                  })),
+                                        padding: EdgeInsets.only(
+                                          left: Indents.md,
+                                          right: Indents.md,
                                         ),
-                                      ])
-                                    ])),
-                              ))
-                          : Container(
-                              margin: EdgeInsets.only(left: Indents.slg),
-                              child: Text(
-                                  "Собственные референсы пока что не добавлены.")),
-                      Container(
-                        padding: EdgeInsets.zero,
-                        width: 220,
-                        child: CustomButton.flat(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AddReferenceAlertDialog(context,
-                                    title: "Указать референс",
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: Indents.md));
-                              },
-                            );
-                          },
-                          text: "Добавить или изменить",
-                        ),
-                      )
-                    ]);
+                                        itemCount: customBiomarker.length,
+                                        itemBuilder: (context, index) => Container(
+                                            child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                                          Text(
+                                            customBiomarker[index].content.name,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText2
+                                                .merge(TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                                          ),
+                                          Row(children: [
+                                            Text(
+                                              customBiomarker[index].reference.valueA.toString() +
+                                                  " - " +
+                                                  customBiomarker[index].reference.valueB.toString() +
+                                                  " " +
+                                                  store.state.unitList.units
+                                                      .firstWhere((element) =>
+                                                          element.id == customBiomarker[index].reference.unitId)
+                                                      .content
+                                                      .shorthand,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText2
+                                                  .merge(TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                                            ),
+                                            Container(
+                                              width: 20,
+                                              height: 20,
+                                              child: FittedBox(
+                                                  alignment: Alignment.center,
+                                                  fit: BoxFit.fitWidth,
+                                                  child: IconButton(
+                                                      icon: Icon(
+                                                        Icons.clear,
+                                                        size: 40,
+                                                        color: BioMadColors.error,
+                                                      ),
+                                                      onPressed: () {
+                                                        api.memberBiomarker.deleteReference(customBiomarker[index].id);
+                                                        setState(() {
+                                                          biomarkers = getBiomarker();
+                                                          _loadBiomarkers(biomarkers);
+                                                        });
+                                                      })),
+                                            ),
+                                          ])
+                                        ])),
+                                      ))
+                                  : Container(
+                                      margin: EdgeInsets.only(left: Indents.slg),
+                                      child: Text("Собственные референсы пока что не добавлены.")),
+                              Container(
+                                padding: EdgeInsets.zero,
+                                width: 220,
+                                child: CustomButton.flat(
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AddReferenceAlertDialog(context,
+                                            title: "Указать референс",
+                                            contentPadding: EdgeInsets.symmetric(vertical: Indents.md));
+                                      },
+                                    ).then((value) => {
+                                          setState(() {
+                                            biomarkers = getBiomarker();
+                                            _loadBiomarkers(biomarkers);
+                                          })
+                                        });
+                                  },
+                                  text: "Добавить или изменить",
+                                ),
+                              )
+                            ]);
+                      } else {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                                padding: EdgeInsets.only(left: Indents.md, right: Indents.md),
+                                child: Text("Собственные референсы пока что не добавлены.")),
+                            Container(
+                              padding: EdgeInsets.zero,
+                              width: 220,
+                              child: CustomButton.flat(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AddReferenceAlertDialog(context,
+                                          title: "Указать референс",
+                                          contentPadding: EdgeInsets.symmetric(vertical: Indents.md));
+                                    },
+                                  );
+                                },
+                                text: "Добавить или изменить",
+                              ),
+                            )
+                          ],
+                        );
+                      }
+                    });
               } else {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                        padding: EdgeInsets.only(
-                            left: Indents.md, right: Indents.md),
-                        child: Text(
-                            "Собственные референсы пока что не добавлены.")),
-                    Container(
-                      padding: EdgeInsets.zero,
-                      width: 220,
-                      child: CustomButton.flat(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AddReferenceAlertDialog(context,
-                                  title: "Указать референс",
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: Indents.md));
-                            },
-                          );
-                        },
-                        text: "Добавить или изменить",
-                      ),
-                    )
-                  ],
-                );
+                return Container(child: Text("Обновляем референсы"));
               }
-              ;
             }),
         CustomDivider(
           text: _tr('socials'),
@@ -342,8 +327,7 @@ class _AccountContainerState extends State<AccountContainer> {
         CustomListTile(
           onTap: () {
             Keys.rootNavigator.currentState.pushReplacementNamed(Routes.auth);
-            WidgetsBinding.instance.addPostFrameCallback(
-                (x) => store.dispatch(StoreThunks.logOut()));
+            WidgetsBinding.instance.addPostFrameCallback((x) => store.dispatch(StoreThunks.logOut()));
           },
           prepend: Row(
             children: [
@@ -351,8 +335,7 @@ class _AccountContainerState extends State<AccountContainer> {
                   padding: EdgeInsets.only(right: Indents.md),
                   child: CustomCircleAvatar(
                       radius: AvatarSizes.md,
-                      backgroundColor:
-                          theme.primaryColor.withOpacity(ColorAlphas.a10),
+                      backgroundColor: theme.primaryColor.withOpacity(ColorAlphas.a10),
                       child: Icon(
                         Icons.exit_to_app,
                         color: theme.primaryColor,

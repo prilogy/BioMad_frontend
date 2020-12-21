@@ -10,6 +10,7 @@ import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:flutter/material.dart';
 
+import '../on_load_container.dart';
 import 'biomarker_alert.dart';
 
 class BiomarkerItem extends StatelessWidget with IndentsMixin {
@@ -29,8 +30,7 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
 
   final EdgeInsetsGeometry headerPadding;
 
-  static const EdgeInsetsGeometry _defaultMargin =
-      const EdgeInsets.only(bottom: Indents.md);
+  static const EdgeInsetsGeometry _defaultMargin = const EdgeInsets.only(bottom: Indents.md);
 
   BiomarkerItem(
       {this.child,
@@ -76,14 +76,15 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
 
     MemberBiomarkerModel _biomarkerModel;
     if (isModel)
-      _biomarkerModel = store.state.memberBiomarkerModelList.biomarkers
-          .firstWhere((element) => element.biomarkerId == id);
+      _biomarkerModel =
+          store.state.memberBiomarkerModelList.biomarkers.firstWhere((element) => element.biomarkerId == id);
 
     Future<Biomarker> biomarker = getBiomarkerById(id, unitId);
 
     return FutureBuilder(
         future: biomarker,
         builder: (context, AsyncSnapshot<Biomarker> biomarker) {
+          var iconContainer;
           if (biomarker.hasData) {
             if (biomarker.data.state == BiomarkerStateType.number2_) {
               color = BioMadColors.success;
@@ -98,12 +99,21 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
               icon = Icons.keyboard_arrow_up;
             } else {
               status = "не определено";
-              icon = Icons.keyboard_arrow_right;
+              color = BioMadColors.base[300].withOpacity(0.8);
+              iconContainer = Container(
+                  margin: EdgeInsets.only(right: Indents.sm),
+                  height: 6.0,
+                  width: 6.0,
+                  decoration: new BoxDecoration(
+                    color: color,
+                    shape: BoxShape.circle,
+                  ));
             }
 
-            var iconContainer = Container(
+            var iconContainerNormal = Container(
                 height: 6.0,
                 width: 6.0,
+                margin: EdgeInsets.only(right: Indents.sm),
                 decoration: new BoxDecoration(
                   color: color,
                   shape: BoxShape.circle,
@@ -158,18 +168,12 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
                                     children: [
                                       Container(
                                           child: icon != null
-                                              ? Icon(icon,
-                                                  color: color, size: 16.0)
-                                              : iconContainer),
-                                      Text(
-                                          value.toString() +
-                                              ' ' +
-                                              unit +
-                                              ', ' +
-                                              status,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText2),
+                                              ? Icon(icon, color: color, size: 16.0)
+                                              : status != "норма"
+                                                  ? iconContainer
+                                                  : iconContainerNormal),
+                                      Text(value.toString() + ' ' + unit + ', ' + status,
+                                          style: Theme.of(context).textTheme.bodyText2),
                                     ],
                                   ),
                                 ],
@@ -211,8 +215,7 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
                                           ),
                                         ],
                                         //contentHeight: h,
-                                        contentPadding: EdgeInsets.symmetric(
-                                            vertical: Indents.md),
+                                        contentPadding: EdgeInsets.symmetric(vertical: Indents.md),
                                       );
                                     },
                                   );
@@ -225,13 +228,9 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
                                     size: 24.0,
                                   ),
                                   onPressed: () {
-                                    store.state.memberBiomarkerModelList
-                                        .biomarkers
-                                        .removeAt(index);
-                                    store.dispatch(
-                                        StoreThunks.setMemberBiomarkerModels(
-                                            store.state.memberBiomarkerModelList
-                                                .biomarkers));
+                                    store.state.memberBiomarkerModelList.biomarkers.removeAt(index);
+                                    store.dispatch(StoreThunks.setMemberBiomarkerModels(
+                                        store.state.memberBiomarkerModelList.biomarkers));
                                   })
                             ],
                           )
@@ -253,8 +252,7 @@ class BiomarkerItem extends StatelessWidget with IndentsMixin {
               ),
             );
           } else {
-            return Container(
-                child: Text("Биомаркеры ещё не загружены"));
+            return OnLoadContainer();
           }
         });
   }

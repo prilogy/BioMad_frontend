@@ -18,12 +18,14 @@ import 'package:flutter/material.dart';
 class SearchScreen extends StatefulWidget {
   final String hintText;
   final List<dynamic> dataList;
+  final List<int> unitIds;
   final SearchResultModel allData;
   final initialValue;
   final searchType;
 
   SearchScreen({@required this.hintText,
     this.dataList,
+    this.unitIds,
     this.allData,
     this.initialValue = "",
     this.searchType,
@@ -32,17 +34,18 @@ class SearchScreen extends StatefulWidget {
 
   @override
   _SearchScreenState createState() =>
-      _SearchScreenState(hintText, dataList, allData, initialValue, searchType);
+      _SearchScreenState(hintText, dataList, unitIds, allData, initialValue, searchType);
 }
 
 class _SearchScreenState extends State<SearchScreen> {
   final String hintText;
   List<dynamic> dataList;
+  final List<int> unitIds;
   SearchResultModel allData;
   final initialValue;
   final searchType;
 
-  _SearchScreenState(this.hintText, this.dataList, this.allData,
+  _SearchScreenState(this.hintText, this.dataList, this.unitIds, this.allData,
       this.initialValue, this.searchType);
 
   TextEditingController _searchController = TextEditingController();
@@ -67,7 +70,7 @@ class _SearchScreenState extends State<SearchScreen> {
     if (searchType == "biomarker" || searchType == "memberBiomarker")
       return BiomarkerSearch(hintText: hintText,);
     else if (searchType == "unit")
-      return UnitSearch(hintText: hintText,);
+      return UnitSearch(hintText: hintText, unitIds: unitIds);
     else
       return AllSearch(hintText: hintText,);
   }

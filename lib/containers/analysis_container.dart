@@ -25,7 +25,7 @@ class _AnalysisContainerState extends State<AnalysisContainer> {
   _AnalysisContainerState(this.analysis);
 
   String zeroAdding(int value) {
-    return value > 10 ? value.toString() : "0" + value.toString();
+    return value > 9 ? value.toString() : "0" + value.toString();
   }
 
   @override

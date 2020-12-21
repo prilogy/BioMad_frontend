@@ -40,15 +40,7 @@ class AddReferenceAlertDialog extends StatefulWidget {
 
   @override
   _AddReferenceAlertDialogState createState() => _AddReferenceAlertDialogState(
-      child,
-      title,
-      hintBiomarker,
-      hintUnit,
-      actions,
-      biomarker,
-      contentPadding,
-      titlePadding,
-      contentHeight);
+      child, title, hintBiomarker, hintUnit, actions, biomarker, contentPadding, titlePadding, contentHeight);
 }
 
 class _AddReferenceAlertDialogState extends State<AddReferenceAlertDialog> {
@@ -66,16 +58,8 @@ class _AddReferenceAlertDialogState extends State<AddReferenceAlertDialog> {
   );
   final double contentHeight;
 
-  _AddReferenceAlertDialogState(
-      this.child,
-      this.title,
-      this.hintBiomarker,
-      this.hintUnit,
-      this.actions,
-      this.biomarker,
-      this.contentPadding,
-      this.titlePadding,
-      this.contentHeight);
+  _AddReferenceAlertDialogState(this.child, this.title, this.hintBiomarker, this.hintUnit, this.actions, this.biomarker,
+      this.contentPadding, this.titlePadding, this.contentHeight);
 
   //Форма биомаркеров
   var _biomarkerValueAController = TextEditingController();
@@ -104,21 +88,17 @@ class _AddReferenceAlertDialogState extends State<AddReferenceAlertDialog> {
       getBiomarkers().then((x) => {
             setState(() {
               biomarkers = x;
-              choosedBiomarker = biomarkers
-                  .firstWhere((element) => element.id == biomarker.biomarkerId);
+              choosedBiomarker = biomarkers.firstWhere((element) => element.id == biomarker.biomarkerId);
               _biomarkerIdController.text = choosedBiomarker.content.name;
-              _biomarkerValueAController.text =
-                  choosedBiomarker.reference.valueA.toString();
-              _biomarkerValueBController.text =
-                  choosedBiomarker.reference.valueB.toString();
+              _biomarkerValueAController.text = choosedBiomarker.reference.valueA.toString();
+              _biomarkerValueBController.text = choosedBiomarker.reference.valueB.toString();
             })
           });
 
       biomarkerId = biomarker.biomarkerId;
       unitId = biomarker.unitId;
 
-      unit = store.state.unitList.units
-          .firstWhere((element) => element.id == biomarker.unitId);
+      unit = store.state.unitList.units.firstWhere((element) => element.id == biomarker.unitId);
       _biomarkerUnitIdController.text = unit.content.name;
     }
 
@@ -126,8 +106,7 @@ class _AddReferenceAlertDialogState extends State<AddReferenceAlertDialog> {
   }
 
   //TODO: Добавить валидаторы
-  MemberBiomarkerReferenceModel getMemberBiomarkerReferenceModel() =>
-      MemberBiomarkerReferenceModel(
+  MemberBiomarkerReferenceModel getMemberBiomarkerReferenceModel() => MemberBiomarkerReferenceModel(
         valueA: double.parse(_biomarkerValueAController.text),
         valueB: double.parse(_biomarkerValueBController.text),
         unitId: unitId,
@@ -153,160 +132,137 @@ class _AddReferenceAlertDialogState extends State<AddReferenceAlertDialog> {
               behavior: NoRippleScrollBehaviour(),
               child: ListView(children: [
                 Container(
-                    padding: EdgeInsets.only(
-                        top: Indents.sm, left: Indents.md, right: Indents.md),
+                    padding: EdgeInsets.only(top: Indents.sm, left: Indents.md, right: Indents.md),
                     child: Form(
                         key: _biomarkerFormKey,
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CustomTextFormField(
-                                controller: _biomarkerIdController,
-                                validator: null,
-                                labelText: "Биомаркер",
-                                disableLabelText: "Выбранный биомаркер",
-                                enabled: biomarker == null ? true : false,
-                                onTap: () {
-                                  return showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return SearchScreen(
-                                          hintText: hintBiomarker ??
-                                              "Введите биомаркер",
-                                          dataList: biomarkers,
-                                          initialValue:
-                                              _biomarkerIdController.text,
-                                          searchType: "biomarker",
-                                        );
-                                      }).then((val) {
-                                    biomarker = null;
-                                    _biomarkerIdController.value =
-                                        TextEditingValue(
-                                      text: val.content.name,
-                                      selection: TextSelection.fromPosition(
-                                        TextPosition(
-                                            offset: val.content.name.length),
-                                      ),
+                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                          CustomTextFormField(
+                            controller: _biomarkerIdController,
+                            validator: null,
+                            labelText: "Биомаркер",
+                            disableLabelText: "Выбранный биомаркер",
+                            enabled: biomarker == null ? true : false,
+                            onTap: () {
+                              return showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return SearchScreen(
+                                      hintText: hintBiomarker ?? "Введите биомаркер",
+                                      dataList: biomarkers,
+                                      initialValue: _biomarkerIdController.text,
+                                      searchType: "biomarker",
                                     );
-                                    setState(() {
-                                      choosedBiomarker = val;
-                                      biomarkerId = val.id;
-                                    });
-                                  });
-                                },
-                                onChange: (x) {
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return SearchScreen(
-                                          hintText: hintBiomarker ??
-                                              "Введите биомаркер",
-                                          dataList: biomarkers,
-                                          initialValue:
-                                              _biomarkerIdController.text,
-                                          searchType: "biomarker",
-                                        );
-                                      }).then((val) {
-                                    _biomarkerIdController.value =
-                                        TextEditingValue(
-                                      text: val.content.name,
-                                      selection: TextSelection.fromPosition(
-                                        TextPosition(
-                                            offset: val.content.name.length),
-                                      ),
+                                  }).then((val) {
+                                biomarker = null;
+                                _biomarkerIdController.value = TextEditingValue(
+                                  text: val.content.name,
+                                  selection: TextSelection.fromPosition(
+                                    TextPosition(offset: val.content.name.length),
+                                  ),
+                                );
+                                setState(() {
+                                  choosedBiomarker = val;
+                                  biomarkerId = val.id;
+                                });
+                              });
+                            },
+                            onChange: (x) {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return SearchScreen(
+                                      hintText: hintBiomarker ?? "Введите биомаркер",
+                                      dataList: biomarkers,
+                                      initialValue: _biomarkerIdController.text,
+                                      searchType: "biomarker",
                                     );
-                                    setState(() {
-                                      choosedBiomarker = val;
-                                      biomarkerId = val.id;
-                                    });
-                                  });
-                                },
-                              ),
-                              CustomTextFormField(
-                                  controller: _biomarkerValueAController,
-                                  validator: null,
-                                  keyboardType: TextInputType.number,
-                                  labelText: "Нижняя граница",
-                                  onTap: () {}),
-                              CustomTextFormField(
-                                  controller: _biomarkerValueBController,
-                                  validator: null,
-                                  keyboardType: TextInputType.number,
-                                  labelText: "Верхняя граница",
-                                  onTap: () {}),
-                              CustomTextFormField(
-                                controller: _biomarkerUnitIdController,
-                                enabled:
-                                    biomarkerId != null || biomarker != null
-                                        ? true
-                                        : false,
-                                disableLabelText: "Сначала выберите биомаркер",
-                                validator: null,
-                                margin: EdgeInsets.only(bottom: 0),
-                                labelText: "Единицы измерения",
-                                onTap: () {
-                                  return showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        List<Unit> dataList = [];
-                                        for (var unit
-                                            in store.state.unitList.units)
-                                          for (var unitId
-                                              in choosedBiomarker.unitIds)
-                                            if (unitId == unit.id)
-                                              dataList.add(unit);
+                                  }).then((val) {
+                                _biomarkerIdController.value = TextEditingValue(
+                                  text: val.content.name,
+                                  selection: TextSelection.fromPosition(
+                                    TextPosition(offset: val.content.name.length),
+                                  ),
+                                );
+                                setState(() {
+                                  choosedBiomarker = val;
+                                  biomarkerId = val.id;
+                                });
+                              });
+                            },
+                          ),
+                          CustomTextFormField(
+                              controller: _biomarkerValueAController,
+                              validator: null,
+                              keyboardType: TextInputType.number,
+                              labelText: "Нижняя граница",
+                              onTap: () {}),
+                          CustomTextFormField(
+                              controller: _biomarkerValueBController,
+                              validator: null,
+                              keyboardType: TextInputType.number,
+                              labelText: "Верхняя граница",
+                              onTap: () {}),
+                          CustomTextFormField(
+                            controller: _biomarkerUnitIdController,
+                            enabled: biomarkerId != null || biomarker != null ? true : false,
+                            disableLabelText: "Сначала выберите биомаркер",
+                            validator: null,
+                            margin: EdgeInsets.only(bottom: 0),
+                            labelText: "Единицы измерения",
+                            onTap: () {
+                              return showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    List<Unit> dataList = [];
+                                    for (var unit in store.state.unitList.units)
+                                      for (var unitId in choosedBiomarker.unitIds)
+                                        if (unitId == unit.id) dataList.add(unit);
 
-                                        return SearchScreen(
-                                          hintText: hintUnit ??
-                                              "Введите единицу измерения",
-                                          dataList: dataList,
-                                          initialValue:
-                                              _biomarkerUnitIdController.text,
-                                          searchType: "unit",
-                                        );
-                                      }).then((val) {
-                                    _biomarkerUnitIdController.value =
-                                        TextEditingValue(
-                                      text: val.content.name,
-                                      selection: TextSelection.fromPosition(
-                                        TextPosition(
-                                            offset: val.content.name.length),
-                                      ),
+                                    return SearchScreen(
+                                      hintText: hintUnit ?? "Введите единицу измерения",
+                                      dataList: dataList,
+                                      unitIds: choosedBiomarker.unitIds,
+                                      initialValue: _biomarkerUnitIdController.text,
+                                      searchType: "unit",
                                     );
-                                    setState(() {
-                                      unitId = val.id;
-                                      _unit = val;
-                                    });
-                                  });
-                                },
-                                onChange: (x) {
-                                  return showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return SearchScreen(
-                                          hintText: hintUnit ??
-                                              "Введите единицу измерения",
-                                          dataList: store.state.unitList.units,
-                                          initialValue:
-                                              _biomarkerUnitIdController.text,
-                                          searchType: "unit",
-                                        );
-                                      }).then((val) {
-                                    _biomarkerUnitIdController.value =
-                                        TextEditingValue(
-                                      text: val.content.name,
-                                      selection: TextSelection.fromPosition(
-                                        TextPosition(
-                                            offset: val.content.name.length),
-                                      ),
+                                  }).then((val) {
+                                _biomarkerUnitIdController.value = TextEditingValue(
+                                  text: val.content.name,
+                                  selection: TextSelection.fromPosition(
+                                    TextPosition(offset: val.content.name.length),
+                                  ),
+                                );
+                                setState(() {
+                                  unitId = val.id;
+                                  _unit = val;
+                                });
+                              });
+                            },
+                            onChange: (x) {
+                              return showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return SearchScreen(
+                                      hintText: hintUnit ?? "Введите единицу измерения",
+                                      dataList: store.state.unitList.units,
+                                      unitIds: choosedBiomarker.unitIds,
+                                      initialValue: _biomarkerUnitIdController.text,
+                                      searchType: "unit",
                                     );
-                                    setState(() {
-                                      unitId = val.id;
-                                    });
-                                  });
-                                },
-                              ),
-                            ])))
+                                  }).then((val) {
+                                _biomarkerUnitIdController.value = TextEditingValue(
+                                  text: val.content.name,
+                                  selection: TextSelection.fromPosition(
+                                    TextPosition(offset: val.content.name.length),
+                                  ),
+                                );
+                                setState(() {
+                                  unitId = val.id;
+                                });
+                              });
+                            },
+                          ),
+                        ])))
               ])),
         ),
         titlePadding: titlePadding,
@@ -325,11 +281,8 @@ class _AddReferenceAlertDialogState extends State<AddReferenceAlertDialog> {
           TextButton(
             child: Text('Сохранить'),
             onPressed: () {
-              MemberBiomarkerReferenceModel answer =
-                  getMemberBiomarkerReferenceModel();
-              api.memberBiomarker
-                  .addReference(answer)
-                  .then((value) => print("REQUEST STATE: " + value.toString()));
+              MemberBiomarkerReferenceModel answer = getMemberBiomarkerReferenceModel();
+              api.memberBiomarker.addReference(answer).then((value) => print("REQUEST STATE: " + value.toString()));
               Navigator.of(context).pop();
             },
           ),

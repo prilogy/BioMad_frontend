@@ -57,32 +57,25 @@ class _BioMarkerListScreenState extends State<BioMarkerListScreen> {
     bool isBiomarkerInType = false;
 
     return Container(
-        height: MediaQuery.of(context).size.height -
-            AppBar().preferredSize.height -
-            61,
+        height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - 61,
         width: MediaQuery.of(context).size.width,
         child: Stack(children: [
           FutureBuilder(
               future: memberBiomarkers,
-              builder: (context,
-                  AsyncSnapshot<List<MemberBiomarker>> memberBiomarkers) {
+              builder: (context, AsyncSnapshot<List<MemberBiomarker>> memberBiomarkers) {
                 if (memberBiomarkers.hasData) {
                   return Container(
-                      height: MediaQuery.of(context).size.height -
-                          AppBar().preferredSize.height -
-                          55,
+                      height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - 55,
                       width: MediaQuery.of(context).size.width,
                       alignment: Alignment.topLeft,
-                      padding: EdgeInsets.only(
-                          top: Indents.md,
-                          left: Indents.slg,
-                          right: Indents.md),
+                      padding: EdgeInsets.only(top: Indents.md, left: Indents.slg, right: Indents.md),
                       margin: EdgeInsets.only(bottom: Indents.sm),
                       child: FutureBuilder(
                           future: types,
-                          builder: (context,
-                              AsyncSnapshot<List<BiomarkerType>> types) {
+                          builder: (context, AsyncSnapshot<List<BiomarkerType>> types) {
                             if (types.hasData) {
+                              int memberBiomarkerCounter = 0;
+                              List<MemberBiomarker> biomarkerList = [];
                               return memberBiomarkers.data.isNotEmpty
                                   ? ScrollConfiguration(
                                       behavior: NoRippleScrollBehaviour(),
@@ -90,84 +83,59 @@ class _BioMarkerListScreenState extends State<BioMarkerListScreen> {
                                           itemCount: types.data.length,
                                           itemBuilder: (context, index) {
                                             try {
-                                              biomarker = memberBiomarkers.data
-                                                  .firstWhere((x) => types
-                                                      .data[index].biomarkerIds
-                                                      .contains(x.biomarkerId));
-                                              isBiomarkerInType = true;
+                                              biomarkerList = [];
+                                              for (var bio in types.data[index].biomarkerIds) {
+                                                try {
+                                                  biomarker = memberBiomarkers.data
+                                                      .firstWhere((x) => x.biomarkerId == bio, orElse: null);
+                                                  biomarkerList.add(biomarker);
+                                                  isBiomarkerInType = true;
+                                                  memberBiomarkerCounter++;
+                                                } catch (e) {}
+                                              }
                                             } catch (e) {
+                                              print("IN TYPES OF BIOMARKER LIST: " + e.toString());
                                               biomarker = null;
                                               isBiomarkerInType = false;
                                             }
-                                            return isBiomarkerInType &&
-                                                    types.data[index].content !=
-                                                        null
+                                            return isBiomarkerInType && types.data[index].content != null
                                                 ? Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text(
-                                                          types.data[index]
-                                                              .content.name
-                                                              .toUpperCase(),
-                                                          style: theme
-                                                              .textTheme.caption
-                                                              .merge(TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .normal))),
+                                                      Text(types.data[index].content.name.toUpperCase(),
+                                                          style: theme.textTheme.caption
+                                                              .merge(TextStyle(fontWeight: FontWeight.normal))),
                                                       Container(
-                                                          height: 76 *
-                                                              types
-                                                                  .data[index]
-                                                                  .biomarkerIds
-                                                                  .length
-                                                                  .toDouble(),
-                                                          width: MediaQuery.of(
-                                                                  context)
-                                                              .size
-                                                              .width,
-                                                          child:
-                                                              ScrollConfiguration(
-                                                                  behavior:
-                                                                      NoRippleScrollBehaviour(),
-                                                                  child: ListView
-                                                                      .builder(
-                                                                          itemCount: types
-                                                                              .data[
-                                                                                  index]
-                                                                              .biomarkerIds
-                                                                              .length,
-                                                                          itemBuilder:
-                                                                              (context, i) {
-                                                                            return BiomarkerItem(
-                                                                              value: biomarker.value ?? "null",
-                                                                              unit: biomarker.unit.content.shorthand ?? "unnamed",
-                                                                              unitId: biomarker.unitId,
-                                                                              id: biomarker.biomarkerId,
-                                                                              withActions: false,
-                                                                            );
-                                                                          })))
+                                                          height: 70 * types.data[index].biomarkerIds.length.toDouble(),
+                                                          width: MediaQuery.of(context).size.width,
+                                                          child: ScrollConfiguration(
+                                                              behavior: NoRippleScrollBehaviour(),
+                                                              child: ListView.builder(
+                                                                  itemCount: biomarkerList.length,
+                                                                  itemBuilder: (context, i) {
+                                                                    return BiomarkerItem(
+                                                                      value: biomarkerList[i].value ?? "null",
+                                                                      unit:
+                                                                          biomarkerList[i].unit.content.shorthand ??
+                                                                              "unnamed",
+                                                                      unitId: biomarkerList[i].unitId,
+                                                                      id: biomarkerList[i].biomarkerId,
+                                                                      withActions: false,
+                                                                    );
+                                                                  })))
                                                     ],
                                                   )
                                                 : Container();
                                           }),
                                     )
-                                  : Container(
-                                      child: Text(
-                                          "Тут пусто. Вы ещё не сдали ни одного биомаркера :("));
+                                  : Container(child: Text("Тут пусто. Вы ещё не сдали ни одного биомаркера :("));
                             } else {
-                              return Container(
-                                  child: Text("Ожидаем загрузки типов..."));
+                              return Container(child: Text("Ожидаем загрузки типов..."));
                             }
                           }));
                 } else {
                   return Container(
-                      padding: EdgeInsets.only(
-                          top: Indents.md,
-                          left: Indents.slg,
-                          right: Indents.md),
+                      padding: EdgeInsets.only(top: Indents.md, left: Indents.slg, right: Indents.md),
                       margin: EdgeInsets.only(bottom: Indents.sm),
                       child: Text("Ожидаем загрузки биомаркеров..."));
                 }
@@ -194,11 +162,9 @@ class _BioMarkerListScreenState extends State<BioMarkerListScreen> {
               ],
             ),
             borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(RadiusValues.main),
-                topRight: Radius.circular(RadiusValues.main)),
+                topLeft: Radius.circular(RadiusValues.main), topRight: Radius.circular(RadiusValues.main)),
             onPanelSlide: (double pos) => setState(() {
-              _fabHeight = pos * (_panelHeightOpen - _panelHeightClosed) +
-                  _initFabHeight;
+              _fabHeight = pos * (_panelHeightOpen - _panelHeightClosed) + _initFabHeight;
             }),
           ),
         ])); // This trailin);
