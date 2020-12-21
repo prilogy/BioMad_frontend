@@ -35,7 +35,6 @@ class CategoryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     Future<List<MemberBiomarker>> memberBiomarkers = getMemberBiomarker();
-    Future<List<Biomarker>> biomarkers = getBiomarker();
 
     var color;
     var status;
@@ -46,6 +45,7 @@ class CategoryItem extends StatelessWidget {
       builder:
           (context, AsyncSnapshot<List<MemberBiomarker>> memberBiomarkers) {
         if (memberBiomarkers.hasData) {
+          Future<List<Biomarker>> biomarkers = getBiomarker();
           return FutureBuilder(
               future: biomarkers,
               builder: (context, AsyncSnapshot<List<Biomarker>> biomarkers) {
