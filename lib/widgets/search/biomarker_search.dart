@@ -53,6 +53,7 @@ class _BiomarkerSearchState extends State<BiomarkerSearch> {
 
   @override
   Widget build(BuildContext context) {
+    biomarkers = getBiomarkers(init: true);
     return Scaffold(
         appBar: AppBar(
             title: Container(
@@ -130,7 +131,7 @@ class _BiomarkerSearchState extends State<BiomarkerSearch> {
                             right: Indents.md,
                           ),
                           child: Text(
-                              "Извините, такая единица измерения пока что не добавлена в систему :("))
+                              "Извините, такой биормарке пока что не добавлен в систему :("))
                           : Container();
                     });
               } else

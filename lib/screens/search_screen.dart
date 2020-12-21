@@ -51,10 +51,6 @@ class _SearchScreenState extends State<SearchScreen> {
   TextEditingController _searchController = TextEditingController();
   FocusNode focusNode = FocusNode();
 
-  Future<List<MemberBiomarker>> getMemberBiomarkers() async {
-    return await api.memberBiomarker.info();
-  }
-
   Future<SearchResultModel> getAll({String query, bool init = false}) async {
     return await api.helper.search("\"" + query + "\"");
   }
@@ -75,102 +71,5 @@ class _SearchScreenState extends State<SearchScreen> {
       return AllSearch(hintText: hintText,);
   }
 
-  Widget _allItems(BuildContext context, SearchResultModel data) {
-    List<MemberBiomarker> memberBiomarker;
-    getMemberBiomarkers().then((x) =>
-    {
-      setState(() {
-        memberBiomarker = x;
-      })
-    });
-    return Column(children: [
-      data.biomarkers.isNotEmpty && memberBiomarker.isNotEmpty
-          ? _memberBiomarkerList(context, data.biomarkers)
-          : Container(),
-      data.categories.isNotEmpty
-          ? _categoryList(context, data.categories)
-          : Container(),
-    ]);
-  }
 
-  Widget _categoryList(BuildContext context, List<Category> data) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: EdgeInsets.only(bottom: Indents.sm),
-            padding: EdgeInsets.only(left: Indents.md, right: Indents.md),
-            child: Text(
-              "Категории",
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .headline6
-                  .merge(TextStyle(color: Theme
-                  .of(context)
-                  .primaryColor)),
-            ),
-          ),
-          Container(
-              height: data.length * 76.0,
-              child: ListView.builder(
-                  itemCount: data.length,
-                  itemBuilder: (context, index) =>
-                      CategoryItem(index: index, category: data[index]))),
-        ],
-      ),
-    );
-  }
-
-  Widget _memberBiomarkerList(BuildContext context, List<Biomarker> data) {
-    return Container(
-      padding:
-      EdgeInsets.only(top: Indents.sm, left: Indents.md, right: Indents.md),
-      margin: EdgeInsets.only(bottom: Indents.md),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: EdgeInsets.only(bottom: Indents.sm),
-            child: Text(
-              "Биомаркеры",
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .headline6
-                  .merge(TextStyle(color: Theme
-                  .of(context)
-                  .primaryColor)),
-            ),
-          ),
-          Container(
-              height: data.length * 76.0,
-              child: ListView.builder(
-                  itemCount: data.length,
-                  itemBuilder: (context, index) =>
-                      _memberBiomarkerItem(context, data[index]))),
-        ],
-      ),
-    );
-  }
-
-  Widget _memberBiomarkerItem(BuildContext context, Biomarker data) {
-    List<MemberBiomarker> memberBiomarkers;
-    getMemberBiomarkers().then((x) =>
-    {
-      setState(() {
-        memberBiomarkers = x;
-      })
-    });
-    MemberBiomarker memberBiomarker = memberBiomarkers
-        .firstWhere((element) => element.biomarkerId == data.id);
-    return BiomarkerItem(
-      value: memberBiomarker.value ?? "null",
-      unit: memberBiomarker.unit.content.shorthand ?? "unnamed",
-      unitId: memberBiomarker.unitId,
-      id: memberBiomarker.biomarkerId,
-      withActions: false,
-    );
-  }
 }

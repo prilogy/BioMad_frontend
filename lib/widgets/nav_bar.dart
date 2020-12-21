@@ -53,7 +53,7 @@ class _NavBarState extends State<NavBar> {
                   context: context,
                   builder: (BuildContext context) {
                     return SearchScreen(
-                        hintText: "Начните набирать", searchType: "unit");
+                        hintText: "Начните набирать", searchType: "all");
                   },
                 );
               },
