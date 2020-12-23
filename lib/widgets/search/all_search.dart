@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:api/api.dart';
 import 'package:biomad_frontend/helpers/indents_mixin.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
+import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
 import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
@@ -124,25 +125,68 @@ class _AllSearchState extends State<AllSearch> {
   }
 
   Widget _categoryList(BuildContext context, List<Category> data) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: EdgeInsets.only(left: Indents.md, right: Indents.md),
-            child: Text(
-              "Категории",
-              style: Theme.of(context).textTheme.headline6.merge(TextStyle(color: Theme.of(context).primaryColor)),
-            ),
-          ),
-          Container(
-              height: data.length * 76.0,
-              child: ListView.builder(
-                  itemCount: data.length,
-                  itemBuilder: (context, index) => CategoryItem(index: index, category: data[index]))),
-        ],
-      ),
-    );
+    Future<List<MemberBiomarker>> memberBiomarkers = getMemberBiomarkers();
+    Future<List<Biomarker>> biomarkers = getBiomarker();
+    return FutureBuilder(
+        future: memberBiomarkers,
+        builder: (context, AsyncSnapshot<List<MemberBiomarker>> memberBiomarkersSnap) {
+          if (memberBiomarkersSnap.hasData) {
+            return FutureBuilder(
+                future: biomarkers,
+                builder: (context, AsyncSnapshot<List<Biomarker>> biomarkers) {
+                  if (biomarkers.hasData) {
+                    return Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.only(left: Indents.md, right: Indents.md),
+                            child: Text(
+                              "Категории",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  .merge(TextStyle(color: Theme.of(context).primaryColor)),
+                            ),
+                          ),
+                          Container(
+                              height: data.length * 76.0,
+                              child: ListView.builder(
+                                  itemCount: data.length,
+                                  itemBuilder: (context, index) => CategoryItem(
+                                      index: index,
+                                      category: data[index],
+                                      memberBiomarkers: memberBiomarkersSnap.data,
+                                      biomarkers: biomarkers.data))),
+                        ],
+                      ),
+                    );
+                  } else {
+                    return Container(
+                      height: 150,
+                      child: ScrollConfiguration(
+                          behavior: NoRippleScrollBehaviour(),
+                          child: ListView.builder(
+                              itemCount: 2,
+                              itemBuilder: (context, index) => OnLoadContainer(
+                                    index: index,
+                                  ))),
+                    );
+                  }
+                });
+          } else {
+            return Container(
+              height: 150,
+              child: ScrollConfiguration(
+                  behavior: NoRippleScrollBehaviour(),
+                  child: ListView.builder(
+                      itemCount: 2,
+                      itemBuilder: (context, index) => OnLoadContainer(
+                            index: index,
+                          ))),
+            );
+          }
+        });
   }
 
   Widget _memberBiomarkerList(BuildContext context, List<Biomarker> data, {List<Category> category}) {
@@ -220,7 +264,7 @@ class _AllSearchState extends State<AllSearch> {
               ),
             );
           } else {
-            return Container(child: Text("Ожидаем"));
+            return Container(child: Text("Ожидаем..."));
           }
         });
   }

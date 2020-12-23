@@ -66,8 +66,6 @@ class BiomarkerItem extends StatelessWidget {
       _biomarkerModel =
           store.state.memberBiomarkerModelList.biomarkers.firstWhere((element) => element.biomarkerId == id);
 
-    var iconContainer;
-
     if (biomarkerState == BiomarkerStateType.number2_) {
       color = BioMadColors.success;
       status = "норма";
@@ -82,14 +80,6 @@ class BiomarkerItem extends StatelessWidget {
     } else {
       status = "не определено";
       color = BioMadColors.base[300].withOpacity(0.8);
-      iconContainer = Container(
-          margin: EdgeInsets.only(right: Indents.sm),
-          height: 6.0,
-          width: 6.0,
-          decoration: new BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ));
     }
 
     var iconContainerNormal = Container(
@@ -114,7 +104,7 @@ class BiomarkerItem extends StatelessWidget {
       child: Container(
         // MARGIN
         margin: EdgeInsets.only(
-          top: Indents.smd,
+          top: index == 0 ? 0 : Indents.smd,
         ),
         decoration: BoxDecoration(
           color: BioMadColors.base[100],
@@ -138,9 +128,7 @@ class BiomarkerItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      biomarkerName.length > 30
-                          ? biomarkerName.substring(0, 30) + "..."
-                          : biomarkerName,
+                      biomarkerName.length > 30 ? biomarkerName.substring(0, 30) + "..." : biomarkerName,
                       style: theme.textTheme.subtitle2,
                     ),
                     Container(
@@ -153,10 +141,10 @@ class BiomarkerItem extends StatelessWidget {
                               Container(
                                   child: icon != null
                                       ? Icon(icon, color: color, size: 16.0)
-                                      : status != "норма"
-                                          ? iconContainer
+                                      : withActions
+                                          ? Container()
                                           : iconContainerNormal),
-                              Text(value.toString() + ' ' + unit + ', ' + status,
+                              Text(value.toString() + ' ' + unit + (withActions ? "" : ', ' + status),
                                   style: Theme.of(context).textTheme.bodyText2),
                             ],
                           ),

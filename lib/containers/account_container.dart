@@ -175,9 +175,7 @@ class _AccountContainerState extends State<AccountContainer> {
                         for (var item in biomarkersSnap.data) {
                           try {
                             if (item.reference.isOwnReference) customBiomarker.add(item);
-                          } catch (e) {
-                            print("NO REFERENCE: " + item.content.name);
-                          }
+                          } catch (e) {}
                         }
                         return Column(
                             mainAxisAlignment: MainAxisAlignment.start,

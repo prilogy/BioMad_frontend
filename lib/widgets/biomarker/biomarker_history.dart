@@ -1,4 +1,5 @@
 import 'package:api/api.dart';
+import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
@@ -40,14 +41,12 @@ class BiomarkerHistory extends StatelessWidget {
         margin: EdgeInsets.only(bottom: Indents.sm),
         child: Text(
           "История",
-          style: theme.textTheme.headline6
-              .merge(TextStyle(color: theme.primaryColor)),
+          style: theme.textTheme.headline6.merge(TextStyle(color: theme.primaryColor)),
         ),
       ),
       FutureBuilder(
           future: biomarkerHistory,
-          builder:
-              (context, AsyncSnapshot<List<MemberBiomarker>> biomarkerHistory) {
+          builder: (context, AsyncSnapshot<List<MemberBiomarker>> biomarkerHistory) {
             if (biomarkerHistory.hasData) {
               return Container(
                 height: 20 * biomarkerHistory.data.length.toDouble() <= 80
@@ -56,12 +55,36 @@ class BiomarkerHistory extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 child: ListView.builder(
                     itemCount: biomarkerHistory.data.length,
-                    itemBuilder: (context, index) => historyItem(
-                        context, index, biomarkerHistory.data[index])),
+                    itemBuilder: (context, index) => historyItem(context, index, biomarkerHistory.data[index])),
               );
             } else {
               return Container(
-                child: Text("Загрузка истории"),
+                height: 60,
+                child: ScrollConfiguration(
+                    behavior: NoRippleScrollBehaviour(),
+                    child: ListView.builder(
+                        itemCount: 3,
+                        itemBuilder: (context, index) => Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                    height: 14,
+                                    width: 100,
+                                    margin: EdgeInsets.only(bottom: Indents.sm),
+                                    decoration: BoxDecoration(
+                                      color: BioMadColors.base[200].withOpacity(0.8),
+                                      borderRadius: BorderRadius.all(Radius.circular(4)),
+                                    )),
+                                Container(
+                                    height: 14,
+                                    width: 160,
+                                    margin: EdgeInsets.only(bottom: Indents.sm),
+                                    decoration: BoxDecoration(
+                                      color: BioMadColors.base[200].withOpacity(0.8),
+                                      borderRadius: BorderRadius.all(Radius.circular(4)),
+                                    )),
+                              ],
+                            ))),
               );
             }
           })
@@ -128,18 +151,10 @@ class BiomarkerHistory extends StatelessWidget {
                   Row(
                     children: [
                       Container(
-                          padding: status == "норма"
-                              ? EdgeInsets.only(right: Indents.sm)
-                              : null,
-                          child: icon != null
-                              ? Icon(icon, color: color, size: 18.0)
-                              : iconContainer),
+                          padding: status == "норма" ? EdgeInsets.only(right: Indents.sm) : null,
+                          child: icon != null ? Icon(icon, color: color, size: 18.0) : iconContainer),
                       Text(
-                        data.value.toString() +
-                            " " +
-                            data.unit.content.shorthand +
-                            ", " +
-                            status,
+                        data.value.toString() + " " + data.unit.content.shorthand + ", " + status,
                       ),
                     ],
                   ),
@@ -147,8 +162,27 @@ class BiomarkerHistory extends StatelessWidget {
               ),
             );
           } else {
-            return Container(
-                child: Text("Элемент истории загружается..."));
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                    height: 14,
+                    width: 100,
+                    margin: EdgeInsets.only(bottom: Indents.sm),
+                    decoration: BoxDecoration(
+                      color: BioMadColors.base[200].withOpacity(0.8),
+                      borderRadius: BorderRadius.all(Radius.circular(4)),
+                    )),
+                Container(
+                    height: 14,
+                    width: 160,
+                    margin: EdgeInsets.only(bottom: Indents.sm),
+                    decoration: BoxDecoration(
+                      color: BioMadColors.base[200].withOpacity(0.8),
+                      borderRadius: BorderRadius.all(Radius.circular(4)),
+                    )),
+              ],
+            );
           }
         });
   }

@@ -89,15 +89,14 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                               memberBiomarkers: memberBiomarkersSnap.data,
                                               biomarkers: biomarkersSnap.data)));
                                 } else {
-
                                   return ScrollConfiguration(
                                       behavior: NoRippleScrollBehaviour(),
                                       child: ListView.builder(
                                           itemCount: 4,
                                           itemBuilder: (context, index) => OnLoadContainer(
-                                            index: index,
-                                            color: BioMadColors.base[200],
-                                          )));
+                                                index: index,
+                                                color: BioMadColors.base[200],
+                                              )));
                                 }
                               });
                         } else {
@@ -106,8 +105,8 @@ class _CategoryContainerState extends State<CategoryContainer> {
                               child: ListView.builder(
                                   itemCount: 4,
                                   itemBuilder: (context, index) => OnLoadContainer(
-                                    index: index,
-                                  )));
+                                        index: index,
+                                      )));
                         }
                       });
                 } else {

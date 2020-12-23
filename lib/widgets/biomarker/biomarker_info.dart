@@ -193,9 +193,7 @@ class BiomarkerInfo extends StatelessWidget {
                     Icons.share,
                     color: theme.colorScheme.background,
                   ),
-                  onPressed: () {
-                    Keys.rootNavigator.currentState.pushReplacementNamed(Routes.add_analysis);
-                  },
+                  onPressed: () {},
                 ),
               ],
             )

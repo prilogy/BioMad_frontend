@@ -175,7 +175,7 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
                                             ),
                                           )
                                         ])),
-                                memberBiomarker != null
+                                biomarkerStock.isNotEmpty
                                     ? Container(
                                         padding: EdgeInsets.only(top: Indents.md, left: Indents.md, right: Indents.md),
                                         margin: EdgeInsets.only(bottom: Indents.sm),
@@ -193,53 +193,51 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
                                                             .textTheme
                                                             .headline6
                                                             .merge(TextStyle(color: theme.primaryColor)))),
-                                                GestureDetector(
-                                                  onTap: () {
-//                                                    Keys.rootNavigator.currentState.pushReplacementNamed(
-//                                                        Routes.all_biomarkers,
-//                                                        arguments: biomarkerStock);
-                                                    return showDialog(
-                                                        context: context,
-                                                        builder: (BuildContext context) {
-                                                          return AllBiomarkersScreen(
-                                                            memberBiomarkers: biomarkerStock,
-                                                          );
-                                                        });
-                                                  },
-                                                  child: Container(
-                                                      child: Text("ВСЕ (" + biomarkerStock.length.toString() + ")",
-                                                          style: Theme.of(context)
-                                                              .textTheme
-                                                              .subtitle1
-                                                              .merge(TextStyle(color: theme.primaryColor)))),
-                                                )
+                                                biomarkerStock.length > 3
+                                                    ? GestureDetector(
+                                                        onTap: () {
+                                                          return showDialog(
+                                                              context: context,
+                                                              builder: (BuildContext context) {
+                                                                return AllBiomarkersScreen(
+                                                                  memberBiomarkers: biomarkerStock,
+                                                                );
+                                                              });
+                                                        },
+                                                        child: Container(
+                                                            child: Text(
+                                                                "ВСЕ (" + biomarkerStock.length.toString() + ")",
+                                                                style: Theme.of(context)
+                                                                    .textTheme
+                                                                    .subtitle1
+                                                                    .merge(TextStyle(color: theme.primaryColor)))),
+                                                      )
+                                                    : Container()
                                               ],
                                             ),
-                                            Container(
-                                                height: biomarkerStock.length <= 3
-                                                    ? 68 * biomarkerStock.length.toDouble()
-                                                    : 68 * 3.0, //153
-                                                width: MediaQuery.of(context).size.width,
-                                                child: ScrollConfiguration(
-                                                  behavior: NoRippleScrollBehaviour(),
-                                                  child: ListView.builder(
-                                                      itemCount: biomarkerStock.length <= 3 ? biomarkerStock.length : 3,
-                                                      itemBuilder: (context, index) {
-                                                        MemberBiomarker memberBiomarkerItem = biomarkerStock[index];
-                                                        Biomarker biomarkerItem = biomarkers.data.firstWhere(
-                                                            (element) => element.id == memberBiomarkerItem.biomarkerId);
+                                            ScrollConfiguration(
+                                              behavior: NoRippleScrollBehaviour(),
+                                              child: ListView.builder(
+                                                  shrinkWrap: true,
+                                                  physics: NeverScrollableScrollPhysics(),
+                                                  itemCount: biomarkerStock.length <= 3 ? biomarkerStock.length : 3,
+                                                  itemBuilder: (context, index) {
+                                                    MemberBiomarker memberBiomarkerItem = biomarkerStock[index];
+                                                    Biomarker biomarkerItem = biomarkers.data.firstWhere(
+                                                        (element) => element.id == memberBiomarkerItem.biomarkerId);
 
-                                                        return BiomarkerItem(
-                                                          value: memberBiomarkerItem.value ?? "null",
-                                                          unit: memberBiomarkerItem.unit.content.shorthand ?? "unnamed",
-                                                          unitId: memberBiomarkerItem.unitId,
-                                                          id: memberBiomarkerItem.biomarkerId,
-                                                          biomarkerState: biomarkerItem.state,
-                                                          biomarkerName: biomarkerItem.content.name,
-                                                          withActions: false,
-                                                        );
-                                                      }),
-                                                )),
+                                                    return BiomarkerItem(
+                                                      index: index,
+                                                      value: memberBiomarkerItem.value ?? "null",
+                                                      unit: memberBiomarkerItem.unit.content.shorthand ?? "unnamed",
+                                                      unitId: memberBiomarkerItem.unitId,
+                                                      id: memberBiomarkerItem.biomarkerId,
+                                                      biomarkerState: biomarkerItem.state,
+                                                      biomarkerName: biomarkerItem.content.name,
+                                                      withActions: false,
+                                                    );
+                                                  }),
+                                            ),
                                           ],
                                         ),
                                       )
@@ -250,28 +248,18 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
                                     header: "Ещё не сдали",
                                     headerMergeStyle: TextStyle(color: theme.primaryColor),
                                     child: biomarkerNotInStock.length != 0
-                                        ? Container(
-                                            height: (biomarkerNotInStock.length < 7
-                                                    ? 70 * biomarkerNotInStock.length.toDouble()
-                                                    : MediaQuery.of(context).size.height -
-                                                        AppBar().preferredSize.height -
-                                                        154 -
-                                                        (biomarkerStock.length <= 3
-                                                            ? 68.0 * biomarkerStock.length
-                                                            : 68 * 3.0)) -
-                                                (biomarkerStock.length == 0 ? 0 : 48),
-                                            width: MediaQuery.of(context).size.width,
-                                            child: ListView.separated(
-                                                separatorBuilder: (context, index) => Divider(
-                                                      color: Theme.of(context).colorScheme.onSurface,
-                                                    ),
-                                                itemCount: biomarkerNotInStock.length,
-                                                itemBuilder: (context, index) => Container(
-                                                    padding: EdgeInsets.symmetric(vertical: Indents.sm),
-                                                    child: GestureDetector(
-                                                        behavior: HitTestBehavior.opaque,
-                                                        child: Text(biomarkerNotInStock[index].content.name)))),
-                                          )
+                                        ? ListView.separated(
+                                            shrinkWrap: true,
+                                            physics: NeverScrollableScrollPhysics(),
+                                            separatorBuilder: (context, index) => Divider(
+                                                  color: Theme.of(context).colorScheme.onSurface,
+                                                ),
+                                            itemCount: biomarkerNotInStock.length,
+                                            itemBuilder: (context, index) => Container(
+                                                padding: EdgeInsets.symmetric(vertical: Indents.sm),
+                                                child: GestureDetector(
+                                                    behavior: HitTestBehavior.opaque,
+                                                    child: Text(biomarkerNotInStock[index].content.name))))
                                         : Text("Поздравляем, все биомаркеры сданы! :)"))
                               ]),
                             ])));

@@ -52,8 +52,8 @@ class _AllBiomarkersScreenState extends State<AllBiomarkersScreen> {
       body: Container(
         padding: EdgeInsets.only(left: Indents.md, right: Indents.md),
         margin: EdgeInsets.only(bottom: Indents.sm),
-        height: MediaQuery.of(context).size.height - AppBar().preferredSize.height,
         child: ListView.builder(
+            shrinkWrap: true,
             itemCount: memberBiomarkers.length,
             itemBuilder: (context, index) {
               return FutureBuilder(
@@ -64,6 +64,7 @@ class _AllBiomarkersScreenState extends State<AllBiomarkersScreen> {
                       Biomarker biomarkerItem =
                           biomarkers.data.firstWhere((element) => element.id == memberBiomarkerItem.biomarkerId);
                       return BiomarkerItem(
+                        index: index,
                         value: memberBiomarkerItem.value ?? "null",
                         unit: memberBiomarkerItem.unit.content.shorthand ?? "unnamed",
                         unitId: memberBiomarkerItem.unitId,

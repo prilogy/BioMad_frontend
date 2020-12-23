@@ -1,21 +1,12 @@
 import 'package:api/api.dart';
 import 'package:biomad_frontend/containers/account_container.dart';
-import 'package:biomad_frontend/containers/biomarker_container.dart';
-import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
-import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/services/api.dart';
-import 'package:biomad_frontend/store/main.dart';
-import 'package:biomad_frontend/store/thunks.dart';
-import 'package:biomad_frontend/styles/avatar_sizes.dart';
-import 'package:biomad_frontend/styles/color_alphas.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:biomad_frontend/styles/radius_values.dart';
 import 'package:biomad_frontend/widgets/biomarker/biomarker_item.dart';
 import 'package:biomad_frontend/widgets/nav_bar.dart';
-import 'package:biomad_frontend/widgets/nav_top_bar.dart';
 import 'package:biomad_frontend/widgets/on_load_container.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -62,16 +53,14 @@ class _BioMarkerListScreenState extends State<BioMarkerListScreen> {
     bool isBiomarkerInType = false;
     Future<List<Biomarker>> biomarkers = getBiomarker();
     return Container(
-        height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - 61,
+        height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - 50,
         width: MediaQuery.of(context).size.width,
         child: Stack(children: [
           FutureBuilder(
               future: memberBiomarkers,
               builder: (context, AsyncSnapshot<List<MemberBiomarker>> memberBiomarkers) {
                 if (memberBiomarkers.hasData) {
-                  return Container(
-                      height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - 55,
-                      width: MediaQuery.of(context).size.width,
+                  return Container(width: MediaQuery.of(context).size.width,
                       alignment: Alignment.topLeft,
                       padding: EdgeInsets.only(top: Indents.md, left: Indents.slg, right: Indents.md),
                       margin: EdgeInsets.only(bottom: Indents.sm),
@@ -79,12 +68,12 @@ class _BioMarkerListScreenState extends State<BioMarkerListScreen> {
                           future: types,
                           builder: (context, AsyncSnapshot<List<BiomarkerType>> types) {
                             if (types.hasData) {
-                              int memberBiomarkerCounter = 0;
                               List<MemberBiomarker> biomarkerList = [];
                               return memberBiomarkers.data.isNotEmpty
                                   ? ScrollConfiguration(
                                       behavior: NoRippleScrollBehaviour(),
                                       child: ListView.builder(
+                                          shrinkWrap: true,
                                           itemCount: types.data.length,
                                           itemBuilder: (context, index) {
                                             try {
@@ -95,7 +84,6 @@ class _BioMarkerListScreenState extends State<BioMarkerListScreen> {
                                                       .firstWhere((x) => x.biomarkerId == bio, orElse: null);
                                                   biomarkerList.add(biomarker);
                                                   isBiomarkerInType = true;
-                                                  memberBiomarkerCounter++;
                                                 } catch (e) {}
                                               }
                                             } catch (e) {
@@ -110,46 +98,41 @@ class _BioMarkerListScreenState extends State<BioMarkerListScreen> {
                                                       Text(types.data[index].content.name.toUpperCase(),
                                                           style: theme.textTheme.caption
                                                               .merge(TextStyle(fontWeight: FontWeight.normal))),
-                                                      Container(
-                                                          height: MediaQuery.of(context).size.height -
-                                                              AppBar().preferredSize.height,
-                                                          width: MediaQuery.of(context).size.width,
-                                                          child: ScrollConfiguration(
-                                                              behavior: NoRippleScrollBehaviour(),
-                                                              child: ListView.builder(
-                                                                  itemCount: biomarkerList.length,
-                                                                  itemBuilder: (context, i) {
-                                                                    return FutureBuilder(
-                                                                        future: biomarkers,
-                                                                        builder: (context,
-                                                                            AsyncSnapshot<List<Biomarker>> biomarkers) {
-                                                                          if (biomarkers.hasData) {
-                                                                            MemberBiomarker memberBiomarkerItem =
-                                                                                biomarkerList[i];
-                                                                            Biomarker biomarkerItem = biomarkers.data
-                                                                                .firstWhere((element) =>
-                                                                                    element.id ==
-                                                                                    memberBiomarkerItem.biomarkerId);
-                                                                            return BiomarkerItem(
-                                                                              value:
-                                                                                  memberBiomarkerItem.value ?? "null",
-                                                                              unit: memberBiomarkerItem
-                                                                                      .unit.content.shorthand ??
-                                                                                  "unnamed",
-                                                                              unitId: memberBiomarkerItem.unitId,
-                                                                              id: memberBiomarkerItem.biomarkerId,
-                                                                              biomarkerState: biomarkerItem.state,
-                                                                              biomarkerName: biomarkerItem.content.name,
-                                                                              withActions: false,
-                                                                            );
-                                                                          } else {
-                                                                            return OnLoadContainer(
-                                                                              index: index,
-                                                                              padding: EdgeInsets.zero,
-                                                                            );
-                                                                          }
-                                                                        });
-                                                                  })))
+                                                      ListView.builder(
+                                                          shrinkWrap: true,
+                                                          physics: NeverScrollableScrollPhysics(),
+                                                          itemCount: biomarkerList.length,
+                                                          itemBuilder: (context, i) {
+                                                            return FutureBuilder(
+                                                                future: biomarkers,
+                                                                builder: (context,
+                                                                    AsyncSnapshot<List<Biomarker>> biomarkers) {
+                                                                  if (biomarkers.hasData) {
+                                                                    MemberBiomarker memberBiomarkerItem =
+                                                                        biomarkerList[i];
+                                                                    Biomarker biomarkerItem = biomarkers.data
+                                                                        .firstWhere((element) =>
+                                                                            element.id ==
+                                                                            memberBiomarkerItem.biomarkerId);
+                                                                    return BiomarkerItem(
+                                                                      value: memberBiomarkerItem.value ?? "null",
+                                                                      unit:
+                                                                          memberBiomarkerItem.unit.content.shorthand ??
+                                                                              "unnamed",
+                                                                      unitId: memberBiomarkerItem.unitId,
+                                                                      id: memberBiomarkerItem.biomarkerId,
+                                                                      biomarkerState: biomarkerItem.state,
+                                                                      biomarkerName: biomarkerItem.content.name,
+                                                                      withActions: false,
+                                                                    );
+                                                                  } else {
+                                                                    return OnLoadContainer(
+                                                                      index: index,
+                                                                      padding: EdgeInsets.zero,
+                                                                    );
+                                                                  }
+                                                                });
+                                                          })
                                                     ],
                                                   )
                                                 : Container();
