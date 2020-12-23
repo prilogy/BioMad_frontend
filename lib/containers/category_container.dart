@@ -64,7 +64,7 @@ class _CategoryContainerState extends State<CategoryContainer> {
     memberBiomarkers = getMemberBiomarker();
     biomarkers = getBiomarker();
     return Container(
-        height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - 61,
+        height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - 50,
         width: MediaQuery.of(context).size.width,
         child: Stack(children: [
           FutureBuilder(
@@ -82,6 +82,7 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                   return ScrollConfiguration(
                                       behavior: NoRippleScrollBehaviour(),
                                       child: ListView.builder(
+                                          shrinkWrap: true,
                                           itemCount: categories.data.length,
                                           itemBuilder: (context, index) => CategoryItem(
                                               index: index,
@@ -92,6 +93,7 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                   return ScrollConfiguration(
                                       behavior: NoRippleScrollBehaviour(),
                                       child: ListView.builder(
+                                          shrinkWrap: true,
                                           itemCount: 4,
                                           itemBuilder: (context, index) => OnLoadContainer(
                                                 index: index,

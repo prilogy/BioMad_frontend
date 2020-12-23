@@ -38,13 +38,6 @@ Widget biomarkerItems(BuildContext context, Biomarker data) {
                       .bodyText2
                       .merge(TextStyle(color: BioMadColors.base[300])),
                 ),
-//                Text(
-//                  ("(✔)"),
-//                  style: Theme.of(context)
-//                      .textTheme
-//                      .bodyText2
-//                      .merge(TextStyle(color: Theme.of(context).colorScheme.onSurface)),
-//                ),
               ],
             ),
           ))

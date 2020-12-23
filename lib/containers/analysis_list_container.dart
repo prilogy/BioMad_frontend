@@ -35,18 +35,14 @@ class _AnalysisListContainerState extends State<AnalysisListContainer> {
         builder: (context, AsyncSnapshot<List<MemberAnalysis>> analysis) {
           if (analysis.hasData) {
             return analysis.data.length > 0
-                ? Container(
-                    height: MediaQuery.of(context).size.height -
-                        AppBar().preferredSize.height -
-                        61,
-                    width: MediaQuery.of(context).size.width,
-                    child: ScrollConfiguration(
+                ? ScrollConfiguration(
                       behavior: NoRippleScrollBehaviour(),
                       child: ListView.builder(
+                          shrinkWrap: true,
                           itemCount: analysis.data.length,
                           itemBuilder: (context, index) =>
                               analysisItem(index, analysis.data[index])),
-                    ))
+                    )
                 : Container(
                     height: MediaQuery.of(context).size.height -
                         AppBar().preferredSize.height -
