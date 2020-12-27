@@ -139,10 +139,10 @@ class BiomarkerItem extends StatelessWidget {
                           Row(
                             children: [
                               Container(
-                                  child: icon != null
-                                      ? Icon(icon, color: color, size: 16.0)
-                                      : withActions
-                                          ? Container()
+                                  child: withActions
+                                      ? Container()
+                                      : icon != null
+                                          ? Icon(icon, color: color, size: 16.0)
                                           : iconContainerNormal),
                               Text(value.toString() + ' ' + unit + (withActions ? "" : ', ' + status),
                                   style: Theme.of(context).textTheme.bodyText2),

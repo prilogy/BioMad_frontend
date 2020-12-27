@@ -2,7 +2,6 @@ import 'package:api/api.dart';
 import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
 import 'package:biomad_frontend/models/member_biomarker_model_list.dart';
 import 'package:biomad_frontend/screens/search_screen.dart';
-import 'package:biomad_frontend/screens/search_screen1.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';

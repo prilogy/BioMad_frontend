@@ -45,6 +45,7 @@ class MyApp extends StatelessWidget {
       store: store,
       child: MaterialApp(
         title: 'BioMad',
+        debugShowCheckedModeBanner: false,
         theme: AppTheme.light,
         navigatorKey: Keys.rootNavigator,
         onGenerateRoute: (settings) => RouteGenerator.generateRoute(settings),

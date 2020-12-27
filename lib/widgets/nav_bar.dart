@@ -2,7 +2,6 @@ import 'package:biomad_frontend/helpers/color_helpers.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/screens/search_screen.dart';
-import 'package:biomad_frontend/screens/search_screen1.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
