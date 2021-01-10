@@ -68,11 +68,9 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
             ],
           ),
           borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(RadiusValues.main),
-              topRight: Radius.circular(RadiusValues.main)),
+              topLeft: Radius.circular(RadiusValues.main), topRight: Radius.circular(RadiusValues.main)),
           onPanelSlide: (double pos) => setState(() {
-            _fabHeight =
-                pos * (_panelHeightOpen - _panelHeightClosed) + _initFabHeight;
+            _fabHeight = pos * (_panelHeightOpen - _panelHeightClosed) + _initFabHeight;
           }),
         ),
       ]), // This trailing comma makes auto-formatting nicer for build methods.

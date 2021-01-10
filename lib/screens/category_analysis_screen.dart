@@ -12,8 +12,7 @@ class CategoryAnalysisScreen extends StatefulWidget {
   CategoryAnalysisScreen({Key key, this.category}) : super(key: key);
 
   @override
-  _CategoryAnalysisScreenState createState() =>
-      _CategoryAnalysisScreenState(category);
+  _CategoryAnalysisScreenState createState() => _CategoryAnalysisScreenState(category);
 }
 
 class _CategoryAnalysisScreenState extends State<CategoryAnalysisScreen> {
@@ -24,22 +23,27 @@ class _CategoryAnalysisScreenState extends State<CategoryAnalysisScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                Keys.rootNavigator.currentState
-                    .pushReplacementNamed(Routes.main);
-              },
-            );
-          },
+        appBar: AppBar(
+          leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () {
+                  Keys.rootNavigator.currentState.pushReplacementNamed(Routes.main);
+                },
+              );
+            },
+          ),
+          title: Text(category.content.name, style: TextStyle(color: Theme.of(context).primaryColor)),
         ),
-        title: Text(category.content.name,
-            style: TextStyle(color: Theme.of(context).primaryColor)),
-      ),
-      body: CategoryAnalysisContainer(category: category,),
-    );
+        body: WillPopScope(
+          onWillPop: () async {
+            Keys.rootNavigator.currentState.pushReplacementNamed(Routes.main);
+            return false;
+          },
+          child: CategoryAnalysisContainer(
+            category: category,
+          ),
+        ));
   }
 }

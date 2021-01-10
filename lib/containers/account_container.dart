@@ -183,7 +183,7 @@ class _AccountContainerState extends State<AccountContainer> {
                             children: [
                               customBiomarker.length != 0
                                   ? Container(
-                                      height: customBiomarker.length * 30.0,
+                                      height: customBiomarker.length * 21.0,
                                       child: ListView.separated(
                                         separatorBuilder: (context, index) => Divider(
                                           color: Theme.of(context).colorScheme.onSurface,

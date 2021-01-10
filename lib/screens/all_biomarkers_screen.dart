@@ -36,52 +36,57 @@ class _AllBiomarkersScreenState extends State<AllBiomarkersScreen> {
   Widget build(BuildContext context) {
     Future<List<Biomarker>> biomarkers = getBiomarker();
     return Scaffold(
-      appBar: AppBar(
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            );
-          },
+        appBar: AppBar(
+          leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              );
+            },
+          ),
+          title: Text("Просмотр биомаркеров", style: TextStyle(color: Theme.of(context).primaryColor)),
         ),
-        title: Text("Просмотр биомаркеров", style: TextStyle(color: Theme.of(context).primaryColor)),
-      ),
-      body: Container(
-        padding: EdgeInsets.only(left: Indents.md, right: Indents.md),
-        margin: EdgeInsets.only(bottom: Indents.sm),
-        child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: memberBiomarkers.length,
-            itemBuilder: (context, index) {
-              return FutureBuilder(
-                  future: biomarkers,
-                  builder: (context, AsyncSnapshot<List<Biomarker>> biomarkers) {
-                    if (biomarkers.hasData) {
-                      MemberBiomarker memberBiomarkerItem = memberBiomarkers[index];
-                      Biomarker biomarkerItem =
-                          biomarkers.data.firstWhere((element) => element.id == memberBiomarkerItem.biomarkerId);
-                      return BiomarkerItem(
-                        index: index,
-                        value: memberBiomarkerItem.value ?? "null",
-                        unit: memberBiomarkerItem.unit.content.shorthand ?? "unnamed",
-                        unitId: memberBiomarkerItem.unitId,
-                        id: memberBiomarkerItem.biomarkerId,
-                        biomarkerState: biomarkerItem.state,
-                        biomarkerName: biomarkerItem.content.name,
-                        withActions: false,
-                      );
-                    } else {
-                      return OnLoadContainer(
-                        index: index,
-                        padding: EdgeInsets.zero,
-                      );
-                    }
-                  });
-            }),
-      ),
-    );
+        body: WillPopScope(
+          onWillPop: () async {
+            Navigator.of(context).pop();
+            return false;
+          },
+          child: Container(
+            padding: EdgeInsets.only(left: Indents.md, right: Indents.md),
+            margin: EdgeInsets.only(bottom: Indents.sm),
+            child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: memberBiomarkers.length,
+                itemBuilder: (context, index) {
+                  return FutureBuilder(
+                      future: biomarkers,
+                      builder: (context, AsyncSnapshot<List<Biomarker>> biomarkers) {
+                        if (biomarkers.hasData) {
+                          MemberBiomarker memberBiomarkerItem = memberBiomarkers[index];
+                          Biomarker biomarkerItem =
+                              biomarkers.data.firstWhere((element) => element.id == memberBiomarkerItem.biomarkerId);
+                          return BiomarkerItem(
+                            index: index,
+                            value: memberBiomarkerItem.value ?? "null",
+                            unit: memberBiomarkerItem.unit.content.shorthand ?? "unnamed",
+                            unitId: memberBiomarkerItem.unitId,
+                            id: memberBiomarkerItem.biomarkerId,
+                            biomarkerState: biomarkerItem.state,
+                            biomarkerName: biomarkerItem.content.name,
+                            withActions: false,
+                          );
+                        } else {
+                          return OnLoadContainer(
+                            index: index,
+                            padding: EdgeInsets.zero,
+                          );
+                        }
+                      });
+                }),
+          ),
+        ));
   }
 }

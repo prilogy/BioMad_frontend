@@ -1,5 +1,6 @@
 part of api.api;
 
+
 class AuthApi extends ApiBase<AuthApi> {
   AuthApi(Dio dio, {String version = "v1"}) : super(dio, version);
 
@@ -7,8 +8,16 @@ class AuthApi extends ApiBase<AuthApi> {
   Future<AuthenticationResult> logIn(LogInWithCredentialsModel model) async {
     try {
       var url = '${v}/auth/logIn';
+      String currentLocale;
+      try {
+        currentLocale = await Devicelocale.currentLocale;
+        currentLocale = currentLocale.substring(0,2);
+        print(currentLocale);
+      } on PlatformException {
+        print("Error obtaining current locale");
+      }
       var response = await dio.post(url,
-          data: model, options: Options(headers: {"Culture": "ru"}));
+          data: model);
       return AuthenticationResult.fromJson(response.data);
     } on DioError catch (e) {
       return null;
@@ -31,9 +40,17 @@ class AuthApi extends ApiBase<AuthApi> {
   /// Refreshes token, also logs in
   Future<AuthenticationResult> refreshToken(
       RefreshTokenAuthenticationModel model) async {
+    String currentLocale;
+    try {
+      currentLocale = await Devicelocale.currentLocale;
+      currentLocale = currentLocale.substring(0,2);
+      print(currentLocale);
+    } on PlatformException {
+      print("Error obtaining current locale");
+    }
     try {
       var url = '${v}/auth/refreshToken';
-      var response = await dio.post(url, data: model);
+      var response = await dio.post(url, data: model, options: Options(headers: {"Culture": currentLocale}));
       return AuthenticationResult.fromJson(response.data);
     } on DioError catch (e) {
       return null;

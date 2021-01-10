@@ -1,5 +1,7 @@
 library api.api;
 
+import 'package:devicelocale/devicelocale.dart';
+import 'package:flutter/services.dart';
 import 'package:dio/dio.dart';
 import 'dart:core';
 import 'dart:async';

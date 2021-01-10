@@ -1,5 +1,7 @@
 import 'package:biomad_frontend/containers/account_container.dart';
 import 'package:biomad_frontend/containers/analysis_list_container.dart';
+import 'package:biomad_frontend/helpers/keys.dart';
+import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
 import 'package:biomad_frontend/styles/radius_values.dart';
@@ -38,44 +40,47 @@ class _AnalysisListScreenState extends State<AnalysisListScreen> {
       appBar: AppBar(
         title: NavTopBar(index: 1),
       ),
-      body: Stack(children: [
-        Scaffold(
-            body: Container(
-                //tmpBiomarker(context)
-                child: Column(
-                  children: [AnalysisListContainer()],
-                ))),
-        Positioned(
-            bottom: NavBar.indent,
-            right: NavBar.indent,
-            child: NavBar(
-              isSearch: false,
-              onAvatarTap: () {
-                _panelController.open();
-              },
-            )),
-        SlidingUpPanel(
-          backdropEnabled: true,
-          controller: _panelController,
-          maxHeight: _panelHeightOpen,
-          minHeight: _panelHeightClosed,
-          parallaxEnabled: true,
-          parallaxOffset: .5,
-          panelBuilder: (sc) => ListView(
-            padding: EdgeInsets.symmetric(vertical: 0),
-            children: [
-              AccountContainer(),
-            ],
-          ),
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(RadiusValues.main),
-              topRight: Radius.circular(RadiusValues.main)),
-          onPanelSlide: (double pos) => setState(() {
-            _fabHeight =
-                pos * (_panelHeightOpen - _panelHeightClosed) + _initFabHeight;
-          }),
-        ),
-      ]), // This trailing comma makes auto-formatting nicer for build methods.
+      body: WillPopScope(
+          onWillPop: () async {
+            Keys.rootNavigator.currentState.pushReplacementNamed(Routes.main);
+            return false;
+          },
+          child: Stack(children: [
+            Scaffold(
+                body: Container(
+                    //tmpBiomarker(context)
+                    child: Column(
+              children: [AnalysisListContainer()],
+            ))),
+            Positioned(
+                bottom: NavBar.indent,
+                right: NavBar.indent,
+                child: NavBar(
+                  isSearch: false,
+                  onAvatarTap: () {
+                    _panelController.open();
+                  },
+                )),
+            SlidingUpPanel(
+              backdropEnabled: true,
+              controller: _panelController,
+              maxHeight: _panelHeightOpen,
+              minHeight: _panelHeightClosed,
+              parallaxEnabled: true,
+              parallaxOffset: .5,
+              panelBuilder: (sc) => ListView(
+                padding: EdgeInsets.symmetric(vertical: 0),
+                children: [
+                  AccountContainer(),
+                ],
+              ),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(RadiusValues.main), topRight: Radius.circular(RadiusValues.main)),
+              onPanelSlide: (double pos) => setState(() {
+                _fabHeight = pos * (_panelHeightOpen - _panelHeightClosed) + _initFabHeight;
+              }),
+            ),
+          ])), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

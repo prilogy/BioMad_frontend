@@ -24,21 +24,26 @@ class _ArticleScreenState extends State<ArticleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          leading: Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              );
-            },
-          ),
-          title: Text(article.content.name, style: TextStyle(color: Theme.of(context).primaryColor))),
-      body: ListView(children: [
-        BlockBaseWidget(child: Text(article.content.text)),
-      ]),
-    );
+        appBar: AppBar(
+            leading: Builder(
+              builder: (BuildContext context) {
+                return IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                );
+              },
+            ),
+            title: Text(article.content.name, style: TextStyle(color: Theme.of(context).primaryColor))),
+        body: WillPopScope(
+          onWillPop: () async {
+            Navigator.of(context).pop();
+            return false;
+          },
+          child: ListView(children: [
+            BlockBaseWidget(child: Text(article.content.text)),
+          ]),
+        ));
   }
 }

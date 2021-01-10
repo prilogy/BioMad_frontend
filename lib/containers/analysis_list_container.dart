@@ -35,28 +35,20 @@ class _AnalysisListContainerState extends State<AnalysisListContainer> {
         builder: (context, AsyncSnapshot<List<MemberAnalysis>> analysis) {
           if (analysis.hasData) {
             return analysis.data.length > 0
-                ? ScrollConfiguration(
-                      behavior: NoRippleScrollBehaviour(),
-                      child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: analysis.data.length,
-                          itemBuilder: (context, index) =>
-                              analysisItem(index, analysis.data[index])),
-                    )
+                ? Container(
+                    height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - 24,
+                    child: ListView.builder(
+                        itemCount: analysis.data.length,
+                        itemBuilder: (context, index) => analysisItem(index, analysis.data[index])),
+                  )
                 : Container(
-                    height: MediaQuery.of(context).size.height -
-                        AppBar().preferredSize.height -
-                        61,
-                    padding:
-                        EdgeInsets.only(left: Indents.sm, right: Indents.sm),
-                    margin:
-                        EdgeInsets.only(left: Indents.md, right: Indents.md),
+                    height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - 61,
+                    padding: EdgeInsets.only(left: Indents.sm, right: Indents.sm),
+                    margin: EdgeInsets.only(left: Indents.md, right: Indents.md),
                     child: Text("Анализы еще не добавлены :("));
           } else {
             return Container(
-              height: MediaQuery.of(context).size.height -
-                  AppBar().preferredSize.height -
-                  61,
+              height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - 61,
               child: ScrollConfiguration(
                   behavior: NoRippleScrollBehaviour(),
                   child: ListView.builder(
@@ -86,10 +78,7 @@ class _AnalysisListContainerState extends State<AnalysisListContainer> {
       },
       child: Container(
         padding: EdgeInsets.only(left: Indents.md, right: Indents.sm),
-        margin: EdgeInsets.only(
-            top: index == 0 ? 0 : Indents.smd,
-            left: Indents.md,
-            right: Indents.md),
+        margin: EdgeInsets.only(top: index == 0 ? 0 : Indents.smd, left: Indents.md, right: Indents.md),
         decoration: BoxDecoration(
           color: BioMadColors.base[100],
           borderRadius: BorderRadius.all(Radius.circular(4)),

@@ -51,33 +51,33 @@ class _BioMarkerScreenState extends State<BioMarkerScreen> {
             future: biomarkers,
             builder: (context, AsyncSnapshot<List<Biomarker>> biomarkers) {
               if (biomarkers.hasData) {
-                biomarker = biomarkers.data
-                    .firstWhere((element) => element.id == biomarkerId);
-                return Text(biomarker.content.name,
-                    style: TextStyle(color: Theme.of(context).primaryColor));
+                biomarker = biomarkers.data.firstWhere((element) => element.id == biomarkerId);
+                return Text(biomarker.content.name, style: TextStyle(color: Theme.of(context).primaryColor));
               } else {
                 return Text("Загрузка биомаркера...");
               }
             }),
       ),
-      body: ListView(children: [
-        FutureBuilder(
-            future: memberBiomarkers,
-            builder: (context,
-                AsyncSnapshot<List<MemberBiomarker>> memberBiomarkers) {
-              if (memberBiomarkers.hasData) {
-                memberBiomarker = memberBiomarkers.data.firstWhere(
-                    (element) => element.biomarkerId == biomarkerId);
-                return BiomarkerContainer(memberBiomarker: memberBiomarker);
-              } else {
-                return Container(
-                    padding:
-                        EdgeInsets.only(left: Indents.md, right: Indents.md),
-                    margin: EdgeInsets.only(bottom: Indents.sm),
-                    child: Text("Ожидаем загрузки биомаркера"));
-              }
-            })
-      ]),
+      body: WillPopScope(
+          onWillPop: () async {
+            Navigator.of(context).pop();
+            return false;
+          },
+          child: ListView(children: [
+            FutureBuilder(
+                future: memberBiomarkers,
+                builder: (context, AsyncSnapshot<List<MemberBiomarker>> memberBiomarkers) {
+                  if (memberBiomarkers.hasData) {
+                    memberBiomarker = memberBiomarkers.data.firstWhere((element) => element.biomarkerId == biomarkerId);
+                    return BiomarkerContainer(memberBiomarker: memberBiomarker);
+                  } else {
+                    return Container(
+                        padding: EdgeInsets.only(left: Indents.md, right: Indents.md),
+                        margin: EdgeInsets.only(bottom: Indents.sm),
+                        child: Text("Ожидаем загрузки биомаркера"));
+                  }
+                })
+          ])),
     );
   }
 }

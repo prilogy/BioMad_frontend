@@ -104,10 +104,10 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     MemberAnalysisModel result = getMemberAnalysisModel();
-                    api.memberAnalysis.add(result);
                     try {
                       _biomarkers = store.state.memberBiomarkerModelList.biomarkers;
                       print(_biomarkers[0].value);
+                      api.memberAnalysis.add(result);
                       store.dispatch(StoreThunks.refreshMemberAnalysis());
                       Keys.rootNavigator.currentState.pushReplacementNamed(Routes.main);
                     } catch (e) {
@@ -117,40 +117,45 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                 },
               )
             ]),
-        body: Container(
-            padding: EdgeInsets.only(top: Indents.md, left: Indents.md, right: Indents.md),
-            margin: EdgeInsets.only(bottom: Indents.sm),
-            child: Form(
-                key: _formKey,
-                child: Column(children: [
-                  CustomTextFormField(
-                    controller: _analysisController,
-                    validator: TextFieldValidators.isNotEmpty,
-                    icon: Icon(Icons.assignment_outlined),
-                    labelText: "Название анализа",
-                    hintText: "Введите название анализа",
-                    onChange: (x) {
-                      onChange();
-                    },
-                    formValidator: () {
-                      return _formKey?.currentState?.validate();
-                    },
-                  ),
-                  CustomDateFormField(
-                    type: CustomDateFormFieldType.date,
-                    validator: (v) {
-                      if (_dateController.text.isEmpty) {
-                        return tr('input_hint.not_empty');
-                      }
-                      return null;
-                    },
-                    labelText: "Дата сдачи анализа",
-                    controller: _dateController,
-                    icon: Icon(Icons.date_range),
-                    onDateSelected: (x) {
-                      onChange();
-                    },
-                  ),
+        body: WillPopScope(
+            onWillPop: () async {
+              Keys.rootNavigator.currentState.pushReplacementNamed(Routes.main);
+              return false;
+            },
+            child: Container(
+                padding: EdgeInsets.only(top: Indents.md, left: Indents.md, right: Indents.md),
+                margin: EdgeInsets.only(bottom: Indents.sm),
+                child: Form(
+                    key: _formKey,
+                    child: Column(children: [
+                      CustomTextFormField(
+                        controller: _analysisController,
+                        validator: TextFieldValidators.isNotEmpty,
+                        icon: Icon(Icons.assignment_outlined),
+                        labelText: "Название анализа",
+                        hintText: "Введите название анализа",
+                        onChange: (x) {
+                          onChange();
+                        },
+                        formValidator: () {
+                          return _formKey?.currentState?.validate();
+                        },
+                      ),
+                      CustomDateFormField(
+                        type: CustomDateFormFieldType.date,
+                        validator: (v) {
+                          if (_dateController.text.isEmpty) {
+                            return tr('input_hint.not_empty');
+                          }
+                          return null;
+                        },
+                        labelText: "Дата сдачи анализа",
+                        controller: _dateController,
+                        icon: Icon(Icons.date_range),
+                        onDateSelected: (x) {
+                          onChange();
+                        },
+                      ),
 //                  CustomTextFormField(
 //                    controller: _labController,
 //                    icon: Icon(Icons.local_pharmacy_outlined),
@@ -163,104 +168,104 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
 //                      return _formKey?.currentState?.validate();
 //                    },
 //                  ),
-                  CustomTextFormField(
-                    controller: _descriptionController,
-                    icon: Icon(Icons.comment_outlined),
-                    labelText: "Примечание",
-                    hintText: "Уточните детали",
-                    maxLines: 5,
-                    onChange: (x) {
-                      onChange();
-                    },
-                  ),
-                  Column(
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      CustomTextFormField(
+                        controller: _descriptionController,
+                        icon: Icon(Icons.comment_outlined),
+                        labelText: "Примечание",
+                        hintText: "Уточните детали",
+                        maxLines: 5,
+                        onChange: (x) {
+                          onChange();
+                        },
+                      ),
+                      Column(
                         children: [
-                          Container(
-                              alignment: Alignment.topLeft,
-                              padding: EdgeInsets.only(top: Indents.sm),
-                              margin: EdgeInsets.only(bottom: Indents.sm),
-                              child: Text("Биомаркеры",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline6
-                                      .merge(TextStyle(color: theme.primaryColor)))),
-                          SizedBox(
-                            height: 30,
-                            width: 30,
-                            child: IconButton(
-                              padding: EdgeInsets.only(right: Indents.sm),
-                              icon: Icon(Icons.add),
-                              color: BioMadColors.primary,
-                              iconSize: 24,
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    //_biomarkerFormKey
-                                    //======= ЛИСТ БИОМАРКЕРОВ ========//
-                                    return BiomarkerAlertDialog(
-                                      context,
-                                      title: "Добавить биомаркер",
-                                      contentPadding: EdgeInsets.symmetric(vertical: Indents.md),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                  alignment: Alignment.topLeft,
+                                  padding: EdgeInsets.only(top: Indents.sm),
+                                  margin: EdgeInsets.only(bottom: Indents.sm),
+                                  child: Text("Биомаркеры",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline6
+                                          .merge(TextStyle(color: theme.primaryColor)))),
+                              SizedBox(
+                                height: 30,
+                                width: 30,
+                                child: IconButton(
+                                  padding: EdgeInsets.only(right: Indents.sm),
+                                  icon: Icon(Icons.add),
+                                  color: BioMadColors.primary,
+                                  iconSize: 24,
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        //_biomarkerFormKey
+                                        //======= ЛИСТ БИОМАРКЕРОВ ========//
+                                        return BiomarkerAlertDialog(
+                                          context,
+                                          title: "Добавить биомаркер",
+                                          contentPadding: EdgeInsets.symmetric(vertical: Indents.md),
+                                        );
+                                      },
                                     );
                                   },
-                                );
-                              },
-                            ),
+                                ),
+                              )
+                            ],
+                          ),
+                          StoreConnector<AppState, List<MemberBiomarkerModel>>(
+                            converter: (store) => store.state.memberBiomarkerModelList.biomarkers,
+                            builder: (ctx, state) {
+                              _biomarkers = store.state.memberBiomarkerModelList.biomarkers;
+                              return Container(
+                                  height: 76 * _biomarkers.length.toDouble() < 304
+                                      ? 76 * _biomarkers.length.toDouble()
+                                      : MediaQuery.of(context).size.height - AppBar().preferredSize.height - 372,
+                                  width: MediaQuery.of(context).size.width,
+                                  child: ScrollConfiguration(
+                                      behavior: NoRippleScrollBehaviour(),
+                                      child: ListView.builder(
+                                          itemCount: _biomarkers.length,
+                                          itemBuilder: (context, index) {
+                                            return FutureBuilder(
+                                                future: biomarkers,
+                                                builder: (context, AsyncSnapshot<List<Biomarker>> biomarkers) {
+                                                  if (biomarkers.hasData) {
+                                                    Biomarker biomarkerItem = biomarkers.data.firstWhere(
+                                                        (element) => element.id == _biomarkers[index].biomarkerId);
+                                                    return BiomarkerItem(
+                                                      value: _biomarkers[index].value ?? null,
+                                                      unit: store.state.unitList.units
+                                                              .firstWhere(
+                                                                  (element) => element.id == _biomarkers[index].unitId)
+                                                              .content
+                                                              .shorthand ??
+                                                          "unnamed",
+                                                      unitId: _biomarkers[index].unitId,
+                                                      id: _biomarkers[index].biomarkerId,
+                                                      biomarkerState: biomarkerItem.state,
+                                                      biomarkerName: biomarkerItem.content.name,
+                                                      isModel: true,
+                                                      index: index,
+                                                    );
+                                                  } else {
+                                                    return OnLoadContainer(
+                                                      index: index,
+                                                      padding: EdgeInsets.zero,
+                                                    );
+                                                  }
+                                                });
+                                          })));
+                            },
                           )
                         ],
-                      ),
-                      StoreConnector<AppState, List<MemberBiomarkerModel>>(
-                        converter: (store) => store.state.memberBiomarkerModelList.biomarkers,
-                        builder: (ctx, state) {
-                          _biomarkers = store.state.memberBiomarkerModelList.biomarkers;
-                          return Container(
-                              height: 76 * _biomarkers.length.toDouble() < 304
-                                  ? 76 * _biomarkers.length.toDouble()
-                                  : MediaQuery.of(context).size.height - AppBar().preferredSize.height - 372,
-                              width: MediaQuery.of(context).size.width,
-                              child: ScrollConfiguration(
-                                  behavior: NoRippleScrollBehaviour(),
-                                  child: ListView.builder(
-                                      itemCount: _biomarkers.length,
-                                      itemBuilder: (context, index) {
-                                        return FutureBuilder(
-                                            future: biomarkers,
-                                            builder: (context, AsyncSnapshot<List<Biomarker>> biomarkers) {
-                                              if (biomarkers.hasData) {
-                                                Biomarker biomarkerItem = biomarkers.data.firstWhere(
-                                                    (element) => element.id == _biomarkers[index].biomarkerId);
-                                                return BiomarkerItem(
-                                                  value: _biomarkers[index].value ?? null,
-                                                  unit: store.state.unitList.units
-                                                          .firstWhere(
-                                                              (element) => element.id == _biomarkers[index].unitId)
-                                                          .content
-                                                          .shorthand ??
-                                                      "unnamed",
-                                                  unitId: _biomarkers[index].unitId,
-                                                  id: _biomarkers[index].biomarkerId,
-                                                  biomarkerState: biomarkerItem.state,
-                                                  biomarkerName: biomarkerItem.content.name,
-                                                  isModel: true,
-                                                  index: index,
-                                                );
-                                              } else {
-                                                return OnLoadContainer(
-                                                  index: index,
-                                                  padding: EdgeInsets.zero,
-                                                );
-                                              }
-                                            });
-                                      })));
-                        },
                       )
-                    ],
-                  )
-                ]))));
+                    ])))));
   }
 }

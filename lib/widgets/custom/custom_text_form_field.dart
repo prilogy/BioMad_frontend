@@ -85,6 +85,7 @@ class CustomTextFormField extends StatelessWidget with IndentsMixin {
       child: Padding(
         padding: const EdgeInsets.only(top: 2.0),
         child: TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           obscureText: obscureText,
           focusNode: focusNode,
           style: enabled

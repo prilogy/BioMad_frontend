@@ -23,13 +23,14 @@ class SearchScreen extends StatefulWidget {
   final initialValue;
   final searchType;
 
-  SearchScreen({@required this.hintText,
-    this.dataList,
-    this.unitIds,
-    this.allData,
-    this.initialValue = "",
-    this.searchType,
-    Key key})
+  SearchScreen(
+      {@required this.hintText,
+      this.dataList,
+      this.unitIds,
+      this.allData,
+      this.initialValue = "",
+      this.searchType,
+      Key key})
       : super(key: key);
 
   @override
@@ -45,8 +46,7 @@ class _SearchScreenState extends State<SearchScreen> {
   final initialValue;
   final searchType;
 
-  _SearchScreenState(this.hintText, this.dataList, this.unitIds, this.allData,
-      this.initialValue, this.searchType);
+  _SearchScreenState(this.hintText, this.dataList, this.unitIds, this.allData, this.initialValue, this.searchType);
 
   TextEditingController _searchController = TextEditingController();
   FocusNode focusNode = FocusNode();
@@ -64,12 +64,29 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     if (searchType == "biomarker" || searchType == "memberBiomarker")
-      return BiomarkerSearch(hintText: hintText,);
+      return WillPopScope(
+          onWillPop: () async {
+            Navigator.of(context).pop();
+            return false;
+          },
+          child: BiomarkerSearch(
+            hintText: hintText,
+          ));
     else if (searchType == "unit")
-      return UnitSearch(hintText: hintText, unitIds: unitIds);
+      return WillPopScope(
+          onWillPop: () async {
+            Navigator.of(context).pop();
+            return false;
+          },
+          child: UnitSearch(hintText: hintText, unitIds: unitIds));
     else
-      return AllSearch(hintText: hintText,);
+      return WillPopScope(
+          onWillPop: () async {
+            Navigator.of(context).pop();
+            return false;
+          },
+          child: AllSearch(
+            hintText: hintText,
+          ));
   }
-
-
 }

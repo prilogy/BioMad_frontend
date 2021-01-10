@@ -1,4 +1,3 @@
-
 import 'package:api/api.dart';
 import 'package:biomad_frontend/containers/member_container.dart';
 import 'package:biomad_frontend/helpers/i18n_helper.dart';
@@ -29,14 +28,11 @@ class _MemberScreenState extends State<MemberScreen> {
     final theme = Theme.of(context);
 
     final _tr = trWithKey('member_screen');
-    final title =
-        widget.member == null ? _tr('new_profile') : _tr('edit_profile');
+    final title = widget.member == null ? _tr('new_profile') : _tr('edit_profile');
 
-    final actionButton = widget.member != null &&
-            widget.member.id != store.state.authorization.currentMemberId
+    final actionButton = widget.member != null && widget.member.id != store.state.authorization.currentMemberId
         ? FlatButton(
-            child:
-                Text(_tr('delete'), style: TextStyle(color: theme.errorColor)),
+            child: Text(_tr('delete'), style: TextStyle(color: theme.errorColor)),
             onPressed: () {
               AcceptDialog.show(context, onYes: () async {
                 var res = await api.member.delete(widget.member.id);
@@ -74,8 +70,7 @@ class _MemberScreenState extends State<MemberScreen> {
               ? IconButton(
                   tooltip: tr('misc.save'),
                   onPressed: () async {
-                    var res = await api.member
-                        .edit(_memberModel, widget.member.id);
+                    var res = await api.member.edit(_memberModel, widget.member.id);
                     if (res == null) {
                       SnackBarExtension.error(tr('misc.save_error'));
                       return;
@@ -91,18 +86,23 @@ class _MemberScreenState extends State<MemberScreen> {
         ],
         title: Text(title, style: TextStyle(color: theme.primaryColor)),
       ),
-      body: Container(
-        child: Column(
-          children: [
-            BlockBaseWidget(
-                child: MemberContainer(
-              widget.member,
-              changeColor: widget.member == null,
-              onChange: (x) => _memberModel = x,
-            )),
-          ],
-        ),
-      ),
+      body: WillPopScope(
+          onWillPop: () async {
+            Navigator.of(context).pop();
+            return false;
+          },
+          child: Container(
+            child: Column(
+              children: [
+                BlockBaseWidget(
+                    child: MemberContainer(
+                  widget.member,
+                  changeColor: widget.member == null,
+                  onChange: (x) => _memberModel = x,
+                )),
+              ],
+            ),
+          )),
     );
   }
 }

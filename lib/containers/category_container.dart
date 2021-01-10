@@ -125,29 +125,35 @@ class _CategoryContainerState extends State<CategoryContainer> {
               bottom: NavBar.indent,
               right: NavBar.indent,
               child: NavBar(
+                isSearch: true,
                 onAvatarTap: () {
                   _panelController.open();
                 },
               )),
-          SlidingUpPanel(
-            backdropEnabled: true,
-            controller: _panelController,
-            maxHeight: _panelHeightOpen,
-            minHeight: _panelHeightClosed,
-            parallaxEnabled: true,
-            parallaxOffset: .5,
-            panelBuilder: (sc) => ListView(
-              padding: EdgeInsets.symmetric(vertical: 0),
-              children: [
-                AccountContainer(),
-              ],
-            ),
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(RadiusValues.main), topRight: Radius.circular(RadiusValues.main)),
-            onPanelSlide: (double pos) => setState(() {
-              _fabHeight = pos * (_panelHeightOpen - _panelHeightClosed) + _initFabHeight;
-            }),
-          ),
+          WillPopScope(
+              onWillPop: () async {
+                _panelController.close();
+                return false;
+              },
+              child: SlidingUpPanel(
+                backdropEnabled: true,
+                controller: _panelController,
+                maxHeight: _panelHeightOpen,
+                minHeight: _panelHeightClosed,
+                parallaxEnabled: true,
+                parallaxOffset: .5,
+                panelBuilder: (sc) => ListView(
+                  padding: EdgeInsets.symmetric(vertical: 0),
+                  children: [
+                    AccountContainer(),
+                  ],
+                ),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(RadiusValues.main), topRight: Radius.circular(RadiusValues.main)),
+                onPanelSlide: (double pos) => setState(() {
+                  _fabHeight = pos * (_panelHeightOpen - _panelHeightClosed) + _initFabHeight;
+                }),
+              )),
         ]));
   }
 }
