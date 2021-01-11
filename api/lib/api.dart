@@ -19,6 +19,8 @@ part 'api/member_api.dart';
 
 part 'api/helper_api.dart';
 
+part 'api/shared_api.dart';
+
 part 'api/article_api.dart';
 
 part 'api/city_api.dart';
@@ -156,6 +158,7 @@ class Api {
   final UserApi user;
   final UnitApi unit;
   final LabApi lab;
+  final SharedApi shared;
   final CityApi city;
   final BiomarkerApi biomarker;
   final MemberBiomarkerApi memberBiomarker;
@@ -171,6 +174,7 @@ class Api {
         user = UserApi(dio),
         unit = UnitApi(dio),
         lab = LabApi(dio),
+        shared = SharedApi(dio),
         city = CityApi(dio),
         biomarker = BiomarkerApi(dio),
         memberBiomarker = MemberBiomarkerApi(dio),

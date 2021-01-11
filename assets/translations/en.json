@@ -89,6 +89,14 @@
     "passed_biomarkers": "We are awaiting the download of submitted biomarkers...",
     "null_biomarkers": "It's empty. You have not passed any biomarker yet :("
   },
+  "shared": {
+    "name": "Share biomarkers",
+    "copy": "Copy",
+    "copied": "Link copied",
+    "link": "Link for share",
+    "link_create": "Link creation",
+    "link_wait": "Loading biomarkers"
+  },
   "analysis": {
     "analysis": "Analysis",
     "date": "Date and time",

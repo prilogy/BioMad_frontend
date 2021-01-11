@@ -19,7 +19,6 @@ import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
 import 'analysis/reducers.dart';
-import 'biomarker_type/reducers.dart';
 import 'helper/reducers.dart';
 import 'member_biomarker_model/reducers.dart';
 
@@ -65,7 +64,6 @@ AppState appStateReducer(AppState state, action) {
     authorization: authorizationReducer(state.authorization, action),
     helper: helperReducer(state.helper, action),
     unitList: unitListReducer(state.unitList, action),
-    biomarkerTypeList: biomarkerTypeListReducer(state.biomarkerTypeList, action),
     memberBiomarkerModelList: memberBiomarkerModelListReducer(state.memberBiomarkerModelList, action),
     memberAnalysisList: memberAnalysisListReducer(state.memberAnalysisList, action),
   );

@@ -39,7 +39,10 @@ class MemberListTile extends StatelessWidget {
           children: [
             Padding(
                 padding: EdgeInsets.only(right: Indents.md),
-                child: CustomCircleAvatar(text: name, radius: AvatarSizes.md, backgroundColor: model.color == null ? theme.primaryColor : ColorHelpers.fromHex(model.color))),
+                child: CustomCircleAvatar(
+                    text: name,
+                    radius: AvatarSizes.md,
+                    backgroundColor: model.color == null ? theme.primaryColor : ColorHelpers.fromHex(model.color))),
             Expanded(
               child: Text(
                 name,
@@ -57,8 +60,7 @@ class MemberListTile extends StatelessWidget {
           isCurrent
               ? Text(
                   tr('member_list_tile.current'),
-                  style: theme.textTheme.subtitle1
-                      .merge(TextStyle(color: theme.canvasColor)),
+                  style: theme.textTheme.subtitle1.merge(TextStyle(color: theme.canvasColor)),
                 )
               : Container(),
           IconButton(

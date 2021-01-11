@@ -25,33 +25,28 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'account_container.dart';
 
 class CategoryContainer extends StatefulWidget {
+  final List<Category> categories;
+  final List<MemberBiomarker> memberBiomarkers;
+  final List<Biomarker> biomarkers;
+
+  CategoryContainer({Key key, this.categories, this.memberBiomarkers, this.biomarkers}) : super(key: key);
+
   @override
-  _CategoryContainerState createState() => _CategoryContainerState();
+  _CategoryContainerState createState() => _CategoryContainerState(categories, memberBiomarkers, biomarkers);
 }
 
 class _CategoryContainerState extends State<CategoryContainer> {
-  PanelController _panelController = PanelController();
+  final List<Category> categories;
+  final List<MemberBiomarker> memberBiomarkers;
+  final List<Biomarker> biomarkers;
 
+  _CategoryContainerState(this.categories, this.memberBiomarkers, this.biomarkers);
+
+  PanelController _panelController = PanelController();
   final double _initFabHeight = 120.0;
   double _fabHeight;
   double _panelHeightOpen = 500;
   double _panelHeightClosed = 0;
-
-  Future<List<Category>> getCategories() async {
-    return await api.category.info();
-  }
-
-  Future<List<Biomarker>> getBiomarker() async {
-    return await api.biomarker.info();
-  }
-
-  Future<List<MemberBiomarker>> getMemberBiomarker() async {
-    return await api.memberBiomarker.info();
-  }
-
-  Future<List<Category>> categories;
-  Future<List<MemberBiomarker>> memberBiomarkers;
-  Future<List<Biomarker>> biomarkers;
 
   @override
   void initState() {
@@ -60,67 +55,20 @@ class _CategoryContainerState extends State<CategoryContainer> {
 
   @override
   Widget build(BuildContext context) {
-    categories = getCategories();
-    memberBiomarkers = getMemberBiomarker();
-    biomarkers = getBiomarker();
     return Container(
         height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - 61,
         width: MediaQuery.of(context).size.width,
         child: Stack(children: [
-          FutureBuilder(
-              future: categories,
-              builder: (context, AsyncSnapshot<List<Category>> categories) {
-                if (categories.hasData) {
-                  return FutureBuilder(
-                      future: memberBiomarkers,
-                      builder: (context, AsyncSnapshot<List<MemberBiomarker>> memberBiomarkersSnap) {
-                        if (memberBiomarkersSnap.hasData) {
-                          return FutureBuilder(
-                              future: biomarkers,
-                              builder: (context, AsyncSnapshot<List<Biomarker>> biomarkersSnap) {
-                                if (biomarkersSnap.hasData) {
-                                  return ScrollConfiguration(
-                                      behavior: NoRippleScrollBehaviour(),
-                                      child: ListView.builder(
-                                          shrinkWrap: true,
-                                          itemCount: categories.data.length,
-                                          itemBuilder: (context, index) => CategoryItem(
-                                              index: index,
-                                              category: categories.data[index],
-                                              memberBiomarkers: memberBiomarkersSnap.data,
-                                              biomarkers: biomarkersSnap.data)));
-                                } else {
-                                  return ScrollConfiguration(
-                                      behavior: NoRippleScrollBehaviour(),
-                                      child: ListView.builder(
-                                          shrinkWrap: true,
-                                          itemCount: 4,
-                                          itemBuilder: (context, index) => OnLoadContainer(
-                                                index: index,
-                                                color: BioMadColors.base[200],
-                                              )));
-                                }
-                              });
-                        } else {
-                          return ScrollConfiguration(
-                              behavior: NoRippleScrollBehaviour(),
-                              child: ListView.builder(
-                                  itemCount: 4,
-                                  itemBuilder: (context, index) => OnLoadContainer(
-                                        index: index,
-                                      )));
-                        }
-                      });
-                } else {
-                  return ScrollConfiguration(
-                      behavior: NoRippleScrollBehaviour(),
-                      child: ListView.builder(
-                          itemCount: 4,
-                          itemBuilder: (context, index) => OnLoadContainer(
-                                index: index,
-                              )));
-                }
-              }),
+          ScrollConfiguration(
+              behavior: NoRippleScrollBehaviour(),
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: categories.length,
+                  itemBuilder: (context, index) => CategoryItem(
+                      index: index,
+                      category: categories[index],
+                      memberBiomarkers: memberBiomarkers,
+                      biomarkers: biomarkers))),
           Positioned(
               bottom: NavBar.indent,
               right: NavBar.indent,

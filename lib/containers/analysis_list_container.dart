@@ -1,11 +1,6 @@
 import 'package:api/api.dart';
-import 'package:biomad_frontend/helpers/keys.dart';
-import 'package:biomad_frontend/models/analysis_list.dart';
-import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/screens/analysis_screen.dart';
 import 'package:biomad_frontend/services/api.dart';
-import 'package:biomad_frontend/store/main.dart';
-import 'package:biomad_frontend/store/thunks.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:biomad_frontend/widgets/on_load_container.dart';
@@ -14,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 
 class AnalysisListContainer extends StatefulWidget {
   @override
@@ -67,6 +61,7 @@ class _AnalysisListContainerState extends State<AnalysisListContainer> {
 
   Widget analysisItem(int index, MemberAnalysis analysis) {
     final theme = Theme.of(context);
+    double chars = (MediaQuery.of(context).size.width - 100)/8;
 
     return GestureDetector(
       onTap: () {
@@ -106,7 +101,7 @@ class _AnalysisListContainerState extends State<AnalysisListContainer> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      analysis.name,
+                      analysis.name.length > chars.toInt() ? analysis.name.substring(0, chars.toInt()) + "..." : analysis.name,
                       style: theme.textTheme.bodyText2,
                     ),
                     Container(

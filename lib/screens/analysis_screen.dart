@@ -1,6 +1,7 @@
 import 'package:api/api.dart';
 import 'package:biomad_frontend/containers/account_container.dart';
 import 'package:biomad_frontend/containers/analysis_container.dart';
+import 'package:biomad_frontend/screens/shared_screen.dart';
 import 'package:biomad_frontend/styles/radius_values.dart';
 import 'package:biomad_frontend/widgets/nav_bar.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -32,13 +33,32 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    double chars = (MediaQuery.of(context).size.width - 80) / 18;
+    String str =
+        analysis.name.length > chars.toInt() ? analysis.name.substring(0, chars.toInt()) + "..." : analysis.name;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          tr('analysis.analysis') + " - " + analysis.name,
+          tr('analysis.analysis') + " - " + str,
           style: TextStyle(fontSize: 18, color: theme.primaryColor),
         ),
+        actions: [
+          Container(
+            margin: EdgeInsets.only(right: 8),
+            child: IconButton(
+              icon: Icon(Icons.share),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return SharedScreen(memberAnalysisId: analysis.id, biomarkerIds: null,);
+                  },
+                );
+              },
+            ),
+          )
+        ],
       ),
       body: Stack(children: [
         Scaffold(

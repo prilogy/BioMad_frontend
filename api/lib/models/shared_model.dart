@@ -5,7 +5,7 @@ class SharedModel {
   int memberAnalysisId = null;
   
   List<int> biomarkerIds = [];
-  SharedModel();
+  SharedModel({this.memberAnalysisId, this.biomarkerIds});
 
   @override
   String toString() {

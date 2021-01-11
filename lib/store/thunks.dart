@@ -15,7 +15,6 @@ import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/services/localstorage.dart';
 import 'package:biomad_frontend/store/authorization/actions.dart';
-import 'package:biomad_frontend/store/biomarker_type/actions.dart';
 import 'package:biomad_frontend/store/helper/actions.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/settings/actions.dart';
@@ -50,7 +49,6 @@ class StoreThunks {
       store.dispatch(SetUser(res.user));
       store.dispatch(SetAuthorization(auth));
 
-      store.dispatch(refreshTypes());
       store.dispatch(refreshMemberAnalysis());
       store.dispatch(refreshUnits());
 
@@ -101,20 +99,6 @@ class StoreThunks {
     return (Store<AppState> store) async {
       store.dispatch(SetUnitList(UnitList(
           units: await api.unit.info(), lastUpdateDate: DateTime.now())));
-    };
-  }
-
-  static ThunkAction<AppState> refreshTypes() {
-    return (Store<AppState> store) async {
-      if (store.state.biomarkerTypeList != null &&
-          (store.state.biomarkerTypeList?.lastUpdateDate
-                      ?.difference(DateTime.now())
-                      ?.inDays ??
-                  3) <
-              2) return;
-
-      store.dispatch(SetBiomarkerTypeList(BiomarkerTypeList(
-          types: await api.biomarker.type(), lastUpdateDate: DateTime.now())));
     };
   }
 

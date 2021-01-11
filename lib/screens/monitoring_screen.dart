@@ -1,9 +1,13 @@
+import 'package:api/api.dart';
 import 'package:biomad_frontend/containers/category_container.dart';
+import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
+import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:biomad_frontend/widgets/nav_top_bar.dart';
+import 'package:biomad_frontend/widgets/on_load_container.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +26,27 @@ class _MyHomePageState extends State<MyHomePage> {
   List<String> navPageBar = [tr('navigation.my_health'), tr('navigation.biomarkers')];
   int selectedIndex = 0;
 
+  Future<List<Category>> getCategories() async {
+    return await api.category.info();
+  }
+
+  Future<List<Biomarker>> getBiomarker() async {
+    return await api.biomarker.info();
+  }
+
+  Future<List<MemberBiomarker>> getMemberBiomarker() async {
+    return await api.memberBiomarker.info();
+  }
+
+  Future<List<BiomarkerType>> getType() async {
+    return await api.biomarker.type();
+  }
+
+  List<Category> categories;
+  List<MemberBiomarker> memberBiomarkers;
+  List<Biomarker> biomarkers;
+  List<BiomarkerType> types;
+
   @override
   void initState() {
     store.dispatch(StoreThunks.authorizeWithRefreshToken());
@@ -30,8 +55,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    store.dispatch(StoreThunks.refreshTypes());
-
     return Scaffold(
       appBar: AppBar(
         title: NavTopBar(index: 0),
@@ -46,7 +69,43 @@ class _MyHomePageState extends State<MyHomePage> {
                   scrollDirection: Axis.horizontal,
                   itemCount: navPageBar.length,
                   itemBuilder: (context, index) => buildNavTopBar(index))),
-          selectedIndex == 0 ? CategoryContainer() : BioMarkerListScreen()
+          FutureBuilder(
+              future: Future.wait([
+                getCategories(),
+                getBiomarker(),
+                getMemberBiomarker(),
+                getType(),
+              ]),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  categories = snapshot.data[0];
+                  biomarkers = snapshot.data[1];
+                  memberBiomarkers = snapshot.data[2];
+                  types = snapshot.data[3];
+
+                  return selectedIndex == 0
+                      ? CategoryContainer(
+                          categories: categories,
+                          memberBiomarkers: memberBiomarkers,
+                          biomarkers: biomarkers,
+                        )
+                      : BioMarkerListScreen(
+                          types: types,
+                          memberBiomarkers: memberBiomarkers,
+                          biomarkers: biomarkers,
+                        );
+                } else {
+                  return ScrollConfiguration(
+                      behavior: NoRippleScrollBehaviour(),
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: 4,
+                          itemBuilder: (context, index) => OnLoadContainer(
+                                index: index,
+                                color: BioMadColors.base[200],
+                              )));
+                }
+              }),
         ],
       ))), // This trailing comma makes auto-formatting nicer for build methods.
     );

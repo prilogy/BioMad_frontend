@@ -3,6 +3,7 @@ import 'package:biomad_frontend/helpers/indents_mixin.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/screens/article_screen.dart';
+import 'package:biomad_frontend/screens/shared_screen.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
@@ -194,7 +195,16 @@ class BiomarkerInfo extends StatelessWidget {
                     Icons.share,
                     color: theme.colorScheme.background,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        List<int> biomarkerIds = [];
+                        biomarkerIds.add(biomarker.id);
+                        return SharedScreen(memberAnalysisId: null, biomarkerIds: biomarkerIds);
+                      },
+                    );
+                  },
                 ),
               ],
             )
