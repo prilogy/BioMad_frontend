@@ -8,6 +8,7 @@ import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'biomarker_items.dart';
@@ -77,7 +78,7 @@ class _BiomarkerSearchState extends State<BiomarkerSearch> {
                         enabledBorder: InputBorder.none,
                         errorBorder: InputBorder.none,
                         disabledBorder: InputBorder.none,
-                        hintText: hintText ?? "Начните набирать",
+                        hintText: hintText ?? tr('search.hint'),
                         suffixIcon: IconButton(
                           onPressed: () {
                             _searchController.text = "";

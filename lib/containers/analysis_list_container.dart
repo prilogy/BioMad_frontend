@@ -112,12 +112,12 @@ class _AnalysisListContainerState extends State<AnalysisListContainer> {
                     Container(
                       padding: EdgeInsets.only(top: 2),
                       child: Text(
-                        analysis.dateCreatedAt.day.toString() +
+                        zeroAdding(analysis.dateCreatedAt.day) +
                             "." +
                             zeroAdding(analysis.dateCreatedAt.month) +
                             "." +
                             analysis.dateCreatedAt.year.toString() +
-                            " в " +
+                            " - " +
                             analysis.dateCreatedAt.hour.toString() +
                             ":" +
                             zeroAdding(analysis.dateCreatedAt.minute),

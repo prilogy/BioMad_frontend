@@ -10,6 +10,7 @@ import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:biomad_frontend/widgets/biomarker/biomarker_item.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../category_item.dart';
@@ -82,7 +83,7 @@ class _AllSearchState extends State<AllSearch> {
                         enabledBorder: InputBorder.none,
                         errorBorder: InputBorder.none,
                         disabledBorder: InputBorder.none,
-                        hintText: hintText ?? "Начните набирать",
+                        hintText: hintText ?? tr('search.hint'),
                         suffixIcon: IconButton(
                           onPressed: () {
                             _searchController.text = "";
@@ -116,7 +117,7 @@ class _AllSearchState extends State<AllSearch> {
                                     left: Indents.md,
                                     right: Indents.md,
                                   ),
-                                  child: Text("Извините, мы не смогли ничего найти :("))
+                                  child: Text(tr('search.null')))
                           : Container();
                     });
               } else
@@ -142,7 +143,7 @@ class _AllSearchState extends State<AllSearch> {
                           Container(
                             padding: EdgeInsets.only(left: Indents.md, right: Indents.md),
                             child: Text(
-                              "Категории",
+                              tr('search.category'),
                               style: Theme.of(context)
                                   .textTheme
                                   .headline6
@@ -215,7 +216,7 @@ class _AllSearchState extends State<AllSearch> {
                   Container(
                     margin: EdgeInsets.only(bottom: Indents.sm),
                     child: Text(
-                      "Биомаркеры",
+                      tr('search.biomarkers'),
                       style:
                           Theme.of(context).textTheme.headline6.merge(TextStyle(color: Theme.of(context).primaryColor)),
                     ),
@@ -258,13 +259,13 @@ class _AllSearchState extends State<AllSearch> {
                               }))
                       : Container(
                           width: MediaQuery.of(context).size.width - 2 * Indents.md,
-                          child: Text("Вы ещё не сдали этот биомаркер."),
+                          child: Text(tr('search.not_passed')),
                         ),
                 ],
               ),
             );
           } else {
-            return Container(child: Text("Ожидаем..."));
+            return Container(child: Text(tr('search.wait')));
           }
         });
   }

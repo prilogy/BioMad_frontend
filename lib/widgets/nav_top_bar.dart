@@ -2,6 +2,7 @@ import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class NavTopBar extends StatefulWidget {
@@ -13,7 +14,7 @@ class NavTopBar extends StatefulWidget {
 }
 
 class _NavTopBarState extends State<NavTopBar> {
-  List<String> navTopBar = ["Мониторинг", "Анализы"];
+  List<String> navTopBar = [tr('navigation.monitoring'), tr('navigation.analyzes')];
   var navTopBarLink = [Routes.main, Routes.analysis_list];
   int selectedIndex;
   _NavTopBarState(this.selectedIndex);

@@ -25,7 +25,7 @@ void init() {
       },
       onError: (e) async {
         if(e.type == DioErrorType.CONNECT_TIMEOUT) {
-          SnackBarExtension.dark(tr('snack_bar.offline_mode'), duration: Duration(seconds: 10));
+          SnackBarExtension.dark(tr('snack_bar.offline_mode'), duration: Duration(seconds: 2));
         }
       },
       onResponse: (r) async {

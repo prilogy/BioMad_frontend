@@ -5,6 +5,7 @@
     "delete": "Delete",
     "edit": "Edit",
     "save": "Save changes",
+    "save_alert": "Save",
     "save_success": "Changes have been saved successfully",
     "save_error": "Unexpected error occurred while saving changes",
     "yes": "Yes",
@@ -35,8 +36,10 @@
   },
   "snack_bar": {
     "log_out_due_refresh_token" : "Seems like you haven't been here for a long time, please, re-log in to to ensure security.",
-    "offline_mode": "No connection, offline mode",
+    "offline_mode": "Timed out. Try again",
+    "offline_user": "No user connection, offline mode",
     "log_out": "Logged out successfully",
+    "add_biomarker": "Add biomarkers to your analysis",
     "app_exit": "Repeat action to exit application"
   },
   "member_screen": {
@@ -57,6 +60,10 @@
     "your_account": "Your account",
     "my_profiles": "My profiles",
     "current_profile": "Current profile",
+    "custom_references": "Custom references",
+    "add_references": "Add or edit",
+    "send_references": "Specify reference",
+    "null_references": "No custom references have been added yet.",
     "socials": "Connected social networks",
     "social_connect_success": "Social network successfully connected",
     "social_connect_error": "Unexpected error while connecting social network",
@@ -67,6 +74,90 @@
     "male": "Male",
     "female": "Female",
     "neutral": "Neutral"
+  },
+  "navigation": {
+    "monitoring": "Monitoring",
+    "analyzes": "Analyzes",
+    "my_health": "My Health",
+    "biomarkers": "Biomarkers"
+  },
+  "loader": {
+    "biomarkers": "Waiting for biomarkers to load...",
+    "load_data": "Loading data...",
+    "load_reference": "Loading references...",
+    "types": "Waiting for types to load...",
+    "passed_biomarkers": "We are awaiting the download of submitted biomarkers...",
+    "null_biomarkers": "It's empty. You have not passed any biomarker yet :("
+  },
+  "analysis": {
+    "analysis": "Analysis",
+    "date": "Date and time",
+    "desc": "Note",
+    "biomarkers": "Biomarkers"
+  },
+  "biomarker": {
+    "value": "Your value",
+    "normal": "Normal",
+    "history": "History",
+    "info": "Information",
+    "null_info": "No description added to marker :(",
+    "load_info": "Loading the biomarker description...",
+    "dangerous": "What is dangerous",
+    "reduced": "Reduced value",
+    "elevated": "Elevated value",
+    "reduce": "Reduce",
+    "elevate": "Elevate",
+    "biomarkers": "Biomarkers"
+  },
+  "category": {
+    "state": "state",
+    "general_state": "General state",
+    "latest_biomarkers": "Latest biomarkers",
+    "not_passed_yet": "Not passed yet",
+    "all_passed": "Congratulations, all biomarkers have been submitted! :)",
+    "null": "Analyzes not loaded",
+    "all": "All",
+    "all_view": "Viewing biomarkers",
+    "updated": "Updated"
+  },
+  "search": {
+    "hint": "Start typing",
+    "not_passed": "You haven't passed in this biomarker yet.",
+    "biomarkers": "Biomarkers",
+    "category": "Categories",
+    "null": "Sorry, we couldn't find anything :(",
+    "wait": "Waiting..."
+  },
+  "state": {
+    "terrible": "terrible",
+    "satisfactory": "satisfactory",
+    "excellent": "excellent",
+    "undefined": "undefined",
+    "reduced": "reduced",
+    "elevated": "elevated",
+    "normal": "normal"
+  },
+  "add_analysis": {
+    "add": "Add Analysis",
+    "add_biomarker": "Add biomarker",
+    "name": "Analysis name",
+    "enter_name": "Enter the name of the analysis",
+    "date": "Analysis date",
+    "note": "Note",
+    "enter_note": "Specify details",
+    "biomarkers": "Biomarkers"
+  },
+  "biomarker_alert": {
+    "biomarker": "Biomarker",
+    "edit_biomarker": "Edit biomarker",
+    "selected_biomarker": "Selected biomarker",
+    "enter_biomarker": "Enter biomarker",
+    "down_line": "Lower value",
+    "up_line": "Upper value",
+    "value": "Value",
+    "null_unit": "Biomarker selection first",
+    "unit": "Units",
+    "enter_unit": "Enter unit"
   },
   "auth_screen": {
     "login": "Sign in",

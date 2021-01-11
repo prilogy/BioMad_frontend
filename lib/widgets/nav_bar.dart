@@ -5,6 +5,7 @@ import 'package:biomad_frontend/screens/search_screen.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class NavBar extends StatefulWidget {
@@ -56,7 +57,7 @@ class _NavBarState extends State<NavBar> {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return SearchScreen(hintText: "Начните набирать", searchType: "all");
+                    return SearchScreen(hintText: tr('search.hint'), searchType: "all");
                   },
                 );
               },

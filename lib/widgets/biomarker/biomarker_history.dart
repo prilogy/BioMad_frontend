@@ -4,6 +4,7 @@ import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -40,7 +41,7 @@ class BiomarkerHistory extends StatelessWidget {
       Container(
         margin: EdgeInsets.only(bottom: Indents.sm),
         child: Text(
-          "История",
+          tr('biomarker.history'),
           style: theme.textTheme.headline6.merge(TextStyle(color: theme.primaryColor)),
         ),
       ),
@@ -110,17 +111,17 @@ class BiomarkerHistory extends StatelessWidget {
           if (biomarker.hasData) {
             if (data.value >= biomarker.data.reference.valueA && data.value <= biomarker.data.reference.valueB) {
               color = BioMadColors.success;
-              status = "норма";
+              status = tr('state.normal');
             } else if (data.value < biomarker.data.reference.valueA) {
               color = BioMadColors.warning;
-              status = "пониженный";
+              status = tr('state.reduced');
               icon = Icons.keyboard_arrow_down;
             } else if (data.value > biomarker.data.reference.valueB) {
               color = BioMadColors.warning;
-              status = "повышенный";
+              status = tr('state.elevated');
               icon = Icons.keyboard_arrow_up;
             } else {
-              status = "не определено";
+              status = tr('state.undefined');
               icon = Icons.keyboard_arrow_right;
             }
 
@@ -151,7 +152,7 @@ class BiomarkerHistory extends StatelessWidget {
                   Row(
                     children: [
                       Container(
-                          padding: status == "норма" ? EdgeInsets.only(right: Indents.sm) : null,
+                          padding: status == tr('state.normal') ? EdgeInsets.only(right: Indents.sm) : null,
                           child: icon != null ? Icon(icon, color: color, size: 18.0) : iconContainer),
                       Text(
                         data.value.toString() + " " + data.unit.content.shorthand + ", " + status,

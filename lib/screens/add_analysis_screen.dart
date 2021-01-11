@@ -1,6 +1,7 @@
 import 'package:api/api.dart';
 import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
 import 'package:biomad_frontend/helpers/date_time_formats.dart';
+import 'package:biomad_frontend/helpers/i18n_helper.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
 import 'package:biomad_frontend/helpers/text_field_validators.dart';
@@ -82,6 +83,7 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final _tr = trWithKey('add_analysis');
     Future<List<Biomarker>> biomarkers = getBiomarker();
     return Scaffold(
         appBar: AppBar(
@@ -97,7 +99,7 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                 );
               },
             ),
-            title: Text("Добавить анализ", style: TextStyle(color: Theme.of(context).primaryColor)),
+            title: Text(_tr('add'), style: TextStyle(color: Theme.of(context).primaryColor)),
             actions: [
               IconButton(
                 icon: Icon(Icons.add),
@@ -111,7 +113,7 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                       store.dispatch(StoreThunks.refreshMemberAnalysis());
                       Keys.rootNavigator.currentState.pushReplacementNamed(Routes.main);
                     } catch (e) {
-                      SnackBarExtension.warning("Добавьте биомаркеры к анализу", duration: Duration(seconds: 4));
+                      SnackBarExtension.warning(tr('snack_bar.add_biomarker'), duration: Duration(seconds: 4));
                     }
                   }
                 },
@@ -132,8 +134,8 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                         controller: _analysisController,
                         validator: TextFieldValidators.isNotEmpty,
                         icon: Icon(Icons.assignment_outlined),
-                        labelText: "Название анализа",
-                        hintText: "Введите название анализа",
+                        labelText: _tr('name'),
+                        hintText: _tr('enter_name'),
                         onChange: (x) {
                           onChange();
                         },
@@ -149,30 +151,18 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                           }
                           return null;
                         },
-                        labelText: "Дата сдачи анализа",
+                        labelText: _tr('date'),
                         controller: _dateController,
                         icon: Icon(Icons.date_range),
                         onDateSelected: (x) {
                           onChange();
                         },
                       ),
-//                  CustomTextFormField(
-//                    controller: _labController,
-//                    icon: Icon(Icons.local_pharmacy_outlined),
-//                    labelText: "Название лаборатории",
-//                    hintText: "Введите название лаборатории",
-//                    onChange: (x) {
-//                      onChange();
-//                    },
-//                    formValidator: () {
-//                      return _formKey?.currentState?.validate();
-//                    },
-//                  ),
                       CustomTextFormField(
                         controller: _descriptionController,
                         icon: Icon(Icons.comment_outlined),
-                        labelText: "Примечание",
-                        hintText: "Уточните детали",
+                        labelText: _tr('note'),
+                        hintText: _tr('enter_note'),
                         maxLines: 5,
                         onChange: (x) {
                           onChange();
@@ -188,7 +178,7 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                                   alignment: Alignment.topLeft,
                                   padding: EdgeInsets.only(top: Indents.sm),
                                   margin: EdgeInsets.only(bottom: Indents.sm),
-                                  child: Text("Биомаркеры",
+                                  child: Text(_tr('biomarkers'),
                                       style: Theme.of(context)
                                           .textTheme
                                           .headline6
@@ -209,7 +199,7 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                                         //======= ЛИСТ БИОМАРКЕРОВ ========//
                                         return BiomarkerAlertDialog(
                                           context,
-                                          title: "Добавить биомаркер",
+                                          title: _tr('add_biomarker'),
                                           contentPadding: EdgeInsets.symmetric(vertical: Indents.md),
                                         );
                                       },

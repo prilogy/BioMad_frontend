@@ -78,8 +78,8 @@ class MyApp extends StatelessWidget {
       else
         store.dispatch(StoreThunks.logOut());
     } catch (e) {
-      SnackBarExtension.dark(tr('snack_bar.offline_mode'),
-          duration: Duration(seconds: 10));
+      SnackBarExtension.dark(tr('snack_bar.offline_user'),
+          duration: Duration(seconds: 2));
     }
     connectionChecked = true;
   }

@@ -3,6 +3,7 @@ import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:biomad_frontend/widgets/biomarker/biomarker_item.dart';
 import 'package:biomad_frontend/widgets/on_load_container.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
@@ -49,16 +50,16 @@ class _AnalysisContainerState extends State<AnalysisContainer> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  "Дата и время сдачи",
+                  tr('analysis.date'),
                   style: theme.textTheme.bodyText1,
                 ),
                 Text(
-                  analysis.dateCreatedAt.day.toString() +
+                  zeroAdding(analysis.dateCreatedAt.day) +
                       "." +
                       zeroAdding(analysis.dateCreatedAt.month) +
                       "." +
                       analysis.dateCreatedAt.year.toString() +
-                      " в " +
+                      " - " +
                       analysis.dateCreatedAt.hour.toString() +
                       ":" +
                       zeroAdding(analysis.dateCreatedAt.minute),
@@ -73,7 +74,7 @@ class _AnalysisContainerState extends State<AnalysisContainer> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Примечание",
+                  tr('analysis.desc'),
                   style: theme.textTheme.bodyText1,
                 ),
                 Text(analysis.description),
@@ -83,7 +84,7 @@ class _AnalysisContainerState extends State<AnalysisContainer> {
           Container(
             margin: EdgeInsets.only(top: Indents.sm),
             child: Text(
-              "Биомаркеры",
+              tr('analysis.biomarkers'),
               style:
                   theme.textTheme.subtitle1.merge(TextStyle(color: theme.primaryColor, fontWeight: FontWeight.normal)),
             ),

@@ -50,9 +50,11 @@ class AuthApi extends ApiBase<AuthApi> {
     }
     try {
       var url = '${v}/auth/refreshToken';
+      print(model);
       var response = await dio.post(url, data: model, options: Options(headers: {"Culture": currentLocale}));
       return AuthenticationResult.fromJson(response.data);
     } on DioError catch (e) {
+      print(e);
       return null;
     }
   }

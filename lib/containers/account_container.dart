@@ -160,7 +160,7 @@ class _AccountContainerState extends State<AccountContainer> {
               );
             }),
         CustomDivider(
-          text: "Собственные референсы",
+          text: _tr('custom_references'),
           dividerPadding: EdgeInsets.symmetric(vertical: Indents.smd),
         ),
         StreamBuilder(
@@ -243,7 +243,7 @@ class _AccountContainerState extends State<AccountContainer> {
                                       ))
                                   : Container(
                                       margin: EdgeInsets.only(left: Indents.slg),
-                                      child: Text("Собственные референсы пока что не добавлены.")),
+                                      child: Text(_tr('null_references'))),
                               Container(
                                 padding: EdgeInsets.zero,
                                 width: 220,
@@ -253,7 +253,7 @@ class _AccountContainerState extends State<AccountContainer> {
                                       context: context,
                                       builder: (BuildContext context) {
                                         return AddReferenceAlertDialog(context,
-                                            title: "Указать референс",
+                                            title: _tr('send_references'),
                                             contentPadding: EdgeInsets.symmetric(vertical: Indents.md));
                                       },
                                     ).then((value) => {
@@ -263,7 +263,7 @@ class _AccountContainerState extends State<AccountContainer> {
                                           })
                                         });
                                   },
-                                  text: "Добавить или изменить",
+                                  text: _tr('add_references'),
                                 ),
                               )
                             ]);
@@ -274,7 +274,7 @@ class _AccountContainerState extends State<AccountContainer> {
                           children: [
                             Container(
                                 padding: EdgeInsets.only(left: Indents.md, right: Indents.md),
-                                child: Text("Собственные референсы пока что не добавлены.")),
+                                child: Text(_tr('null_references'))),
                             Container(
                               padding: EdgeInsets.zero,
                               width: 220,

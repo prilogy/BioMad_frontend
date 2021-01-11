@@ -4,6 +4,7 @@ import 'package:biomad_frontend/store/thunks.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:biomad_frontend/widgets/nav_top_bar.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<String> navPageBar = ["Моё здоровье", "Биомаркеры"];
+  List<String> navPageBar = [tr('navigation.my_health'), tr('navigation.biomarkers')];
   int selectedIndex = 0;
 
   @override

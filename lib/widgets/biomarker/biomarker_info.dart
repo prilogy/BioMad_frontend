@@ -7,6 +7,7 @@ import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'biomarker_alert.dart';
@@ -37,9 +38,9 @@ class BiomarkerInfo extends StatelessWidget {
 
     String biomarkerDescription;
     try {
-      biomarkerDescription = biomarker.content.description ?? "Описание к маркеру не добавлено :(";
+      biomarkerDescription = biomarker.content.description ?? tr('biomarker.null_info');
     } catch (e) {
-      biomarkerDescription = "Загружаем описание биомаркера...";
+      biomarkerDescription = tr('biomarker.load_info');
     }
 
     Future<Article> decreasedDesc;
@@ -69,7 +70,7 @@ class BiomarkerInfo extends StatelessWidget {
             Container(
               margin: EdgeInsets.only(bottom: Indents.sm),
               child: Text(
-                "Информация",
+                tr('biomarker.info'),
                 style: theme.textTheme.headline6.merge(TextStyle(color: theme.primaryColor)),
               ),
             ),
@@ -86,14 +87,14 @@ class BiomarkerInfo extends StatelessWidget {
                     children: [
                       Container(
                           margin: EdgeInsets.only(bottom: Indents.sm),
-                          child: Text("Чем опасен",
+                          child: Text(tr('biomarker.dangerous'),
                               style: theme.textTheme.subtitle1.merge(TextStyle(color: theme.primaryColor)))),
                       FutureBuilder(
                           future: decreasedDesc,
                           builder: (context, AsyncSnapshot<Article> articleSnap) {
                             if (articleSnap.hasData) {
                               return DropText(
-                                  header: "Пониженный показатель",
+                                  header: tr('biomarker.reduced'),
                                   inside: articleSnap.data.content.text,
                                   color: theme.colorScheme.onBackground);
                             } else {
@@ -112,7 +113,7 @@ class BiomarkerInfo extends StatelessWidget {
                           builder: (context, AsyncSnapshot<Article> articleSnap) {
                             if (articleSnap.hasData) {
                               return DropText(
-                                  header: "Повышенный показатель",
+                                  header: tr('biomarker.elevated'),
                                   inside: articleSnap.data.content.text,
                                   color: theme.errorColor);
                             } else {
@@ -146,7 +147,7 @@ class BiomarkerInfo extends StatelessWidget {
                               },
                             );
                           },
-                          child: Text('ПОВЫСИТЬ',
+                          child: Text(tr('biomarker.elevate').toUpperCase(),
                               style: theme.textTheme.bodyText2.merge(TextStyle(color: theme.colorScheme.onPrimary))),
                           color: theme.errorColor,
                         );
@@ -173,7 +174,7 @@ class BiomarkerInfo extends StatelessWidget {
                               },
                             );
                           },
-                          child: Text('ПОНИЗИТЬ',
+                          child: Text(tr('biomarker.reduce').toUpperCase(),
                               style: theme.textTheme.bodyText2.merge(TextStyle(color: theme.colorScheme.onPrimary))),
                           color: BioMadColors.success,
                         );
@@ -198,6 +199,6 @@ class BiomarkerInfo extends StatelessWidget {
               ],
             )
           ])
-        : Container(child: Text("Ожидаем подгрузку информации..."));
+        : Container(child: Text(tr('loader.load_data')));
   }
 }

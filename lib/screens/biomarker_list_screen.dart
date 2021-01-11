@@ -9,6 +9,7 @@ import 'package:biomad_frontend/styles/radius_values.dart';
 import 'package:biomad_frontend/widgets/biomarker/biomarker_item.dart';
 import 'package:biomad_frontend/widgets/nav_bar.dart';
 import 'package:biomad_frontend/widgets/on_load_container.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -60,7 +61,7 @@ class _BioMarkerListScreenState extends State<BioMarkerListScreen> {
           return false;
         },
         child: Container(
-            height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - 50,
+            height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - 61,
             width: MediaQuery.of(context).size.width,
             child: Stack(children: [
               FutureBuilder(
@@ -146,16 +147,16 @@ class _BioMarkerListScreenState extends State<BioMarkerListScreen> {
                                                     : Container();
                                               }),
                                         )
-                                      : Container(child: Text("Тут пусто. Вы ещё не сдали ни одного биомаркера :("));
+                                      : Container(child: Text(tr('loader.null_biomarkers')));
                                 } else {
-                                  return Container(child: Text("Ожидаем загрузки типов..."));
+                                  return Container(child: Text(tr('loader.types')));
                                 }
                               }));
                     } else {
                       return Container(
                           padding: EdgeInsets.only(top: Indents.md, left: Indents.slg, right: Indents.md),
                           margin: EdgeInsets.only(bottom: Indents.sm),
-                          child: Text("Ожидаем загрузки биомаркеров..."));
+                          child: Text(tr('loader.biomarkers')));
                     }
                   }),
               Positioned(

@@ -10,6 +10,7 @@ import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'biomarker/biomarker_alert.dart';
@@ -58,16 +59,16 @@ class CategoryItem extends StatelessWidget {
     }
     if (state >= 80.0) {
       color = BioMadColors.success;
-      status = "отличное";
+      status = tr('state.excellent');
     } else if (state >= 40.0) {
       color = BioMadColors.warning;
-      status = "удовлетворительное";
+      status = tr('state.satisfactory');
     } else if (state > 0.0 && state < 40.0) {
       color = BioMadColors.error;
-      status = "ужасное";
+      status = tr('state.terrible');
     } else {
       color = BioMadColors.base[400];
-      status = "не определено";
+      status = tr('state.undefined');
     }
 
     return GestureDetector(
@@ -110,7 +111,7 @@ class CategoryItem extends StatelessWidget {
                     Container(
                       padding: EdgeInsets.only(top: 2),
                       child: Text(
-                        "Состояние: " + status,
+                        tr('category.state') + ": " + status,
                         style: theme.textTheme.caption.merge(TextStyle(color: color)),
                       ),
                     )

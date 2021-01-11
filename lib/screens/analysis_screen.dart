@@ -3,6 +3,7 @@ import 'package:biomad_frontend/containers/account_container.dart';
 import 'package:biomad_frontend/containers/analysis_container.dart';
 import 'package:biomad_frontend/styles/radius_values.dart';
 import 'package:biomad_frontend/widgets/nav_bar.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -35,7 +36,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Анализ - " + analysis.name,
+          tr('analysis.analysis') + " - " + analysis.name,
           style: TextStyle(fontSize: 18, color: theme.primaryColor),
         ),
       ),

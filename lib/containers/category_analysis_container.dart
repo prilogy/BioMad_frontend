@@ -9,6 +9,7 @@ import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:biomad_frontend/widgets/biomarker/biomarker_item.dart';
 import 'package:biomad_frontend/widgets/block_base_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
@@ -61,8 +62,8 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
 
     return FutureBuilder(
         future: memberBiomarkers,
-        builder: (context, AsyncSnapshot<List<MemberBiomarker>> memberBiomarkers) {
-          if (memberBiomarkers.hasData) {
+        builder: (context, AsyncSnapshot<List<MemberBiomarker>> snapMemberBiomarkers) {
+          if (snapMemberBiomarkers.hasData) {
             int allBiomarkers = 0;
             int successfulBiomarkers = 0;
             return FutureBuilder(
@@ -75,7 +76,7 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
                       biomarkerStock = [];
                       for (var item in category.biomarkerIds) {
                         memberBiomarker =
-                            memberBiomarkers.data.firstWhere((x) => x.biomarkerId == item, orElse: () => null);
+                            snapMemberBiomarkers.data.firstWhere((x) => x.biomarkerId == item, orElse: () => null);
                         memberBiomarker != null
                             ? biomarkerStock.add(memberBiomarker)
                             : biomarkerNotInStock
@@ -94,7 +95,7 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
                     try {
                       allBiomarkers = 0;
                       successfulBiomarkers = 0;
-                      for (var item in memberBiomarkers.data) {
+                      for (var item in snapMemberBiomarkers.data) {
                         if (category.biomarkerIds.contains(item.biomarkerId)) {
                           allBiomarkers++;
                           Biomarker biomarkerItem =
@@ -116,16 +117,16 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
 
                     if (state >= 80.0) {
                       color = BioMadColors.success;
-                      status = "отличное";
+                      status = tr('state.excellent');
                     } else if (state >= 40.0) {
                       color = BioMadColors.warning;
-                      status = "удовлетворительное";
+                      status = tr('state.satisfactory');
                     } else if (state > 0.0 && state < 40.0) {
                       color = BioMadColors.error;
-                      status = "ужасное";
+                      status = tr('state.terrible');
                     } else {
                       color = BioMadColors.base[400];
-                      status = "не определено";
+                      status = tr('state.undefined');
                     }
 
                     return Container(
@@ -137,7 +138,7 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
                                 BlockBaseWidget(
                                     padding: EdgeInsets.only(left: Indents.md, right: Indents.md),
                                     margin: EdgeInsets.only(bottom: Indents.sm),
-                                    header: "Общее состояние",
+                                    header: tr('category.general_state'),
                                     headerMergeStyle: TextStyle(color: theme.primaryColor),
                                     child: Row(
                                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -157,17 +158,18 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
                                                   children: [
                                                     Text(
                                                         dateOfChanged != null
-                                                            ? "Обновлено: " +
-                                                                dateOfChanged.day.toString() +
+                                                            ? tr('category.updated') +
+                                                                ": " +
+                                                                zeroAdding(dateOfChanged.day) +
                                                                 '.' +
                                                                 zeroAdding(dateOfChanged.month) +
                                                                 '.' +
                                                                 dateOfChanged.year.toString() +
-                                                                ' в ' +
+                                                                ' - ' +
                                                                 dateOfChanged.hour.toString() +
                                                                 ':' +
                                                                 zeroAdding(dateOfChanged.minute)
-                                                            : "Анализы не загружены",
+                                                            : tr('category.null'),
                                                         style: Theme.of(context).textTheme.bodyText2),
                                                   ],
                                                 ),
@@ -188,7 +190,7 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
                                                 Container(
                                                     alignment: Alignment.topLeft,
                                                     margin: EdgeInsets.only(bottom: Indents.sm),
-                                                    child: Text("Последние биомаркеры",
+                                                    child: Text(tr('category.latest_biomarkers'),
                                                         style: Theme.of(context)
                                                             .textTheme
                                                             .headline6
@@ -206,7 +208,10 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
                                                         },
                                                         child: Container(
                                                             child: Text(
-                                                                "ВСЕ (" + biomarkerStock.length.toString() + ")",
+                                                                tr('category.all').toUpperCase() +
+                                                                    " (" +
+                                                                    biomarkerStock.length.toString() +
+                                                                    ")",
                                                                 style: Theme.of(context)
                                                                     .textTheme
                                                                     .subtitle1
@@ -245,7 +250,7 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
                                 BlockBaseWidget(
                                     padding: EdgeInsets.only(top: Indents.md, left: Indents.md, right: Indents.md),
                                     margin: EdgeInsets.only(bottom: Indents.sm),
-                                    header: "Ещё не сдали",
+                                    header: tr('category.not_passed_yet'),
                                     headerMergeStyle: TextStyle(color: theme.primaryColor),
                                     child: biomarkerNotInStock.length != 0
                                         ? ListView.separated(
@@ -260,88 +265,22 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
                                                 child: GestureDetector(
                                                     behavior: HitTestBehavior.opaque,
                                                     child: Text(biomarkerNotInStock[index].content.name))))
-                                        : Text("Поздравляем, все биомаркеры сданы! :)"))
+                                        : Text(tr('category.all_passed')))
                               ]),
                             ])));
                   } else {
                     return Container(
                         padding: EdgeInsets.only(top: Indents.md, left: Indents.slg, right: Indents.md),
                         margin: EdgeInsets.only(bottom: Indents.sm),
-                        child: Text("Ожидаем загрузки биомаркеров..."));
+                        child: Text(tr('loader.biomarkers')));
                   }
                 });
           } else {
             return Container(
                 padding: EdgeInsets.only(top: Indents.md, left: Indents.slg, right: Indents.md),
                 margin: EdgeInsets.only(bottom: Indents.sm),
-                child: Text("Ожидаем загрузки сданных биомаркеров..."));
+                child: Text(tr('loader.passed_biomarkers')));
           }
         });
-  }
-
-  Widget analysisItem(int index, category) {
-    final theme = Theme.of(context);
-
-    return GestureDetector(
-      onTap: () {
-        Keys.rootNavigator.currentState.pushReplacementNamed(Routes.category_analysis, arguments: category.id);
-      },
-      child: Container(
-        padding: EdgeInsets.only(left: Indents.md, right: Indents.sm),
-        margin: EdgeInsets.only(
-          top: index == 0 ? Indents.md : Indents.smd,
-        ),
-        decoration: BoxDecoration(
-          color: BioMadColors.base[100],
-          borderRadius: BorderRadius.all(Radius.circular(4)),
-          boxShadow: [
-            BoxShadow(
-              color: BioMadColors.base.withOpacity(0.06),
-              blurRadius: 7,
-              offset: Offset(0, 2), // changes position of shadow
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(children: [
-              Icon(
-                Icons.favorite,
-                color: BioMadColors.success,
-                size: 32.0,
-              ),
-              Container(
-                padding: EdgeInsets.all(Indents.md),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      category.content.name,
-                      style: theme.textTheme.bodyText2,
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(top: 2),
-                      child: Text(
-                        "Состояние: 80%",
-                        style: theme.textTheme.caption.merge(TextStyle(color: BioMadColors.success)),
-                      ),
-                    )
-                  ],
-                ),
-              )
-            ]),
-            IconButton(
-                icon: Icon(
-                  Icons.arrow_forward,
-                  color: BioMadColors.primary,
-                  size: 24.0,
-                ),
-                onPressed: null)
-          ],
-        ),
-      ),
-    );
   }
 }

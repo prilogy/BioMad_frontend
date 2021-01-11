@@ -64,7 +64,7 @@ class _CategoryContainerState extends State<CategoryContainer> {
     memberBiomarkers = getMemberBiomarker();
     biomarkers = getBiomarker();
     return Container(
-        height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - 50,
+        height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - 61,
         width: MediaQuery.of(context).size.width,
         child: Stack(children: [
           FutureBuilder(

@@ -6,6 +6,7 @@ import 'package:biomad_frontend/styles/indents.dart';
 import 'package:biomad_frontend/widgets/biomarker/biomarker_history.dart';
 import 'package:biomad_frontend/widgets/biomarker/biomarker_info.dart';
 import 'package:biomad_frontend/widgets/block_base_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -63,17 +64,17 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
     try {
       if (biomarker.state == BiomarkerStateType.number2_) {
         color = BioMadColors.success;
-        status = "норма";
+        status = tr('state.normal');
       } else if (biomarker.state == BiomarkerStateType.number1_) {
         color = BioMadColors.warning;
-        status = "пониженный";
+        status = tr('state.reduced');
         icon = Icons.keyboard_arrow_down;
       } else if (biomarker.state == BiomarkerStateType.number0_) {
         color = BioMadColors.warning;
-        status = "повышенный";
+        status = tr('state.elevated');
         icon = Icons.keyboard_arrow_up;
       } else {
-        status = "не определено";
+        status = tr('state.undefined');
         icon = Icons.keyboard_arrow_right;
       }
       referenceRange = biomarker.reference.valueA.toString() +
@@ -82,8 +83,8 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
           " " +
           memberBiomarker.unit.content.shorthand;
     } catch (e) {
-      status = "Загружаем данные...";
-      referenceRange = "Загружаем референсы...";
+      status = tr('loader.load_data');
+      referenceRange = tr('loader.load_reference');
       icon = Icons.keyboard_arrow_right;
     }
 
@@ -109,13 +110,13 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        "Ваш показатель",
+                        tr('biomarker.value'),
                         style: theme.textTheme.bodyText1,
                       ),
                       Row(
                         children: [
                           Container(
-                              padding: status == "норма"
+                              padding: status == tr('state.normal')
                                   ? EdgeInsets.only(right: Indents.sm)
                                   : null,
                               child: icon != null
@@ -138,7 +139,7 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      "Норма",
+                      tr('biomarker.normal'),
                       style: theme.textTheme.bodyText1,
                     ),
                     Row(

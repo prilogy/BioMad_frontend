@@ -8,6 +8,7 @@ import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../on_load_container.dart';
@@ -68,17 +69,17 @@ class BiomarkerItem extends StatelessWidget {
 
     if (biomarkerState == BiomarkerStateType.number2_) {
       color = BioMadColors.success;
-      status = "норма";
+      status = tr('state.normal');
     } else if (biomarkerState == BiomarkerStateType.number1_) {
       color = BioMadColors.warning;
-      status = "пониженный";
+      status = tr('state.reduced');
       icon = Icons.keyboard_arrow_down;
     } else if (biomarkerState == BiomarkerStateType.number0_) {
       color = BioMadColors.warning;
-      status = "повышенный";
+      status = tr('state.elevated');
       icon = Icons.keyboard_arrow_up;
     } else {
-      status = "не определено";
+      status = tr('state.undefined');
       color = BioMadColors.base[300].withOpacity(0.8);
     }
 
@@ -171,22 +172,7 @@ class BiomarkerItem extends StatelessWidget {
                               return BiomarkerAlertDialog(
                                 context,
                                 biomarker: _biomarkerModel,
-                                title: "Изменить биомаркер",
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: Text('Отмена'),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                  TextButton(
-                                    child: Text('Изменить'),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ],
-                                //contentHeight: h,
+                                title: tr('biomarker_alert.edit_biomarker'),
                                 contentPadding: EdgeInsets.symmetric(vertical: Indents.md),
                               );
                             },

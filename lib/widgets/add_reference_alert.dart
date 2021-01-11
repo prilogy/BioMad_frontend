@@ -1,4 +1,5 @@
 import 'package:api/api.dart';
+import 'package:biomad_frontend/helpers/i18n_helper.dart';
 import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
 import 'package:biomad_frontend/models/member_biomarker_model_list.dart';
 import 'package:biomad_frontend/screens/search_screen.dart';
@@ -7,6 +8,7 @@ import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:biomad_frontend/styles/radius_values.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'custom/custom_text_form_field.dart';
@@ -120,7 +122,8 @@ class _AddReferenceAlertDialogState extends State<AddReferenceAlertDialog> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     store.dispatch(StoreThunks.refreshUnits());
-    var txt = TextEditingController();
+    final _tr = trWithKey('biomarker_alert');
+
     return AlertDialog(
         scrollable: true,
         insetPadding: EdgeInsets.symmetric(horizontal: Indents.lg),
@@ -138,15 +141,15 @@ class _AddReferenceAlertDialogState extends State<AddReferenceAlertDialog> {
                           CustomTextFormField(
                             controller: _biomarkerIdController,
                             validator: null,
-                            labelText: "Биомаркер",
-                            disableLabelText: "Выбранный биомаркер",
+                            labelText: _tr('biomarker'),
+                            disableLabelText: _tr('selected_biomarker'),
                             enabled: biomarker == null ? true : false,
                             onTap: () {
                               return showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
                                     return SearchScreen(
-                                      hintText: hintBiomarker ?? "Введите биомаркер",
+                                      hintText: hintBiomarker ?? _tr('enter_biomarker'),
                                       dataList: biomarkers,
                                       initialValue: _biomarkerIdController.text,
                                       searchType: "biomarker",
@@ -170,7 +173,7 @@ class _AddReferenceAlertDialogState extends State<AddReferenceAlertDialog> {
                                   context: context,
                                   builder: (BuildContext context) {
                                     return SearchScreen(
-                                      hintText: hintBiomarker ?? "Введите биомаркер",
+                                      hintText: hintBiomarker ?? _tr('enter_biomarker'),
                                       dataList: biomarkers,
                                       initialValue: _biomarkerIdController.text,
                                       searchType: "biomarker",
@@ -193,21 +196,21 @@ class _AddReferenceAlertDialogState extends State<AddReferenceAlertDialog> {
                               controller: _biomarkerValueAController,
                               validator: null,
                               keyboardType: TextInputType.number,
-                              labelText: "Нижняя граница",
+                              labelText: _tr('down_line'),
                               onTap: () {}),
                           CustomTextFormField(
                               controller: _biomarkerValueBController,
                               validator: null,
                               keyboardType: TextInputType.number,
-                              labelText: "Верхняя граница",
+                              labelText: _tr('up_line'),
                               onTap: () {}),
                           CustomTextFormField(
                             controller: _biomarkerUnitIdController,
                             enabled: biomarkerId != null || biomarker != null ? true : false,
-                            disableLabelText: "Сначала выберите биомаркер",
+                            disableLabelText: _tr('null_unit'),
                             validator: null,
                             margin: EdgeInsets.only(bottom: 0),
-                            labelText: "Единицы измерения",
+                            labelText: _tr('units'),
                             onTap: () {
                               return showDialog(
                                   context: context,
@@ -218,7 +221,7 @@ class _AddReferenceAlertDialogState extends State<AddReferenceAlertDialog> {
                                         if (unitId == unit.id) dataList.add(unit);
 
                                     return SearchScreen(
-                                      hintText: hintUnit ?? "Введите единицу измерения",
+                                      hintText: hintUnit ?? _tr('enter_unit'),
                                       dataList: dataList,
                                       unitIds: choosedBiomarker.unitIds,
                                       initialValue: _biomarkerUnitIdController.text,
@@ -242,7 +245,7 @@ class _AddReferenceAlertDialogState extends State<AddReferenceAlertDialog> {
                                   context: context,
                                   builder: (BuildContext context) {
                                     return SearchScreen(
-                                      hintText: hintUnit ?? "Введите единицу измерения",
+                                      hintText: hintUnit ?? _tr('enter_unit'),
                                       dataList: store.state.unitList.units,
                                       unitIds: choosedBiomarker.unitIds,
                                       initialValue: _biomarkerUnitIdController.text,
@@ -272,13 +275,13 @@ class _AddReferenceAlertDialogState extends State<AddReferenceAlertDialog> {
         ),
         actions: <Widget>[
           TextButton(
-            child: Text('Отмена'),
+            child: Text(tr('misc.cancel')),
             onPressed: () {
               Navigator.of(context).pop();
             },
           ),
           TextButton(
-            child: Text('Сохранить'),
+            child: Text(tr('misc.continue')),
             onPressed: () {
               MemberBiomarkerReferenceModel answer = getMemberBiomarkerReferenceModel();
               api.memberBiomarker.addReference(answer).then((value) => print("REQUEST STATE: " + value.toString()));

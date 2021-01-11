@@ -10,6 +10,7 @@ import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:biomad_frontend/widgets/biomarker/biomarker_item.dart';
 import 'package:biomad_frontend/widgets/on_load_container.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class AllBiomarkersScreen extends StatefulWidget {
@@ -47,7 +48,7 @@ class _AllBiomarkersScreenState extends State<AllBiomarkersScreen> {
               );
             },
           ),
-          title: Text("Просмотр биомаркеров", style: TextStyle(color: Theme.of(context).primaryColor)),
+          title: Text(tr('category.all_view'), style: TextStyle(color: Theme.of(context).primaryColor)),
         ),
         body: WillPopScope(
           onWillPop: () async {
