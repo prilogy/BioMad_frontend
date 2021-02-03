@@ -18,7 +18,8 @@
     "or": "or",
     "years_old": "Years old",
     "connect": "Connect",
-    "disconnect": "Disconnect"
+    "disconnect": "Disconnect",
+    "privacy_policy": "Privacy policy"
   },
   "accept_dialog": {
     "desc": "You will not be able to undo this action, do you want to continue?"
