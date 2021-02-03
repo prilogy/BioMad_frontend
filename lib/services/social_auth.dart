@@ -23,6 +23,7 @@ class GoogleAuthService implements SocialAuthService {
     try {
       var result = await googleSignIn.signIn();
       var googleKey = await result.authentication;
+      print(googleKey.accessToken);
       return googleKey?.idToken ?? null;
     } catch (e) {
       print("GOOGLE ERROR: " + e.toString());

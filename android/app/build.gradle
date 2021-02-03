@@ -12,10 +12,10 @@ if (flutterRoot == null) {
 }
 
 def keystoreProperties = new Properties()
-   def keystorePropertiesFile = rootProject.file('key.properties')
-   if (keystorePropertiesFile.exists()) {
-       keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-   }
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
@@ -52,29 +52,29 @@ android {
     }
 
     signingConfigs {
-            debug {
-                storeFile file('key.jks')
-                storePassword 'password'
-                keyAlias 'androiddebugkey'
-                keyPassword 'password'
-            }
-
-            release {
-                   storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-                   storePassword keystoreProperties['storePassword']
-                   keyAlias keystoreProperties['keyAlias']
-                   keyPassword keystoreProperties['keyPassword']
-            }
+        debug {
+            storeFile file('key.jks')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
         }
 
-        buildTypes {
-            debug {
-                signingConfig signingConfigs.debug
-            }
-            release {
-                signingConfig signingConfigs.release
-            }
+        release {
+            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
         }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
 }
 
 flutter {
