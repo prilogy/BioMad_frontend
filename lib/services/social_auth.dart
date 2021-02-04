@@ -1,6 +1,7 @@
+import 'package:biomad_frontend/config/env.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:flutter_vk_login/flutter_vk_login.dart';
+import 'package:flutter_login_vk/flutter_login_vk.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 abstract class SocialAuthService {
@@ -16,7 +17,7 @@ class GoogleAuthService implements SocialAuthService {
   static final Color color = Colors.white;
   static final double size = 25;
 
-  GoogleAuthService(): googleSignIn = GoogleSignIn();
+  GoogleAuthService() : googleSignIn = GoogleSignIn();
 
   @override
   Future<String> getToken() async {
@@ -38,26 +39,32 @@ class FacebookAuthService implements SocialAuthService {
   static final Color color = Color(0xff4267B2);
   static final double size = 22;
 
-  FacebookAuthService(): facebookLogin = FacebookLogin();
+  FacebookAuthService() : facebookLogin = FacebookLogin();
 
   @override
   Future<String> getToken() async {
-    var result =  await facebookLogin.logIn(['email']);
+    var result = await facebookLogin.logIn(['email']);
     return result?.accessToken?.token ?? null;
   }
 }
 
 class VkAuthService implements SocialAuthService {
-  final FlutterVkLogin vkLogin;
+  final VKLogin vkLogin;
   static final String svgPath = "assets/svg/vk_logo.svg";
   static final Color color = Color(0xff4A76A8);
   static final double size = 17;
 
-  VkAuthService(): vkLogin = FlutterVkLogin();
+  VkAuthService() : vkLogin = VKLogin();
 
   @override
   Future<String> getToken() async {
-    var result = await vkLogin.logIn(['email']);
-    return result?.token?.token ?? null;
+    await vkLogin.initSdk(env.VK_APP_ID);
+    var result = await vkLogin.logIn(scope: [VKScope.email]);
+    if (result.isValue) {} else
+      print(result.asError);
+
+    var token = result.asValue?.value?.accessToken ?? null;
+
+    return token?.token ?? null;
   }
 }
