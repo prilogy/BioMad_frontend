@@ -144,9 +144,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ],
                     ),
-                    Text(
-                      _tr('login_with_social'),
-                      style: theme.textTheme.caption,
+                    Padding(
+                      padding: const EdgeInsets.only(top: Indents.sm),
+                      child: Text(
+                        _tr('login_with_social'),
+                        style: theme.textTheme.caption,
+                      ),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: Indents.lg),

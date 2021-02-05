@@ -2,9 +2,11 @@ import 'package:api/api.dart';
 import 'package:biomad_frontend/config/env.dart';
 import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
+import 'package:biomad_frontend/models/settings.dart';
 import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/services/localstorage.dart';
 import 'package:biomad_frontend/store/main.dart';
+import 'package:biomad_frontend/store/settings/actions.dart';
 import 'package:biomad_frontend/store/thunks.dart';
 import 'package:biomad_frontend/store/user/actions.dart';
 import 'package:biomad_frontend/styles/app_theme.dart';
@@ -39,7 +41,7 @@ class MyApp extends StatelessWidget {
     initializeDateFormatting("en", null);
 
     if (!connectionChecked)
-      WidgetsBinding.instance.addPostFrameCallback(initAction);
+      WidgetsBinding.instance.addPostFrameCallback((x) => initAction(x, context));
 
     return StoreProvider<AppState>(
       store: store,
@@ -65,7 +67,8 @@ class MyApp extends StatelessWidget {
   /// If OK - updates user info
   /// If TIMEOUT - shows snack bar
   /// If user == null - logs out
-  Future initAction(dynamic _) async {
+  Future initAction(dynamic _, BuildContext ctx) async {
+    store.dispatch(SetSettings(Settings(culture: EasyLocalization.of(ctx).locale.languageCode)));
     store.dispatch(StoreThunks.refreshGendersAndCulture());
 
     if (store.state.authorization == null ||

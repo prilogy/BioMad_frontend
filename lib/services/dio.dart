@@ -13,27 +13,27 @@ final Dio dio = new Dio();
 void init() {
   dio.options.baseUrl = env.API_BASE_URL;
   dio.options.connectTimeout = 4000;
-  dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (RequestOptions options) async {
-        var customHeaders = {
-          "Authorization": store.state.authorization?.accessToken == null
-              ? null
-              : 'Bearer ${store.state.authorization.accessToken}'
-        };
-        options.headers.addAll(customHeaders);
-        return options;
-      },
-      onError: (e) async {
-        if(e.type == DioErrorType.CONNECT_TIMEOUT) {
-          SnackBarExtension.dark(tr('snack_bar.offline_mode'), duration: Duration(seconds: 2));
-        }
-      },
-      onResponse: (r) async {
-        print('[ API REQUEST ] - CODE ${r.statusCode}');
-        if (r.statusCode == 401 && store.state.authorization.isAuthorized)
-          store.dispatch(StoreThunks.authorizeWithRefreshToken(onError: () {
-            store.dispatch(
-                StoreThunks.logOut(tr('snack_bar.log_out_due_refresh_token')));
-          }));
+  dio.interceptors
+      .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
+    var customHeaders = {
+      "Culture": store.state.settings.culture,
+      "Authorization": store.state.authorization?.accessToken == null
+          ? null
+          : 'Bearer ${store.state.authorization.accessToken}'
+    };
+    options.headers.addAll(customHeaders);
+    return options;
+  }, onError: (e) async {
+    if (e.type == DioErrorType.CONNECT_TIMEOUT) {
+      SnackBarExtension.dark(tr('snack_bar.offline_mode'),
+          duration: Duration(seconds: 2));
+    }
+  }, onResponse: (r) async {
+    print('[ API REQUEST ] - CODE ${r.statusCode}');
+    if (r.statusCode == 401 && store.state.authorization.isAuthorized)
+      store.dispatch(StoreThunks.authorizeWithRefreshToken(onError: () {
+        store.dispatch(
+            StoreThunks.logOut(tr('snack_bar.log_out_due_refresh_token')));
       }));
+  }));
 }

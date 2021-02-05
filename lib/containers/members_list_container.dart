@@ -44,6 +44,8 @@ class MembersListContainer extends StatelessWidget {
                                       .state.authorization.refreshToken.token,
                                   memberId: model.id,
                                   userId: store.state.user.id));
+                        }, onSuccess: () {
+                          Keys.rootNavigator.currentState.pushReplacementNamed('/main');
                         }));
                       },
                       onTap: () async {

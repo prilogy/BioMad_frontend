@@ -8,5 +8,6 @@ final settingsReducer = combineReducers<Settings>(
 
 Settings _setSettings(Settings state, Actions.SetSettings action) {
   Settings.saveToLocalStorage(action.settings);
+  print(action.settings.culture);
   return action.settings;
 }
