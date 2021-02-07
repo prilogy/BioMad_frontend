@@ -206,7 +206,7 @@ class _MemberContainerState extends State<MemberContainer> {
                   },
                   items: _genders,
                   itemBuilder: (x) => DropdownMenuItem(
-                      child: Text(isRegistration ? _ttr(x.content?.name?.toLowerCase()) : x.content?.name ?? x.key)))
+                      child: Text(isRegistration ? x.content?.name : x.content?.name ?? x.key)))
               : Container()
         ],
       ),
