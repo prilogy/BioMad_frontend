@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:api/api.dart';
 import 'package:biomad_frontend/containers/members_list_container.dart';
-import 'package:biomad_frontend/helpers/i18n_helper.dart';
 import 'package:biomad_frontend/helpers/age_from_date.dart';
 import 'package:biomad_frontend/helpers/color_helpers.dart';
 import 'package:biomad_frontend/helpers/custom_alert_dialog.dart';
@@ -86,9 +85,7 @@ class _AccountContainerState extends State<AccountContainer> {
                       color: theme.primaryColor,
                     ),
                     onPressed: () {
-                      var h = CustomListTile.baseHeight * (store.state.user?.members?.length ?? 1) +
-                          CustomListTile.baseHeight +
-                          10;
+                      var h = CustomListTile.baseHeight * (store.state.user?.members?.length ?? 1) + CustomListTile.baseHeight + 10;
                       if (h > MediaQuery.of(context).size.height) h = MediaQuery.of(context).size.height / 2;
 
                       var alert = customAlertDialog(context,
@@ -196,38 +193,38 @@ class _AccountContainerState extends State<AccountContainer> {
                                         itemBuilder: (context, index) => Container(
                                             child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                                           Text(
-                                            customBiomarker[index].content.name,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyText2
-                                                .merge(TextStyle(color: Theme.of(context).colorScheme.onSurface)),
-                                          ),
-                                          Row(children: [
-                                            Text(
-                                              customBiomarker[index].reference.valueA.toString() +
-                                                  " - " +
-                                                  customBiomarker[index].reference.valueB.toString() +
-                                                  " " +
-                                                  store.state.unitList.units
-                                                      .firstWhere((element) =>
-                                                          element.id == customBiomarker[index].reference.unitId)
-                                                      .content
-                                                      .shorthand,
+                                              customBiomarker[index].content.name.length > 26
+                                                  ? customBiomarker[index].content.name.substring(0, 26) + "..."
+                                                  : customBiomarker[index].content.name,
                                               style: Theme.of(context)
                                                   .textTheme
-                                                  .bodyText2
-                                                  .merge(TextStyle(color: Theme.of(context).colorScheme.onSurface)),
-                                            ),
+                                                  .subtitle1
+                                                  .merge(TextStyle(color: BioMadColors.base[500], fontWeight: FontWeight.normal))),
+                                          Row(children: [
+                                            Text(
+                                                customBiomarker[index].reference.valueA.toString() +
+                                                    " - " +
+                                                    customBiomarker[index].reference.valueB.toString() +
+                                                    " " +
+                                                    store.state.unitList.units
+                                                        .firstWhere(
+                                                            (element) => element.id == customBiomarker[index].reference.unitId)
+                                                        .content
+                                                        .shorthand,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .subtitle1
+                                                    .merge(TextStyle(color: BioMadColors.base[500], fontWeight: FontWeight.normal))),
                                             Container(
-                                              width: 20,
-                                              height: 20,
+                                              width: 22,
+                                              height: 22,
                                               child: FittedBox(
                                                   alignment: Alignment.center,
                                                   fit: BoxFit.fitWidth,
                                                   child: IconButton(
                                                       icon: Icon(
                                                         Icons.clear,
-                                                        size: 40,
+                                                        size: 38,
                                                         color: BioMadColors.error,
                                                       ),
                                                       onPressed: () {
@@ -242,8 +239,11 @@ class _AccountContainerState extends State<AccountContainer> {
                                         ])),
                                       ))
                                   : Container(
-                                      margin: EdgeInsets.only(left: Indents.slg),
-                                      child: Text(_tr('null_references'))),
+                                      margin: EdgeInsets.only(left: Indents.md, right: Indents.md),
+                                      child: Text(
+                                        _tr('null_references'),
+                                        style: theme.textTheme.subtitle1.merge(TextStyle(fontWeight: FontWeight.normal)),
+                                      )),
                               Container(
                                 padding: EdgeInsets.zero,
                                 width: 220,
@@ -252,9 +252,12 @@ class _AccountContainerState extends State<AccountContainer> {
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
-                                        return AddReferenceAlertDialog(context,
-                                            title: _tr('send_references'),
-                                            contentPadding: EdgeInsets.symmetric(vertical: Indents.md));
+                                        return AddReferenceAlertDialog(
+                                          context,
+                                          title: _tr('send_references'),
+                                          contentPadding: EdgeInsets.symmetric(vertical: Indents.md),
+                                          customBiomarker: customBiomarker,
+                                        );
                                       },
                                     ).then((value) => {
                                           setState(() {
@@ -273,8 +276,7 @@ class _AccountContainerState extends State<AccountContainer> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                                padding: EdgeInsets.only(left: Indents.md, right: Indents.md),
-                                child: Text(_tr('null_references'))),
+                                padding: EdgeInsets.only(left: Indents.md, right: Indents.md), child: Text(_tr('null_references'))),
                             Container(
                               padding: EdgeInsets.zero,
                               width: 220,
@@ -284,8 +286,7 @@ class _AccountContainerState extends State<AccountContainer> {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AddReferenceAlertDialog(context,
-                                          title: "Указать референс",
-                                          contentPadding: EdgeInsets.symmetric(vertical: Indents.md));
+                                          title: "Указать референс", contentPadding: EdgeInsets.symmetric(vertical: Indents.md));
                                     },
                                   );
                                 },
@@ -309,11 +310,7 @@ class _AccountContainerState extends State<AccountContainer> {
             converter: (store) => store.state.user,
             builder: (ctx, state) => Column(
               children: [
-                for (var item in [
-                  SocialAccountProvider.google,
-                  SocialAccountProvider.facebook,
-                  SocialAccountProvider.vk
-                ])
+                for (var item in [SocialAccountProvider.google, SocialAccountProvider.facebook, SocialAccountProvider.vk])
                   SocialAccountListTile(item)
               ],
             ),

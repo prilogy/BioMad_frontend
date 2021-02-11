@@ -53,7 +53,7 @@ class _AnalysisListScreenState extends State<AnalysisListScreen> {
               children: [AnalysisListContainer()],
             ))),
             Positioned(
-                bottom: NavBar.indent,
+                bottom: NavBar.indent + 6,
                 right: NavBar.indent,
                 child: NavBar(
                   isSearch: false,
@@ -74,8 +74,8 @@ class _AnalysisListScreenState extends State<AnalysisListScreen> {
                   AccountContainer(),
                 ],
               ),
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(RadiusValues.main), topRight: Radius.circular(RadiusValues.main)),
+              borderRadius:
+                  BorderRadius.only(topLeft: Radius.circular(RadiusValues.main), topRight: Radius.circular(RadiusValues.main)),
               onPanelSlide: (double pos) => setState(() {
                 _fabHeight = pos * (_panelHeightOpen - _panelHeightClosed) + _initFabHeight;
               }),

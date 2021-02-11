@@ -33,9 +33,8 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    double chars = (MediaQuery.of(context).size.width - 80) / 18;
-    String str =
-        analysis.name.length > chars.toInt() ? analysis.name.substring(0, chars.toInt()) + "..." : analysis.name;
+    double chars = (MediaQuery.of(context).size.width - 80) / 20;
+    String str = analysis.name.length > chars.toInt() ? analysis.name.substring(0, chars.toInt()) + "..." : analysis.name;
 
     return Scaffold(
       appBar: AppBar(
@@ -52,7 +51,10 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return SharedScreen(memberAnalysisId: analysis.id, biomarkerIds: null,);
+                    return SharedScreen(
+                      memberAnalysisId: analysis.id,
+                      biomarkerIds: null,
+                    );
                   },
                 );
               },
@@ -88,8 +90,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
               AccountContainer(),
             ],
           ),
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(RadiusValues.main), topRight: Radius.circular(RadiusValues.main)),
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(RadiusValues.main), topRight: Radius.circular(RadiusValues.main)),
           onPanelSlide: (double pos) => setState(() {
             _fabHeight = pos * (_panelHeightOpen - _panelHeightClosed) + _initFabHeight;
           }),

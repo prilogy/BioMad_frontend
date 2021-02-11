@@ -1,17 +1,16 @@
 import 'package:biomad_frontend/helpers/date_time_formats.dart';
 import 'package:biomad_frontend/helpers/indents_mixin.dart';
 import 'package:biomad_frontend/helpers/text_field_validators.dart';
+import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/styles/decorations.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:devicelocale/devicelocale.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
-enum CustomDateFormFieldType {
-  date,
-  dateTime,
-  time
-}
+enum CustomDateFormFieldType { date, dateTime, time }
 
 class CustomDateFormField extends StatelessWidget with IndentsMixin {
   final InputDecoration inputDecoration;
@@ -26,18 +25,18 @@ class CustomDateFormField extends StatelessWidget with IndentsMixin {
   final EdgeInsetsGeometry margin;
   final CustomDateFormFieldType type;
 
-  CustomDateFormField({
-    this.inputDecoration,
-    @required this.controller,
-    @required this.labelText,
-    this.hintText = '',
-    this.icon,
-    this.type = CustomDateFormFieldType.date,
-    this.formValidator,
-    this.validator,
-    this.onDateSelected,
-    this.margin = const EdgeInsets.only(bottom: Indents.md),
-    this.padding});
+  CustomDateFormField(
+      {this.inputDecoration,
+      @required this.controller,
+      @required this.labelText,
+      this.hintText = '',
+      this.icon,
+      this.type = CustomDateFormFieldType.date,
+      this.formValidator,
+      this.validator,
+      this.onDateSelected,
+      this.margin = const EdgeInsets.only(bottom: Indents.md),
+      this.padding});
 
   @override
   Widget build(BuildContext context) {
@@ -62,25 +61,35 @@ class CustomDateFormField extends StatelessWidget with IndentsMixin {
           onChanged: onDateSelected ?? (x) {},
           onShowPicker: (context, currentValue) async {
             DateTime date;
-            if(type != CustomDateFormFieldType.time)
-             date = await showDatePicker(
-                context: context,
-                firstDate: DateTime(1900),
-                initialDate: currentValue ?? DateTime.now(),
-                lastDate: DateTime(2100));
+            if (type != CustomDateFormFieldType.time)
+              date = await DatePicker.showDatePicker(context,
+                  showTitleActions: true,
+                  minTime: DateTime(1960, 12, 31),
+                  maxTime: DateTime(2022, 12, 31),
+                  theme: DatePickerTheme(
+                      headerColor:
+                          Theme.of(context).primaryColor.withOpacity(0.9),
+                      backgroundColor: Colors.white,
+                      itemStyle: TextStyle(
+                          color: Theme.of(context).shadowColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                      doneStyle: TextStyle(color: Colors.white, fontSize: 16)),
+                  currentTime: currentValue ?? DateTime.now(),
+                  locale: store.state.settings.culture == "ru"
+                      ? LocaleType.ru
+                      : LocaleType.en);
 
-            if(type == CustomDateFormFieldType.date)
-              if(date == null)
-                return currentValue;
-              else
-                return date;
-
+            if (type == CustomDateFormFieldType.date) if (date == null)
+              return currentValue;
+            else
+              return date;
 
             if (type != CustomDateFormFieldType.date) {
               final time = await showTimePicker(
                 context: context,
                 initialTime:
-                TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+                    TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
               );
               return DateTimeField.combine(date, time);
             }

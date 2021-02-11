@@ -56,7 +56,7 @@ class _CategoryContainerState extends State<CategoryContainer> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - 61,
+        height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - NavBar.size,
         width: MediaQuery.of(context).size.width,
         child: Stack(children: [
           ScrollConfiguration(

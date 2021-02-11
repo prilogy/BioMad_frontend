@@ -1,9 +1,5 @@
 import 'package:api/api.dart';
 import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
-import 'package:biomad_frontend/helpers/indents_mixin.dart';
-import 'package:biomad_frontend/helpers/keys.dart';
-import 'package:biomad_frontend/router/main.dart';
-import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
@@ -12,8 +8,7 @@ import 'package:flutter/material.dart';
 Widget biomarkerItems(BuildContext context, Biomarker data) {
   bool isAdded;
   try {
-    store.state.memberBiomarkerModelList.biomarkers
-        ?.firstWhere((element) => element.biomarkerId == data.id, orElse: null);
+    store.state.memberBiomarkerModelList.biomarkers?.firstWhere((element) => element.biomarkerId == data.id, orElse: null);
     isAdded = true;
   } catch (e) {
     isAdded = false;
@@ -32,7 +27,10 @@ Widget biomarkerItems(BuildContext context, Biomarker data) {
                 children: [
                   Text(
                     data.content.name.length > 44 ? data.content.name.substring(0, 44) + "..." : data.content.name,
-                    style: Theme.of(context).textTheme.bodyText2.merge(TextStyle(color: BioMadColors.base[300])),
+                    style: Theme.of(context)
+                        .textTheme
+                        .subtitle1
+                        .merge(TextStyle(color: BioMadColors.base[300], fontWeight: FontWeight.normal)),
                   ),
                 ],
               ),
@@ -47,15 +45,15 @@ Widget biomarkerItems(BuildContext context, Biomarker data) {
               padding: EdgeInsets.symmetric(vertical: Indents.sm),
               child: Text(
                 data.content.name.length > 44 ? data.content.name.substring(0, 44) + "..." : data.content.name,
-                style: Theme.of(context).textTheme.bodyText2.merge(TextStyle(color: BioMadColors.base[500])),
+                style: Theme.of(context)
+                    .textTheme
+                    .subtitle1
+                    .merge(TextStyle(color: BioMadColors.base[500], fontWeight: FontWeight.normal)),
               ),
             ));
   } else {
     return Container(
         child: Text("Все биомаркеры:",
-            style: Theme.of(context)
-                .textTheme
-                .subtitle1
-                .merge(TextStyle(color: Theme.of(context).primaryColor.withOpacity(0.8)))));
+            style: Theme.of(context).textTheme.subtitle1.merge(TextStyle(color: Theme.of(context).primaryColor.withOpacity(0.8)))));
   }
 }

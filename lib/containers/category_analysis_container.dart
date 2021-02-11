@@ -1,19 +1,13 @@
 import 'package:api/api.dart';
-import 'package:biomad_frontend/helpers/keys.dart';
-import 'package:biomad_frontend/router/main.dart';
+import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
 import 'package:biomad_frontend/screens/all_biomarkers_screen.dart';
 import 'package:biomad_frontend/services/api.dart';
-import 'package:biomad_frontend/store/main.dart';
-import 'package:biomad_frontend/store/thunks.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:biomad_frontend/widgets/biomarker/biomarker_item.dart';
 import 'package:biomad_frontend/widgets/block_base_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
-import 'package:biomad_frontend/styles/indents.dart';
 import 'package:flutter/material.dart';
 
 class CategoryAnalysisContainer extends StatefulWidget {
@@ -75,12 +69,10 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
                       biomarkerNotInStock = [];
                       biomarkerStock = [];
                       for (var item in category.biomarkerIds) {
-                        memberBiomarker =
-                            snapMemberBiomarkers.data.firstWhere((x) => x.biomarkerId == item, orElse: () => null);
+                        memberBiomarker = snapMemberBiomarkers.data.firstWhere((x) => x.biomarkerId == item, orElse: () => null);
                         memberBiomarker != null
                             ? biomarkerStock.add(memberBiomarker)
-                            : biomarkerNotInStock
-                                .add(biomarkers.data.firstWhere((x) => x.id == item, orElse: () => null));
+                            : biomarkerNotInStock.add(biomarkers.data.firstWhere((x) => x.id == item, orElse: () => null));
                       }
                     } catch (e) {
                       biomarkerStock = [];
@@ -98,11 +90,9 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
                       for (var item in snapMemberBiomarkers.data) {
                         if (category.biomarkerIds.contains(item.biomarkerId)) {
                           allBiomarkers++;
-                          Biomarker biomarkerItem =
-                              biomarkers.data.firstWhere((element) => element.id == item.biomarkerId);
+                          Biomarker biomarkerItem = biomarkers.data.firstWhere((element) => element.id == item.biomarkerId);
                           if (biomarkerItem?.state == BiomarkerStateType.number2_) successfulBiomarkers++;
-                          if (item.dateCreatedAt.millisecondsSinceEpoch > epochTime)
-                            dateOfChanged = item.dateCreatedAt.toLocal();
+                          if (item.dateCreatedAt.millisecondsSinceEpoch > epochTime) dateOfChanged = item.dateCreatedAt.toLocal();
                         }
                       }
                       state = allBiomarkers != 0 && successfulBiomarkers != 0
@@ -145,15 +135,14 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
                                           Text(state.round().toString() + "%",
-                                              style:
-                                                  Theme.of(context).textTheme.headline3.merge(TextStyle(color: color))),
+                                              style: Theme.of(context).textTheme.headline3.merge(TextStyle(color: color))),
                                           Container(
                                             padding: EdgeInsets.only(left: Indents.sm),
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               mainAxisAlignment: MainAxisAlignment.end,
                                               children: [
-                                                Text(status, style: Theme.of(context).textTheme.bodyText1),
+                                                Text(status, style: Theme.of(context).textTheme.subtitle1),
                                                 Row(
                                                   children: [
                                                     Text(
@@ -228,8 +217,8 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
                                                   itemCount: biomarkerStock.length <= 3 ? biomarkerStock.length : 3,
                                                   itemBuilder: (context, index) {
                                                     MemberBiomarker memberBiomarkerItem = biomarkerStock[index];
-                                                    Biomarker biomarkerItem = biomarkers.data.firstWhere(
-                                                        (element) => element.id == memberBiomarkerItem.biomarkerId);
+                                                    Biomarker biomarkerItem = biomarkers.data
+                                                        .firstWhere((element) => element.id == memberBiomarkerItem.biomarkerId);
 
                                                     return BiomarkerItem(
                                                       index: index,
@@ -264,7 +253,11 @@ class _CategoryAnalysisContainerState extends State<CategoryAnalysisContainer> {
                                                 padding: EdgeInsets.symmetric(vertical: Indents.sm),
                                                 child: GestureDetector(
                                                     behavior: HitTestBehavior.opaque,
-                                                    child: Text(biomarkerNotInStock[index].content.name))))
+                                                    child: Text(
+                                                      biomarkerNotInStock[index].content.name,
+                                                      style: Theme.of(context).textTheme.subtitle2.merge(
+                                                          TextStyle(color: BioMadColors.base[500], fontWeight: FontWeight.normal)),
+                                                    ))))
                                         : Text(tr('category.all_passed')))
                               ]),
                             ])));

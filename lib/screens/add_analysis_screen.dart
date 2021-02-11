@@ -5,8 +5,6 @@ import 'package:biomad_frontend/helpers/i18n_helper.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
 import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
 import 'package:biomad_frontend/helpers/text_field_validators.dart';
-import 'package:biomad_frontend/models/member_biomarker_list.dart';
-import 'package:biomad_frontend/models/member_biomarker_model_list.dart';
 import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
@@ -47,12 +45,10 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
 
   MemberAnalysisModel getMemberAnalysisModel() => MemberAnalysisModel(
       name: _analysisController.text ?? "Неопределено",
-      date:
-          DateTimeFormats.defaultDate.parse(_dateController.text) ?? DateTimeFormats.defaultDate.format(DateTime.now()),
+      date: DateTimeFormats.defaultDate.parse(_dateController.text) ?? DateTimeFormats.defaultDate.format(DateTime.now()),
       //labId: _labId,
-      description: _descriptionController.text == "" || _descriptionController.text == null
-          ? "Примечаний нет"
-          : _descriptionController.text,
+      description:
+          _descriptionController.text == "" || _descriptionController.text == null ? "Примечаний нет" : _descriptionController.text,
       biomarkers: _biomarkers ?? []);
 
   void onChange() {
@@ -111,7 +107,8 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                       print(_biomarkers[0].value);
                       api.memberAnalysis.add(result);
                       store.dispatch(StoreThunks.refreshMemberAnalysis());
-                      Keys.rootNavigator.currentState.pushReplacementNamed(Routes.main);
+
+                      Keys.rootNavigator.currentState.pushReplacementNamed(Routes.main, arguments: 600);
                     } catch (e) {
                       SnackBarExtension.warning(tr('snack_bar.add_biomarker'), duration: Duration(seconds: 4));
                     }
@@ -179,10 +176,7 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                                   padding: EdgeInsets.only(top: Indents.sm),
                                   margin: EdgeInsets.only(bottom: Indents.sm),
                                   child: Text(_tr('biomarkers'),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline6
-                                          .merge(TextStyle(color: theme.primaryColor)))),
+                                      style: Theme.of(context).textTheme.headline6.merge(TextStyle(color: theme.primaryColor)))),
                               SizedBox(
                                 height: 30,
                                 width: 30,
@@ -227,13 +221,12 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                                                 future: biomarkers,
                                                 builder: (context, AsyncSnapshot<List<Biomarker>> biomarkers) {
                                                   if (biomarkers.hasData) {
-                                                    Biomarker biomarkerItem = biomarkers.data.firstWhere(
-                                                        (element) => element.id == _biomarkers[index].biomarkerId);
+                                                    Biomarker biomarkerItem = biomarkers.data
+                                                        .firstWhere((element) => element.id == _biomarkers[index].biomarkerId);
                                                     return BiomarkerItem(
                                                       value: _biomarkers[index].value ?? null,
                                                       unit: store.state.unitList.units
-                                                              .firstWhere(
-                                                                  (element) => element.id == _biomarkers[index].unitId)
+                                                              .firstWhere((element) => element.id == _biomarkers[index].unitId)
                                                               .content
                                                               .shorthand ??
                                                           "unnamed",

@@ -7,6 +7,8 @@ import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
 import 'package:biomad_frontend/helpers/text_field_validators.dart';
 import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/services/api.dart';
+import 'package:biomad_frontend/store/main.dart';
+import 'package:biomad_frontend/store/thunks.dart';
 import 'package:biomad_frontend/styles/indents.dart';
 import 'package:biomad_frontend/widgets/block_base_widget.dart';
 import 'package:biomad_frontend/widgets/custom/custom_button.dart';
@@ -36,8 +38,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   void initState() {
-    if(widget.socialIdentity != null)
-      _emailController.text = widget.socialIdentity.email;
+    if (widget.socialIdentity != null) _emailController.text = widget.socialIdentity.email;
 
     super.initState();
   }
@@ -78,8 +79,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             children: [
                               CustomButton.raised(
                                 disabled: _memberModel == null ||
-                                    ((_memberModel?.name == null ||
-                                            _memberModel?.name == '') ||
+                                    ((_memberModel?.name == null || _memberModel?.name == '') ||
                                         _memberModel?.dateBirthday == null ||
                                         _memberModel?.genderId == null),
                                 onPressed: () {
@@ -108,8 +108,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       hintText: 'example@email.com',
                                     ),
                                     CustomTextFormField(
-                                      margin:
-                                          EdgeInsets.only(bottom: Indents.md),
+                                      margin: EdgeInsets.only(bottom: Indents.md),
                                       icon: Icon(Icons.lock),
                                       controller: _passwordController,
                                       validator: TextFieldValidators.isNotEmpty,
@@ -117,61 +116,75 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       obscureText: true,
                                     ),
                                     CustomTextFormField(
-                                      margin:
-                                      EdgeInsets.only(bottom: Indents.sm),
+                                      margin: EdgeInsets.only(bottom: Indents.sm),
                                       icon: Icon(Icons.lock),
                                       controller: _rePasswordController,
                                       validator: (x) {
                                         final v = TextFieldValidators.isNotEmpty(x);
-                                        if(v != null)
-                                          return v;
+                                        if (v != null) return v;
 
-                                        if(x == _passwordController.text)
+                                        if (x == _passwordController.text)
                                           return null;
-                                        else return tr('input_hint.re_password_invalid');
-                                        },
+                                        else
+                                          return tr('input_hint.re_password_invalid');
+                                      },
                                       labelText: tr('input_hint.re_password'),
                                       obscureText: true,
                                     ),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        CustomButton.raised(onPressed: () async {
-                                          if(_formKey.currentState.validate()) {
-                                            var model = SignUpModel(
-                                              password: _passwordController.text,
-                                              name: _memberModel.name,
-                                              color: _memberModel.color,
-                                              genderId: _memberModel.genderId,
-                                              email: _emailController.text,
-                                              dateBirthday: _memberModel.dateBirthday
-                                            );
-
-                                            bool r;
-                                            if(widget.socialIdentity != null)
-                                              r = await api.auth.signUpWithSocial(SignUpWithSocialAccountModel(
+                                        CustomButton.raised(
+                                          onPressed: () async {
+                                            if (_formKey.currentState.validate()) {
+                                              var model = SignUpModel(
                                                   password: _passwordController.text,
                                                   name: _memberModel.name,
                                                   color: _memberModel.color,
                                                   genderId: _memberModel.genderId,
                                                   email: _emailController.text,
-                                                  dateBirthday: _memberModel.dateBirthday,
-                                                identity: widget.socialIdentity
-                                              ), widget.socialType);
-                                              else r = await api.auth.signUp(model);
+                                                  dateBirthday: _memberModel.dateBirthday);
 
-                                              if(r != false)
-                                              Keys.rootNavigator.currentState.pushReplacementNamed(Routes.auth);
+                                              bool r;
+                                              if (widget.socialIdentity != null)
+                                                r = await api.auth.signUpWithSocial(
+                                                    SignUpWithSocialAccountModel(
+                                                        password: _passwordController.text,
+                                                        name: _memberModel.name,
+                                                        color: _memberModel.color,
+                                                        genderId: _memberModel.genderId,
+                                                        email: _emailController.text,
+                                                        dateBirthday: _memberModel.dateBirthday,
+                                                        identity: widget.socialIdentity),
+                                                    widget.socialType);
+                                              else
+                                                r = await api.auth.signUp(model);
 
-                                            if(r == true)
-                                              SnackBarExtension.success(tr('auth_screen.sign_up_success'));
-                                            else if(r == null)
-                                              SnackBarExtension.error(tr('auth_screen.sign_up_error'));
-                                            else if(r == false)
-                                              SnackBarExtension.info(tr('auth_screen.email_in_use'));
+                                              if (r != false) Keys.rootNavigator.currentState.pushReplacementNamed(Routes.auth);
 
-                                          }
-                                        }, text: tr('auth_screen.create_account'),)
+                                              if (r == true)
+                                                SnackBarExtension.success(tr('auth_screen.sign_up_success'));
+                                              else if (r == null)
+                                                SnackBarExtension.error(tr('auth_screen.sign_up_error'));
+                                              else if (r == false) SnackBarExtension.info(tr('auth_screen.email_in_use'));
+
+                                              store.dispatch(StoreThunks.authorize(() async {
+                                                var authResponse = await api.auth.logIn(LogInWithCredentialsModel(
+                                                    email: _emailController.text, password: _passwordController.text));
+
+                                                if (authResponse == null) {
+                                                  SnackBarExtension.error(_tr('log_in_error'), hideCurrent: false);
+                                                  return null;
+                                                } else
+                                                  return authResponse;
+                                              }, onSuccess: () {
+                                                SnackBarExtension.success(_tr('log_in_success'));
+                                                Keys.rootNavigator.currentState.pushReplacementNamed(Routes.main);
+                                              }));
+                                            }
+                                          },
+                                          text: tr('auth_screen.create_account'),
+                                        )
                                       ],
                                     )
                                   ],

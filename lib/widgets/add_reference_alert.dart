@@ -1,7 +1,6 @@
 import 'package:api/api.dart';
 import 'package:biomad_frontend/helpers/i18n_helper.dart';
 import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
-import 'package:biomad_frontend/models/member_biomarker_model_list.dart';
 import 'package:biomad_frontend/screens/search_screen.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
@@ -23,6 +22,7 @@ class AddReferenceAlertDialog extends StatefulWidget {
   final EdgeInsetsGeometry contentPadding;
   final EdgeInsetsGeometry titlePadding;
   final double contentHeight;
+  List<Biomarker> customBiomarker;
   final void Function(MemberBiomarkerReferenceModel) onChange;
 
   AddReferenceAlertDialog(BuildContext context,
@@ -36,12 +36,13 @@ class AddReferenceAlertDialog extends StatefulWidget {
       this.contentPadding,
       this.titlePadding,
       this.contentHeight,
+      this.customBiomarker,
       this.onChange})
       : super(key: key);
 
   @override
   _AddReferenceAlertDialogState createState() => _AddReferenceAlertDialogState(
-      child, title, hintBiomarker, hintUnit, actions, biomarker, contentPadding, titlePadding, contentHeight);
+      child, title, hintBiomarker, hintUnit, actions, biomarker, contentPadding, titlePadding, contentHeight, customBiomarker);
 }
 
 class _AddReferenceAlertDialogState extends State<AddReferenceAlertDialog> {
@@ -58,9 +59,10 @@ class _AddReferenceAlertDialogState extends State<AddReferenceAlertDialog> {
     right: Indents.md,
   );
   final double contentHeight;
+  List<Biomarker> customBiomarker;
 
   _AddReferenceAlertDialogState(this.child, this.title, this.hintBiomarker, this.hintUnit, this.actions, this.biomarker,
-      this.contentPadding, this.titlePadding, this.contentHeight);
+      this.contentPadding, this.titlePadding, this.contentHeight, this.customBiomarker);
 
   //Форма биомаркеров
   var _biomarkerValueAController = TextEditingController();
@@ -151,8 +153,9 @@ class _AddReferenceAlertDialogState extends State<AddReferenceAlertDialog> {
                                     return SearchScreen(
                                       hintText: hintBiomarker ?? _tr('enter_biomarker'),
                                       dataList: biomarkers,
+                                      customBiomarker: customBiomarker,
                                       initialValue: _biomarkerIdController.text,
-                                      searchType: "biomarker",
+                                      searchType: "customs",
                                     );
                                   }).then((val) {
                                 biomarker = null;
@@ -175,8 +178,9 @@ class _AddReferenceAlertDialogState extends State<AddReferenceAlertDialog> {
                                     return SearchScreen(
                                       hintText: hintBiomarker ?? _tr('enter_biomarker'),
                                       dataList: biomarkers,
+                                      customBiomarker: customBiomarker,
                                       initialValue: _biomarkerIdController.text,
-                                      searchType: "biomarker",
+                                      searchType: "customs",
                                     );
                                   }).then((val) {
                                 _biomarkerIdController.value = TextEditingValue(
@@ -217,8 +221,7 @@ class _AddReferenceAlertDialogState extends State<AddReferenceAlertDialog> {
                                   builder: (BuildContext context) {
                                     List<Unit> dataList = [];
                                     for (var unit in store.state.unitList.units)
-                                      for (var unitId in choosedBiomarker.unitIds)
-                                        if (unitId == unit.id) dataList.add(unit);
+                                      for (var unitId in choosedBiomarker.unitIds) if (unitId == unit.id) dataList.add(unit);
 
                                     return SearchScreen(
                                       hintText: hintUnit ?? _tr('enter_unit'),

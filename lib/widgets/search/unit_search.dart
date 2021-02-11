@@ -12,8 +12,7 @@ class UnitSearch extends StatefulWidget {
   final String hintText;
   final List<int> unitIds;
 
-  UnitSearch({@required this.hintText, this.unitIds, Key key})
-      : super(key: key);
+  UnitSearch({@required this.hintText, this.unitIds, Key key}) : super(key: key);
 
   @override
   _UnitSearchState createState() => _UnitSearchState(hintText, unitIds);
@@ -65,18 +64,9 @@ class _UnitSearchState extends State<UnitSearch> {
                     },
                     decoration: InputDecoration(
                         filled: true,
-                        fillColor: Theme.of(context)
-                            .colorScheme
-                            .background
-                            .withOpacity(0.5),
-                        focusColor: Theme.of(context)
-                            .colorScheme
-                            .background
-                            .withOpacity(0.5),
-                        hoverColor: Theme.of(context)
-                            .colorScheme
-                            .background
-                            .withOpacity(0.5),
+                        fillColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
+                        focusColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
+                        hoverColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
                         border: InputBorder.none,
                         focusedBorder: InputBorder.none,
                         enabledBorder: InputBorder.none,
@@ -89,8 +79,7 @@ class _UnitSearchState extends State<UnitSearch> {
                             units = getUnits(init: true);
                             _loadUnits(units);
                           },
-                          icon: Icon(Icons.clear,
-                              color: Theme.of(context).primaryColor),
+                          icon: Icon(Icons.clear, color: Theme.of(context).primaryColor),
                         ))))),
         body: StreamBuilder(
             stream: searchStream.stream,
@@ -102,35 +91,26 @@ class _UnitSearchState extends State<UnitSearch> {
                       if (unitsSnap.hasData) {
                         if (unitsSnap.data.isNotEmpty) {
                           List<Unit> unitList = [];
-                          for (var unit in unitsSnap.data)
-                            for (var unitId in unitIds)
-                              if (unitId == unit.id) unitList.add(unit);
+                          for (var unit in unitsSnap.data) for (var unitId in unitIds) if (unitId == unit.id) unitList.add(unit);
                           return Container(
-                              height: MediaQuery.of(context).size.height -
-                                  AppBar().preferredSize.height -
-                                  61,
+                              height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - 61,
                               child: ListView.separated(
                                   separatorBuilder: (context, index) => Divider(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
+                                        color: Theme.of(context).colorScheme.onSurface,
                                       ),
                                   padding: EdgeInsets.only(
                                     left: Indents.md,
                                     right: Indents.md,
                                   ),
                                   itemCount: unitList.length,
-                                  itemBuilder: (context, index) => Container(
-                                      child: unitItems(
-                                          context, unitList[index]))));
+                                  itemBuilder: (context, index) => Container(child: unitItems(context, unitList[index]))));
                         } else {
                           return Container(
                               padding: EdgeInsets.only(
                                 left: Indents.md,
                                 right: Indents.md,
                               ),
-                              child: Text(
-                                  "Извините, такая единица измерения пока что не добавлена в систему :("));
+                              child: Text("Извините, такая единица измерения пока что не добавлена в систему :("));
                         }
                       } else {
                         return Container();

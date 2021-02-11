@@ -50,14 +50,13 @@ class _BioMarkerListScreenState extends State<BioMarkerListScreen> {
           return false;
         },
         child: Container(
-            height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - 61,
+            height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - NavBar.size,
             width: MediaQuery.of(context).size.width,
             child: Stack(children: [
               Container(
                   width: MediaQuery.of(context).size.width,
                   alignment: Alignment.topLeft,
                   padding: EdgeInsets.only(top: Indents.md, left: Indents.slg, right: Indents.md),
-                  margin: EdgeInsets.only(bottom: Indents.sm),
                   child: memberBiomarkers.isNotEmpty
                       ? ScrollConfiguration(
                           behavior: NoRippleScrollBehaviour(),

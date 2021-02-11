@@ -165,6 +165,7 @@
     "up_line": "Upper value",
     "value": "Value",
     "null_unit": "Biomarker selection first",
+    "units": "Units",
     "unit": "Units",
     "enter_unit": "Enter unit"
   },

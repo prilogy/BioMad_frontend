@@ -9,7 +9,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class NavBar extends StatefulWidget {
-  static double indent = Indents.md;
+  static double indent = Indents.lg;
   static double size = 55.0;
 
   final bool isSearch;
@@ -41,9 +41,9 @@ class _NavBarState extends State<NavBar> {
             borderRadius: BorderRadius.all(Radius.circular(40)),
             boxShadow: [
               BoxShadow(
-                color: theme.primaryColor.withOpacity(0.15),
-                blurRadius: 10,
-                offset: Offset(0, 5), // changes position of shadow
+                color: theme.primaryColor.withOpacity(0.24),
+                blurRadius: 8,
+                offset: Offset(1, 5), // changes position of shadow
               ),
             ],
           ),
@@ -72,9 +72,9 @@ class _NavBarState extends State<NavBar> {
             borderRadius: BorderRadius.all(Radius.circular(40)),
             boxShadow: [
               BoxShadow(
-                color: theme.primaryColor.withOpacity(0.15),
-                blurRadius: 10,
-                offset: Offset(0, 5), // changes position of shadow
+                color: theme.primaryColor.withOpacity(0.24),
+                blurRadius: 8,
+                offset: Offset(1, 5), // changes position of shadow
               ),
             ],
           ),
@@ -99,7 +99,7 @@ class _NavBarState extends State<NavBar> {
               BoxShadow(
                 color: theme.primaryColor.withOpacity(0.24),
                 blurRadius: 10,
-                offset: Offset(0, 6), // changes position of shadow
+                offset: Offset(1, 6), // changes position of shadow
               ),
             ],
           ),

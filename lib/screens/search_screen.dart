@@ -1,14 +1,8 @@
 import 'package:api/api.dart';
-import 'package:biomad_frontend/containers/category_container.dart';
-import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
 import 'package:biomad_frontend/services/api.dart';
-import 'package:biomad_frontend/store/main.dart';
-import 'package:biomad_frontend/styles/indents.dart';
-import 'package:biomad_frontend/widgets/biomarker/biomarker_item.dart';
-import 'package:biomad_frontend/widgets/block_base_widget.dart';
-import 'package:biomad_frontend/widgets/category_item.dart';
 import 'package:biomad_frontend/widgets/search/all_search.dart';
 import 'package:biomad_frontend/widgets/search/biomarker_search.dart';
+import 'package:biomad_frontend/widgets/search/customs_search.dart';
 import 'package:biomad_frontend/widgets/search/unit_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +16,7 @@ class SearchScreen extends StatefulWidget {
   final SearchResultModel allData;
   final initialValue;
   final searchType;
+  List<Biomarker> customBiomarker;
 
   SearchScreen(
       {@required this.hintText,
@@ -30,12 +25,13 @@ class SearchScreen extends StatefulWidget {
       this.allData,
       this.initialValue = "",
       this.searchType,
+      this.customBiomarker,
       Key key})
       : super(key: key);
 
   @override
   _SearchScreenState createState() =>
-      _SearchScreenState(hintText, dataList, unitIds, allData, initialValue, searchType);
+      _SearchScreenState(hintText, dataList, unitIds, allData, initialValue, searchType, customBiomarker);
 }
 
 class _SearchScreenState extends State<SearchScreen> {
@@ -45,8 +41,10 @@ class _SearchScreenState extends State<SearchScreen> {
   SearchResultModel allData;
   final initialValue;
   final searchType;
+  List<Biomarker> customBiomarker;
 
-  _SearchScreenState(this.hintText, this.dataList, this.unitIds, this.allData, this.initialValue, this.searchType);
+  _SearchScreenState(
+      this.hintText, this.dataList, this.unitIds, this.allData, this.initialValue, this.searchType, this.customBiomarker);
 
   TextEditingController _searchController = TextEditingController();
   FocusNode focusNode = FocusNode();
@@ -79,6 +77,13 @@ class _SearchScreenState extends State<SearchScreen> {
             return false;
           },
           child: UnitSearch(hintText: hintText, unitIds: unitIds));
+    else if (searchType == "customs")
+      return WillPopScope(
+          onWillPop: () async {
+            Navigator.of(context).pop();
+            return false;
+          },
+          child: CustomsSearch(hintText: hintText, customBiomarker: customBiomarker));
     else
       return WillPopScope(
           onWillPop: () async {

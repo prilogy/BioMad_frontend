@@ -1,13 +1,12 @@
 import 'package:api/api.dart';
+import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
 import 'package:biomad_frontend/screens/analysis_screen.dart';
 import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
 import 'package:biomad_frontend/styles/indents.dart';
+import 'package:biomad_frontend/widgets/nav_bar.dart';
 import 'package:biomad_frontend/widgets/on_load_container.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:biomad_frontend/helpers/no_ripple_scroll_behaviour.dart';
-import 'package:biomad_frontend/styles/indents.dart';
 import 'package:flutter/material.dart';
 
 class AnalysisListContainer extends StatefulWidget {
@@ -30,13 +29,12 @@ class _AnalysisListContainerState extends State<AnalysisListContainer> {
           if (analysis.hasData) {
             return analysis.data.length > 0
                 ? Container(
-                    height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - 24,
+                    height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - NavBar.size,
                     child: ListView.builder(
-                        itemCount: analysis.data.length,
-                        itemBuilder: (context, index) => analysisItem(index, analysis.data[index])),
+                        itemCount: analysis.data.length, itemBuilder: (context, index) => analysisItem(index, analysis.data[index])),
                   )
                 : Container(
-                    height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - 61,
+                    height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - NavBar.size,
                     padding: EdgeInsets.only(left: Indents.sm, right: Indents.sm),
                     margin: EdgeInsets.only(left: Indents.md, right: Indents.md),
                     child: Text("Анализы еще не добавлены :("));
@@ -61,7 +59,7 @@ class _AnalysisListContainerState extends State<AnalysisListContainer> {
 
   Widget analysisItem(int index, MemberAnalysis analysis) {
     final theme = Theme.of(context);
-    double chars = (MediaQuery.of(context).size.width - 100)/8;
+    double chars = (MediaQuery.of(context).size.width - 100) / 8 - 10;
 
     return GestureDetector(
       onTap: () {
@@ -96,12 +94,12 @@ class _AnalysisListContainerState extends State<AnalysisListContainer> {
                 size: 32.0,
               ),
               Container(
-                padding: EdgeInsets.all(Indents.md),
+                padding: EdgeInsets.only(top: Indents.md, left: Indents.md, bottom: Indents.md),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      analysis.name.length > chars.toInt() ? analysis.name.substring(0, chars.toInt()) + "..." : analysis.name,
+                      analysis.name.length > chars.toInt() ? analysis.name.substring(0, chars.toInt() - 2) + "..." : analysis.name,
                       style: theme.textTheme.bodyText2,
                     ),
                     Container(

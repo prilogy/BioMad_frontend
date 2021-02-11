@@ -1,9 +1,5 @@
 import 'package:api/api.dart';
-import 'package:biomad_frontend/helpers/indents_mixin.dart';
-import 'package:biomad_frontend/helpers/keys.dart';
-import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/screens/biomarker_screen.dart';
-import 'package:biomad_frontend/services/api.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
 import 'package:biomad_frontend/styles/biomad_colors.dart';
@@ -11,7 +7,6 @@ import 'package:biomad_frontend/styles/indents.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-import '../on_load_container.dart';
 import 'biomarker_alert.dart';
 
 class BiomarkerItem extends StatelessWidget {
@@ -63,9 +58,7 @@ class BiomarkerItem extends StatelessWidget {
     var icon;
 
     MemberBiomarkerModel _biomarkerModel;
-    if (isModel)
-      _biomarkerModel =
-          store.state.memberBiomarkerModelList.biomarkers.firstWhere((element) => element.biomarkerId == id);
+    if (isModel) _biomarkerModel = store.state.memberBiomarkerModelList.biomarkers.firstWhere((element) => element.biomarkerId == id);
 
     if (biomarkerState == BiomarkerStateType.number2_) {
       color = BioMadColors.success;
@@ -128,10 +121,8 @@ class BiomarkerItem extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      biomarkerName.length > 30 ? biomarkerName.substring(0, 30) + "..." : biomarkerName,
-                      style: theme.textTheme.subtitle2,
-                    ),
+                    Text(biomarkerName.length > 30 ? biomarkerName.substring(0, 30) + "..." : biomarkerName,
+                        style: Theme.of(context).textTheme.subtitle1),
                     Container(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,8 +178,7 @@ class BiomarkerItem extends StatelessWidget {
                           ),
                           onPressed: () {
                             store.state.memberBiomarkerModelList.biomarkers.removeAt(index);
-                            store.dispatch(
-                                StoreThunks.setMemberBiomarkerModels(store.state.memberBiomarkerModelList.biomarkers));
+                            store.dispatch(StoreThunks.setMemberBiomarkerModels(store.state.memberBiomarkerModelList.biomarkers));
                           })
                     ],
                   )

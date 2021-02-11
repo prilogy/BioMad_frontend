@@ -1,6 +1,5 @@
 import 'package:api/api.dart';
 import 'package:biomad_frontend/config/env.dart';
-import 'package:biomad_frontend/helpers/i18n_helper.dart';
 import 'package:biomad_frontend/extensions/snack_bar_extension.dart';
 import 'package:biomad_frontend/helpers/i18n_helper.dart';
 import 'package:biomad_frontend/helpers/keys.dart';
@@ -52,8 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: ListView(
           children: [
             Padding(
-              padding:
-                  EdgeInsets.only(top: MediaQuery.of(context).size.height / 4),
+              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 4),
               child: BlockBaseWidget(
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,16 +59,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     Text(
                       _tr('login'),
-                      style: theme.textTheme.headline5.merge(TextStyle(
-                          fontWeight: FontWeight.w500,
-                          color: theme.primaryColor)),
+                      style: theme.textTheme.headline5.merge(TextStyle(fontWeight: FontWeight.w500, color: theme.primaryColor)),
                     ),
                     Container(
                       height: 30,
                       child: CustomButton.flat(
                         onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (x) => SignUpScreen()));
+                          Navigator.of(context).push(MaterialPageRoute(builder: (x) => SignUpScreen()));
                         },
                         text: _tr('sign_up'),
                       ),
@@ -115,26 +110,18 @@ class _LoginScreenState extends State<LoginScreen> {
                             CustomButton.raised(
                               onPressed: () async {
                                 if (_formKey.currentState.validate())
-                                  store
-                                      .dispatch(StoreThunks.authorize(() async {
+                                  store.dispatch(StoreThunks.authorize(() async {
                                     var authResponse = await api.auth.logIn(
-                                        LogInWithCredentialsModel(
-                                            email: _emailController.text,
-                                            password:
-                                                _passwordController.text));
+                                        LogInWithCredentialsModel(email: _emailController.text, password: _passwordController.text));
 
                                     if (authResponse == null) {
-                                      SnackBarExtension.error(
-                                          _tr('log_in_error'),
-                                          hideCurrent: false);
+                                      SnackBarExtension.error(_tr('log_in_error'), hideCurrent: false);
                                       return null;
                                     } else
                                       return authResponse;
                                   }, onSuccess: () {
-                                    SnackBarExtension.success(
-                                        _tr('log_in_success'));
-                                    Keys.rootNavigator.currentState
-                                        .pushReplacementNamed(Routes.main);
+                                    SnackBarExtension.success(_tr('log_in_success'));
+                                    Keys.rootNavigator.currentState.pushReplacementNamed(Routes.main);
                                   }));
                               },
                               margin: EdgeInsets.only(left: Indents.sm),
@@ -162,24 +149,21 @@ class _LoginScreenState extends State<LoginScreen> {
                               var googleAuth = GoogleAuthService();
                               var token = await googleAuth.getToken();
 
-                              await _authWithSocial(
-                                  context, SocialAccountProvider.google, token);
+                              await _authWithSocial(context, SocialAccountProvider.google, token);
                             },
                             backgroundColor: GoogleAuthService.color,
                             shadowColor: theme.colorScheme.onBackground,
                             svgSize: GoogleAuthService.size,
                           ),
                           Padding(
-                            padding:
-                                EdgeInsets.symmetric(horizontal: Indents.md),
+                            padding: EdgeInsets.symmetric(horizontal: Indents.md),
                             child: SocialAuthIcon(
                               svgPath: FacebookAuthService.svgPath,
                               onPressed: () async {
                                 var fbAuth = FacebookAuthService();
                                 var token = await fbAuth.getToken();
 
-                                await _authWithSocial(context,
-                                    SocialAccountProvider.facebook, token);
+                                await _authWithSocial(context, SocialAccountProvider.facebook, token);
                               },
                               backgroundColor: FacebookAuthService.color,
                               svgSize: FacebookAuthService.size,
@@ -191,8 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               var vkAuth = VkAuthService();
                               var token = await vkAuth.getToken();
 
-                              await _authWithSocial(
-                                  context, SocialAccountProvider.vk, token);
+                              await _authWithSocial(context, SocialAccountProvider.vk, token);
                             },
                             backgroundColor: VkAuthService.color,
                             svgSize: VkAuthService.size,
@@ -204,16 +187,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () async {
                         var url = env.API_BASE_URL.replaceAll("/api/", "");
                         url += "/policy/${EasyLocalization.of(context).locale.languageCode}";
-                        if(await canLaunch(url))
-                          await launch(url);
+                        if (await canLaunch(url)) await launch(url);
                       },
                       child: Text(
-                          tr("misc.privacy_policy"),
-                          style: theme.textTheme.caption.merge(TextStyle(
-                            decoration: TextDecoration.underline,
-                          )),
-                        ),
+                        tr("misc.privacy_policy"),
+                        style: theme.textTheme.caption.merge(TextStyle(
+                          decoration: TextDecoration.underline,
+                        )),
                       ),
+                    ),
                   ],
                 ),
               ),
@@ -224,26 +206,22 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Future _authWithSocial(BuildContext context, SocialAccountProvider provider,
-      String token) async {
+  Future _authWithSocial(BuildContext context, SocialAccountProvider provider, String token) async {
     if (token == null) {
-      var socialName =
-          provider.name[0].toUpperCase() + provider.name.substring(1);
+      var socialName = provider.name[0].toUpperCase() + provider.name.substring(1);
       SnackBarExtension.error(tr('auth_screen.sign_in_social_error'));
       return;
     }
 
     var r = await api.auth.logInWithSocial(token: token, type: provider.name);
     if (r == null) {
-      var identity = await api.auth
-          .signUpWithSocialInfo(token: token, type: provider.name);
+      var identity = await api.auth.signUpWithSocialInfo(token: token, type: provider.name);
       if (identity == null) {
         SnackBarExtension.error(tr('auth_screen.sign_in_social_error'));
         return;
       }
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => SignUpScreen(
-              socialIdentity: identity, socialType: provider.name)));
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => SignUpScreen(socialIdentity: identity, socialType: provider.name)));
       return;
     }
 
@@ -263,11 +241,7 @@ class SocialAuthIcon extends StatelessWidget {
   final double svgSize;
 
   SocialAuthIcon(
-      {@required this.svgPath,
-      @required this.onPressed,
-      @required this.backgroundColor,
-      this.svgSize = 25,
-      this.shadowColor});
+      {@required this.svgPath, @required this.onPressed, @required this.backgroundColor, this.svgSize = 25, this.shadowColor});
 
   @override
   Widget build(BuildContext context) {
@@ -276,13 +250,7 @@ class SocialAuthIcon extends StatelessWidget {
       width: 45,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        boxShadow: [
-          BoxShadow(
-              blurRadius: 20,
-              color:
-                  (shadowColor ?? backgroundColor).withOpacity(ColorAlphas.a30),
-              spreadRadius: 1)
-        ],
+        boxShadow: [BoxShadow(blurRadius: 20, color: (shadowColor ?? backgroundColor).withOpacity(ColorAlphas.a30), spreadRadius: 1)],
       ),
       child: GestureDetector(
         onTap: onPressed ?? () {},

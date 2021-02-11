@@ -15,16 +15,21 @@ import 'package:flutter/material.dart';
 import 'biomarker_list_screen.dart';
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
+  final int duration;
+
+  MyHomePage({Key key, this.duration = 10}) : super(key: key);
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyHomePageState createState() => _MyHomePageState(this.duration);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
   List<String> navPageBar = [tr('navigation.my_health'), tr('navigation.biomarkers')];
   int selectedIndex = 0;
+  int duration;
+  bool changed = false;
+
+  _MyHomePageState(this.duration);
 
   Future<List<Category>> getCategories() async {
     return await api.category.info();
@@ -70,32 +75,49 @@ class _MyHomePageState extends State<MyHomePage> {
                   itemCount: navPageBar.length,
                   itemBuilder: (context, index) => buildNavTopBar(index))),
           FutureBuilder(
-              future: Future.wait([
-                getCategories(),
-                getBiomarker(),
-                getMemberBiomarker(),
-                getType(),
-              ]),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  categories = snapshot.data[0];
-                  biomarkers = snapshot.data[1];
-                  memberBiomarkers = snapshot.data[2];
-                  types = snapshot.data[3];
+              future: Future.delayed(Duration(milliseconds: selectedIndex == 0 ? changed ? 0 : duration ?? 0 : 0)),
+              builder: (c, s) => s.connectionState == ConnectionState.done
+                  ? FutureBuilder(
+                      future: Future.wait([
+                        getCategories(),
+                        getBiomarker(),
+                        getMemberBiomarker(),
+                        getType(),
+                      ]),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          categories = snapshot.data[0];
+                          biomarkers = snapshot.data[1];
+                          memberBiomarkers = snapshot.data[2];
+                          types = snapshot.data[3];
 
-                  return selectedIndex == 0
-                      ? CategoryContainer(
-                          categories: categories,
-                          memberBiomarkers: memberBiomarkers,
-                          biomarkers: biomarkers,
-                        )
-                      : BioMarkerListScreen(
-                          types: types,
-                          memberBiomarkers: memberBiomarkers,
-                          biomarkers: biomarkers,
-                        );
-                } else {
-                  return ScrollConfiguration(
+                          if(selectedIndex == 0){
+                            return CategoryContainer(
+                              categories: categories,
+                              memberBiomarkers: memberBiomarkers,
+                              biomarkers: biomarkers,
+                            );
+                          }else{
+                            changed = true;
+                            return BioMarkerListScreen(
+                              types: types,
+                              memberBiomarkers: memberBiomarkers,
+                              biomarkers: biomarkers,
+                            );
+                          }
+                        } else {
+                          return ScrollConfiguration(
+                              behavior: NoRippleScrollBehaviour(),
+                              child: ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: 4,
+                                  itemBuilder: (context, index) => OnLoadContainer(
+                                        index: index,
+                                        color: BioMadColors.base[200],
+                                      )));
+                        }
+                      })
+                  : ScrollConfiguration(
                       behavior: NoRippleScrollBehaviour(),
                       child: ListView.builder(
                           shrinkWrap: true,
@@ -103,9 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           itemBuilder: (context, index) => OnLoadContainer(
                                 index: index,
                                 color: BioMadColors.base[200],
-                              )));
-                }
-              }),
+                              )))),
         ],
       ))), // This trailing comma makes auto-formatting nicer for build methods.
     );
@@ -119,9 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
         });
       },
       child: Padding(
-        padding: index == 0
-            ? EdgeInsets.only(left: Indents.slg, right: Indents.md)
-            : EdgeInsets.symmetric(horizontal: Indents.md),
+        padding: index == 0 ? EdgeInsets.only(left: Indents.slg, right: Indents.md) : EdgeInsets.symmetric(horizontal: Indents.md),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

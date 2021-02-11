@@ -47,7 +47,7 @@ final authRoute = RouteBuilder(Routes.auth, (args) => AuthScreen(), false);
 
 final routes = [
   authRoute,
-  RouteBuilder(Routes.main, (args) => MyHomePage(title: "s",)),
+  RouteBuilder(Routes.main, (args) => MyHomePage(duration: args as int,)),
   RouteBuilder(Routes.member, (args) => MemberScreen(member: args as Member)),
   RouteBuilder(Routes.biomarker, (args) => BioMarkerScreen(biomarkerId: args as int)),
   RouteBuilder(Routes.biomarker_list, (args) => BioMarkerListScreen()),

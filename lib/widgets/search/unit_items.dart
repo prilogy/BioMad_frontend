@@ -20,15 +20,10 @@ Widget unitItems(BuildContext context, data) {
         padding: EdgeInsets.symmetric(vertical: Indents.sm),
         child: Text(
           data.content.name,
-          style: Theme
-              .of(context)
+          style: Theme.of(context)
               .textTheme
-              .bodyText2
-              .merge(
-              TextStyle(color: Theme
-                  .of(context)
-                  .colorScheme
-                  .onSurface)),
+              .subtitle1
+              .merge(TextStyle(color: BioMadColors.base[500], fontWeight: FontWeight.normal)),
         ),
       ));
 }
