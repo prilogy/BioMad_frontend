@@ -2,7 +2,7 @@ name: biomad_frontend
 description: BioMad application to control your health
 publish_to: 'none'
 
-version: 1.0.0+5
+version: 1.0.0+6
 
 environment:
   sdk: ">=2.10.0 <3.0.0"
