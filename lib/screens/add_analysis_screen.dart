@@ -186,6 +186,7 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                                   color: BioMadColors.primary,
                                   iconSize: 24,
                                   onPressed: () {
+                                    FocusScope.of(context).nextFocus();
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {

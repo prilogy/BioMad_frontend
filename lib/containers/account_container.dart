@@ -301,21 +301,21 @@ class _AccountContainerState extends State<AccountContainer> {
                 return Container(child: Text("Обновляем референсы"));
               }
             }),
-        CustomDivider(
-          text: _tr('socials'),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: Indents.sm),
-          child: StoreConnector<AppState, User>(
-            converter: (store) => store.state.user,
-            builder: (ctx, state) => Column(
-              children: [
-                for (var item in [SocialAccountProvider.google, SocialAccountProvider.facebook, SocialAccountProvider.vk])
-                  SocialAccountListTile(item)
-              ],
-            ),
-          ),
-        ),
+//        CustomDivider(
+//          text: _tr('socials'),
+//        ),
+//        Padding(
+//          padding: const EdgeInsets.only(bottom: Indents.sm),
+//          child: StoreConnector<AppState, User>(
+//            converter: (store) => store.state.user,
+//            builder: (ctx, state) => Column(
+//              children: [
+//                for (var item in [SocialAccountProvider.google, SocialAccountProvider.facebook, SocialAccountProvider.vk])
+//                  SocialAccountListTile(item)
+//              ],
+//            ),
+//          ),
+//        ),
         CustomDivider(
           text: tr('misc.other'),
         ),

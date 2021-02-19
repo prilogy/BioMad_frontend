@@ -8,7 +8,6 @@ import 'package:biomad_frontend/helpers/text_field_validators.dart';
 import 'package:biomad_frontend/router/main.dart';
 import 'package:biomad_frontend/screens/auth_screen/sign_up_screen.dart';
 import 'package:biomad_frontend/services/api.dart';
-import 'package:biomad_frontend/services/social_auth.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
 import 'package:biomad_frontend/styles/color_alphas.dart';
@@ -131,58 +130,59 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: Indents.sm),
-                      child: Text(
-                        _tr('login_with_social'),
-                        style: theme.textTheme.caption,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: Indents.lg),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SocialAuthIcon(
-                            svgPath: GoogleAuthService.svgPath,
-                            onPressed: () async {
-                              var googleAuth = GoogleAuthService();
-                              var token = await googleAuth.getToken();
+//                    Padding(
+//                      padding: const EdgeInsets.only(top: Indents.sm),
+//                      child: Text(
+//                        _tr('login_with_social'),
+//                        style: theme.textTheme.caption,
+//                      ),
+//                    ),
+//                    Padding(
+//                      padding: EdgeInsets.symmetric(vertical: Indents.lg),
+//                      child: Row(
+//                        mainAxisAlignment: MainAxisAlignment.center,
+//                        children: [
+//                          SocialAuthIcon(
+//                            svgPath: GoogleAuthService.svgPath,
+//                            onPressed: () async {
+//                              var googleAuth = GoogleAuthService();
+//                              var token = await googleAuth.getToken();
+//
+//                              await _authWithSocial(context, SocialAccountProvider.google, token);
+//                            },
+//                            backgroundColor: GoogleAuthService.color,
+//                            shadowColor: theme.colorScheme.onBackground,
+//                            svgSize: GoogleAuthService.size,
+//                          ),
+//                          Padding(
+//                            padding: EdgeInsets.symmetric(horizontal: Indents.md),
+//                            child: SocialAuthIcon(
+//                              svgPath: FacebookAuthService.svgPath,
+//                              onPressed: () async {
+//                                var fbAuth = FacebookAuthService();
+//                                var token = await fbAuth.getToken();
+//
+//                                await _authWithSocial(context, SocialAccountProvider.facebook, token);
+//                              },
+//                              backgroundColor: FacebookAuthService.color,
+//                              svgSize: FacebookAuthService.size,
+//                            ),
+//                          ),
+//                          SocialAuthIcon(
+//                            svgPath: VkAuthService.svgPath,
+//                            onPressed: () async {
+//                              var vkAuth = VkAuthService();
+//                              var token = await vkAuth.getToken();
+//
+//                              await _authWithSocial(context, SocialAccountProvider.vk, token);
+//                            },
+//                            backgroundColor: VkAuthService.color,
+//                            svgSize: VkAuthService.size,
+//                          )
+//                        ],
+//                      ),
+//                    ),
 
-                              await _authWithSocial(context, SocialAccountProvider.google, token);
-                            },
-                            backgroundColor: GoogleAuthService.color,
-                            shadowColor: theme.colorScheme.onBackground,
-                            svgSize: GoogleAuthService.size,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: Indents.md),
-                            child: SocialAuthIcon(
-                              svgPath: FacebookAuthService.svgPath,
-                              onPressed: () async {
-                                var fbAuth = FacebookAuthService();
-                                var token = await fbAuth.getToken();
-
-                                await _authWithSocial(context, SocialAccountProvider.facebook, token);
-                              },
-                              backgroundColor: FacebookAuthService.color,
-                              svgSize: FacebookAuthService.size,
-                            ),
-                          ),
-                          SocialAuthIcon(
-                            svgPath: VkAuthService.svgPath,
-                            onPressed: () async {
-                              var vkAuth = VkAuthService();
-                              var token = await vkAuth.getToken();
-
-                              await _authWithSocial(context, SocialAccountProvider.vk, token);
-                            },
-                            backgroundColor: VkAuthService.color,
-                            svgSize: VkAuthService.size,
-                          )
-                        ],
-                      ),
-                    ),
                     FlatButton(
                       onPressed: () async {
                         var url = env.API_BASE_URL.replaceAll("/api/", "");
