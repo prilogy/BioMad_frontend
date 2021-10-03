@@ -2,13 +2,13 @@ part of api.api;
 
 class Unit {
   
-  int id = null;
+  int? id = null;
   
-  UnitTranslation content = null;
+  UnitTranslation? content = null;
   
-  List<int> transfersToIds = [];
+  List<int>? transfersToIds = [];
   
-  List<int> transfersFromIds = [];
+  List<int>? transfersFromIds = [];
   Unit();
 
   @override
@@ -16,7 +16,7 @@ class Unit {
     return 'Unit[id=$id, content=$content, transfersToIds=$transfersToIds, transfersFromIds=$transfersFromIds, ]';
   }
 
-  Unit.fromJson(Map<String, dynamic> json) {
+  Unit.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
     id = json['id'];
     content = (json['content'] == null) ?
@@ -41,8 +41,8 @@ class Unit {
     return json;
   }
 
-  static List<Unit> listFromJson(List<dynamic> json) {
-    return json == null ? List<Unit>() : json.map((value) => Unit.fromJson(value)).toList();
+  static List<Unit> listFromJson(List<dynamic>? json) {
+    return json == null ? <Unit>[] : json.map((value) => Unit.fromJson(value)).toList();
   }
 
   static Map<String, Unit> mapFromJson(Map<String, dynamic> json) {

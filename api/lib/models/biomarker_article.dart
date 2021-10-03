@@ -2,13 +2,13 @@ part of api.api;
 
 class BiomarkerArticle {
   
-  int biomarkerId = null;
+  int? biomarkerId = null;
   
-  int articleId = null;
+  int? articleId = null;
   
-  int typeId = null;
+  int? typeId = null;
   
-  BiomarkerArticleType type = null;
+  BiomarkerArticleType? type = null;
   BiomarkerArticle();
 
   @override
@@ -39,8 +39,8 @@ class BiomarkerArticle {
     return json;
   }
 
-  static List<BiomarkerArticle> listFromJson(List<dynamic> json) {
-    return json == null ? List<BiomarkerArticle>() : json.map((value) => BiomarkerArticle.fromJson(value)).toList();
+  static List<BiomarkerArticle> listFromJson(List<dynamic>? json) {
+    return json == null ? <BiomarkerArticle>[] : json.map((value) => BiomarkerArticle.fromJson(value)).toList();
   }
 
   static Map<String, BiomarkerArticle> mapFromJson(Map<String, dynamic> json) {

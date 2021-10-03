@@ -2,21 +2,21 @@ part of api.api;
 
 class Member {
   
-  int id = null;
+  int? id = null;
   
-  String name = null;
+  String? name = null;
   
-  String color = null;
+  String? color = null;
   
-  DateTime dateCreatedAt = null;
+  DateTime? dateCreatedAt = null;
   
-  DateTime dateBirthday = null;
+  DateTime? dateBirthday = null;
   
-  int age = null;
+  int? age = null;
   
-  int genderId = null;
+  int? genderId = null;
   
-  List<int> analysisIds = [];
+  List<int>? analysisIds = [];
   Member();
 
   @override
@@ -49,9 +49,9 @@ class Member {
       json['name'] = name;
       json['color'] = color;
     if (dateCreatedAt != null)
-      json['dateCreatedAt'] = dateCreatedAt == null ? null : dateCreatedAt.toUtc().toIso8601String();
+      json['dateCreatedAt'] = dateCreatedAt == null ? null : dateCreatedAt!.toUtc().toIso8601String();
     if (dateBirthday != null)
-      json['dateBirthday'] = dateBirthday == null ? null : dateBirthday.toUtc().toIso8601String();
+      json['dateBirthday'] = dateBirthday == null ? null : dateBirthday!.toUtc().toIso8601String();
     if (age != null)
       json['age'] = age;
     if (genderId != null)
@@ -60,8 +60,8 @@ class Member {
     return json;
   }
 
-  static List<Member> listFromJson(List<dynamic> json) {
-    return json == null ? List<Member>() : json.map((value) => Member.fromJson(value)).toList();
+  static List<Member> listFromJson(List<dynamic>? json) {
+    return json == null ? <Member>[] : json.map((value) => Member.fromJson(value)).toList();
   }
 
   static Map<String, Member> mapFromJson(Map<String, dynamic> json) {

@@ -2,11 +2,11 @@ part of api.api;
 
 class Gender {
   
-  int id = null;
+  int? id = null;
   
-  String key = null;
+  String? key = null;
   
-  GenderTranslation content = null;
+  GenderTranslation? content = null;
   Gender();
 
   @override
@@ -33,8 +33,8 @@ class Gender {
     return json;
   }
 
-  static List<Gender> listFromJson(List<dynamic> json) {
-    return json == null ? List<Gender>() : json.map((value) => Gender.fromJson(value)).toList();
+  static List<Gender> listFromJson(List<dynamic>? json) {
+    return json == null ? <Gender>[] : json.map((value) => Gender.fromJson(value)).toList();
   }
 
   static Map<String, Gender> mapFromJson(Map<String, dynamic> json) {

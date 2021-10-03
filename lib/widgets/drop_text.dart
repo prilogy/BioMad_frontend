@@ -3,15 +3,15 @@ import 'package:biomad_frontend/widgets/block_base_widget.dart';
 import 'package:flutter/material.dart';
 
 class DropText extends StatefulWidget {
-  final String header;
-  final String inside;
-  final Color color;
+  final String? header;
+  final String? inside;
+  final Color? color;
 
   DropText({
     this.header,
     this.inside,
     this.color,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -19,9 +19,9 @@ class DropText extends StatefulWidget {
 }
 
 class _DropTextState extends State<DropText> {
-  final String header;
-  final String inside;
-  final Color color;
+  final String? header;
+  final String? inside;
+  final Color? color;
 
   _DropTextState(this.header, this.inside, this.color);
 
@@ -44,10 +44,10 @@ class _DropTextState extends State<DropText> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Text(
-                header,
+                header!,
                 style: Theme.of(context)
                     .textTheme
-                    .bodyText1
+                    .bodyText1!
                     .merge(TextStyle(color: color)),
               ),
               Icon(
@@ -61,7 +61,7 @@ class _DropTextState extends State<DropText> {
           ? Container(
               margin: EdgeInsets.only(bottom: Indents.sm),
               child: Text(
-                inside,
+                inside!,
                 style: Theme.of(context).textTheme.bodyText2,
               ),
             )

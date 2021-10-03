@@ -2,9 +2,9 @@ part of api.api;
 
 class Role {
   
-  int id = null;
+  int? id = null;
   
-  String key = null;
+  String? key = null;
   Role();
 
   @override
@@ -12,7 +12,7 @@ class Role {
     return 'Role[id=$id, key=$key, ]';
   }
 
-  Role.fromJson(Map<String, dynamic> json) {
+  Role.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
     id = json['id'];
     key = json['key'];
@@ -27,7 +27,7 @@ class Role {
   }
 
   static List<Role> listFromJson(List<dynamic> json) {
-    return json == null ? List<Role>() : json.map((value) => Role.fromJson(value)).toList();
+    return json == null ? <Role>[] : json.map((value) => Role.fromJson(value)).toList();
   }
 
   static Map<String, Role> mapFromJson(Map<String, dynamic> json) {

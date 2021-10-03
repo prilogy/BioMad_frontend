@@ -10,23 +10,23 @@ import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class AnalysisScreen extends StatefulWidget {
-  final MemberAnalysis analysis;
+  final MemberAnalysis? analysis;
 
-  AnalysisScreen({Key key, this.analysis}) : super(key: key);
+  AnalysisScreen({Key? key, this.analysis}) : super(key: key);
 
   @override
   _AnalysisScreenState createState() => _AnalysisScreenState(analysis);
 }
 
 class _AnalysisScreenState extends State<AnalysisScreen> {
-  final MemberAnalysis analysis;
+  final MemberAnalysis? analysis;
 
   _AnalysisScreenState(this.analysis);
 
   PanelController _panelController = PanelController();
 
   final double _initFabHeight = 120.0;
-  double _fabHeight;
+  double? _fabHeight;
   double _panelHeightOpen = 500;
   double _panelHeightClosed = 0;
 
@@ -34,7 +34,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     double chars = (MediaQuery.of(context).size.width - 80) / 20;
-    String str = analysis.name.length > chars.toInt() ? analysis.name.substring(0, chars.toInt()) + "..." : analysis.name;
+    String str = analysis!.name!.length > chars.toInt() ? analysis!.name!.substring(0, chars.toInt()) + "..." : analysis!.name!;
 
     return Scaffold(
       appBar: AppBar(
@@ -52,7 +52,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
                   context: context,
                   builder: (BuildContext context) {
                     return SharedScreen(
-                      memberAnalysisId: analysis.id,
+                      memberAnalysisId: analysis!.id,
                       biomarkerIds: null,
                     );
                   },

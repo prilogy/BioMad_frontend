@@ -2,9 +2,9 @@ part of api.api;
 
 class PasswordResetModel {
   
-  String code = null;
+  String? code = null;
   
-  String password = null;
+  String? password = null;
   PasswordResetModel();
 
   @override
@@ -28,7 +28,7 @@ class PasswordResetModel {
   }
 
   static List<PasswordResetModel> listFromJson(List<dynamic> json) {
-    return json == null ? List<PasswordResetModel>() : json.map((value) => PasswordResetModel.fromJson(value)).toList();
+    return json == null ? <PasswordResetModel>[] : json.map((value) => PasswordResetModel.fromJson(value)).toList();
   }
 
   static Map<String, PasswordResetModel> mapFromJson(Map<String, dynamic> json) {

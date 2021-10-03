@@ -18,8 +18,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SignUpScreen extends StatefulWidget {
-  final SocialAuthenticationIdentity socialIdentity;
-  final String socialType;
+  final SocialAuthenticationIdentity? socialIdentity;
+  final String? socialType;
 
   SignUpScreen({this.socialIdentity, this.socialType});
 
@@ -28,7 +28,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  MemberModel _memberModel;
+  MemberModel? _memberModel;
   int _stage = 0;
   final _formKey = GlobalKey<FormState>();
 
@@ -38,7 +38,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   void initState() {
-    if (widget.socialIdentity != null) _emailController.text = widget.socialIdentity.email;
+    if (widget.socialIdentity != null) _emailController.text = widget.socialIdentity!.email!;
 
     super.initState();
   }
@@ -46,7 +46,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final _tr = trWithKey('auth_screen');
+    final String Function(String, {List<String> args, BuildContext context, String gender, Map<String, String> namedArgs}) _tr = trWithKey('auth_screen');
 
     return Scaffold(
       appBar: AppBar(
@@ -136,31 +136,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       children: [
                                         CustomButton.raised(
                                           onPressed: () async {
-                                            if (_formKey.currentState.validate()) {
+                                            if (_formKey.currentState!.validate()) {
                                               var model = SignUpModel(
                                                   password: _passwordController.text,
-                                                  name: _memberModel.name,
-                                                  color: _memberModel.color,
-                                                  genderId: _memberModel.genderId,
+                                                  name: _memberModel!.name,
+                                                  color: _memberModel!.color,
+                                                  genderId: _memberModel!.genderId,
                                                   email: _emailController.text,
-                                                  dateBirthday: _memberModel.dateBirthday);
+                                                  dateBirthday: _memberModel!.dateBirthday);
 
-                                              bool r;
+                                              bool? r;
                                               if (widget.socialIdentity != null)
                                                 r = await api.auth.signUpWithSocial(
                                                     SignUpWithSocialAccountModel(
                                                         password: _passwordController.text,
-                                                        name: _memberModel.name,
-                                                        color: _memberModel.color,
-                                                        genderId: _memberModel.genderId,
+                                                        name: _memberModel!.name,
+                                                        color: _memberModel!.color,
+                                                        genderId: _memberModel!.genderId,
                                                         email: _emailController.text,
-                                                        dateBirthday: _memberModel.dateBirthday,
+                                                        dateBirthday: _memberModel!.dateBirthday,
                                                         identity: widget.socialIdentity),
-                                                    widget.socialType);
+                                                    widget.socialType!);
                                               else
                                                 r = await api.auth.signUp(model);
 
-                                              if (r != false) Keys.rootNavigator.currentState.pushReplacementNamed(Routes.auth);
+                                              if (r != false) Keys.rootNavigator.currentState!.pushReplacementNamed(Routes.auth);
 
                                               if (r == true)
                                                 SnackBarExtension.success(tr('auth_screen.sign_up_success'));
@@ -179,7 +179,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                   return authResponse;
                                               }, onSuccess: () {
                                                 SnackBarExtension.success(_tr('log_in_success'));
-                                                Keys.rootNavigator.currentState.pushReplacementNamed(Routes.main);
+                                                Keys.rootNavigator.currentState!.pushReplacementNamed(Routes.main);
                                               }));
                                             }
                                           },

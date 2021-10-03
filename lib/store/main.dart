@@ -23,24 +23,24 @@ import 'helper/reducers.dart';
 import 'member_biomarker_model/reducers.dart';
 
 class AppState {
-  final User user;
+  final User? user;
   final Settings settings;
-  final Authorization authorization;
-  final Helper helper;
-  final UnitList unitList;
-  final BiomarkerTypeList biomarkerTypeList;
-  final MemberBiomarkerModelList memberBiomarkerModelList;
-  final MemberAnalysisList memberAnalysisList;
+  final Authorization? authorization;
+  final Helper? helper;
+  final UnitList? unitList;
+  final BiomarkerTypeList? biomarkerTypeList;
+  final MemberBiomarkerModelList? memberBiomarkerModelList;
+  final MemberAnalysisList? memberAnalysisList;
 
   AppState(
-      {@required this.user,
-      @required this.settings,
-      @required this.authorization,
-      @required this.unitList,
-      @required this.biomarkerTypeList,
-      @required this.memberBiomarkerModelList,
-      @required this.memberAnalysisList,
-      @required this.helper
+      {required this.user,
+      required this.settings,
+      required this.authorization,
+      required this.unitList,
+      required this.biomarkerTypeList,
+      required this.memberBiomarkerModelList,
+      required this.memberAnalysisList,
+      required this.helper
       });
 
   AppState.initialState()
@@ -61,11 +61,12 @@ AppState appStateReducer(AppState state, action) {
       state.settings,
       action,
     ),
-    authorization: authorizationReducer(state.authorization, action),
-    helper: helperReducer(state.helper, action),
-    unitList: unitListReducer(state.unitList, action),
-    memberBiomarkerModelList: memberBiomarkerModelListReducer(state.memberBiomarkerModelList, action),
-    memberAnalysisList: memberAnalysisListReducer(state.memberAnalysisList, action),
+    authorization: authorizationReducer(state.authorization!, action),
+    helper: helperReducer(state.helper!, action),
+    unitList: unitListReducer(state.unitList!, action),
+    memberBiomarkerModelList: memberBiomarkerModelListReducer(state.memberBiomarkerModelList!, action),
+    memberAnalysisList: memberAnalysisListReducer(state.memberAnalysisList!, action),
+    biomarkerTypeList: BiomarkerTypeList(),
   );
 }
 

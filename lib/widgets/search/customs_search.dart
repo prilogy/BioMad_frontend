@@ -11,37 +11,37 @@ import 'package:flutter/material.dart';
 
 class CustomsSearch extends StatefulWidget {
   final String hintText;
-  List<Biomarker> customBiomarker;
+  List<Biomarker>? customBiomarker;
 
-  CustomsSearch({@required this.hintText, this.customBiomarker, Key key}) : super(key: key);
+  CustomsSearch({required this.hintText, this.customBiomarker, Key? key}) : super(key: key);
 
   @override
   _CustomsSearchState createState() => _CustomsSearchState(hintText, customBiomarker);
 }
 
 class _CustomsSearchState extends State<CustomsSearch> {
-  final String hintText;
-  List<Biomarker> customBiomarker;
+  final String? hintText;
+  List<Biomarker>? customBiomarker;
 
   _CustomsSearchState(this.hintText, this.customBiomarker);
 
   TextEditingController _searchController = TextEditingController();
 
-  Future<List<Biomarker>> getBiomarkers({String query, bool init = false}) async {
+  Future<List<Biomarker>?> getBiomarkers({String? query, bool init = false}) async {
     if (init)
       return await api.biomarker.info();
     else
-      return await api.biomarker.search("\"" + query + "\"");
+      return await api.biomarker.search("\"" + query! + "\"");
   }
 
-  StreamController<Future<List<Biomarker>>> searchStream;
-  Future<List<Biomarker>> biomarkers;
+  late StreamController<Future<List<Biomarker>>?> searchStream;
+  Future<List<Biomarker>?>? biomarkers;
 
   void _loadBiomarkers(biomarkers) async => searchStream.add(biomarkers);
 
   @override
   void initState() {
-    searchStream = StreamController<Future<List<Biomarker>>>();
+    searchStream = StreamController<Future<List<Biomarker>>?>();
     biomarkers = getBiomarkers(init: true);
     _loadBiomarkers(biomarkers);
     super.initState();
@@ -90,10 +90,10 @@ class _CustomsSearchState extends State<CustomsSearch> {
             builder: (context, snap) {
               if (snap.hasData) {
                 return FutureBuilder(
-                    future: snap.data,
+                    future: snap.data as Future<List<Biomarker>>?,
                     builder: (context, AsyncSnapshot<List<Biomarker>> biomarkersSnap) {
                       if (biomarkersSnap.hasData) {
-                        return biomarkersSnap.data.isNotEmpty
+                        return biomarkersSnap.data!.isNotEmpty
                             ? Container(
                                 height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - 61,
                                 child: ListView.separated(
@@ -104,18 +104,18 @@ class _CustomsSearchState extends State<CustomsSearch> {
                                       left: Indents.md,
                                       right: Indents.md,
                                     ),
-                                    itemCount: biomarkersSnap.data.length,
+                                    itemCount: biomarkersSnap.data!.length,
                                     itemBuilder: (context, index) {
                                       bool isAdded;
                                       try {
                                         customBiomarker?.firstWhere(
-                                            (element) => element.id == biomarkersSnap.data[index].id,
+                                            (element) => element.id == biomarkersSnap.data![index].id,
                                             orElse: null);
                                         isAdded = false;
                                       } catch (e) {
                                         isAdded = false;
                                       }
-                                      if (biomarkersSnap.data[index].content != null) {
+                                      if (biomarkersSnap.data![index].content != null) {
                                         return isAdded
                                             ? GestureDetector(
                                                 behavior: HitTestBehavior.opaque,
@@ -129,12 +129,12 @@ class _CustomsSearchState extends State<CustomsSearch> {
                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: [
                                                       Text(
-                                                        biomarkersSnap.data[index].content.name.length > 40
-                                                            ? biomarkersSnap.data[index].content.name.substring(0, 38) + "..."
-                                                            : biomarkersSnap.data[index].content.name,
+                                                        biomarkersSnap.data![index].content!.name!.length > 40
+                                                            ? biomarkersSnap.data![index].content!.name!.substring(0, 38) + "..."
+                                                            : biomarkersSnap.data![index].content!.name!,
                                                         style: Theme.of(context)
                                                             .textTheme
-                                                            .subtitle1
+                                                            .subtitle1!
                                                             .merge(TextStyle(color: BioMadColors.base[300], fontWeight: FontWeight.normal)),
                                                       ),
                                                     ],
@@ -143,18 +143,18 @@ class _CustomsSearchState extends State<CustomsSearch> {
                                             : GestureDetector(
                                                 behavior: HitTestBehavior.opaque,
                                                 onTap: () {
-                                                  Navigator.of(context).pop(biomarkersSnap.data[index]);
+                                                  Navigator.of(context).pop(biomarkersSnap.data![index]);
                                                   //dataList.firstWhere((element) => element.id == data.id)
                                                 },
                                                 child: Container(
                                                   padding: EdgeInsets.symmetric(vertical: Indents.sm),
                                                   child: Text(
-                                                    biomarkersSnap.data[index].content.name.length > 44
-                                                        ? biomarkersSnap.data[index].content.name.substring(0, 44) + "..."
-                                                        : biomarkersSnap.data[index].content.name,
+                                                    biomarkersSnap.data![index].content!.name!.length > 44
+                                                        ? biomarkersSnap.data![index].content!.name!.substring(0, 44) + "..."
+                                                        : biomarkersSnap.data![index].content!.name!,
                                                     style: Theme.of(context)
                                                         .textTheme
-                                                        .subtitle1
+                                                        .subtitle1!
                                                         .merge(TextStyle(color: BioMadColors.base[500], fontWeight: FontWeight.normal)),
                                                   ),
                                                 ));
@@ -163,7 +163,7 @@ class _CustomsSearchState extends State<CustomsSearch> {
                                             child: Text("Все биомаркеры:",
                                                 style: Theme.of(context)
                                                     .textTheme
-                                                    .subtitle1
+                                                    .subtitle1!
                                                     .merge(TextStyle(color: Theme.of(context).primaryColor.withOpacity(0.8)))));
                                       }
                                     }))

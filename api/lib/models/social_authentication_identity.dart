@@ -2,11 +2,11 @@ part of api.api;
 
 class SocialAuthenticationIdentity {
   
-  String id = null;
+  String? id = null;
   
-  String name = null;
+  String? name = null;
   
-  String email = null;
+  String? email = null;
   SocialAuthenticationIdentity();
 
   @override
@@ -14,7 +14,7 @@ class SocialAuthenticationIdentity {
     return 'SocialAuthenticationIdentity[id=$id, name=$name, email=$email, ]';
   }
 
-  SocialAuthenticationIdentity.fromJson(Map<String, dynamic> json) {
+  SocialAuthenticationIdentity.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
     id = json['id'];
     name = json['name'];
@@ -30,7 +30,7 @@ class SocialAuthenticationIdentity {
   }
 
   static List<SocialAuthenticationIdentity> listFromJson(List<dynamic> json) {
-    return json == null ? List<SocialAuthenticationIdentity>() : json.map((value) => SocialAuthenticationIdentity.fromJson(value)).toList();
+    return json == null ? <SocialAuthenticationIdentity>[] : json.map((value) => SocialAuthenticationIdentity.fromJson(value)).toList();
   }
 
   static Map<String, SocialAuthenticationIdentity> mapFromJson(Map<String, dynamic> json) {

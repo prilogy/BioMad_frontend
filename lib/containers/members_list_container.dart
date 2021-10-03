@@ -20,18 +20,18 @@ class MembersListContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final _tr = trWithKey('member_list_container');
+    final String Function(String, {List<String> args, BuildContext context, String gender, Map<String, String> namedArgs}) _tr = trWithKey('member_list_container');
     return Column(
       children: [
-        StoreConnector<AppState, User>(
+        StoreConnector<AppState, User?>(
             converter: (store) => store.state.user,
             builder: (ctx, state) => CustomListBuilder(
                 gap: 0,
                 items: () {
-                  var members = state.members;
-                  members.sort((a, b) => (a.name + a.id.toString())
+                  var members = state!.members!;
+                  members.sort((a, b) => (a.name! + a.id.toString())
                       .toLowerCase()
-                      .compareTo((b.name + b.id.toString()).toLowerCase()));
+                      .compareTo((b.name! + b.id.toString()).toLowerCase()));
                   return state.members;
                 }(),
                 itemBuilder: (Member model, isLast) => MemberListTile(
@@ -41,21 +41,21 @@ class MembersListContainer extends StatelessWidget {
                           return await api.auth.refreshToken(
                               RefreshTokenAuthenticationModel(
                                   refreshToken: store
-                                      .state.authorization.refreshToken.token,
+                                      .state.authorization!.refreshToken!.token,
                                   memberId: model.id,
-                                  userId: store.state.user.id));
+                                  userId: store.state.user!.id));
                         }, onSuccess: () {
-                          Keys.rootNavigator.currentState.pushReplacementNamed('/main');
+                          Keys.rootNavigator.currentState!.pushReplacementNamed('/main');
                         }));
                       },
                       onTap: () async {
-                        Keys.rootNavigator.currentState
+                        Keys.rootNavigator.currentState!
                             .pushNamed(Routes.member, arguments: model);
                       },
                     ))),
         CustomListTile(
           onTap: () {
-            Keys.rootNavigator.currentState.pushNamed(Routes.member);
+            Keys.rootNavigator.currentState!.pushNamed(Routes.member);
           },
           prepend: Row(
             children: [

@@ -8,16 +8,16 @@ import 'package:biomad_frontend/widgets/nav_bar.dart';
 import 'package:flutter/material.dart';
 
 class ArticleScreen extends StatefulWidget {
-  final Article article;
+  final Article? article;
 
-  ArticleScreen({Key key, this.article}) : super(key: key);
+  ArticleScreen({Key? key, this.article}) : super(key: key);
 
   @override
   _ArticleScreenState createState() => _ArticleScreenState(article);
 }
 
 class _ArticleScreenState extends State<ArticleScreen> {
-  final Article article;
+  final Article? article;
 
   _ArticleScreenState(this.article);
 
@@ -35,14 +35,14 @@ class _ArticleScreenState extends State<ArticleScreen> {
                 );
               },
             ),
-            title: Text(article.content.name, style: TextStyle(color: Theme.of(context).primaryColor))),
+            title: Text(article!.content!.name!, style: TextStyle(color: Theme.of(context).primaryColor))),
         body: WillPopScope(
           onWillPop: () async {
             Navigator.of(context).pop();
             return false;
           },
           child: ListView(children: [
-            BlockBaseWidget(child: Text(article.content.text)),
+            BlockBaseWidget(child: Text(article!.content!.text!)),
           ]),
         ));
   }

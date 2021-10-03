@@ -2,11 +2,11 @@ import 'package:biomad_frontend/styles/indents.dart';
 import 'package:flutter/material.dart';
 
 class CustomDivider extends StatelessWidget {
-  final String text;
+  final String? text;
   final EdgeInsetsGeometry textPadding;
   final double indent;
   final EdgeInsetsGeometry dividerPadding;
-  final Color color;
+  final Color? color;
 
   CustomDivider(
       {this.text,
@@ -26,7 +26,7 @@ class CustomDivider extends StatelessWidget {
             ? Padding(
                 padding: textPadding,
                 child: Text(
-                  text.toUpperCase(),
+                  text!.toUpperCase(),
                   style: TextStyle(color: theme.canvasColor),
                 ),
               )

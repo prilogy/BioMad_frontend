@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatelessWidget with IndentsMixin {
   final TextEditingController controller;
-  final InputDecoration inputDecoration;
+  final InputDecoration? inputDecoration;
   final String labelText;
   final String disableLabelText;
   final String hintText;
@@ -19,21 +19,21 @@ class CustomTextFormField extends StatelessWidget with IndentsMixin {
   var maxLines;
   var focusNode;
   var enableInteractiveSelection;
-  final String Function(String) validator;
-  final void Function(String) onChange;
-  final void Function() onTap;
-  final bool Function() formValidator;
-  final EdgeInsetsGeometry padding;
+  final String? Function(String?)? validator;
+  final void Function(String)? onChange;
+  final void Function()? onTap;
+  final bool? Function()? formValidator;
+  final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry margin;
   final bool obscureText;
-  final Color enabledColor;
-  final Color disabledColor;
+  final Color? enabledColor;
+  final Color? disabledColor;
 
   CustomTextFormField(
-      {@required this.controller,
+      {required this.controller,
       this.inputDecoration,
       this.obscureText = false,
-      @required this.labelText,
+      required this.labelText,
       this.hintText = '',
       this.disableLabelText = '',
       this.icon,
@@ -63,7 +63,7 @@ class CustomTextFormField extends StatelessWidget with IndentsMixin {
               ? OutlineInputBorder(
                   borderRadius: Decorations.borderRadius,
                   borderSide: BorderSide(
-                      color: enabledColor, width: AppTheme.borderWidth),
+                      color: enabledColor!, width: AppTheme.borderWidth),
                 )
               : baseDecoration.enabledBorder,
           disabledBorder: OutlineInputBorder(

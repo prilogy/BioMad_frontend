@@ -2,11 +2,11 @@ part of api.api;
 
 class Culture {
   
-  int id = null;
+  int? id = null;
   
-  String key = null;
+  String? key = null;
   
-  String name = null;
+  String? name = null;
   Culture();
 
   @override
@@ -14,7 +14,7 @@ class Culture {
     return 'Culture[id=$id, key=$key, name=$name, ]';
   }
 
-  Culture.fromJson(Map<String, dynamic> json) {
+  Culture.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
     id = json['id'];
     key = json['key'];
@@ -30,8 +30,8 @@ class Culture {
     return json;
   }
 
-  static List<Culture> listFromJson(List<dynamic> json) {
-    return json == null ? List<Culture>() : json.map((value) => Culture.fromJson(value)).toList();
+  static List<Culture> listFromJson(List<dynamic>? json) {
+    return json == null ? <Culture>[] : json.map((value) => Culture.fromJson(value)).toList();
   }
 
   static Map<String, Culture> mapFromJson(Map<String, dynamic> json) {

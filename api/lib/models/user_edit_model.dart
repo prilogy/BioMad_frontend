@@ -2,7 +2,7 @@ part of api.api;
 
 class UserEditModel {
   
-  String email = null;
+  String? email = null;
   UserEditModel();
 
   @override
@@ -22,7 +22,7 @@ class UserEditModel {
   }
 
   static List<UserEditModel> listFromJson(List<dynamic> json) {
-    return json == null ? List<UserEditModel>() : json.map((value) => UserEditModel.fromJson(value)).toList();
+    return json == null ? <UserEditModel>[] : json.map((value) => UserEditModel.fromJson(value)).toList();
   }
 
   static Map<String, UserEditModel> mapFromJson(Map<String, dynamic> json) {

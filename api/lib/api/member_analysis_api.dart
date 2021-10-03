@@ -33,7 +33,7 @@ class MemberAnalysisApi extends ApiBase<MemberAnalysisApi> {
     }
   }
 
-  Future<MemberAnalysis> infoById(int id) async {
+  Future<MemberAnalysis?> infoById(int id) async {
     try {
       var url = '${v}/member/analysis/${id}';
       var response = await dio.get(url);
@@ -43,7 +43,7 @@ class MemberAnalysisApi extends ApiBase<MemberAnalysisApi> {
     }
   }
 
-  Future<List<MemberAnalysis>> info() async {
+  Future<List<MemberAnalysis>?> info() async {
     try {
       var url = '${v}/member/analysis';
       var response = await dio.get(url);

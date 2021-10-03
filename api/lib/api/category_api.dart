@@ -3,7 +3,7 @@ part of api.api;
 class CategoryApi extends ApiBase<CategoryApi> {
   CategoryApi(Dio dio, {String version = "v1"}) : super(dio, version);
 
-  Future<List<MemberCategoryState>> history() async {
+  Future<List<MemberCategoryState>?> history() async {
     try {
       var url = '${v}/category/history';
       var response = await dio.get(url);
@@ -13,7 +13,7 @@ class CategoryApi extends ApiBase<CategoryApi> {
     }
   }
 
-  Future<List<MemberCategoryState>> historyById(int id) async {
+  Future<List<MemberCategoryState>?> historyById(int id) async {
     try {
       var url = '${v}/category/${id}/history';
       var response = await dio.get(url);
@@ -34,7 +34,7 @@ class CategoryApi extends ApiBase<CategoryApi> {
 //    }
 //  }
 
-  Future<List<Category>> info() async {
+  Future<List<Category>?> info() async {
     try {
       var url = '${v}/category';
       var response = await dio.get(url);
@@ -44,7 +44,7 @@ class CategoryApi extends ApiBase<CategoryApi> {
     }
   }
 
-  Future<Category> infoById(int id) async {
+  Future<Category?> infoById(int id) async {
     try {
       var url = '${v}/category/${id}';
       var response = await dio.get(url);

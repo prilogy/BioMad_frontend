@@ -11,14 +11,14 @@ import 'package:biomad_frontend/screens/biomarker_screen.dart';
 import 'package:biomad_frontend/screens/biomarker_list_screen.dart';
 import 'package:biomad_frontend/screens/category_analysis_screen.dart';
 import 'package:biomad_frontend/store/main.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 
 class RouteGenerator {
-  static Route<dynamic> generateRoute(RouteSettings settings) {
+  static Route<dynamic>? generateRoute(RouteSettings settings) {
     final args = settings.arguments;
 
-    var route = routes.firstWhere((x) => x.routeName == settings.name,
-        orElse: () => null);
+    var route = routes.firstWhereOrNull((x) => x.routeName == settings.name);
 
     if (route != null) {
       var pass = !route.requireAuthorization ||
@@ -51,8 +51,8 @@ final routes = [
   RouteBuilder(Routes.member, (args) => MemberScreen(member: args as Member)),
   RouteBuilder(Routes.biomarker, (args) => BioMarkerScreen(biomarkerId: args as int)),
   RouteBuilder(Routes.biomarker_list, (args) => BioMarkerListScreen()),
-  RouteBuilder(Routes.all_biomarkers, (args) => AllBiomarkersScreen(memberBiomarkers: args as List<MemberBiomarker>,)),
-  RouteBuilder(Routes.category_analysis, (args) => CategoryAnalysisScreen(category: args as Category,)),
+  RouteBuilder(Routes.all_biomarkers, (args) => AllBiomarkersScreen(memberBiomarkers: args)),
+  RouteBuilder(Routes.category_analysis, (args) => CategoryAnalysisScreen(category: args)),
   RouteBuilder(Routes.analysis_list, (args) => AnalysisListScreen(index: args as int,)),
   RouteBuilder(Routes.analysis, (args) => AnalysisScreen(analysis: args as MemberAnalysis,)),
   RouteBuilder(Routes.add_analysis, (args) => AddAnalysisScreen(title: "s",)),

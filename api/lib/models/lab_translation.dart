@@ -2,13 +2,13 @@ part of api.api;
 
 class LabTranslation {
   
-  String name = null;
+  String? name = null;
   
-  String description = null;
+  String? description = null;
   
-  int baseEntityId = null;
+  int? baseEntityId = null;
   
-  int cultureId = null;
+  int? cultureId = null;
   LabTranslation();
 
   @override
@@ -16,7 +16,7 @@ class LabTranslation {
     return 'LabTranslation[name=$name, description=$description, baseEntityId=$baseEntityId, cultureId=$cultureId, ]';
   }
 
-  LabTranslation.fromJson(Map<String, dynamic> json) {
+  LabTranslation.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
     name = json['name'];
     description = json['description'];
@@ -36,7 +36,7 @@ class LabTranslation {
   }
 
   static List<LabTranslation> listFromJson(List<dynamic> json) {
-    return json == null ? List<LabTranslation>() : json.map((value) => LabTranslation.fromJson(value)).toList();
+    return json == null ? <LabTranslation>[] : json.map((value) => LabTranslation.fromJson(value)).toList();
   }
 
   static Map<String, LabTranslation> mapFromJson(Map<String, dynamic> json) {

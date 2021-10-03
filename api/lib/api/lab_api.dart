@@ -3,7 +3,7 @@ part of api.api;
 class LabApi extends ApiBase<LabApi> {
   LabApi(Dio dio, {String version = "v1"}) : super(dio, version);
 
-  Future<List<Lab>> info() async {
+  Future<List<Lab>?> info() async {
     try {
       var url = '${v}/lab';
       var response = await dio.get(url);
@@ -13,7 +13,7 @@ class LabApi extends ApiBase<LabApi> {
     }
   }
 
-  Future<Lab> infoById(int id) async {
+  Future<Lab?> infoById(int id) async {
     try {
       var url = '${v}/lab/${id}';
       var response = await dio.get(url);

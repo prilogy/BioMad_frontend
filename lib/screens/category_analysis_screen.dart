@@ -7,16 +7,16 @@ import 'package:biomad_frontend/store/main.dart';
 import 'package:flutter/material.dart';
 
 class CategoryAnalysisScreen extends StatefulWidget {
-  final Category category;
+  final Category? category;
 
-  CategoryAnalysisScreen({Key key, this.category}) : super(key: key);
+  CategoryAnalysisScreen({Key? key, this.category}) : super(key: key);
 
   @override
   _CategoryAnalysisScreenState createState() => _CategoryAnalysisScreenState(category);
 }
 
 class _CategoryAnalysisScreenState extends State<CategoryAnalysisScreen> {
-  final Category category;
+  final Category? category;
 
   _CategoryAnalysisScreenState(this.category);
 
@@ -29,16 +29,16 @@ class _CategoryAnalysisScreenState extends State<CategoryAnalysisScreen> {
               return IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
-                  Keys.rootNavigator.currentState.pushReplacementNamed(Routes.main);
+                  Keys.rootNavigator.currentState!.pushReplacementNamed(Routes.main);
                 },
               );
             },
           ),
-          title: Text(category.content.name, style: TextStyle(color: Theme.of(context).primaryColor)),
+          title: Text(category!.content!.name!, style: TextStyle(color: Theme.of(context).primaryColor)),
         ),
         body: WillPopScope(
           onWillPop: () async {
-            Keys.rootNavigator.currentState.pushReplacementNamed(Routes.main);
+            Keys.rootNavigator.currentState!.pushReplacementNamed(Routes.main);
             return false;
           },
           child: CategoryAnalysisContainer(

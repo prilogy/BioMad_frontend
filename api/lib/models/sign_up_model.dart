@@ -1,17 +1,17 @@
 part of api.api;
 
 class SignUpModel {
-  String email = null;
+  String? email = null;
 
-  String name = null;
+  String? name = null;
 
-  int genderId = null;
+  int? genderId = null;
 
-  DateTime dateBirthday = null;
+  DateTime? dateBirthday = null;
 
-  String password = null;
+  String? password = null;
 
-  String color = null;
+  String? color = null;
 
   SignUpModel(
       {this.email,
@@ -45,7 +45,7 @@ class SignUpModel {
     if (genderId != null) json['genderId'] = genderId;
     if (dateBirthday != null)
       json['dateBirthday'] =
-          dateBirthday == null ? null : dateBirthday.toUtc().toIso8601String();
+          dateBirthday == null ? null : dateBirthday!.toUtc().toIso8601String();
     if (password != null) json['password'] = password;
     if (color != null) json['color'] = color;
     return json;
@@ -53,7 +53,7 @@ class SignUpModel {
 
   static List<SignUpModel> listFromJson(List<dynamic> json) {
     return json == null
-        ? List<SignUpModel>()
+        ? <SignUpModel>[]
         : json.map((value) => SignUpModel.fromJson(value)).toList();
   }
 

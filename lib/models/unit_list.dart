@@ -2,8 +2,8 @@ import 'package:api/api.dart';
 import 'package:biomad_frontend/services/localstorage.dart';
 
 class UnitList {
-  List<Unit> units;
-  DateTime lastUpdateDate;
+  List<Unit>? units;
+  DateTime? lastUpdateDate;
 
   static String localStorageKey = "units_state";
 
@@ -22,7 +22,7 @@ class UnitList {
     var json = <String, dynamic>{};
     json['units'] = units;
     if (lastUpdateDate != null)
-      json['lastUpdateDate'] = lastUpdateDate == null ? null : lastUpdateDate.toUtc().toIso8601String();
+      json['lastUpdateDate'] = lastUpdateDate == null ? null : lastUpdateDate!.toUtc().toIso8601String();
     return json;
   }
 

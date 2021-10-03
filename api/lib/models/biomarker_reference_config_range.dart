@@ -2,11 +2,11 @@ part of api.api;
 
 class BiomarkerReferenceConfigRange {
   
-  int id = null;
+  int? id = null;
   
-  double lower = null;
+  double? lower = null;
   
-  double upper = null;
+  double? upper = null;
   BiomarkerReferenceConfigRange();
 
   @override
@@ -14,7 +14,7 @@ class BiomarkerReferenceConfigRange {
     return 'BiomarkerReferenceConfigRange[id=$id, lower=$lower, upper=$upper, ]';
   }
 
-  BiomarkerReferenceConfigRange.fromJson(Map<String, dynamic> json) {
+  BiomarkerReferenceConfigRange.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
     id = json['id'];
     lower = (json['lower'] == null) ?
@@ -37,7 +37,7 @@ class BiomarkerReferenceConfigRange {
   }
 
   static List<BiomarkerReferenceConfigRange> listFromJson(List<dynamic> json) {
-    return json == null ? List<BiomarkerReferenceConfigRange>() : json.map((value) => BiomarkerReferenceConfigRange.fromJson(value)).toList();
+    return json == null ? <BiomarkerReferenceConfigRange>[] : json.map((value) => BiomarkerReferenceConfigRange.fromJson(value)).toList();
   }
 
   static Map<String, BiomarkerReferenceConfigRange> mapFromJson(Map<String, dynamic> json) {

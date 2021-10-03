@@ -15,10 +15,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class MemberContainer extends StatefulWidget {
-  final Member member;
+  final Member? member;
   final bool changeColor;
-  final String prefilledName;
-  final void Function(MemberModel) onChange;
+  final String? prefilledName;
+  final void Function(MemberModel)? onChange;
   final bool isRegistration;
 
   MemberContainer(this.member,
@@ -36,10 +36,10 @@ class _MemberContainerState extends State<MemberContainer> {
 
   _MemberContainerState(this.isRegistration);
 
-  int _genderId;
+  int? _genderId;
   Color _avatarColor = BioMadColors.primary;
-  String _profilePreviewName;
-  int _profilePreviewAge;
+  String? _profilePreviewName;
+  int? _profilePreviewAge;
 
   MemberModel getMemberModel() => MemberModel(
         name: _nameController.text,
@@ -49,27 +49,27 @@ class _MemberContainerState extends State<MemberContainer> {
       );
 
   void onChange() {
-    widget.onChange(getMemberModel());
+    widget.onChange!(getMemberModel());
   }
 
   @override
   void initState() {
     if (widget.prefilledName != null)
       setState(() {
-        _nameController.text = widget.prefilledName;
+        _nameController.text = widget.prefilledName!;
         _profilePreviewName = widget.prefilledName;
         _avatarColor = colors[randomInRange(0, colors.length - 1)];
       });
 
     if (widget.member != null)
       setState(() {
-        final name = widget.member.name;
+        final name = widget.member!.name!;
         _nameController.text = name;
         _profilePreviewName = name;
-        _dateBirthDayController.text = DateTimeFormats.defaultDate.format(widget.member.dateBirthday ?? DateTime.now());
-        _profilePreviewAge = getAgeFromDate(widget.member.dateBirthday);
-        _genderId = widget.member.genderId;
-        if (widget.member.color != null) _avatarColor = ColorHelpers.fromHex(widget.member.color);
+        _dateBirthDayController.text = DateTimeFormats.defaultDate.format(widget.member!.dateBirthday ?? DateTime.now());
+        _profilePreviewAge = getAgeFromDate(widget.member!.dateBirthday!);
+        _genderId = widget.member!.genderId;
+        if (widget.member!.color != null) _avatarColor = ColorHelpers.fromHex(widget.member!.color!);
       });
 
     getGenders().then((x) => {
@@ -99,23 +99,23 @@ class _MemberContainerState extends State<MemberContainer> {
     Colors.deepOrangeAccent
   ];
 
-  List<Gender> _genders;
+  List<Gender>? _genders;
 
-  Future<List<Gender>> getGenders() async {
+  Future<List<Gender>?> getGenders() async {
     return await api.helper.genders();
   }
 
   @override
   void dispose() {
-    _nameController?.dispose();
-    _dateBirthDayController?.dispose();
+    _nameController.dispose();
+    _dateBirthDayController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final _ttr = trWithKey('gender');
+    final String Function(String?, {List<String> args, BuildContext context, String gender, Map<String, String> namedArgs}) _ttr = trWithKey('gender');
     return Form(
       key: _formKey,
       child: Column(
@@ -137,7 +137,7 @@ class _MemberContainerState extends State<MemberContainer> {
                         children: [
                           if (_profilePreviewName == null || _profilePreviewName == '')
                             Text(tr('member_container.your_name_or_alias'),
-                                style: theme.textTheme.headline6.merge(TextStyle(color: theme.canvasColor)))
+                                style: theme.textTheme.headline6!.merge(TextStyle(color: theme.canvasColor)))
                           else
                             Text(
                               _nameController.text,
@@ -149,14 +149,13 @@ class _MemberContainerState extends State<MemberContainer> {
                           if (_profilePreviewAge != null)
                             Text(
                               ', ' + _profilePreviewAge.toString(),
-                              style: theme.textTheme.headline6.merge(TextStyle(color: theme.canvasColor)),
+                              style: theme.textTheme.headline6!.merge(TextStyle(color: theme.canvasColor)),
                             ),
                           if (_genderId != null && _genders != null)
                             Text(
                               (_genderId != null ? ', ' : '') +
-                                      _ttr(_genders.firstWhere((x) => x.id == _genderId)?.key).toLowerCase() ??
-                                  '',
-                              style: theme.textTheme.headline6.merge(TextStyle(color: theme.canvasColor)),
+                                      _ttr(_genders!.firstWhere((x) => x.id == _genderId).key).toLowerCase(),
+                              style: theme.textTheme.headline6!.merge(TextStyle(color: theme.canvasColor)),
                             )
                         ],
                       ),
@@ -178,7 +177,7 @@ class _MemberContainerState extends State<MemberContainer> {
             },
             icon: Icon(Icons.account_circle_outlined),
             formValidator: () {
-              return _formKey?.currentState?.validate();
+              return _formKey.currentState?.validate();
             },
           ),
           CustomDateFormField(
@@ -197,16 +196,16 @@ class _MemberContainerState extends State<MemberContainer> {
               ? CustomSelectFormField<Gender>(
                   icon: Icon(Icons.face),
                   labelText: tr('input_hint.sex'),
-                  value: widget.member == null ? null : _genders.firstWhere((x) => x.id == widget.member.genderId),
+                  value: widget.member == null ? null : _genders!.firstWhere((x) => x.id == widget.member!.genderId),
                   onChanged: (x) {
                     setState(() {
-                      _genderId = x.id;
+                      _genderId = x!.id;
                     });
                     onChange();
                   },
                   items: _genders,
                   itemBuilder: (x) => DropdownMenuItem(
-                      child: Text(isRegistration ? x.content?.name : x.content?.name ?? x.key)))
+                      child: Text((isRegistration ? x.content?.name! : x.content?.name ?? x.key!)!)))
               : Container()
         ],
       ),

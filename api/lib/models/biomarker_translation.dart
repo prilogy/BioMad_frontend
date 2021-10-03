@@ -2,13 +2,13 @@ part of api.api;
 
 class BiomarkerTranslation {
   
-  String name = null;
+  String? name = null;
   
-  String description = null;
+  String? description = null;
   
-  int baseEntityId = null;
+  int? baseEntityId = null;
   
-  int cultureId = null;
+  int? cultureId = null;
   BiomarkerTranslation();
 
   @override
@@ -16,7 +16,7 @@ class BiomarkerTranslation {
     return 'BiomarkerTranslation[name=$name, description=$description, baseEntityId=$baseEntityId, cultureId=$cultureId, ]';
   }
 
-  BiomarkerTranslation.fromJson(Map<String, dynamic> json) {
+  BiomarkerTranslation.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
     name = json['name'];
     description = json['description'];
@@ -36,7 +36,7 @@ class BiomarkerTranslation {
   }
 
   static List<BiomarkerTranslation> listFromJson(List<dynamic> json) {
-    return json == null ? List<BiomarkerTranslation>() : json.map((value) => BiomarkerTranslation.fromJson(value)).toList();
+    return json == null ? <BiomarkerTranslation>[] : json.map((value) => BiomarkerTranslation.fromJson(value)).toList();
   }
 
   static Map<String, BiomarkerTranslation> mapFromJson(Map<String, dynamic> json) {

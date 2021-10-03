@@ -2,11 +2,11 @@ part of api.api;
 
 class BiomarkerType {
   
-  int id = null;
+  int? id = null;
   
-  BiomarkerTypeTranslation content = null;
+  BiomarkerTypeTranslation? content = null;
   
-  List<int> biomarkerIds = [];
+  List<int>? biomarkerIds = [];
   BiomarkerType();
 
   @override
@@ -14,7 +14,7 @@ class BiomarkerType {
     return 'BiomarkerType[id=$id, content=$content, biomarkerIds=$biomarkerIds, ]';
   }
 
-  BiomarkerType.fromJson(Map<String, dynamic> json) {
+  BiomarkerType.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
     id = json['id'];
     content = (json['content'] == null) ?
@@ -35,8 +35,8 @@ class BiomarkerType {
     return json;
   }
 
-  static List<BiomarkerType> listFromJson(List<dynamic> json) {
-    return json == null ? List<BiomarkerType>() : json.map((value) => BiomarkerType.fromJson(value)).toList();
+  static List<BiomarkerType> listFromJson(List<dynamic>? json) {
+    return json == null ? <BiomarkerType>[] : json.map((value) => BiomarkerType.fromJson(value)).toList();
   }
 
   static Map<String, BiomarkerType> mapFromJson(Map<String, dynamic> json) {

@@ -7,12 +7,12 @@ import 'package:flutter/material.dart';
 
 class AcceptDialog {
   static void show(BuildContext context,
-      {String titleText,
-      String descriptionText,
-      String yesText,
-      String noText,
-      AsyncCallback onYes,
-      AsyncCallback onNo}) {
+      {String? titleText,
+      String? descriptionText,
+      String? yesText,
+      String? noText,
+      AsyncCallback? onYes,
+      AsyncCallback? onNo}) {
     // set up the buttons
     Widget cancelButton = FlatButton(
       child: Text(noText ?? tr('misc.no')),

@@ -2,19 +2,19 @@ part of api.api;
 
 class SocialAccount {
   
-  int id = null;
+  int? id = null;
   
-  String key = null;
+  String? key = null;
   
-  DateTime dateCreatedAt = null;
+  DateTime? dateCreatedAt = null;
   
-  int providerId = null;
+  int? providerId = null;
   
-  SocialAccountProvider provider = null;
+  SocialAccountProvider? provider = null;
   
-  int userId = null;
+  int? userId = null;
   
-  User user = null;
+  User? user = null;
   SocialAccount();
 
   @override
@@ -45,7 +45,7 @@ class SocialAccount {
       json['id'] = id;
       json['key'] = key;
     if (dateCreatedAt != null)
-      json['dateCreatedAt'] = dateCreatedAt == null ? null : dateCreatedAt.toUtc().toIso8601String();
+      json['dateCreatedAt'] = dateCreatedAt == null ? null : dateCreatedAt!.toUtc().toIso8601String();
     if (providerId != null)
       json['providerId'] = providerId;
     if (provider != null)
@@ -56,8 +56,8 @@ class SocialAccount {
     return json;
   }
 
-  static List<SocialAccount> listFromJson(List<dynamic> json) {
-    return json == null ? List<SocialAccount>() : json.map((value) => SocialAccount.fromJson(value)).toList();
+  static List<SocialAccount> listFromJson(List<dynamic>? json) {
+    return json == null ? <SocialAccount>[] : json.map((value) => SocialAccount.fromJson(value)).toList();
   }
 
   static Map<String, SocialAccount> mapFromJson(Map<String, dynamic> json) {

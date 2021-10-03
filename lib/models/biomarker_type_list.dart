@@ -2,8 +2,8 @@ import 'package:api/api.dart';
 import 'package:biomad_frontend/services/localstorage.dart';
 
 class BiomarkerTypeList {
-  List<BiomarkerType> types;
-  DateTime lastUpdateDate;
+  List<BiomarkerType>? types;
+  DateTime? lastUpdateDate;
 
   static String localStorageKey = "biomarkerTypes_state";
 
@@ -22,7 +22,7 @@ class BiomarkerTypeList {
     var json = <String, dynamic>{};
     json['types'] = types;
     if (lastUpdateDate != null)
-      json['lastUpdateDate'] = lastUpdateDate == null ? null : lastUpdateDate.toUtc().toIso8601String();
+      json['lastUpdateDate'] = lastUpdateDate == null ? null : lastUpdateDate!.toUtc().toIso8601String();
     return json;
   }
 

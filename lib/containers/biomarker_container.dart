@@ -11,10 +11,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class BiomarkerContainer extends StatefulWidget {
-  final int id;
-  final MemberBiomarker memberBiomarker;
+  final int? id;
+  final MemberBiomarker? memberBiomarker;
 
-  BiomarkerContainer({Key key, this.id, this.memberBiomarker})
+  BiomarkerContainer({Key? key, this.id, this.memberBiomarker})
       : super(key: key);
 
   @override
@@ -23,29 +23,29 @@ class BiomarkerContainer extends StatefulWidget {
 }
 
 class _BiomarkerContainerState extends State<BiomarkerContainer> {
-  final int id;
-  MemberBiomarker memberBiomarker;
-  Biomarker biomarker;
+  final int? id;
+  MemberBiomarker? memberBiomarker;
+  Biomarker? biomarker;
 
   _BiomarkerContainerState(this.id, this.memberBiomarker);
 
-  Future<Biomarker> getBiomarker(int id) async {
-    return await api.biomarker.infoById(id, memberBiomarker.unitId);
+  Future<Biomarker?> getBiomarker(int id) async {
+    return await api.biomarker.infoById(id, memberBiomarker!.unitId!);
   }
 
-  Future<MemberBiomarker> getMemberBiomarker(int id) async {
-    return await api.memberBiomarker.infoById(id, memberBiomarker.unitId);
+  Future<MemberBiomarker?> getMemberBiomarker(int id) async {
+    return await api.memberBiomarker.infoById(id, memberBiomarker!.unitId!);
   }
 
   @override
   void initState() {
-    getBiomarker(memberBiomarker.biomarkerId).then((x) => {
+    getBiomarker(memberBiomarker!.biomarkerId!).then((x) => {
           setState(() {
             biomarker = x;
           })
         });
 
-    getMemberBiomarker(memberBiomarker.id).then((x) => {
+    getMemberBiomarker(memberBiomarker!.id!).then((x) => {
           setState(() {
             memberBiomarker = x;
           })
@@ -62,14 +62,14 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
     var icon;
     String referenceRange;
     try {
-      if (biomarker.state == BiomarkerStateType.number2_) {
+      if (biomarker!.state == BiomarkerStateType.number2_) {
         color = BioMadColors.success;
         status = tr('state.normal');
-      } else if (biomarker.state == BiomarkerStateType.number1_) {
+      } else if (biomarker!.state == BiomarkerStateType.number1_) {
         color = BioMadColors.warning;
         status = tr('state.reduced');
         icon = Icons.keyboard_arrow_down;
-      } else if (biomarker.state == BiomarkerStateType.number0_) {
+      } else if (biomarker!.state == BiomarkerStateType.number0_) {
         color = BioMadColors.warning;
         status = tr('state.elevated');
         icon = Icons.keyboard_arrow_up;
@@ -77,11 +77,11 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
         status = tr('state.undefined');
         icon = Icons.keyboard_arrow_right;
       }
-      referenceRange = biomarker.reference.valueA.toString() +
+      referenceRange = biomarker!.reference!.valueA.toString() +
           "-" +
-          biomarker.reference.valueB.toString() +
+          biomarker!.reference!.valueB.toString() +
           " " +
-          memberBiomarker.unit.content.shorthand;
+          memberBiomarker!.unit!.content!.shorthand!;
     } catch (e) {
       status = tr('loader.load_data');
       referenceRange = tr('loader.load_reference');
@@ -123,9 +123,9 @@ class _BiomarkerContainerState extends State<BiomarkerContainer> {
                                   ? Icon(icon, color: color)
                                   : iconContainer),
                           Text(
-                            memberBiomarker.value.toString() +
+                            memberBiomarker!.value.toString() +
                                 " " +
-                                memberBiomarker.unit.content.shorthand +
+                                memberBiomarker!.unit!.content!.shorthand! +
                                 ", " +
                                 status,
                           ),

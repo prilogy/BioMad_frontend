@@ -2,17 +2,17 @@ part of api.api;
 
 class UnitTransfer {
   
-  int id = null;
+  int? id = null;
   
-  int unitAId = null;
+  int? unitAId = null;
   
-  Unit unitA = null;
+  Unit? unitA = null;
   
-  int unitBId = null;
+  int? unitBId = null;
   
-  Unit unitB = null;
+  Unit? unitB = null;
   /* UnitA is UnitB * Coefficient */
-  double coefficient = null;
+  double? coefficient = null;
   UnitTransfer();
 
   @override
@@ -54,7 +54,7 @@ class UnitTransfer {
   }
 
   static List<UnitTransfer> listFromJson(List<dynamic> json) {
-    return json == null ? List<UnitTransfer>() : json.map((value) => UnitTransfer.fromJson(value)).toList();
+    return json == null ? <UnitTransfer>[] : json.map((value) => UnitTransfer.fromJson(value)).toList();
   }
 
   static Map<String, UnitTransfer> mapFromJson(Map<String, dynamic> json) {

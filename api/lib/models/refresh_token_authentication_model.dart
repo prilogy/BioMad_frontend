@@ -1,13 +1,13 @@
 part of api.api;
 
 class RefreshTokenAuthenticationModel {
-  String refreshToken = null;
+  String? refreshToken = null;
 
   /* Id of current user */
-  int userId = null;
+  int? userId = null;
 
   /* Id of current member */
-  int memberId = null;
+  int? memberId = null;
 
   RefreshTokenAuthenticationModel(
       {this.refreshToken, this.userId, this.memberId});
@@ -35,7 +35,7 @@ class RefreshTokenAuthenticationModel {
   static List<RefreshTokenAuthenticationModel> listFromJson(
       List<dynamic> json) {
     return json == null
-        ? List<RefreshTokenAuthenticationModel>()
+        ? <RefreshTokenAuthenticationModel>[]
         : json
             .map((value) => RefreshTokenAuthenticationModel.fromJson(value))
             .toList();

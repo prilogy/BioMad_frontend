@@ -14,25 +14,25 @@ import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class BioMarkerListScreen extends StatefulWidget {
-  final List<BiomarkerType> types;
-  final List<MemberBiomarker> memberBiomarkers;
-  final List<Biomarker> biomarkers;
+  final List<BiomarkerType>? types;
+  final List<MemberBiomarker>? memberBiomarkers;
+  final List<Biomarker>? biomarkers;
 
-  BioMarkerListScreen({Key key, this.types, this.memberBiomarkers, this.biomarkers}) : super(key: key);
+  BioMarkerListScreen({Key? key, this.types, this.memberBiomarkers, this.biomarkers}) : super(key: key);
 
   @override
   _BioMarkerListScreenState createState() => _BioMarkerListScreenState(types, memberBiomarkers, biomarkers);
 }
 
 class _BioMarkerListScreenState extends State<BioMarkerListScreen> {
-  final List<BiomarkerType> types;
-  final List<MemberBiomarker> memberBiomarkers;
-  final List<Biomarker> biomarkers;
+  final List<BiomarkerType>? types;
+  final List<MemberBiomarker>? memberBiomarkers;
+  final List<Biomarker>? biomarkers;
 
   _BioMarkerListScreenState(this.types, this.memberBiomarkers, this.biomarkers);
 
   final double _initFabHeight = 120.0;
-  double _fabHeight;
+  double? _fabHeight;
   double _panelHeightOpen = 500;
   double _panelHeightClosed = 0;
   PanelController _panelController = PanelController();
@@ -41,12 +41,12 @@ class _BioMarkerListScreenState extends State<BioMarkerListScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    MemberBiomarker biomarker;
+    MemberBiomarker? biomarker;
     bool isBiomarkerInType = false;
-    List<MemberBiomarker> biomarkerList = [];
+    List<MemberBiomarker?> biomarkerList = [];
     return WillPopScope(
         onWillPop: () async {
-          Keys.rootNavigator.currentState.pushReplacementNamed(Routes.main);
+          Keys.rootNavigator.currentState!.pushReplacementNamed(Routes.main);
           return false;
         },
         child: Container(
@@ -57,19 +57,19 @@ class _BioMarkerListScreenState extends State<BioMarkerListScreen> {
                   width: MediaQuery.of(context).size.width,
                   alignment: Alignment.topLeft,
                   padding: EdgeInsets.only(top: Indents.md, left: Indents.slg, right: Indents.md),
-                  child: memberBiomarkers.isNotEmpty
+                  child: memberBiomarkers!.isNotEmpty
                       ? ScrollConfiguration(
                           behavior: NoRippleScrollBehaviour(),
                           child: ListView.builder(
                               shrinkWrap: true,
-                              itemCount: types.length,
+                              itemCount: types!.length,
                               itemBuilder: (context, index) {
                                 try {
                                   biomarkerList = [];
-                                  for (var bio in types[index].biomarkerIds) {
+                                  for (var bio in types![index].biomarkerIds!) {
                                     try {
                                       biomarker =
-                                          memberBiomarkers.firstWhere((x) => x.biomarkerId == bio, orElse: null);
+                                          memberBiomarkers!.firstWhere((x) => x.biomarkerId == bio, orElse: null);
                                       biomarkerList.add(biomarker);
                                       isBiomarkerInType = true;
                                     } catch (e) {}
@@ -79,26 +79,26 @@ class _BioMarkerListScreenState extends State<BioMarkerListScreen> {
                                   biomarker = null;
                                   isBiomarkerInType = false;
                                 }
-                                return isBiomarkerInType && types[index].content != null
+                                return isBiomarkerInType && types![index].content != null
                                     ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                                        Text(types[index].content.name.toUpperCase(),
-                                            style: theme.textTheme.caption
+                                        Text(types![index].content!.name!.toUpperCase(),
+                                            style: theme.textTheme.caption!
                                                 .merge(TextStyle(fontWeight: FontWeight.normal))),
                                         ListView.builder(
                                             shrinkWrap: true,
                                             physics: NeverScrollableScrollPhysics(),
                                             itemCount: biomarkerList.length,
                                             itemBuilder: (context, i) {
-                                              MemberBiomarker memberBiomarkerItem = biomarkerList[i];
-                                              Biomarker biomarkerItem = biomarkers.firstWhere(
+                                              MemberBiomarker memberBiomarkerItem = biomarkerList[i]!;
+                                              Biomarker biomarkerItem = biomarkers!.firstWhere(
                                                   (element) => element.id == memberBiomarkerItem.biomarkerId);
                                               return BiomarkerItem(
-                                                value: memberBiomarkerItem.value ?? "null",
-                                                unit: memberBiomarkerItem.unit.content.shorthand ?? "unnamed",
+                                                value: memberBiomarkerItem.value ?? "null" as double?,
+                                                unit: memberBiomarkerItem.unit!.content!.shorthand ?? "unnamed",
                                                 unitId: memberBiomarkerItem.unitId,
                                                 id: memberBiomarkerItem.biomarkerId,
                                                 biomarkerState: biomarkerItem.state,
-                                                biomarkerName: biomarkerItem.content.name,
+                                                biomarkerName: biomarkerItem.content!.name,
                                                 withActions: false,
                                               );
                                             })

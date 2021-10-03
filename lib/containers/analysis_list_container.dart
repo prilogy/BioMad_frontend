@@ -15,23 +15,23 @@ class AnalysisListContainer extends StatefulWidget {
 }
 
 class _AnalysisListContainerState extends State<AnalysisListContainer> {
-  Future<List<MemberAnalysis>> getAnalysis() async {
+  Future<List<MemberAnalysis>?> getAnalysis() async {
     return await api.memberAnalysis.info();
   }
 
   @override
   Widget build(BuildContext context) {
-    Future<List<MemberAnalysis>> analysis = getAnalysis();
+    Future<List<MemberAnalysis>?> analysis = getAnalysis();
 
     return FutureBuilder(
         future: analysis,
-        builder: (context, AsyncSnapshot<List<MemberAnalysis>> analysis) {
+        builder: (context, AsyncSnapshot<List<MemberAnalysis>?> analysis) {
           if (analysis.hasData) {
-            return analysis.data.length > 0
+            return analysis.data!.length > 0
                 ? Container(
                     height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - NavBar.size,
                     child: ListView.builder(
-                        itemCount: analysis.data.length, itemBuilder: (context, index) => analysisItem(index, analysis.data[index])),
+                        itemCount: analysis.data!.length, itemBuilder: (context, index) => analysisItem(index, analysis.data![index])),
                   )
                 : Container(
                     height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - NavBar.size,
@@ -63,7 +63,7 @@ class _AnalysisListContainerState extends State<AnalysisListContainer> {
 
     return GestureDetector(
       onTap: () {
-        return showDialog(
+        showDialog(
             context: context,
             builder: (BuildContext context) {
               return AnalysisScreen(analysis: analysis);
@@ -99,21 +99,21 @@ class _AnalysisListContainerState extends State<AnalysisListContainer> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      analysis.name.length > chars.toInt() ? analysis.name.substring(0, chars.toInt() - 2) + "..." : analysis.name,
+                      analysis.name!.length > chars.toInt() ? analysis.name!.substring(0, chars.toInt() - 2) + "..." : analysis.name!,
                       style: theme.textTheme.bodyText2,
                     ),
                     Container(
                       padding: EdgeInsets.only(top: 2),
                       child: Text(
-                        zeroAdding(analysis.dateCreatedAt.day) +
+                        zeroAdding(analysis.dateCreatedAt!.day) +
                             "." +
-                            zeroAdding(analysis.dateCreatedAt.month) +
+                            zeroAdding(analysis.dateCreatedAt!.month) +
                             "." +
-                            analysis.dateCreatedAt.year.toString() +
+                            analysis.dateCreatedAt!.year.toString() +
                             " - " +
-                            analysis.dateCreatedAt.hour.toString() +
+                            analysis.dateCreatedAt!.hour.toString() +
                             ":" +
-                            zeroAdding(analysis.dateCreatedAt.minute),
+                            zeroAdding(analysis.dateCreatedAt!.minute),
                         style: theme.textTheme.caption,
                       ),
                     )

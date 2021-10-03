@@ -1,15 +1,17 @@
 import 'package:easy_localization/easy_localization.dart';
 
 class TextFieldValidators {
-  static String isNotEmpty(String v) {
-    if (v.isEmpty) {
+  static String? isNotEmpty(String? v) {
+    if (v?.isEmpty ?? false) {
       return tr('input_hint.not_empty');
     }
 
     return null;
   }
 
-  static String isEmail(String v) {
+  static String? isEmail(String? v) {
+    if(v == null) return "error";
+
     var ie = isNotEmpty(v);
     if (ie != null) return ie;
 

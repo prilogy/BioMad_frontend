@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class BiomarkerHistory extends StatelessWidget {
-  final MemberBiomarker memberBiomarker;
-  final String title;
+  final MemberBiomarker? memberBiomarker;
+  final String? title;
 
   BiomarkerHistory({
     this.memberBiomarker,
@@ -22,41 +22,41 @@ class BiomarkerHistory extends StatelessWidget {
     this.title,
   });
 
-  Future<Biomarker> getBiomarkerById(int id, int unitId) async {
+  Future<Biomarker?> getBiomarkerById(int id, int unitId) async {
     return await api.biomarker.infoById(id, unitId);
   }
 
-  Future<List<MemberBiomarker>> getBiomarkerHistory(int id) async {
-    return await api.memberBiomarker.history(id, memberBiomarker.unitId);
+  Future<List<MemberBiomarker>?> getBiomarkerHistory(int id) async {
+    return await api.memberBiomarker.history(id, memberBiomarker!.unitId!);
   }
 
-  Future<List<MemberBiomarker>> biomarkerHistory;
+  Future<List<MemberBiomarker>?>? biomarkerHistory;
 
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
 
-    biomarkerHistory = getBiomarkerHistory(memberBiomarker.biomarkerId);
+    biomarkerHistory = getBiomarkerHistory(memberBiomarker!.biomarkerId!);
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Container(
         margin: EdgeInsets.only(bottom: Indents.sm),
         child: Text(
           tr('biomarker.history'),
-          style: theme.textTheme.headline6.merge(TextStyle(color: theme.primaryColor)),
+          style: theme.textTheme.headline6!.merge(TextStyle(color: theme.primaryColor)),
         ),
       ),
       FutureBuilder(
           future: biomarkerHistory,
-          builder: (context, AsyncSnapshot<List<MemberBiomarker>> biomarkerHistory) {
+          builder: (context, AsyncSnapshot<List<MemberBiomarker>?> biomarkerHistory) {
             if (biomarkerHistory.hasData) {
               return Container(
-                height: 20 * biomarkerHistory.data.length.toDouble() <= 80
-                    ? 20 * biomarkerHistory.data.length.toDouble()
+                height: 20 * biomarkerHistory.data!.length.toDouble() <= 80
+                    ? 20 * biomarkerHistory.data!.length.toDouble()
                     : 80,
                 width: MediaQuery.of(context).size.width,
                 child: ListView.builder(
-                    itemCount: biomarkerHistory.data.length,
-                    itemBuilder: (context, index) => historyItem(context, index, biomarkerHistory.data[index])),
+                    itemCount: biomarkerHistory.data!.length,
+                    itemBuilder: (context, index) => historyItem(context, index, biomarkerHistory.data![index])),
               );
             } else {
               return Container(
@@ -73,7 +73,7 @@ class BiomarkerHistory extends StatelessWidget {
                                     width: 100,
                                     margin: EdgeInsets.only(bottom: Indents.sm),
                                     decoration: BoxDecoration(
-                                      color: BioMadColors.base[200].withOpacity(0.8),
+                                      color: BioMadColors.base[200]!.withOpacity(0.8),
                                       borderRadius: BorderRadius.all(Radius.circular(4)),
                                     )),
                                 Container(
@@ -81,7 +81,7 @@ class BiomarkerHistory extends StatelessWidget {
                                     width: 160,
                                     margin: EdgeInsets.only(bottom: Indents.sm),
                                     decoration: BoxDecoration(
-                                      color: BioMadColors.base[200].withOpacity(0.8),
+                                      color: BioMadColors.base[200]!.withOpacity(0.8),
                                       borderRadius: BorderRadius.all(Radius.circular(4)),
                                     )),
                               ],
@@ -103,20 +103,20 @@ class BiomarkerHistory extends StatelessWidget {
       return value > 10 ? value.toString() : "0" + value.toString();
     }
 
-    Future<Biomarker> biomarker = getBiomarkerById(data.biomarkerId, data.unitId);
+    Future<Biomarker?> biomarker = getBiomarkerById(data.biomarkerId!, data.unitId!);
 
     return FutureBuilder(
         future: biomarker,
-        builder: (context, AsyncSnapshot<Biomarker> biomarker) {
+        builder: (context, AsyncSnapshot<Biomarker?> biomarker) {
           if (biomarker.hasData) {
-            if (data.value >= biomarker.data.reference.valueA && data.value <= biomarker.data.reference.valueB) {
+            if (data.value! >= biomarker.data!.reference!.valueA! && data.value! <= biomarker.data!.reference!.valueB!) {
               color = BioMadColors.success;
               status = tr('state.normal');
-            } else if (data.value < biomarker.data.reference.valueA) {
+            } else if (data.value! < biomarker.data!.reference!.valueA!) {
               color = BioMadColors.warning;
               status = tr('state.reduced');
               icon = Icons.keyboard_arrow_down;
-            } else if (data.value > biomarker.data.reference.valueB) {
+            } else if (data.value! > biomarker.data!.reference!.valueB!) {
               color = BioMadColors.warning;
               status = tr('state.elevated');
               icon = Icons.keyboard_arrow_up;
@@ -138,15 +138,15 @@ class BiomarkerHistory extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    data.dateCreatedAt.day.toString() +
+                    data.dateCreatedAt!.day.toString() +
                         '.' +
-                        zeroAdding(data.dateCreatedAt.month) +
+                        zeroAdding(data.dateCreatedAt!.month) +
                         '.' +
-                        data.dateCreatedAt.year.toString() +
+                        data.dateCreatedAt!.year.toString() +
                         ' ' +
-                        data.dateCreatedAt.hour.toString() +
+                        data.dateCreatedAt!.hour.toString() +
                         ':' +
-                        zeroAdding(data.dateCreatedAt.minute),
+                        zeroAdding(data.dateCreatedAt!.minute),
                     style: theme.textTheme.bodyText1,
                   ),
                   Row(
@@ -155,7 +155,7 @@ class BiomarkerHistory extends StatelessWidget {
                           padding: status == tr('state.normal') ? EdgeInsets.only(right: Indents.sm) : null,
                           child: icon != null ? Icon(icon, color: color, size: 18.0) : iconContainer),
                       Text(
-                        data.value.toString() + " " + data.unit.content.shorthand + ", " + status,
+                        data.value.toString() + " " + data.unit!.content!.shorthand! + ", " + status,
                       ),
                     ],
                   ),
@@ -171,7 +171,7 @@ class BiomarkerHistory extends StatelessWidget {
                     width: 100,
                     margin: EdgeInsets.only(bottom: Indents.sm),
                     decoration: BoxDecoration(
-                      color: BioMadColors.base[200].withOpacity(0.8),
+                      color: BioMadColors.base[200]!.withOpacity(0.8),
                       borderRadius: BorderRadius.all(Radius.circular(4)),
                     )),
                 Container(
@@ -179,7 +179,7 @@ class BiomarkerHistory extends StatelessWidget {
                     width: 160,
                     margin: EdgeInsets.only(bottom: Indents.sm),
                     decoration: BoxDecoration(
-                      color: BioMadColors.base[200].withOpacity(0.8),
+                      color: BioMadColors.base[200]!.withOpacity(0.8),
                       borderRadius: BorderRadius.all(Radius.circular(4)),
                     )),
               ],

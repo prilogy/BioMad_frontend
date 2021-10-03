@@ -34,18 +34,18 @@ class AccountContainer extends StatefulWidget {
 }
 
 class _AccountContainerState extends State<AccountContainer> {
-  Future<List<Biomarker>> getBiomarker() async {
+  Future<List<Biomarker>?> getBiomarker() async {
     return await api.biomarker.info();
   }
 
-  StreamController<Future<List<Biomarker>>> searchStream;
-  Future<List<Biomarker>> biomarkers;
+  late StreamController<Future<List<Biomarker>>?> searchStream;
+  Future<List<Biomarker>?>? biomarkers;
 
   void _loadBiomarkers(biomarkers) async => searchStream.add(biomarkers);
 
   @override
   void initState() {
-    searchStream = StreamController<Future<List<Biomarker>>>();
+    searchStream = StreamController<Future<List<Biomarker>>?>();
     biomarkers = getBiomarker();
     _loadBiomarkers(biomarkers);
     super.initState();
@@ -54,10 +54,10 @@ class _AccountContainerState extends State<AccountContainer> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final _tr = trWithKey('account_container');
-    final _ttr = trWithKey('gender');
-    final user = store.state.user;
-    final currentMember = store.state.authorization.currentMember;
+    final String Function(String, {List<String> args, BuildContext context, String gender, Map<String, String> namedArgs}) _tr = trWithKey('account_container');
+    final String Function(String, {List<String> args, BuildContext context, String gender, Map<String, String> namedArgs}) _ttr = trWithKey('gender');
+    final user = store.state.user!;
+    final currentMember = store.state.authorization!.currentMember;
     List<Biomarker> customBiomarker = [];
     //Добавить локализацию
     //gendersAsync(); //Подгрузка гендеров
@@ -72,8 +72,8 @@ class _AccountContainerState extends State<AccountContainer> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                user.email,
-                style: theme.textTheme.headline6.merge(TextStyle(color: theme.primaryColor)),
+                user.email!,
+                style: theme.textTheme.headline6!.merge(TextStyle(color: theme.primaryColor)),
               ),
               SizedBox(
                 height: 30,
@@ -114,10 +114,10 @@ class _AccountContainerState extends State<AccountContainer> {
           dividerPadding: EdgeInsets.symmetric(vertical: Indents.smd),
         ),
         StoreConnector<AppState, Authorization>(
-            converter: (store) => store.state.authorization,
+            converter: (store) => store.state.authorization!,
             builder: (ctx, state) {
               final currentMember = state.currentMember;
-              final gender = store.state.helper.genders;
+              final gender = store.state.helper!.genders!;
 
               return BlockBaseWidget(
                 child: Column(
@@ -127,7 +127,7 @@ class _AccountContainerState extends State<AccountContainer> {
                         CustomCircleAvatar(
                           radius: AvatarSizes.xl,
                           text: currentMember.name,
-                          backgroundColor: ColorHelpers.fromHex(currentMember.color),
+                          backgroundColor: ColorHelpers.fromHex(currentMember.color!),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: Indents.smd),
@@ -138,15 +138,15 @@ class _AccountContainerState extends State<AccountContainer> {
                               Padding(
                                 padding: const EdgeInsets.only(bottom: Indents.sm),
                                 child: Text(
-                                  currentMember.name,
+                                  currentMember.name!,
                                   style: theme.textTheme.headline6,
                                 ),
                               ),
                               Text(
                                   _ttr((gender.firstWhere((x) => x.id == currentMember.genderId).key ?? 'neutral')) +
                                       ', ' +
-                                      getAgeFromDate(currentMember.dateBirthday).toString(),
-                                  style: theme.textTheme.bodyText2.merge(TextStyle(color: theme.colorScheme.onSurface)))
+                                      getAgeFromDate(currentMember.dateBirthday!).toString(),
+                                  style: theme.textTheme.bodyText2!.merge(TextStyle(color: theme.colorScheme.onSurface)))
                             ],
                           ),
                         )
@@ -165,13 +165,13 @@ class _AccountContainerState extends State<AccountContainer> {
             builder: (context, snap) {
               if (snap.hasData) {
                 return FutureBuilder(
-                    future: snap.data,
+                    future: snap.data as Future<List<Biomarker>>,
                     builder: (context, AsyncSnapshot<List<Biomarker>> biomarkersSnap) {
                       customBiomarker = [];
                       if (biomarkersSnap.hasData) {
-                        for (var item in biomarkersSnap.data) {
+                        for (var item in biomarkersSnap.data!) {
                           try {
-                            if (item.reference.isOwnReference) customBiomarker.add(item);
+                            if (item.reference!.isOwnReference!) customBiomarker.add(item);
                           } catch (e) {}
                         }
                         return Column(
@@ -193,27 +193,27 @@ class _AccountContainerState extends State<AccountContainer> {
                                         itemBuilder: (context, index) => Container(
                                             child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                                           Text(
-                                              customBiomarker[index].content.name.length > 26
-                                                  ? customBiomarker[index].content.name.substring(0, 26) + "..."
-                                                  : customBiomarker[index].content.name,
+                                              customBiomarker[index].content!.name!.length > 26
+                                                  ? customBiomarker[index].content!.name!.substring(0, 26) + "..."
+                                                  : customBiomarker[index].content!.name!,
                                               style: Theme.of(context)
                                                   .textTheme
-                                                  .subtitle1
+                                                  .subtitle1!
                                                   .merge(TextStyle(color: BioMadColors.base[500], fontWeight: FontWeight.normal))),
                                           Row(children: [
                                             Text(
-                                                customBiomarker[index].reference.valueA.toString() +
+                                                customBiomarker[index].reference!.valueA.toString() +
                                                     " - " +
-                                                    customBiomarker[index].reference.valueB.toString() +
+                                                    customBiomarker[index].reference!.valueB.toString() +
                                                     " " +
-                                                    store.state.unitList.units
+                                                    store.state.unitList!.units!
                                                         .firstWhere(
-                                                            (element) => element.id == customBiomarker[index].reference.unitId)
-                                                        .content
-                                                        .shorthand,
+                                                            (element) => element.id == customBiomarker[index].reference!.unitId)
+                                                        .content!
+                                                        .shorthand!,
                                                 style: Theme.of(context)
                                                     .textTheme
-                                                    .subtitle1
+                                                    .subtitle1!
                                                     .merge(TextStyle(color: BioMadColors.base[500], fontWeight: FontWeight.normal))),
                                             Container(
                                               width: 22,
@@ -228,7 +228,7 @@ class _AccountContainerState extends State<AccountContainer> {
                                                         color: BioMadColors.error,
                                                       ),
                                                       onPressed: () {
-                                                        api.memberBiomarker.deleteReference(customBiomarker[index].id);
+                                                        api.memberBiomarker.deleteReference(customBiomarker[index].id!);
                                                         setState(() {
                                                           biomarkers = getBiomarker();
                                                           _loadBiomarkers(biomarkers);
@@ -242,7 +242,7 @@ class _AccountContainerState extends State<AccountContainer> {
                                       margin: EdgeInsets.only(left: Indents.md, right: Indents.md),
                                       child: Text(
                                         _tr('null_references'),
-                                        style: theme.textTheme.subtitle1.merge(TextStyle(fontWeight: FontWeight.normal)),
+                                        style: theme.textTheme.subtitle1!.merge(TextStyle(fontWeight: FontWeight.normal)),
                                       )),
                               Container(
                                 padding: EdgeInsets.zero,
@@ -321,8 +321,8 @@ class _AccountContainerState extends State<AccountContainer> {
         ),
         CustomListTile(
           onTap: () {
-            Keys.rootNavigator.currentState.pushReplacementNamed(Routes.auth);
-            WidgetsBinding.instance.addPostFrameCallback((x) => store.dispatch(StoreThunks.logOut()));
+            Keys.rootNavigator.currentState!.pushReplacementNamed(Routes.auth);
+            WidgetsBinding.instance!.addPostFrameCallback((x) => store.dispatch(StoreThunks.logOut()));
           },
           prepend: Row(
             children: [

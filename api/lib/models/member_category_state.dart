@@ -2,19 +2,19 @@ part of api.api;
 
 class MemberCategoryState {
   
-  int id = null;
+  int? id = null;
   
-  double state = null;
+  double? state = null;
   
-  double difference = null;
+  double? difference = null;
   
-  int categoryId = null;
+  int? categoryId = null;
   
-  Category category = null;
+  Category? category = null;
   
-  int memberId = null;
+  int? memberId = null;
   
-  DateTime dateCreatedAt = null;
+  DateTime? dateCreatedAt = null;
   MemberCategoryState();
 
   @override
@@ -22,7 +22,7 @@ class MemberCategoryState {
     return 'MemberCategoryState[id=$id, state=$state, difference=$difference, categoryId=$categoryId, category=$category, memberId=$memberId, dateCreatedAt=$dateCreatedAt, ]';
   }
 
-  MemberCategoryState.fromJson(Map<String, dynamic> json) {
+  MemberCategoryState.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
     id = json['id'];
     state = (json['state'] == null) ?
@@ -56,12 +56,12 @@ class MemberCategoryState {
     if (memberId != null)
       json['memberId'] = memberId;
     if (dateCreatedAt != null)
-      json['dateCreatedAt'] = dateCreatedAt == null ? null : dateCreatedAt.toUtc().toIso8601String();
+      json['dateCreatedAt'] = dateCreatedAt == null ? null : dateCreatedAt!.toUtc().toIso8601String();
     return json;
   }
 
-  static List<MemberCategoryState> listFromJson(List<dynamic> json) {
-    return json == null ? List<MemberCategoryState>() : json.map((value) => MemberCategoryState.fromJson(value)).toList();
+  static List<MemberCategoryState> listFromJson(List<dynamic>? json) {
+    return json == null ? <MemberCategoryState>[] : json.map((value) => MemberCategoryState.fromJson(value)).toList();
   }
 
   static Map<String, MemberCategoryState> mapFromJson(Map<String, dynamic> json) {

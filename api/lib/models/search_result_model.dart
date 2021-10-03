@@ -2,15 +2,15 @@ part of api.api;
 
 class SearchResultModel {
   
-  List<Category> categories = [];
+  List<Category>? categories = [];
   
-  List<Unit> units = [];
+  List<Unit>? units = [];
   
-  List<Biomarker> biomarkers = [];
+  List<Biomarker>? biomarkers = [];
   
-  List<City> cities = [];
+  List<City>? cities = [];
   
-  List<Lab> labs = [];
+  List<Lab>? labs = [];
   SearchResultModel();
 
   @override
@@ -18,7 +18,7 @@ class SearchResultModel {
     return 'SearchResultModel[categories=$categories, units=$units, biomarkers=$biomarkers, cities=$cities, labs=$labs, ]';
   }
 
-  SearchResultModel.fromJson(Map<String, dynamic> json) {
+  SearchResultModel.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
     categories = (json['categories'] == null) ?
       null :
@@ -48,7 +48,7 @@ class SearchResultModel {
   }
 
   static List<SearchResultModel> listFromJson(List<dynamic> json) {
-    return json == null ? List<SearchResultModel>() : json.map((value) => SearchResultModel.fromJson(value)).toList();
+    return json == null ? <SearchResultModel>[] : json.map((value) => SearchResultModel.fromJson(value)).toList();
   }
 
   static Map<String, SearchResultModel> mapFromJson(Map<String, dynamic> json) {

@@ -2,11 +2,11 @@ part of api.api;
 
 class GenderTranslation {
   
-  String name = null;
+  String? name = null;
   
-  int baseEntityId = null;
+  int? baseEntityId = null;
   
-  int cultureId = null;
+  int? cultureId = null;
   GenderTranslation();
 
   @override
@@ -14,7 +14,7 @@ class GenderTranslation {
     return 'GenderTranslation[name=$name, baseEntityId=$baseEntityId, cultureId=$cultureId, ]';
   }
 
-  GenderTranslation.fromJson(Map<String, dynamic> json) {
+  GenderTranslation.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
     name = json['name'];
     baseEntityId = json['baseEntityId'];
@@ -32,7 +32,7 @@ class GenderTranslation {
   }
 
   static List<GenderTranslation> listFromJson(List<dynamic> json) {
-    return json == null ? List<GenderTranslation>() : json.map((value) => GenderTranslation.fromJson(value)).toList();
+    return json == null ? <GenderTranslation>[] : json.map((value) => GenderTranslation.fromJson(value)).toList();
   }
 
   static Map<String, GenderTranslation> mapFromJson(Map<String, dynamic> json) {

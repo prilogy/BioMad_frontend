@@ -13,7 +13,7 @@ class NavBar extends StatefulWidget {
   static double size = 55.0;
 
   final bool isSearch;
-  final VoidCallback onAvatarTap;
+  final VoidCallback? onAvatarTap;
 
   NavBar({this.onAvatarTap, this.isSearch = true});
 
@@ -85,8 +85,8 @@ class _NavBarState extends State<NavBar> {
                 color: theme.primaryColor,
               ),
               onPressed: () {
-                store.dispatch(store.state.memberBiomarkerModelList.biomarkers = []);
-                Keys.rootNavigator.currentState.pushReplacementNamed(Routes.add_analysis);
+                store.dispatch(store.state.memberBiomarkerModelList!.biomarkers = []);
+                Keys.rootNavigator.currentState!.pushReplacementNamed(Routes.add_analysis);
               },
             ),
           ),
@@ -106,13 +106,13 @@ class _NavBarState extends State<NavBar> {
           child: FittedBox(
             child: FloatingActionButton(
               elevation: 0.0,
-              backgroundColor: ColorHelpers.fromHex(member.color) ?? theme.primaryColor,
+              backgroundColor: ColorHelpers.fromHex(member?.color ?? ""),
               onPressed: () {
-                widget.onAvatarTap();
+                widget.onAvatarTap!();
               },
               child: Text(
                 letterInButton,
-                style: theme.textTheme.headline5.merge(TextStyle(color: theme.colorScheme.onPrimary)),
+                style: theme.textTheme.headline5!.merge(TextStyle(color: theme.colorScheme.onPrimary)),
               ),
             ),
           ),

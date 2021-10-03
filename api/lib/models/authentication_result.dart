@@ -2,11 +2,11 @@ part of api.api;
 
 class AuthenticationResult {
   
-  User user = null;
+  User? user = null;
   
-  RefreshToken refreshToken = null;
+  RefreshToken? refreshToken = null;
   
-  String accessToken = null;
+  String? accessToken = null;
   AuthenticationResult();
 
   @override
@@ -14,7 +14,7 @@ class AuthenticationResult {
     return 'AuthenticationResult[user=$user, refreshToken=$refreshToken, accessToken=$accessToken, ]';
   }
 
-  AuthenticationResult.fromJson(Map<String, dynamic> json) {
+  AuthenticationResult.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
     user = (json['user'] == null) ?
       null :
@@ -36,7 +36,7 @@ class AuthenticationResult {
   }
 
   static List<AuthenticationResult> listFromJson(List<dynamic> json) {
-    return json == null ? List<AuthenticationResult>() : json.map((value) => AuthenticationResult.fromJson(value)).toList();
+    return json == null ? <AuthenticationResult>[] : json.map((value) => AuthenticationResult.fromJson(value)).toList();
   }
 
   static Map<String, AuthenticationResult> mapFromJson(Map<String, dynamic> json) {

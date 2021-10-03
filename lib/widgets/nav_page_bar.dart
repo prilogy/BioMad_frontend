@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 class NavPageBar extends StatefulWidget {
   final index;
 
-  NavPageBar({Key key, this.index}) : super(key: key);
+  NavPageBar({Key? key, this.index}) : super(key: key);
 
   @override
   _NavPageBarState createState() => _NavPageBarState(index);
@@ -16,7 +16,7 @@ class NavPageBar extends StatefulWidget {
 
 class _NavPageBarState extends State<NavPageBar> {
   List<String> navPageBar = [tr('navigation.my_health'), tr('navigation.biomarkers')];
-  int selectedIndex;
+  int? selectedIndex;
 
   _NavPageBarState(this.selectedIndex);
 
@@ -36,10 +36,10 @@ class _NavPageBarState extends State<NavPageBar> {
         setState(() {
           selectedIndex = index;
           if (navPageBar[index] == tr('navigation.biomarkers')) {
-            Keys.rootNavigator.currentState
+            Keys.rootNavigator.currentState!
                 .pushReplacementNamed(Routes.biomarker_list);
           } else {
-            Keys.rootNavigator.currentState.pushReplacementNamed(Routes.main);
+            Keys.rootNavigator.currentState!.pushReplacementNamed(Routes.main);
           }
         });
       },

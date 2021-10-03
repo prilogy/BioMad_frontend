@@ -3,7 +3,7 @@ part of api.api;
 class BiomarkerApi extends ApiBase<BiomarkerApi> {
   BiomarkerApi(Dio dio, {String version = "v1"}) : super(dio, version);
 
-  Future<MemberBiomarker> history(int id) async {
+  Future<MemberBiomarker?> history(int id) async {
     try {
       var url = '${v}/biomarker/${id}/history';
       var response = await dio.get(url);
@@ -13,7 +13,7 @@ class BiomarkerApi extends ApiBase<BiomarkerApi> {
     }
   }
 
-  Future<List<BiomarkerType>> type() async {
+  Future<List<BiomarkerType>?> type() async {
     try {
       var url = '${v}/biomarker/type';
       var response = await dio.get(url);
@@ -23,7 +23,7 @@ class BiomarkerApi extends ApiBase<BiomarkerApi> {
     }
   }
 
-  Future<BiomarkerType> typeById(int id) async {
+  Future<BiomarkerType?> typeById(int id) async {
     try {
       var url = '${v}/biomarker/type/${id}';
       var response = await dio.get(url);
@@ -33,7 +33,7 @@ class BiomarkerApi extends ApiBase<BiomarkerApi> {
     }
   }
 
-  Future<List<Biomarker>> info() async {
+  Future<List<Biomarker>?> info() async {
     try {
       var url = '${v}/biomarker';
       var response = await dio.get(url);
@@ -44,7 +44,7 @@ class BiomarkerApi extends ApiBase<BiomarkerApi> {
     }
   }
 
-  Future<Biomarker> infoById(int id, int unitId) async {
+  Future<Biomarker?> infoById(int id, int unitId) async {
     try {
       var url = unitId != null
           ? '${v}/biomarker/${id}?unitId=$unitId'
@@ -56,7 +56,7 @@ class BiomarkerApi extends ApiBase<BiomarkerApi> {
     }
   }
 
-  Future<List<Biomarker>> search(String query) async {
+  Future<List<Biomarker>?> search(String query) async {
     try {
       var url = '${v}/biomarker/search';
       var response = await dio.post(url, data: query);

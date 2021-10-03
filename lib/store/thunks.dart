@@ -29,11 +29,11 @@ import 'analysis/actions.dart';
 import 'lab/actions.dart';
 import 'member_biomarker_model/actions.dart';
 
-typedef AuthenticationResultGetter = Future<AuthenticationResult> Function();
+typedef AuthenticationResultGetter = Future<AuthenticationResult?> Function();
 
 class StoreThunks {
   static ThunkAction<AppState> authorize(AuthenticationResultGetter getter,
-      {VoidCallback onSuccess, VoidCallback onError}) {
+      {VoidCallback? onSuccess, VoidCallback? onError}) {
     return (Store<AppState> store) async {
       var res = await getter();
       if (res == null) {
@@ -43,7 +43,7 @@ class StoreThunks {
 
       var auth = Authorization(
           accessToken: res.accessToken,
-          currentMemberId: res.user.currentMemberId,
+          currentMemberId: res.user!.currentMemberId,
           refreshToken: res.refreshToken);
 
       store.dispatch(SetUser(res.user));
@@ -57,18 +57,18 @@ class StoreThunks {
   }
 
   static ThunkAction<AppState> authorizeWithRefreshToken(
-      {VoidCallback onSuccess, VoidCallback onError}) {
+      {VoidCallback? onSuccess, VoidCallback? onError}) {
     return (Store<AppState> store) async {
       store.dispatch(StoreThunks.authorize(() async {
         return await api.auth.refreshToken(RefreshTokenAuthenticationModel(
-            refreshToken: store.state.authorization.refreshToken.token,
-            userId: store.state.user.id,
-            memberId: store.state.authorization.currentMemberId));
+            refreshToken: store.state.authorization!.refreshToken!.token,
+            userId: store.state.user!.id,
+            memberId: store.state.authorization!.currentMemberId));
       }, onError: onError, onSuccess: onSuccess));
     };
   }
 
-  static ThunkAction<AppState> logOut([String snackBarText]) {
+  static ThunkAction<AppState> logOut([String? snackBarText]) {
     return (Store<AppState> store) {
       //Keys.rootNavigator.currentState.pushReplacementNamed(Routes.auth);
       store.dispatch(SetUser(null));
@@ -81,8 +81,7 @@ class StoreThunks {
     return (Store<AppState> store) async {
       if (store.state.helper != null &&
           (store.state.helper?.lastUpdateDate
-                      ?.difference(DateTime.now())
-                      ?.inDays ??
+                      ?.difference(DateTime.now()).inDays ??
                   3) <
               2) return;
 
@@ -110,7 +109,7 @@ class StoreThunks {
   }
 
   static ThunkAction<AppState> setMemberBiomarkerModels(
-      List<MemberBiomarkerModel> biomarkerModelList) {
+      List<MemberBiomarkerModel>? biomarkerModelList) {
     return (Store<AppState> store) async {
       store.dispatch(SetMemberBiomarkerModelList(
           MemberBiomarkerModelList(biomarkers: biomarkerModelList)));

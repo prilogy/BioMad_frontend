@@ -3,11 +3,11 @@ import 'package:redux/redux.dart';
 import 'actions.dart' as Actions;
 
 final authorizationReducer = combineReducers<Authorization>([
-  TypedReducer<Authorization, Actions.SetAuthorization>(_setAuthorization),
-  TypedReducer<Authorization, Actions.SetAuthorizationMemberId>(_setAuthorizationMemberId)
+  TypedReducer<Authorization?, Actions.SetAuthorization>(_setAuthorization) as Authorization Function(Authorization, dynamic),
+  TypedReducer<Authorization, Actions.SetAuthorizationMemberId>(_setAuthorizationMemberId) as Authorization Function(Authorization, dynamic)
 ]);
 
-Authorization _setAuthorization(Authorization state, Actions.SetAuthorization action) {
+Authorization? _setAuthorization(Authorization? state, Actions.SetAuthorization action) {
   Authorization.saveToLocalStorage(action.authorization);
   return action.authorization;
 }

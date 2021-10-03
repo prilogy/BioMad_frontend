@@ -25,26 +25,26 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'account_container.dart';
 
 class CategoryContainer extends StatefulWidget {
-  final List<Category> categories;
-  final List<MemberBiomarker> memberBiomarkers;
-  final List<Biomarker> biomarkers;
+  final List<Category>? categories;
+  final List<MemberBiomarker>? memberBiomarkers;
+  final List<Biomarker>? biomarkers;
 
-  CategoryContainer({Key key, this.categories, this.memberBiomarkers, this.biomarkers}) : super(key: key);
+  CategoryContainer({Key? key, this.categories, this.memberBiomarkers, this.biomarkers}) : super(key: key);
 
   @override
   _CategoryContainerState createState() => _CategoryContainerState(categories, memberBiomarkers, biomarkers);
 }
 
 class _CategoryContainerState extends State<CategoryContainer> {
-  final List<Category> categories;
-  final List<MemberBiomarker> memberBiomarkers;
-  final List<Biomarker> biomarkers;
+  final List<Category>? categories;
+  final List<MemberBiomarker>? memberBiomarkers;
+  final List<Biomarker>? biomarkers;
 
   _CategoryContainerState(this.categories, this.memberBiomarkers, this.biomarkers);
 
   PanelController _panelController = PanelController();
   final double _initFabHeight = 120.0;
-  double _fabHeight;
+  double? _fabHeight;
   double _panelHeightOpen = 500;
   double _panelHeightClosed = 0;
 
@@ -63,10 +63,10 @@ class _CategoryContainerState extends State<CategoryContainer> {
               behavior: NoRippleScrollBehaviour(),
               child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: categories.length,
+                  itemCount: categories!.length,
                   itemBuilder: (context, index) => CategoryItem(
                       index: index,
-                      category: categories[index],
+                      category: categories![index],
                       memberBiomarkers: memberBiomarkers,
                       biomarkers: biomarkers))),
           Positioned(

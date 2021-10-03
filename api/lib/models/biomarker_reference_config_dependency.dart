@@ -2,18 +2,18 @@ part of api.api;
 
 class BiomarkerReferenceConfigDependency {
   
-  int id = null;
+  int? id = null;
   
-  BiomarkerReferenceConfigDependencyType type = null;
+  BiomarkerReferenceConfigDependencyType? type = null;
   //enum typeEnum {  0,  };{
   
-  int rangeId = null;
+  int? rangeId = null;
   
-  BiomarkerReferenceConfigDependencyRange range = null;
+  BiomarkerReferenceConfigDependencyRange? range = null;
   
-  int configId = null;
+  int? configId = null;
   
-  BiomarkerReferenceConfig config = null;
+  BiomarkerReferenceConfig? config = null;
   BiomarkerReferenceConfigDependency();
 
   @override
@@ -55,7 +55,7 @@ class BiomarkerReferenceConfigDependency {
   }
 
   static List<BiomarkerReferenceConfigDependency> listFromJson(List<dynamic> json) {
-    return json == null ? List<BiomarkerReferenceConfigDependency>() : json.map((value) => BiomarkerReferenceConfigDependency.fromJson(value)).toList();
+    return json == null ? <BiomarkerReferenceConfigDependency>[] : json.map((value) => BiomarkerReferenceConfigDependency.fromJson(value)).toList();
   }
 
   static Map<String, BiomarkerReferenceConfigDependency> mapFromJson(Map<String, dynamic> json) {

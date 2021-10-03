@@ -24,7 +24,7 @@ class SharedApi extends ApiBase<MemberBiomarkerApi> {
     }
   }
 
-  Future<Shared> infoById(int id, int unitId) async {
+  Future<Shared?> infoById(int id, int unitId) async {
     try {
       var url = '${v}/shared/${id}';
       var response = await dio.get(url);
@@ -34,7 +34,7 @@ class SharedApi extends ApiBase<MemberBiomarkerApi> {
     }
   }
 
-  Future<List<Shared>> info() async {
+  Future<List<Shared>?> info() async {
     try {
       var url = '${v}/shared';
       var response = await dio.get(url);

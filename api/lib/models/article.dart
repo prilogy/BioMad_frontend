@@ -2,9 +2,9 @@ part of api.api;
 
 class Article {
   
-  int id = null;
+  int? id = null;
   
-  ArticleTranslation content = null;
+  ArticleTranslation? content = null;
   Article();
 
   @override
@@ -12,7 +12,7 @@ class Article {
     return 'Article[id=$id, content=$content, ]';
   }
 
-  Article.fromJson(Map<String, dynamic> json) {
+  Article.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
     id = json['id'];
     content = (json['content'] == null) ?
@@ -29,8 +29,8 @@ class Article {
     return json;
   }
 
-  static List<Article> listFromJson(List<dynamic> json) {
-    return json == null ? List<Article>() : json.map((value) => Article.fromJson(value)).toList();
+  static List<Article> listFromJson(List<dynamic>? json) {
+    return json == null ? <Article>[] : json.map((value) => Article.fromJson(value)).toList();
   }
 
   static Map<String, Article> mapFromJson(Map<String, dynamic> json) {

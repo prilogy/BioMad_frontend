@@ -2,9 +2,9 @@ import 'package:api/api.dart';
 import 'package:biomad_frontend/services/localstorage.dart';
 
 class Helper {
-  List<Gender> genders;
-  List<Culture> cultures;
-  DateTime lastUpdateDate;
+  List<Gender>? genders;
+  List<Culture>? cultures;
+  DateTime? lastUpdateDate;
 
   static String localStorageKey = "helper_state";
 
@@ -26,7 +26,7 @@ class Helper {
     json['genders'] = genders;
     json['cultures'] = cultures;
     if (lastUpdateDate != null)
-      json['lastUpdateDate'] = lastUpdateDate == null ? null : lastUpdateDate.toUtc().toIso8601String();
+      json['lastUpdateDate'] = lastUpdateDate == null ? null : lastUpdateDate!.toUtc().toIso8601String();
     return json;
   }
 

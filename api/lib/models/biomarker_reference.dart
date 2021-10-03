@@ -2,19 +2,19 @@ part of api.api;
 
 class BiomarkerReference {
   
-  int id = null;
+  int? id = null;
   
-  double valueA = null;
+  double? valueA = null;
   
-  double valueB = null;
+  double? valueB = null;
   
-  int unitId = null;
+  int? unitId = null;
   
-  int biomarkerId = null;
+  int? biomarkerId = null;
   
-  bool isOwnReference = null;
+  bool? isOwnReference = null;
   
-  BiomarkerReferenceConfig config = null;
+  BiomarkerReferenceConfig? config = null;
   BiomarkerReference();
 
   @override
@@ -22,7 +22,7 @@ class BiomarkerReference {
     return 'BiomarkerReference[id=$id, valueA=$valueA, valueB=$valueB, unitId=$unitId, biomarkerId=$biomarkerId, isOwnReference=$isOwnReference, config=$config, ]';
   }
 
-  BiomarkerReference.fromJson(Map<String, dynamic> json) {
+  BiomarkerReference.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
     id = json['id'];
     valueA = (json['valueA'] == null) ?
@@ -59,7 +59,7 @@ class BiomarkerReference {
   }
 
   static List<BiomarkerReference> listFromJson(List<dynamic> json) {
-    return json == null ? List<BiomarkerReference>() : json.map((value) => BiomarkerReference.fromJson(value)).toList();
+    return json == null ? <BiomarkerReference>[] : json.map((value) => BiomarkerReference.fromJson(value)).toList();
   }
 
   static Map<String, BiomarkerReference> mapFromJson(Map<String, dynamic> json) {

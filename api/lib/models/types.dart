@@ -9,12 +9,12 @@ class Types {
   static const Types number0_ = const Types._internal(0);
   static const Types number1_ = const Types._internal(1);
 
-  static Types fromJson(int value) {
+  static Types fromJson(int? value) {
     return new TypesTypeTransformer().decode(value);
   }
   
   static List<Types> listFromJson(List<dynamic> json) {
-    return json == null ? new List<Types>() : json.map((value) => Types.fromJson(value)).toList();
+    return json == null ? <Types>[] : json.map((value) => Types.fromJson(value)).toList();
   }
 }
 

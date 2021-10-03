@@ -2,9 +2,9 @@ part of api.api;
 
 class LogInWithCredentialsModel {
   
-  String email = null;
+  String? email = null;
   
-  String password = null;
+  String? password = null;
   LogInWithCredentialsModel({this.email, this.password});
 
   @override
@@ -28,7 +28,7 @@ class LogInWithCredentialsModel {
   }
 
   static List<LogInWithCredentialsModel> listFromJson(List<dynamic> json) {
-    return json == null ? List<LogInWithCredentialsModel>() : json.map((value) => LogInWithCredentialsModel.fromJson(value)).toList();
+    return json == null ? <LogInWithCredentialsModel>[] : json.map((value) => LogInWithCredentialsModel.fromJson(value)).toList();
   }
 
   static Map<String, LogInWithCredentialsModel> mapFromJson(Map<String, dynamic> json) {

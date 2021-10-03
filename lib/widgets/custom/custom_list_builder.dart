@@ -7,7 +7,7 @@ enum CustomListBuilderTypes { verticalList, grid, horizontalList }
 
 class CustomListBuilder<T> extends StatelessWidget {
   /// Список моделей, которые необходимо преобразовать в виджеты
-  final List<T> items;
+  final List<T>? items;
   /// Функция-преобразователь моделей в виджеты с последующим составлением списка
   final ItemBuilder<T> itemBuilder;
   /// Тип отображаемого листа
@@ -27,8 +27,8 @@ class CustomListBuilder<T> extends StatelessWidget {
 
 
   CustomListBuilder(
-      {@required this.items,
-      @required this.itemBuilder,
+      {required this.items,
+      required this.itemBuilder,
       this.type = CustomListBuilderTypes.verticalList,
       this.height = 100,
       this.crossAxisCount = 2,
@@ -40,10 +40,10 @@ class CustomListBuilder<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    var widgetItems = List<Widget>();
+    var widgetItems = <Widget>[];
     var i = 0;
-    for(var e in items) {
-      widgetItems.add(itemBuilder(e, items.length - 1 == i));
+    for(var e in items!) {
+      widgetItems.add(itemBuilder(e, items!.length - 1 == i));
       i++;
     }
 

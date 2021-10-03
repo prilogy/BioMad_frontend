@@ -6,30 +6,30 @@ import 'package:biomad_frontend/styles/indents.dart';
 import 'package:flutter/material.dart';
 
 class CustomSelectFormField<T> extends StatelessWidget with IndentsMixin {
-  final InputDecoration inputDecoration;
+  final InputDecoration? inputDecoration;
   final String labelText;
   final String hintText;
-  final Icon icon;
-  final String Function(String) validator;
-  final EdgeInsetsGeometry padding;
+  final Icon? icon;
+  final String Function(String?)? validator;
+  final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry margin;
   final bool obscureText;
-  final List<T> items;
+  final List<T>? items;
   final DropdownMenuItem Function(T) itemBuilder;
-  final void Function(T) onChanged;
-  final T value;
+  final void Function(T?) onChanged;
+  final T? value;
 
 
   CustomSelectFormField({this.inputDecoration,
     this.obscureText = false,
-    @required this.labelText,
+    required this.labelText,
     this.hintText = '',
     this.icon,
     this.validator,
-    @required this.onChanged,
-    @required this.items,
+    required this.onChanged,
+    required this.items,
     this.value,
-    @required this.itemBuilder,
+    required this.itemBuilder,
     this.margin = const EdgeInsets.only(bottom: Indents.md),
     this.padding});
 
@@ -55,14 +55,14 @@ class CustomSelectFormField<T> extends StatelessWidget with IndentsMixin {
         child: DropdownButtonFormField(
           value: value,
           onChanged: onChanged,
-          items: items
+          items: items!
               .map((x) =>
               DropdownMenuItem(
                 child: itemBuilder(x),
                 value: x,
               ))
               .toList(),
-          validator: (v) =>
+          validator: (dynamic v) =>
           validator?.call(v) ?? TextFieldValidators.isNotEmpty(v),
           decoration: decoration,
         ),

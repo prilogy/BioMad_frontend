@@ -2,7 +2,7 @@ import 'package:api/api.dart';
 import 'package:biomad_frontend/services/localstorage.dart';
 
 class Settings {
-  String culture;
+  String? culture;
 
   static String localStorageKey = "settings_state";
 
@@ -23,7 +23,7 @@ class Settings {
     return Settings.fromJson(json ?? Map<String, dynamic>());
   }
 
-  static void saveToLocalStorage(Settings model) {
-    localStorage.setItem(localStorageKey, model.toJson());
+  static void saveToLocalStorage(Settings? model) {
+    localStorage.setItem(localStorageKey, model?.toJson());
   }
 }

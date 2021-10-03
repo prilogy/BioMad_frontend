@@ -17,7 +17,7 @@ import 'biomarker_list_screen.dart';
 class MyHomePage extends StatefulWidget {
   final int duration;
 
-  MyHomePage({Key key, this.duration = 10}) : super(key: key);
+  MyHomePage({Key? key, this.duration = 10}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState(this.duration);
@@ -31,26 +31,26 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _MyHomePageState(this.duration);
 
-  Future<List<Category>> getCategories() async {
+  Future<List<Category>?> getCategories() async {
     return await api.category.info();
   }
 
-  Future<List<Biomarker>> getBiomarker() async {
+  Future<List<Biomarker>?> getBiomarker() async {
     return await api.biomarker.info();
   }
 
-  Future<List<MemberBiomarker>> getMemberBiomarker() async {
+  Future<List<MemberBiomarker>?> getMemberBiomarker() async {
     return await api.memberBiomarker.info();
   }
 
-  Future<List<BiomarkerType>> getType() async {
+  Future<List<BiomarkerType>?> getType() async {
     return await api.biomarker.type();
   }
 
-  List<Category> categories;
-  List<MemberBiomarker> memberBiomarkers;
-  List<Biomarker> biomarkers;
-  List<BiomarkerType> types;
+  List<Category>? categories;
+  List<MemberBiomarker>? memberBiomarkers;
+  List<Biomarker>? biomarkers;
+  List<BiomarkerType>? types;
 
   @override
   void initState() {
@@ -75,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   itemCount: navPageBar.length,
                   itemBuilder: (context, index) => buildNavTopBar(index))),
           FutureBuilder(
-              future: Future.delayed(Duration(milliseconds: selectedIndex == 0 ? changed ? 0 : duration ?? 0 : 0)),
+              future: Future.delayed(Duration(milliseconds: selectedIndex == 0 ? changed ? 0 : duration : 0)),
               builder: (c, s) => s.connectionState == ConnectionState.done
                   ? FutureBuilder(
                       future: Future.wait([
@@ -86,10 +86,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       ]),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          categories = snapshot.data[0];
-                          biomarkers = snapshot.data[1];
-                          memberBiomarkers = snapshot.data[2];
-                          types = snapshot.data[3];
+                          categories = (snapshot.data as List<dynamic>)[0];
+                          biomarkers = (snapshot.data as List<dynamic>)[1];
+                          memberBiomarkers = (snapshot.data as List<dynamic>)[2];
+                          types = (snapshot.data as List<dynamic>)[3];
 
                           if(selectedIndex == 0){
                             return CategoryContainer(

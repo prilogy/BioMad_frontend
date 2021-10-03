@@ -2,13 +2,13 @@ part of api.api;
 
 class Lab {
   
-  int id = null;
+  int? id = null;
   
-  String phoneNumber = null;
+  String? phoneNumber = null;
   
-  int cityId = null;
+  int? cityId = null;
   
-  LabTranslation content = null;
+  LabTranslation? content = null;
   Lab();
 
   @override
@@ -16,7 +16,7 @@ class Lab {
     return 'Lab[id=$id, phoneNumber=$phoneNumber, cityId=$cityId, content=$content, ]';
   }
 
-  Lab.fromJson(Map<String, dynamic> json) {
+  Lab.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
     id = json['id'];
     phoneNumber = json['phoneNumber'];
@@ -38,8 +38,8 @@ class Lab {
     return json;
   }
 
-  static List<Lab> listFromJson(List<dynamic> json) {
-    return json == null ? List<Lab>() : json.map((value) => Lab.fromJson(value)).toList();
+  static List<Lab> listFromJson(List<dynamic>? json) {
+    return json == null ? <Lab>[] : json.map((value) => Lab.fromJson(value)).toList();
   }
 
   static Map<String, Lab> mapFromJson(Map<String, dynamic> json) {

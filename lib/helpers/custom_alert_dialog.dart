@@ -4,13 +4,13 @@ import 'package:biomad_frontend/styles/radius_values.dart';
 import 'package:flutter/material.dart';
 
 AlertDialog customAlertDialog(BuildContext context,
-    {Widget child,
-    String title,
-    List<Widget> actions,
+    {required Widget child,
+    required String title,
+    List<Widget>? actions,
     EdgeInsetsGeometry contentPadding = const EdgeInsets.all(Indents.md),
     EdgeInsetsGeometry titlePadding = const EdgeInsets.only(
         top: Indents.md, left: Indents.md, right: Indents.md,
-    ), double contentHeight}) {
+    ), double? contentHeight}) {
   final theme = Theme.of(context);
 
   return AlertDialog(

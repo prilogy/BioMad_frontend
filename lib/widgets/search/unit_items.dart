@@ -22,7 +22,7 @@ Widget unitItems(BuildContext context, data) {
           data.content.name,
           style: Theme.of(context)
               .textTheme
-              .subtitle1
+              .subtitle1!
               .merge(TextStyle(color: BioMadColors.base[500], fontWeight: FontWeight.normal)),
         ),
       ));

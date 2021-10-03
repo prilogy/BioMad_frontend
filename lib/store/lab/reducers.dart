@@ -3,7 +3,7 @@ import 'package:redux/redux.dart';
 import 'actions.dart' as Actions;
 
 final labListReducer = combineReducers<LabList>([
-  TypedReducer<LabList, Actions.SetLabList>(_setLabList),
+  TypedReducer<LabList, Actions.SetLabList>(_setLabList) as LabList Function(LabList, dynamic),
 ]);
 
 LabList _setLabList(LabList state, Actions.SetLabList action) {

@@ -3,10 +3,10 @@ import 'package:biomad_frontend/styles/indents.dart';
 import 'package:flutter/material.dart';
 
 class BlockBaseWidget extends StatelessWidget with IndentsMixin {
-  final Widget child;
-  final String header;
-  final double height;
-  final TextStyle headerMergeStyle;
+  final Widget? child;
+  final String? header;
+  final double? height;
+  final TextStyle? headerMergeStyle;
   final CrossAxisAlignment crossAxisAlignment;
 
   final EdgeInsetsGeometry margin;
@@ -51,8 +51,8 @@ class BlockBaseWidget extends StatelessWidget with IndentsMixin {
                 margin: EdgeInsets.only(bottom: Indents.sm),
                 height: height,
                 child:
-                    Text(header, style: Theme.of(context).textTheme.headline6.merge(headerMergeStyle))),
-          child
+                    Text(header!, style: Theme.of(context).textTheme.headline6!.merge(headerMergeStyle))),
+          child!
         ],
       ),
     );

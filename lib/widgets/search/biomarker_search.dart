@@ -16,34 +16,34 @@ import 'biomarker_items.dart';
 class BiomarkerSearch extends StatefulWidget {
   final String hintText;
 
-  BiomarkerSearch({@required this.hintText, Key key}) : super(key: key);
+  BiomarkerSearch({required this.hintText, Key? key}) : super(key: key);
 
   @override
   _BiomarkerSearchState createState() => _BiomarkerSearchState(hintText);
 }
 
 class _BiomarkerSearchState extends State<BiomarkerSearch> {
-  final String hintText;
+  final String? hintText;
 
   _BiomarkerSearchState(this.hintText);
 
   TextEditingController _searchController = TextEditingController();
 
-  Future<List<Biomarker>> getBiomarkers({String query, bool init = false}) async {
+  Future<List<Biomarker>?> getBiomarkers({String? query, bool init = false}) async {
     if (init)
       return await api.biomarker.info();
     else
-      return await api.biomarker.search("\"" + query + "\"");
+      return await api.biomarker.search("\"" + query! + "\"");
   }
 
-  StreamController<Future<List<Biomarker>>> searchStream;
-  Future<List<Biomarker>> biomarkers;
+  late StreamController<Future<List<Biomarker>>?> searchStream;
+  Future<List<Biomarker>?>? biomarkers;
 
   void _loadBiomarkers(biomarkers) async => searchStream.add(biomarkers);
 
   @override
   void initState() {
-    searchStream = StreamController<Future<List<Biomarker>>>();
+    searchStream = StreamController<Future<List<Biomarker>>?>();
     biomarkers = getBiomarkers(init: true);
     _loadBiomarkers(biomarkers);
     super.initState();
@@ -92,10 +92,10 @@ class _BiomarkerSearchState extends State<BiomarkerSearch> {
             builder: (context, snap) {
               if (snap.hasData) {
                 return FutureBuilder(
-                    future: snap.data,
+                    future: snap.data as Future<List<Biomarker>>?,
                     builder: (context, AsyncSnapshot<List<Biomarker>> biomarkersSnap) {
                       if (biomarkersSnap.hasData) {
-                        return biomarkersSnap.data.isNotEmpty
+                        return biomarkersSnap.data!.isNotEmpty
                             ? Container(
                                 height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - 61,
                                 child: ListView.separated(
@@ -106,9 +106,9 @@ class _BiomarkerSearchState extends State<BiomarkerSearch> {
                                       left: Indents.md,
                                       right: Indents.md,
                                     ),
-                                    itemCount: biomarkersSnap.data.length,
+                                    itemCount: biomarkersSnap.data!.length,
                                     itemBuilder: (context, index) =>
-                                        Container(child: biomarkerItems(context, biomarkersSnap.data[index]))))
+                                        Container(child: biomarkerItems(context, biomarkersSnap.data![index]))))
                             : Container(
                                 padding: EdgeInsets.only(
                                   left: Indents.md,

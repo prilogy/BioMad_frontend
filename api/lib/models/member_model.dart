@@ -2,13 +2,13 @@ part of api.api;
 
 class MemberModel {
   
-  String name = null;
+  String? name = null;
   
-  int genderId = null;
+  int? genderId = null;
   
-  DateTime dateBirthday = null;
+  DateTime? dateBirthday = null;
   
-  String color = null;
+  String? color = null;
   MemberModel({this.name, this.genderId, this.dateBirthday, this.color});
 
   @override
@@ -32,13 +32,13 @@ class MemberModel {
     if (genderId != null)
       json['genderId'] = genderId;
     if (dateBirthday != null)
-      json['dateBirthday'] = dateBirthday == null ? null : dateBirthday.toUtc().toIso8601String();
+      json['dateBirthday'] = dateBirthday == null ? null : dateBirthday!.toUtc().toIso8601String();
       json['color'] = color;
     return json;
   }
 
   static List<MemberModel> listFromJson(List<dynamic> json) {
-    return json == null ? List<MemberModel>() : json.map((value) => MemberModel.fromJson(value)).toList();
+    return json == null ? <MemberModel>[] : json.map((value) => MemberModel.fromJson(value)).toList();
   }
 
   static Map<String, MemberModel> mapFromJson(Map<String, dynamic> json) {

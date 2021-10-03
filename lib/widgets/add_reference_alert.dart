@@ -13,20 +13,20 @@ import 'package:flutter/material.dart';
 import 'custom/custom_text_form_field.dart';
 
 class AddReferenceAlertDialog extends StatefulWidget {
-  final Widget child;
-  final String title;
-  final String hintBiomarker;
-  final String hintUnit;
-  final MemberBiomarkerModel biomarker;
-  final List<Widget> actions;
-  final EdgeInsetsGeometry contentPadding;
-  final EdgeInsetsGeometry titlePadding;
-  final double contentHeight;
-  List<Biomarker> customBiomarker;
-  final void Function(MemberBiomarkerReferenceModel) onChange;
+  final Widget? child;
+  final String? title;
+  final String? hintBiomarker;
+  final String? hintUnit;
+  final MemberBiomarkerModel? biomarker;
+  final List<Widget>? actions;
+  final EdgeInsetsGeometry? contentPadding;
+  final EdgeInsetsGeometry? titlePadding;
+  final double? contentHeight;
+  List<Biomarker>? customBiomarker;
+  final void Function(MemberBiomarkerReferenceModel)? onChange;
 
   AddReferenceAlertDialog(BuildContext context,
-      {Key key,
+      {Key? key,
       this.child,
       this.title,
       this.hintBiomarker,
@@ -46,20 +46,20 @@ class AddReferenceAlertDialog extends StatefulWidget {
 }
 
 class _AddReferenceAlertDialogState extends State<AddReferenceAlertDialog> {
-  final Widget child;
-  final String title;
-  final String hintBiomarker;
-  final String hintUnit;
-  final List<Widget> actions;
-  MemberBiomarkerModel biomarker;
-  EdgeInsetsGeometry contentPadding = const EdgeInsets.all(Indents.md);
-  EdgeInsetsGeometry titlePadding = const EdgeInsets.only(
+  final Widget? child;
+  final String? title;
+  final String? hintBiomarker;
+  final String? hintUnit;
+  final List<Widget>? actions;
+  MemberBiomarkerModel? biomarker;
+  EdgeInsetsGeometry? contentPadding = const EdgeInsets.all(Indents.md);
+  EdgeInsetsGeometry? titlePadding = const EdgeInsets.only(
     top: Indents.md,
     left: Indents.md,
     right: Indents.md,
   );
-  final double contentHeight;
-  List<Biomarker> customBiomarker;
+  final double? contentHeight;
+  List<Biomarker>? customBiomarker;
 
   _AddReferenceAlertDialogState(this.child, this.title, this.hintBiomarker, this.hintUnit, this.actions, this.biomarker,
       this.contentPadding, this.titlePadding, this.contentHeight, this.customBiomarker);
@@ -73,17 +73,17 @@ class _AddReferenceAlertDialogState extends State<AddReferenceAlertDialog> {
   var _biomarkerUnitIdController = TextEditingController();
   var _biomarkerFormKey = GlobalKey<FormState>();
 
-  Unit _unit;
-  Biomarker choosedBiomarker;
-  int biomarkerId;
-  int unitId;
-  Unit unit;
+  Unit? _unit;
+  Biomarker? choosedBiomarker;
+  int? biomarkerId;
+  int? unitId;
+  late Unit unit;
 
-  Future<List<Biomarker>> getBiomarkers() async {
+  Future<List<Biomarker>?> getBiomarkers() async {
     return await api.biomarker.info();
   }
 
-  List<Biomarker> biomarkers;
+  List<Biomarker>? biomarkers;
 
   @override
   void initState() {
@@ -91,18 +91,18 @@ class _AddReferenceAlertDialogState extends State<AddReferenceAlertDialog> {
       getBiomarkers().then((x) => {
             setState(() {
               biomarkers = x;
-              choosedBiomarker = biomarkers.firstWhere((element) => element.id == biomarker.biomarkerId);
-              _biomarkerIdController.text = choosedBiomarker.content.name;
-              _biomarkerValueAController.text = choosedBiomarker.reference.valueA.toString();
-              _biomarkerValueBController.text = choosedBiomarker.reference.valueB.toString();
+              choosedBiomarker = biomarkers!.firstWhere((element) => element.id == biomarker!.biomarkerId);
+              _biomarkerIdController.text = choosedBiomarker!.content!.name!;
+              _biomarkerValueAController.text = choosedBiomarker!.reference!.valueA.toString();
+              _biomarkerValueBController.text = choosedBiomarker!.reference!.valueB.toString();
             })
           });
 
-      biomarkerId = biomarker.biomarkerId;
-      unitId = biomarker.unitId;
+      biomarkerId = biomarker!.biomarkerId;
+      unitId = biomarker!.unitId;
 
-      unit = store.state.unitList.units.firstWhere((element) => element.id == biomarker.unitId);
-      _biomarkerUnitIdController.text = unit.content.name;
+      unit = store.state.unitList!.units!.firstWhere((element) => element.id == biomarker!.unitId);
+      _biomarkerUnitIdController.text = unit.content!.name!;
     }
 
     super.initState();
@@ -117,14 +117,14 @@ class _AddReferenceAlertDialogState extends State<AddReferenceAlertDialog> {
       );
 
   void onBiomarkerChange() {
-    widget.onChange(getMemberBiomarkerReferenceModel());
+    widget.onChange!(getMemberBiomarkerReferenceModel());
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     store.dispatch(StoreThunks.refreshUnits());
-    final _tr = trWithKey('biomarker_alert');
+    final String Function(String, {List<String> args, BuildContext context, String gender, Map<String, String> namedArgs}) _tr = trWithKey('biomarker_alert');
 
     return AlertDialog(
         scrollable: true,
@@ -147,7 +147,7 @@ class _AddReferenceAlertDialogState extends State<AddReferenceAlertDialog> {
                             disableLabelText: _tr('selected_biomarker'),
                             enabled: biomarker == null ? true : false,
                             onTap: () {
-                              return showDialog(
+                              showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
                                     return SearchScreen(
@@ -216,17 +216,17 @@ class _AddReferenceAlertDialogState extends State<AddReferenceAlertDialog> {
                             margin: EdgeInsets.only(bottom: 0),
                             labelText: _tr('units'),
                             onTap: () {
-                              return showDialog(
+                              showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
                                     List<Unit> dataList = [];
-                                    for (var unit in store.state.unitList.units)
-                                      for (var unitId in choosedBiomarker.unitIds) if (unitId == unit.id) dataList.add(unit);
+                                    for (var unit in store.state.unitList!.units!)
+                                      for (var unitId in choosedBiomarker!.unitIds!) if (unitId == unit.id) dataList.add(unit);
 
                                     return SearchScreen(
                                       hintText: hintUnit ?? _tr('enter_unit'),
                                       dataList: dataList,
-                                      unitIds: choosedBiomarker.unitIds,
+                                      unitIds: choosedBiomarker!.unitIds,
                                       initialValue: _biomarkerUnitIdController.text,
                                       searchType: "unit",
                                     );
@@ -244,13 +244,13 @@ class _AddReferenceAlertDialogState extends State<AddReferenceAlertDialog> {
                               });
                             },
                             onChange: (x) {
-                              return showDialog(
+                              showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
                                     return SearchScreen(
                                       hintText: hintUnit ?? _tr('enter_unit'),
-                                      dataList: store.state.unitList.units,
-                                      unitIds: choosedBiomarker.unitIds,
+                                      dataList: store.state.unitList!.units,
+                                      unitIds: choosedBiomarker!.unitIds,
                                       initialValue: _biomarkerUnitIdController.text,
                                       searchType: "unit",
                                     );
@@ -271,9 +271,9 @@ class _AddReferenceAlertDialogState extends State<AddReferenceAlertDialog> {
               ])),
         ),
         titlePadding: titlePadding,
-        contentPadding: contentPadding,
+        contentPadding: contentPadding!,
         title: Text(
-          title,
+          title!,
           style: theme.textTheme.headline6,
         ),
         actions: <Widget>[

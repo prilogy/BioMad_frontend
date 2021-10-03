@@ -33,7 +33,7 @@ class MemberBiomarkerApi extends ApiBase<MemberBiomarkerApi> {
     }
   }
 
-  Future<MemberBiomarker> infoById(int id, int unitId) async {
+  Future<MemberBiomarker?> infoById(int id, int unitId) async {
     try {
       var url = unitId != null
           ? '${v}/member/biomarker/${id}?unitId=$unitId'
@@ -45,7 +45,7 @@ class MemberBiomarkerApi extends ApiBase<MemberBiomarkerApi> {
     }
   }
 
-  Future<List<MemberBiomarker>> info() async {
+  Future<List<MemberBiomarker>?> info() async {
     try {
       var url = '${v}/member/biomarker';
       var response = await dio.get(url);
@@ -55,7 +55,7 @@ class MemberBiomarkerApi extends ApiBase<MemberBiomarkerApi> {
     }
   }
 
-  Future<List<MemberBiomarker>> history(int id, int unitId) async {
+  Future<List<MemberBiomarker>?> history(int id, int unitId) async {
     try {
       var url = unitId != null
           ? '${v}/biomarker/${id}/history?unitId=$unitId'

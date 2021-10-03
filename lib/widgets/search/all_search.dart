@@ -20,39 +20,39 @@ import 'biomarker_items.dart';
 class AllSearch extends StatefulWidget {
   final String hintText;
 
-  AllSearch({@required this.hintText, Key key}) : super(key: key);
+  AllSearch({required this.hintText, Key? key}) : super(key: key);
 
   @override
   _AllSearchState createState() => _AllSearchState(hintText);
 }
 
 class _AllSearchState extends State<AllSearch> {
-  final String hintText;
+  final String? hintText;
 
   _AllSearchState(this.hintText);
 
   TextEditingController _searchController = TextEditingController();
 
-  Future<SearchResultModel> getSearch(String query) async {
+  Future<SearchResultModel?> getSearch(String query) async {
     return await api.helper.search("\"" + query + "\"");
   }
 
-  StreamController<Future<SearchResultModel>> searchStream;
-  Future<SearchResultModel> searchData;
+  late StreamController<Future<SearchResultModel>?> searchStream;
+  Future<SearchResultModel?>? searchData;
 
   void _loadBiomarkers(biomarkers) async => searchStream.add(biomarkers);
 
-  Future<List<MemberBiomarker>> getMemberBiomarkers() async {
+  Future<List<MemberBiomarker>?> getMemberBiomarkers() async {
     return await api.memberBiomarker.info();
   }
 
-  Future<List<Biomarker>> getBiomarker() async {
+  Future<List<Biomarker>?> getBiomarker() async {
     return await api.biomarker.info();
   }
 
   @override
   void initState() {
-    searchStream = StreamController<Future<SearchResultModel>>();
+    searchStream = StreamController<Future<SearchResultModel>?>();
     searchData = getSearch("");
     _loadBiomarkers(searchData);
     super.initState();
@@ -97,19 +97,19 @@ class _AllSearchState extends State<AllSearch> {
             builder: (context, snap) {
               if (snap.hasData) {
                 return FutureBuilder(
-                    future: snap.data,
+                    future: snap.data as Future<SearchResultModel>?,
                     builder: (context, AsyncSnapshot<SearchResultModel> searchSnap) {
                       return searchSnap.hasData
                           ? searchSnap.data != null
                               ? Column(children: [
-                                  searchSnap.data.categories.isNotEmpty
-                                      ? _categoryList(context, searchSnap.data.categories)
+                                  searchSnap.data!.categories!.isNotEmpty
+                                      ? _categoryList(context, searchSnap.data!.categories)
                                       : Container(),
-                                  searchSnap.data.biomarkers.isNotEmpty
-                                      ? searchSnap.data.categories.isNotEmpty
-                                          ? _memberBiomarkerList(context, searchSnap.data.biomarkers,
-                                              category: searchSnap.data.categories)
-                                          : _memberBiomarkerList(context, searchSnap.data.biomarkers)
+                                  searchSnap.data!.biomarkers!.isNotEmpty
+                                      ? searchSnap.data!.categories!.isNotEmpty
+                                          ? _memberBiomarkerList(context, searchSnap.data!.biomarkers,
+                                              category: searchSnap.data!.categories)
+                                          : _memberBiomarkerList(context, searchSnap.data!.biomarkers)
                                       : Container(),
                                 ])
                               : Container(
@@ -125,16 +125,16 @@ class _AllSearchState extends State<AllSearch> {
             }));
   }
 
-  Widget _categoryList(BuildContext context, List<Category> data) {
-    Future<List<MemberBiomarker>> memberBiomarkers = getMemberBiomarkers();
-    Future<List<Biomarker>> biomarkers = getBiomarker();
+  Widget _categoryList(BuildContext context, List<Category>? data) {
+    Future<List<MemberBiomarker>?> memberBiomarkers = getMemberBiomarkers();
+    Future<List<Biomarker>?> biomarkers = getBiomarker();
     return FutureBuilder(
         future: memberBiomarkers,
-        builder: (context, AsyncSnapshot<List<MemberBiomarker>> memberBiomarkersSnap) {
+        builder: (context, AsyncSnapshot<List<MemberBiomarker>?> memberBiomarkersSnap) {
           if (memberBiomarkersSnap.hasData) {
             return FutureBuilder(
                 future: biomarkers,
-                builder: (context, AsyncSnapshot<List<Biomarker>> biomarkers) {
+                builder: (context, AsyncSnapshot<List<Biomarker>?> biomarkers) {
                   if (biomarkers.hasData) {
                     return Container(
                       child: Column(
@@ -146,12 +146,12 @@ class _AllSearchState extends State<AllSearch> {
                               tr('search.category'),
                               style: Theme.of(context)
                                   .textTheme
-                                  .headline6
+                                  .headline6!
                                   .merge(TextStyle(color: Theme.of(context).primaryColor)),
                             ),
                           ),
                           Container(
-                              height: data.length * 76.0,
+                              height: data!.length * 76.0,
                               child: ListView.builder(
                                   itemCount: data.length,
                                   itemBuilder: (context, index) => CategoryItem(
@@ -190,18 +190,18 @@ class _AllSearchState extends State<AllSearch> {
         });
   }
 
-  Widget _memberBiomarkerList(BuildContext context, List<Biomarker> data, {List<Category> category}) {
-    Future<List<MemberBiomarker>> memberBiomarkers = getMemberBiomarkers();
-    Future<List<Biomarker>> biomarkers = getBiomarker();
+  Widget _memberBiomarkerList(BuildContext context, List<Biomarker>? data, {List<Category>? category}) {
+    Future<List<MemberBiomarker>?> memberBiomarkers = getMemberBiomarkers();
+    Future<List<Biomarker>?> biomarkers = getBiomarker();
     return FutureBuilder(
         future: memberBiomarkers,
-        builder: (context, AsyncSnapshot<List<MemberBiomarker>> memberBiomarkersSnap) {
+        builder: (context, AsyncSnapshot<List<MemberBiomarker>?> memberBiomarkersSnap) {
           if (memberBiomarkersSnap.hasData) {
             List<MemberBiomarker> memberBiomarker = [];
-            for (var item in data) {
+            for (var item in data!) {
               try {
                 MemberBiomarker memberBiomarkerItem =
-                    memberBiomarkersSnap.data.firstWhere((element) => element.biomarkerId == item.id);
+                    memberBiomarkersSnap.data!.firstWhere((element) => element.biomarkerId == item.id);
                 memberBiomarker.add(memberBiomarkerItem);
                 print(memberBiomarkerItem);
               } catch (e) {}
@@ -218,7 +218,7 @@ class _AllSearchState extends State<AllSearch> {
                     child: Text(
                       tr('search.biomarkers'),
                       style:
-                          Theme.of(context).textTheme.headline6.merge(TextStyle(color: Theme.of(context).primaryColor)),
+                          Theme.of(context).textTheme.headline6!.merge(TextStyle(color: Theme.of(context).primaryColor)),
                     ),
                   ),
                   memberBiomarker.isNotEmpty
@@ -235,18 +235,18 @@ class _AllSearchState extends State<AllSearch> {
                               itemBuilder: (context, index) {
                                 return FutureBuilder(
                                     future: biomarkers,
-                                    builder: (context, AsyncSnapshot<List<Biomarker>> biomarkers) {
+                                    builder: (context, AsyncSnapshot<List<Biomarker>?> biomarkers) {
                                       if (biomarkers.hasData) {
                                         MemberBiomarker memberBiomarkerItem = memberBiomarker[index];
-                                        Biomarker biomarkerItem = biomarkers.data
+                                        Biomarker biomarkerItem = biomarkers.data!
                                             .firstWhere((element) => element.id == memberBiomarkerItem.biomarkerId);
                                         return BiomarkerItem(
-                                          value: memberBiomarkerItem.value ?? "null",
-                                          unit: memberBiomarkerItem.unit.content.shorthand ?? "unnamed",
+                                          value: memberBiomarkerItem.value ?? "null" as double?,
+                                          unit: memberBiomarkerItem.unit!.content!.shorthand ?? "unnamed",
                                           unitId: memberBiomarkerItem.unitId,
                                           id: memberBiomarkerItem.biomarkerId,
                                           biomarkerState: biomarkerItem.state,
-                                          biomarkerName: biomarkerItem.content.name,
+                                          biomarkerName: biomarkerItem.content!.name,
                                           withActions: false,
                                         );
                                       } else {

@@ -6,7 +6,7 @@ import 'package:redux/redux.dart';
 import 'actions.dart' as Actions;
 
 final unitListReducer = combineReducers<UnitList>([
-  TypedReducer<UnitList, Actions.SetUnitList>(_setUnitList),
+  TypedReducer<UnitList, Actions.SetUnitList>(_setUnitList) as UnitList Function(UnitList, dynamic),
 ]);
 
 UnitList _setUnitList(UnitList state, Actions.SetUnitList action) {

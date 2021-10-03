@@ -2,22 +2,22 @@ part of api.api;
 
 class ConfirmationCode {
   
-  int id = null;
+  int? id = null;
   
-  String code = null;
+  String? code = null;
   
-  Types type = null;
+  Types? type = null;
   //enum typeEnum {  0,  1,  };{
   
-  bool isConfirmed = null;
+  bool? isConfirmed = null;
   
-  String helperValue = null;
+  String? helperValue = null;
   
-  int userId = null;
+  int? userId = null;
   
-  User user = null;
+  User? user = null;
   
-  DateTime dateValidUntil = null;
+  DateTime? dateValidUntil = null;
   ConfirmationCode();
 
   @override
@@ -58,12 +58,12 @@ class ConfirmationCode {
     if (user != null)
       json['user'] = user;
     if (dateValidUntil != null)
-      json['dateValidUntil'] = dateValidUntil == null ? null : dateValidUntil.toUtc().toIso8601String();
+      json['dateValidUntil'] = dateValidUntil == null ? null : dateValidUntil!.toUtc().toIso8601String();
     return json;
   }
 
-  static List<ConfirmationCode> listFromJson(List<dynamic> json) {
-    return json == null ? List<ConfirmationCode>() : json.map((value) => ConfirmationCode.fromJson(value)).toList();
+  static List<ConfirmationCode> listFromJson(List<dynamic>? json) {
+    return json == null ? <ConfirmationCode>[] : json.map((value) => ConfirmationCode.fromJson(value)).toList();
   }
 
   static Map<String, ConfirmationCode> mapFromJson(Map<String, dynamic> json) {

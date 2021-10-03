@@ -6,34 +6,34 @@ import 'package:biomad_frontend/styles/indents.dart';
 import 'package:flutter/material.dart';
 
 class BioMarkerScreen extends StatefulWidget {
-  final int biomarkerId;
+  final int? biomarkerId;
 
-  BioMarkerScreen({Key key, this.biomarkerId}) : super(key: key);
+  BioMarkerScreen({Key? key, this.biomarkerId}) : super(key: key);
 
   @override
   _BioMarkerScreenState createState() => _BioMarkerScreenState(biomarkerId);
 }
 
 class _BioMarkerScreenState extends State<BioMarkerScreen> {
-  final int biomarkerId;
+  final int? biomarkerId;
 
   _BioMarkerScreenState(this.biomarkerId);
 
-  MemberBiomarker memberBiomarker;
-  Biomarker biomarker;
+  MemberBiomarker? memberBiomarker;
+  late Biomarker biomarker;
 
-  Future<List<Biomarker>> getBiomarker() async {
+  Future<List<Biomarker>?> getBiomarker() async {
     return await api.biomarker.info();
   }
 
-  Future<List<MemberBiomarker>> getMemberBiomarker() async {
+  Future<List<MemberBiomarker>?> getMemberBiomarker() async {
     return await api.memberBiomarker.info();
   }
 
   @override
   Widget build(BuildContext context) {
-    Future<List<MemberBiomarker>> memberBiomarkers = getMemberBiomarker();
-    Future<List<Biomarker>> biomarkers = getBiomarker();
+    Future<List<MemberBiomarker>?> memberBiomarkers = getMemberBiomarker();
+    Future<List<Biomarker>?> biomarkers = getBiomarker();
 
     return Scaffold(
       appBar: AppBar(
@@ -49,10 +49,10 @@ class _BioMarkerScreenState extends State<BioMarkerScreen> {
         ),
         title: FutureBuilder(
             future: biomarkers,
-            builder: (context, AsyncSnapshot<List<Biomarker>> biomarkers) {
+            builder: (context, AsyncSnapshot<List<Biomarker>?> biomarkers) {
               if (biomarkers.hasData) {
-                biomarker = biomarkers.data.firstWhere((element) => element.id == biomarkerId);
-                return Text(biomarker.content.name, style: TextStyle(color: Theme.of(context).primaryColor));
+                biomarker = biomarkers.data!.firstWhere((element) => element.id == biomarkerId);
+                return Text(biomarker.content!.name!, style: TextStyle(color: Theme.of(context).primaryColor));
               } else {
                 return Text("Загрузка биомаркера...");
               }
@@ -66,9 +66,9 @@ class _BioMarkerScreenState extends State<BioMarkerScreen> {
           child: ListView(children: [
             FutureBuilder(
                 future: memberBiomarkers,
-                builder: (context, AsyncSnapshot<List<MemberBiomarker>> memberBiomarkers) {
+                builder: (context, AsyncSnapshot<List<MemberBiomarker>?> memberBiomarkers) {
                   if (memberBiomarkers.hasData) {
-                    memberBiomarker = memberBiomarkers.data.firstWhere((element) => element.biomarkerId == biomarkerId);
+                    memberBiomarker = memberBiomarkers.data!.firstWhere((element) => element.biomarkerId == biomarkerId);
                     return BiomarkerContainer(memberBiomarker: memberBiomarker);
                   } else {
                     return Container(

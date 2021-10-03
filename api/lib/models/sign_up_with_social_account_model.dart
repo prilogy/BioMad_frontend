@@ -2,19 +2,19 @@ part of api.api;
 
 class SignUpWithSocialAccountModel {
   
-  String email = null;
+  String? email = null;
   
-  String name = null;
+  String? name = null;
   
-  int genderId = null;
+  int? genderId = null;
   
-  DateTime dateBirthday = null;
+  DateTime? dateBirthday = null;
   
-  String password = null;
+  String? password = null;
   
-  String color = null;
+  String? color = null;
   
-  SocialAuthenticationIdentity identity = null;
+  SocialAuthenticationIdentity? identity = null;
   SignUpWithSocialAccountModel({this.email, this.name, this.genderId, this.dateBirthday, this.password, this.color, this.identity});
 
   @override
@@ -46,7 +46,7 @@ class SignUpWithSocialAccountModel {
     if (genderId != null)
       json['genderId'] = genderId;
     if (dateBirthday != null)
-      json['dateBirthday'] = dateBirthday == null ? null : dateBirthday.toUtc().toIso8601String();
+      json['dateBirthday'] = dateBirthday == null ? null : dateBirthday!.toUtc().toIso8601String();
     if (password != null)
       json['password'] = password;
     if (color != null)
@@ -57,7 +57,7 @@ class SignUpWithSocialAccountModel {
   }
 
   static List<SignUpWithSocialAccountModel> listFromJson(List<dynamic> json) {
-    return json == null ? List<SignUpWithSocialAccountModel>() : json.map((value) => SignUpWithSocialAccountModel.fromJson(value)).toList();
+    return json == null ? <SignUpWithSocialAccountModel>[] : json.map((value) => SignUpWithSocialAccountModel.fromJson(value)).toList();
   }
 
   static Map<String, SignUpWithSocialAccountModel> mapFromJson(Map<String, dynamic> json) {

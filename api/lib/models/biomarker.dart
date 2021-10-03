@@ -1,29 +1,29 @@
 part of api.api;
 
 class Biomarker {
-  BiomarkerReference reference = null;
+  BiomarkerReference? reference = null;
 
-  MemberBiomarker currentValue = null;
+  MemberBiomarker? currentValue = null;
 
-  int id = null;
+  int? id = null;
 
-  int typeId = null;
+  int? typeId = null;
 
-  BiomarkerType type = null;
+  BiomarkerType? type = null;
 
-  int defaultUnitId = null;
+  int? defaultUnitId = null;
 
-  BiomarkerTranslation content = null;
+  BiomarkerTranslation? content = null;
 
-  List<int> categoryIds = [];
+  List<int>? categoryIds = [];
 
-  List<int> unitIds = [];
+  List<int>? unitIds = [];
 
-  List<BiomarkerArticle> biomarkerArticles = [];
+  List<BiomarkerArticle>? biomarkerArticles = [];
 
-  int unitGroupId = null;
+  int? unitGroupId = null;
 
-  BiomarkerStateType state = null;
+  BiomarkerStateType? state = null;
 
   //enum stateEnum {  0 - выше,  1 - ниже,  2 - норма,  3 - неизвестно,  };{
   Biomarker();
@@ -33,7 +33,7 @@ class Biomarker {
     return 'Biomarker[defaultUnit =$defaultUnitId, reference=$reference, currentValue=$currentValue, id=$id, typeId=$typeId, type=$type, content=$content, categoryIds=$categoryIds, unitIds=$unitIds, biomarkerArticles=$biomarkerArticles, unitGroupId=$unitGroupId, state=$state, ]';
   }
 
-  Biomarker.fromJson(Map<String, dynamic> json) {
+  Biomarker.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
 
     reference = (json['reference'] == null)
@@ -81,9 +81,9 @@ class Biomarker {
     return json;
   }
 
-  static List<Biomarker> listFromJson(List<dynamic> json) {
+  static List<Biomarker> listFromJson(List<dynamic>? json) {
     return json == null
-        ? List<Biomarker>()
+        ? <Biomarker>[]
         : json.map((value) => Biomarker.fromJson(value)).toList();
   }
 

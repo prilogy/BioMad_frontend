@@ -17,10 +17,10 @@ import 'biomarker/biomarker_alert.dart';
 import 'on_load_container.dart';
 
 class CategoryItem extends StatelessWidget {
-  final int index;
-  final Category category;
-  final List<MemberBiomarker> memberBiomarkers;
-  final List<Biomarker> biomarkers;
+  final int? index;
+  final Category? category;
+  final List<MemberBiomarker>? memberBiomarkers;
+  final List<Biomarker>? biomarkers;
 
 
   CategoryItem({this.index, this.category, this.memberBiomarkers, this.biomarkers});
@@ -41,11 +41,11 @@ class CategoryItem extends StatelessWidget {
       allBiomarkers = 0;
       successfulBiomarkers = 0;
 
-      for (var item in memberBiomarkers) {
-        if (category.biomarkerIds.contains(item.biomarkerId)) {
+      for (var item in memberBiomarkers!) {
+        if (category!.biomarkerIds!.contains(item.biomarkerId)) {
           allBiomarkers++;
-          Biomarker biomarkerItem = biomarkers.firstWhere((element) => element.id == item.biomarkerId);
-          if (biomarkerItem?.state == BiomarkerStateType.number2_) successfulBiomarkers++;
+          Biomarker biomarkerItem = biomarkers!.firstWhere((element) => element.id == item.biomarkerId);
+          if (biomarkerItem.state == BiomarkerStateType.number2_) successfulBiomarkers++;
         }
       }
       state = allBiomarkers != 0 && successfulBiomarkers != 0
@@ -73,7 +73,7 @@ class CategoryItem extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        Keys.rootNavigator.currentState.pushReplacementNamed(Routes.category_analysis, arguments: category);
+        Keys.rootNavigator.currentState!.pushReplacementNamed(Routes.category_analysis, arguments: category);
       },
       child: Container(
         padding: EdgeInsets.only(left: Indents.md, right: Indents.sm),
@@ -105,14 +105,14 @@ class CategoryItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      category.content.name,
+                      category!.content!.name!,
                       style: theme.textTheme.bodyText2,
                     ),
                     Container(
                       padding: EdgeInsets.only(top: 2),
                       child: Text(
                         tr('category.state') + ": " + status,
-                        style: theme.textTheme.caption.merge(TextStyle(color: color)),
+                        style: theme.textTheme.caption!.merge(TextStyle(color: color)),
                       ),
                     )
                   ],

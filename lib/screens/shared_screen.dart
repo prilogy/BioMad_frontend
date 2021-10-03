@@ -13,30 +13,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class SharedScreen extends StatefulWidget {
-  final int memberAnalysisId;
-  final List<int> biomarkerIds;
+  final int? memberAnalysisId;
+  final List<int?>? biomarkerIds;
 
-  SharedScreen({Key key, this.memberAnalysisId, this.biomarkerIds}) : super(key: key);
+  SharedScreen({Key? key, this.memberAnalysisId, this.biomarkerIds}) : super(key: key);
 
   @override
   _SharedScreenState createState() => _SharedScreenState(memberAnalysisId, biomarkerIds);
 }
 
 class _SharedScreenState extends State<SharedScreen> {
-  final int memberAnalysisId;
-  final List<int> biomarkerIds;
+  final int? memberAnalysisId;
+  final List<int?>? biomarkerIds;
 
   _SharedScreenState(this.memberAnalysisId, this.biomarkerIds);
 
-  Future<List<Shared>> getSharedData() async {
+  Future<List<Shared>?> getSharedData() async {
     return await api.shared.info();
   }
 
-  Future<String> getLocal() async {
-    String currentLocale;
+  Future<String?> getLocal() async {
+    String? currentLocale;
     try {
       currentLocale = await Devicelocale.currentLocale;
-      currentLocale = currentLocale.substring(0, 2);
+      currentLocale = currentLocale!.substring(0, 2);
       return currentLocale;
     } on PlatformException {
       print("Error obtaining current locale");
@@ -46,7 +46,7 @@ class _SharedScreenState extends State<SharedScreen> {
 
   @override
   void initState() {
-    SharedModel result = SharedModel(memberAnalysisId: memberAnalysisId, biomarkerIds: biomarkerIds);
+    SharedModel result = SharedModel(memberAnalysisId: memberAnalysisId, biomarkerIds: biomarkerIds as List<int>?);
     api.shared.add(result);
     super.initState();
   }
@@ -74,8 +74,8 @@ class _SharedScreenState extends State<SharedScreen> {
                       ]),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          List<Shared> shared = snapshot.data[0];
-                          String localization = snapshot.data[1];
+                          List<Shared> shared = (snapshot.data as List<dynamic>)[0];
+                          String localization = (snapshot.data as List<dynamic>)[1];
                           print(shared);
                           String sharedLink = shared[0].url.toString() + "?culture=" + localization.substring(0, 2);
                           return Container(
@@ -90,7 +90,7 @@ class _SharedScreenState extends State<SharedScreen> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(sharedLink.substring(0, chars.toInt()) + "...",
-                                            style: theme.textTheme.subtitle1
+                                            style: theme.textTheme.subtitle1!
                                                 .merge(TextStyle(color: theme.primaryColor.withOpacity(0.8)))),
                                         Container(
                                           decoration: BoxDecoration(
@@ -100,7 +100,7 @@ class _SharedScreenState extends State<SharedScreen> {
                                           padding: EdgeInsets.symmetric(vertical: Indents.sm, horizontal: Indents.lg),
                                           margin: EdgeInsets.only(top: Indents.sm),
                                           child: Text(tr('shared.copy'),
-                                              style: theme.textTheme.subtitle1
+                                              style: theme.textTheme.subtitle1!
                                                   .merge(TextStyle(color: BioMadColors.base[100]))),
                                         ),
                                       ],

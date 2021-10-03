@@ -2,9 +2,9 @@ part of api.api;
 
 class BiomarkerArticleType {
   
-  int id = null;
+  int? id = null;
   
-  String key = null;
+  String? key = null;
   BiomarkerArticleType();
 
   @override
@@ -12,7 +12,7 @@ class BiomarkerArticleType {
     return 'BiomarkerArticleType[id=$id, key=$key, ]';
   }
 
-  BiomarkerArticleType.fromJson(Map<String, dynamic> json) {
+  BiomarkerArticleType.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
     id = json['id'];
     key = json['key'];
@@ -27,7 +27,7 @@ class BiomarkerArticleType {
   }
 
   static List<BiomarkerArticleType> listFromJson(List<dynamic> json) {
-    return json == null ? List<BiomarkerArticleType>() : json.map((value) => BiomarkerArticleType.fromJson(value)).toList();
+    return json == null ? <BiomarkerArticleType>[] : json.map((value) => BiomarkerArticleType.fromJson(value)).toList();
   }
 
   static Map<String, BiomarkerArticleType> mapFromJson(Map<String, dynamic> json) {

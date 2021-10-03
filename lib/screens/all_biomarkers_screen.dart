@@ -14,28 +14,28 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class AllBiomarkersScreen extends StatefulWidget {
-  final List<MemberBiomarker> memberBiomarkers;
-  final String categoryName;
+  final List<MemberBiomarker?>? memberBiomarkers;
+  final String? categoryName;
 
-  AllBiomarkersScreen({Key key, this.memberBiomarkers, this.categoryName}) : super(key: key);
+  AllBiomarkersScreen({Key? key, this.memberBiomarkers, this.categoryName}) : super(key: key);
 
   @override
   _AllBiomarkersScreenState createState() => _AllBiomarkersScreenState(memberBiomarkers, categoryName);
 }
 
 class _AllBiomarkersScreenState extends State<AllBiomarkersScreen> {
-  final List<MemberBiomarker> memberBiomarkers;
-  final String categoryName;
+  final List<MemberBiomarker?>? memberBiomarkers;
+  final String? categoryName;
 
   _AllBiomarkersScreenState(this.memberBiomarkers, this.categoryName);
 
-  Future<List<Biomarker>> getBiomarker() async {
+  Future<List<Biomarker>?> getBiomarker() async {
     return await api.biomarker.info();
   }
 
   @override
   Widget build(BuildContext context) {
-    Future<List<Biomarker>> biomarkers = getBiomarker();
+    Future<List<Biomarker>?> biomarkers = getBiomarker();
     return Scaffold(
         appBar: AppBar(
           leading: Builder(
@@ -60,23 +60,23 @@ class _AllBiomarkersScreenState extends State<AllBiomarkersScreen> {
             margin: EdgeInsets.only(bottom: Indents.sm),
             child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: memberBiomarkers.length,
+                itemCount: memberBiomarkers!.length,
                 itemBuilder: (context, index) {
                   return FutureBuilder(
                       future: biomarkers,
-                      builder: (context, AsyncSnapshot<List<Biomarker>> biomarkers) {
+                      builder: (context, AsyncSnapshot<List<Biomarker>?> biomarkers) {
                         if (biomarkers.hasData) {
-                          MemberBiomarker memberBiomarkerItem = memberBiomarkers[index];
+                          MemberBiomarker memberBiomarkerItem = memberBiomarkers![index]!;
                           Biomarker biomarkerItem =
-                              biomarkers.data.firstWhere((element) => element.id == memberBiomarkerItem.biomarkerId);
+                              biomarkers.data!.firstWhere((element) => element.id == memberBiomarkerItem.biomarkerId);
                           return BiomarkerItem(
                             index: index,
-                            value: memberBiomarkerItem.value ?? "null",
-                            unit: memberBiomarkerItem.unit.content.shorthand ?? "unnamed",
+                            value: memberBiomarkerItem.value ?? "null" as double?,
+                            unit: memberBiomarkerItem.unit!.content!.shorthand ?? "unnamed",
                             unitId: memberBiomarkerItem.unitId,
                             id: memberBiomarkerItem.biomarkerId,
                             biomarkerState: biomarkerItem.state,
-                            biomarkerName: biomarkerItem.content.name,
+                            biomarkerName: biomarkerItem.content!.name,
                             withActions: false,
                           );
                         } else {

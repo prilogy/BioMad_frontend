@@ -16,8 +16,8 @@ import '../drop_text.dart';
 
 // ignore: must_be_immutable
 class BiomarkerInfo extends StatelessWidget {
-  final Biomarker biomarker;
-  final String title;
+  final Biomarker? biomarker;
+  final String? title;
 
   BiomarkerInfo({
     this.biomarker,
@@ -29,7 +29,7 @@ class BiomarkerInfo extends StatelessWidget {
     this.title,
   });
 
-  Future<Article> getArticles(int id) async {
+  Future<Article?> getArticles(int id) async {
     return await api.article.infoById(id);
   }
 
@@ -39,26 +39,26 @@ class BiomarkerInfo extends StatelessWidget {
 
     String biomarkerDescription;
     try {
-      biomarkerDescription = biomarker.content.description ?? tr('biomarker.null_info');
+      biomarkerDescription = biomarker!.content!.description ?? tr('biomarker.null_info');
     } catch (e) {
       biomarkerDescription = tr('biomarker.load_info');
     }
 
-    Future<Article> decreasedDesc;
-    Future<Article> increasedDesc;
-    Future<Article> decrease;
-    Future<Article> increase;
+    Future<Article?>? decreasedDesc;
+    Future<Article?>? increasedDesc;
+    Future<Article?>? decrease;
+    Future<Article?>? increase;
     bool isReady = false;
     try {
-      for (var article in biomarker.biomarkerArticles) {
-        if (article.type.key == "decreased_desc")
-          decreasedDesc = getArticles(article.articleId);
-        else if (article.type.key == "increased_desc")
-          increasedDesc = getArticles(article.articleId);
-        else if (article.type.key == "decrease")
-          decrease = getArticles(article.articleId);
+      for (var article in biomarker!.biomarkerArticles!) {
+        if (article.type!.key == "decreased_desc")
+          decreasedDesc = getArticles(article.articleId!);
+        else if (article.type!.key == "increased_desc")
+          increasedDesc = getArticles(article.articleId!);
+        else if (article.type!.key == "decrease")
+          decrease = getArticles(article.articleId!);
         else
-          increase = getArticles(article.articleId);
+          increase = getArticles(article.articleId!);
       }
       isReady = true;
     } catch (e) {
@@ -72,7 +72,7 @@ class BiomarkerInfo extends StatelessWidget {
               margin: EdgeInsets.only(bottom: Indents.sm),
               child: Text(
                 tr('biomarker.info'),
-                style: theme.textTheme.headline6.merge(TextStyle(color: theme.primaryColor)),
+                style: theme.textTheme.headline6!.merge(TextStyle(color: theme.primaryColor)),
               ),
             ),
             Text(
@@ -89,14 +89,14 @@ class BiomarkerInfo extends StatelessWidget {
                       Container(
                           margin: EdgeInsets.only(bottom: Indents.sm),
                           child: Text(tr('biomarker.dangerous'),
-                              style: theme.textTheme.subtitle1.merge(TextStyle(color: theme.primaryColor)))),
+                              style: theme.textTheme.subtitle1!.merge(TextStyle(color: theme.primaryColor)))),
                       FutureBuilder(
                           future: decreasedDesc,
-                          builder: (context, AsyncSnapshot<Article> articleSnap) {
+                          builder: (context, AsyncSnapshot<Article?> articleSnap) {
                             if (articleSnap.hasData) {
                               return DropText(
                                   header: tr('biomarker.reduced'),
-                                  inside: articleSnap.data.content.text,
+                                  inside: articleSnap.data!.content!.text,
                                   color: theme.colorScheme.onBackground);
                             } else {
                               return Container(
@@ -104,18 +104,18 @@ class BiomarkerInfo extends StatelessWidget {
                                   margin: EdgeInsets.only(bottom: Indents.sm),
                                   width: MediaQuery.of(context).size.width - Indents.md * 2,
                                   decoration: BoxDecoration(
-                                    color: BioMadColors.base[200].withOpacity(0.8),
+                                    color: BioMadColors.base[200]!.withOpacity(0.8),
                                     borderRadius: BorderRadius.all(Radius.circular(4)),
                                   ));
                             }
                           }),
                       FutureBuilder(
                           future: increasedDesc,
-                          builder: (context, AsyncSnapshot<Article> articleSnap) {
+                          builder: (context, AsyncSnapshot<Article?> articleSnap) {
                             if (articleSnap.hasData) {
                               return DropText(
                                   header: tr('biomarker.elevated'),
-                                  inside: articleSnap.data.content.text,
+                                  inside: articleSnap.data!.content!.text,
                                   color: theme.errorColor);
                             } else {
                               return Container(
@@ -123,7 +123,7 @@ class BiomarkerInfo extends StatelessWidget {
                                   margin: EdgeInsets.only(bottom: Indents.sm),
                                   width: MediaQuery.of(context).size.width - Indents.md * 2,
                                   decoration: BoxDecoration(
-                                    color: BioMadColors.base[200].withOpacity(0.8),
+                                    color: BioMadColors.base[200]!.withOpacity(0.8),
                                     borderRadius: BorderRadius.all(Radius.circular(4)),
                                   ));
                             }
@@ -135,7 +135,7 @@ class BiomarkerInfo extends StatelessWidget {
               children: [
                 FutureBuilder(
                     future: increase,
-                    builder: (context, AsyncSnapshot<Article> articleSnap) {
+                    builder: (context, AsyncSnapshot<Article?> articleSnap) {
                       if (articleSnap.hasData) {
                         return RaisedButton(
                           onPressed: () {
@@ -149,7 +149,7 @@ class BiomarkerInfo extends StatelessWidget {
                             );
                           },
                           child: Text(tr('biomarker.elevate').toUpperCase(),
-                              style: theme.textTheme.bodyText2.merge(TextStyle(color: theme.colorScheme.onPrimary))),
+                              style: theme.textTheme.bodyText2!.merge(TextStyle(color: theme.colorScheme.onPrimary))),
                           color: theme.errorColor,
                         );
                       } else {
@@ -157,14 +157,14 @@ class BiomarkerInfo extends StatelessWidget {
                             height: 40,
                             width: 100,
                             decoration: BoxDecoration(
-                              color: BioMadColors.base[200].withOpacity(0.8),
+                              color: BioMadColors.base[200]!.withOpacity(0.8),
                               borderRadius: BorderRadius.all(Radius.circular(4)),
                             ));
                       }
                     }),
                 FutureBuilder(
                     future: decrease,
-                    builder: (context, AsyncSnapshot<Article> articleSnap) {
+                    builder: (context, AsyncSnapshot<Article?> articleSnap) {
                       if (articleSnap.hasData) {
                         return RaisedButton(
                           onPressed: () {
@@ -176,7 +176,7 @@ class BiomarkerInfo extends StatelessWidget {
                             );
                           },
                           child: Text(tr('biomarker.reduce').toUpperCase(),
-                              style: theme.textTheme.bodyText2.merge(TextStyle(color: theme.colorScheme.onPrimary))),
+                              style: theme.textTheme.bodyText2!.merge(TextStyle(color: theme.colorScheme.onPrimary))),
                           color: BioMadColors.success,
                         );
                       } else {
@@ -184,7 +184,7 @@ class BiomarkerInfo extends StatelessWidget {
                             height: 40,
                             width: 100,
                             decoration: BoxDecoration(
-                              color: BioMadColors.base[200].withOpacity(0.8),
+                              color: BioMadColors.base[200]!.withOpacity(0.8),
                               borderRadius: BorderRadius.all(Radius.circular(4)),
                             ));
                       }
@@ -199,8 +199,8 @@ class BiomarkerInfo extends StatelessWidget {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        List<int> biomarkerIds = [];
-                        biomarkerIds.add(biomarker.id);
+                        List<int?> biomarkerIds = [];
+                        biomarkerIds.add(biomarker!.id);
                         return SharedScreen(memberAnalysisId: null, biomarkerIds: biomarkerIds);
                       },
                     );

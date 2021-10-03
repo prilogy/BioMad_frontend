@@ -2,9 +2,9 @@ part of api.api;
 
 class SharedModel {
   
-  int memberAnalysisId = null;
+  int? memberAnalysisId = null;
   
-  List<int> biomarkerIds = [];
+  List<int>? biomarkerIds = [];
   SharedModel({this.memberAnalysisId, this.biomarkerIds});
 
   @override
@@ -29,7 +29,7 @@ class SharedModel {
   }
 
   static List<SharedModel> listFromJson(List<dynamic> json) {
-    return json == null ? List<SharedModel>() : json.map((value) => SharedModel.fromJson(value)).toList();
+    return json == null ? <SharedModel>[] : json.map((value) => SharedModel.fromJson(value)).toList();
   }
 
   static Map<String, SharedModel> mapFromJson(Map<String, dynamic> json) {

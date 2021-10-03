@@ -11,22 +11,22 @@ import 'package:flutter/material.dart';
 /// Создаёт окно поиска контента
 class SearchScreen extends StatefulWidget {
   final String hintText;
-  final List<dynamic> dataList;
-  final List<int> unitIds;
-  final SearchResultModel allData;
+  final List<dynamic>? dataList;
+  final List<int>? unitIds;
+  final SearchResultModel? allData;
   final initialValue;
   final searchType;
-  List<Biomarker> customBiomarker;
+  List<Biomarker>? customBiomarker;
 
   SearchScreen(
-      {@required this.hintText,
+      {required this.hintText,
       this.dataList,
       this.unitIds,
       this.allData,
       this.initialValue = "",
       this.searchType,
       this.customBiomarker,
-      Key key})
+      Key? key})
       : super(key: key);
 
   @override
@@ -36,12 +36,12 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final String hintText;
-  List<dynamic> dataList;
-  final List<int> unitIds;
-  SearchResultModel allData;
+  List<dynamic>? dataList;
+  final List<int>? unitIds;
+  SearchResultModel? allData;
   final initialValue;
   final searchType;
-  List<Biomarker> customBiomarker;
+  List<Biomarker>? customBiomarker;
 
   _SearchScreenState(
       this.hintText, this.dataList, this.unitIds, this.allData, this.initialValue, this.searchType, this.customBiomarker);
@@ -49,7 +49,7 @@ class _SearchScreenState extends State<SearchScreen> {
   TextEditingController _searchController = TextEditingController();
   FocusNode focusNode = FocusNode();
 
-  Future<SearchResultModel> getAll({String query, bool init = false}) async {
+  Future<SearchResultModel?> getAll({required String query, bool init = false}) async {
     return await api.helper.search("\"" + query + "\"");
   }
 

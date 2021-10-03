@@ -2,13 +2,13 @@ part of api.api;
 
 class CityTranslation {
   
-  String name = null;
+  String? name = null;
   
-  int baseEntityId = null;
+  int? baseEntityId = null;
   
-  City baseEntity = null;
+  City? baseEntity = null;
   
-  int cultureId = null;
+  int? cultureId = null;
   CityTranslation();
 
   @override
@@ -16,7 +16,7 @@ class CityTranslation {
     return 'CityTranslation[name=$name, baseEntityId=$baseEntityId, baseEntity=$baseEntity, cultureId=$cultureId, ]';
   }
 
-  CityTranslation.fromJson(Map<String, dynamic> json) {
+  CityTranslation.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
     name = json['name'];
     baseEntityId = json['baseEntityId'];
@@ -39,7 +39,7 @@ class CityTranslation {
   }
 
   static List<CityTranslation> listFromJson(List<dynamic> json) {
-    return json == null ? List<CityTranslation>() : json.map((value) => CityTranslation.fromJson(value)).toList();
+    return json == null ? <CityTranslation>[] : json.map((value) => CityTranslation.fromJson(value)).toList();
   }
 
   static Map<String, CityTranslation> mapFromJson(Map<String, dynamic> json) {

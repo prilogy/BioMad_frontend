@@ -13,22 +13,22 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 enum CustomDateFormFieldType { date, dateTime, time }
 
 class CustomDateFormField extends StatelessWidget with IndentsMixin {
-  final InputDecoration inputDecoration;
+  final InputDecoration? inputDecoration;
   final TextEditingController controller;
   final String labelText;
   final String hintText;
-  final Icon icon;
-  final String Function(DateTime) validator;
-  final bool Function() formValidator;
-  final void Function(DateTime) onDateSelected;
-  final EdgeInsetsGeometry padding;
+  final Icon? icon;
+  final String? Function(DateTime?)? validator;
+  final bool Function()? formValidator;
+  final void Function(DateTime?)? onDateSelected;
+  final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry margin;
   final CustomDateFormFieldType type;
 
   CustomDateFormField(
       {this.inputDecoration,
-      @required this.controller,
-      @required this.labelText,
+      required this.controller,
+      required this.labelText,
       this.hintText = '',
       this.icon,
       this.type = CustomDateFormFieldType.date,
@@ -60,7 +60,7 @@ class CustomDateFormField extends StatelessWidget with IndentsMixin {
           format: DateTimeFormats.defaultDate,
           onChanged: onDateSelected ?? (x) {},
           onShowPicker: (context, currentValue) async {
-            DateTime date;
+            DateTime? date;
             if (type != CustomDateFormFieldType.time)
               date = await DatePicker.showDatePicker(context,
                   showTitleActions: true,
@@ -91,7 +91,7 @@ class CustomDateFormField extends StatelessWidget with IndentsMixin {
                 initialTime:
                     TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
               );
-              return DateTimeField.combine(date, time);
+              return DateTimeField.combine(date!, time);
             }
 
             return currentValue;

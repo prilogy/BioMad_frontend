@@ -8,12 +8,12 @@ class BiomarkerReferenceConfigDependencyType {
 
   static const BiomarkerReferenceConfigDependencyType number0_ = const BiomarkerReferenceConfigDependencyType._internal(0);
 
-  static BiomarkerReferenceConfigDependencyType fromJson(int value) {
+  static BiomarkerReferenceConfigDependencyType fromJson(int? value) {
     return new BiomarkerReferenceConfigDependencyTypeTypeTransformer().decode(value);
   }
   
   static List<BiomarkerReferenceConfigDependencyType> listFromJson(List<dynamic> json) {
-    return json == null ? new List<BiomarkerReferenceConfigDependencyType>() : json.map((value) => BiomarkerReferenceConfigDependencyType.fromJson(value)).toList();
+    return json == null ? <BiomarkerReferenceConfigDependencyType>[] : json.map((value) => BiomarkerReferenceConfigDependencyType.fromJson(value)).toList();
   }
 }
 

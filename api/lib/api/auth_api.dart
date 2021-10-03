@@ -5,13 +5,13 @@ class AuthApi extends ApiBase<AuthApi> {
   AuthApi(Dio dio, {String version = "v1"}) : super(dio, version);
 
   /// Logs in with email and password
-  Future<AuthenticationResult> logIn(LogInWithCredentialsModel model) async {
+  Future<AuthenticationResult?> logIn(LogInWithCredentialsModel model) async {
     try {
       var url = '${v}/auth/logIn';
-      String currentLocale;
+      String? currentLocale;
       try {
         currentLocale = await Devicelocale.currentLocale;
-        currentLocale = currentLocale.substring(0,2);
+        currentLocale = currentLocale!.substring(0,2);
         print(currentLocale);
       } on PlatformException {
         print("Error obtaining current locale");
@@ -25,8 +25,8 @@ class AuthApi extends ApiBase<AuthApi> {
   }
 
   /// Logs in with social identity token
-  Future<AuthenticationResult> logInWithSocial(
-      {String token, String type}) async {
+  Future<AuthenticationResult?> logInWithSocial(
+      {String? token, String? type}) async {
     try {
       var url = '${v}/auth/logIn/${type}';
       var response = await dio.post(url, data: {'token': token});
@@ -38,12 +38,12 @@ class AuthApi extends ApiBase<AuthApi> {
   }
 
   /// Refreshes token, also logs in
-  Future<AuthenticationResult> refreshToken(
+  Future<AuthenticationResult?> refreshToken(
       RefreshTokenAuthenticationModel model) async {
-    String currentLocale;
+    String? currentLocale;
     try {
       currentLocale = await Devicelocale.currentLocale;
-      currentLocale = currentLocale.substring(0,2);
+      currentLocale = currentLocale!.substring(0,2);
       print(currentLocale);
     } on PlatformException {
       print("Error obtaining current locale");
@@ -72,8 +72,8 @@ class AuthApi extends ApiBase<AuthApi> {
   }
 
   /// Gets identity info
-  Future<SocialAuthenticationIdentity> signUpWithSocialInfo(
-      {String token, String type}) async {
+  Future<SocialAuthenticationIdentity?> signUpWithSocialInfo(
+      {String? token, String? type}) async {
     try {
       var url = '${v}/auth/signUp/${type}/identity';
       var response = await dio.post(url, data: {"token": token});
@@ -84,7 +84,7 @@ class AuthApi extends ApiBase<AuthApi> {
   }
 
   /// Signs up with social identity
-  Future<bool> signUpWithSocial(
+  Future<bool?> signUpWithSocial(
       SignUpWithSocialAccountModel model, String type) async {
     try {
       var url = '${v}/auth/signUp/${type}';

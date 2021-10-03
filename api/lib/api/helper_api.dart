@@ -3,7 +3,7 @@ part of api.api;
 class HelperApi extends ApiBase<HelperApi> {
   HelperApi(Dio dio, {String version = "v1"}) : super(dio, version);
 
-  Future<List<Gender>> genders() async {
+  Future<List<Gender>?> genders() async {
     try {
       var url = '${v}/helper/gender';
       var response = await dio.post(url);
@@ -13,7 +13,7 @@ class HelperApi extends ApiBase<HelperApi> {
     }
   }
 
-  Future<List<Culture>> cultures() async {
+  Future<List<Culture>?> cultures() async {
     try {
       var url = '${v}/helper/culture';
       var response = await dio.post(url);
@@ -23,7 +23,7 @@ class HelperApi extends ApiBase<HelperApi> {
     }
   }
 
-  Future<SearchResultModel> search(String query) async {
+  Future<SearchResultModel?> search(String query) async {
     try {
       var url = '${v}/helper/search';
       var response = await dio.post(url, data: query);

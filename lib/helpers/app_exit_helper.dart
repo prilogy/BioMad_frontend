@@ -4,19 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class AppExitHelper {
-  DateTime _currentBackPressTime;
+  DateTime? _currentBackPressTime;
   Key _navigatorKey;
 
 
   AppExitHelper(this._navigatorKey);
 
-  Future<bool> onWillPop() async {
+  Future<bool?> onWillPop() async {
     final NavigatorState navigator =
-        (_navigatorKey as GlobalKey<NavigatorState>).currentState;
+        (_navigatorKey as GlobalKey<NavigatorState>).currentState!;
     if (!navigator.canPop()) {
       DateTime now = DateTime.now();
       if (_currentBackPressTime == null ||
-          now.difference(_currentBackPressTime) > Duration(seconds: 2)) {
+          now.difference(_currentBackPressTime!) > Duration(seconds: 2)) {
         _currentBackPressTime = now;
         SnackBarExtension.dark(tr('snack_bar.app_exit'));
         return null;

@@ -21,11 +21,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
 class AddAnalysisScreen extends StatefulWidget {
-  final String title;
-  final Member member;
-  final void Function(MemberAnalysisModel) onChange;
+  final String? title;
+  final Member? member;
+  final void Function(MemberAnalysisModel)? onChange;
 
-  AddAnalysisScreen({Key key, this.title, this.member, this.onChange}) : super(key: key);
+  AddAnalysisScreen({Key? key, this.title, this.member, this.onChange}) : super(key: key);
 
   @override
   _AddAnalysisScreenState createState() => _AddAnalysisScreenState();
@@ -38,24 +38,24 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
 
   final int _labId = 1;
   final _descriptionController = TextEditingController();
-  List<MemberBiomarkerModel> _biomarkers = store.state.memberBiomarkerModelList.biomarkers;
+  List<MemberBiomarkerModel>? _biomarkers = store.state.memberBiomarkerModelList!.biomarkers;
 
-  String biomarkerJson;
+  String? biomarkerJson;
   final _formKey = GlobalKey<FormState>();
 
   MemberAnalysisModel getMemberAnalysisModel() => MemberAnalysisModel(
-      name: _analysisController.text ?? "Неопределено",
-      date: DateTimeFormats.defaultDate.parse(_dateController.text) ?? DateTimeFormats.defaultDate.format(DateTime.now()),
+      name: _analysisController.text,
+      date: DateTimeFormats.defaultDate.parse(_dateController.text),// ?? DateTimeFormats.defaultDate.format(DateTime.now()) as DateTime?,
       //labId: _labId,
       description:
           _descriptionController.text == "" || _descriptionController.text == null ? "Примечаний нет" : _descriptionController.text,
       biomarkers: _biomarkers ?? []);
 
   void onChange() {
-    widget.onChange(getMemberAnalysisModel());
+    widget.onChange!(getMemberAnalysisModel());
   }
 
-  Future<List<Biomarker>> getBiomarker() async {
+  Future<List<Biomarker>?> getBiomarker() async {
     return await api.biomarker.info();
   }
 
@@ -70,17 +70,17 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
 
   @override
   void dispose() {
-    _analysisController?.dispose();
-    _dateController?.dispose();
-    _descriptionController?.dispose();
+    _analysisController.dispose();
+    _dateController.dispose();
+    _descriptionController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final _tr = trWithKey('add_analysis');
-    Future<List<Biomarker>> biomarkers = getBiomarker();
+    final String Function(String, {List<String> args, BuildContext context, String gender, Map<String, String> namedArgs}) _tr = trWithKey('add_analysis');
+    Future<List<Biomarker>?> biomarkers = getBiomarker();
     return Scaffold(
         appBar: AppBar(
             leading: Builder(
@@ -88,9 +88,9 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                 return IconButton(
                   icon: Icon(Icons.arrow_back),
                   onPressed: () {
-                    store.dispatch(store.state.memberBiomarkerModelList.biomarkers = []);
+                    store.dispatch(store.state.memberBiomarkerModelList!.biomarkers = []);
                     store.dispatch(StoreThunks.refreshMemberAnalysis());
-                    Keys.rootNavigator.currentState.pushReplacementNamed(Routes.main);
+                    Keys.rootNavigator.currentState!.pushReplacementNamed(Routes.main);
                   },
                 );
               },
@@ -100,15 +100,15 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
               IconButton(
                 icon: Icon(Icons.add),
                 onPressed: () {
-                  if (_formKey.currentState.validate()) {
+                  if (_formKey.currentState!.validate()) {
                     MemberAnalysisModel result = getMemberAnalysisModel();
                     try {
-                      _biomarkers = store.state.memberBiomarkerModelList.biomarkers;
-                      print(_biomarkers[0].value);
+                      _biomarkers = store.state.memberBiomarkerModelList!.biomarkers;
+                      print(_biomarkers![0].value);
                       api.memberAnalysis.add(result);
                       store.dispatch(StoreThunks.refreshMemberAnalysis());
 
-                      Keys.rootNavigator.currentState.pushReplacementNamed(Routes.main, arguments: 600);
+                      Keys.rootNavigator.currentState!.pushReplacementNamed(Routes.main, arguments: 600);
                     } catch (e) {
                       SnackBarExtension.warning(tr('snack_bar.add_biomarker'), duration: Duration(seconds: 4));
                     }
@@ -118,7 +118,7 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
             ]),
         body: WillPopScope(
             onWillPop: () async {
-              Keys.rootNavigator.currentState.pushReplacementNamed(Routes.main);
+              Keys.rootNavigator.currentState!.pushReplacementNamed(Routes.main);
               return false;
             },
             child: Container(
@@ -137,7 +137,7 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                           onChange();
                         },
                         formValidator: () {
-                          return _formKey?.currentState?.validate();
+                          return _formKey.currentState?.validate();
                         },
                       ),
                       CustomDateFormField(
@@ -176,7 +176,7 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                                   padding: EdgeInsets.only(top: Indents.sm),
                                   margin: EdgeInsets.only(bottom: Indents.sm),
                                   child: Text(_tr('biomarkers'),
-                                      style: Theme.of(context).textTheme.headline6.merge(TextStyle(color: theme.primaryColor)))),
+                                      style: Theme.of(context).textTheme.headline6!.merge(TextStyle(color: theme.primaryColor)))),
                               SizedBox(
                                 height: 30,
                                 width: 30,
@@ -204,37 +204,37 @@ class _AddAnalysisScreenState extends State<AddAnalysisScreen> {
                               )
                             ],
                           ),
-                          StoreConnector<AppState, List<MemberBiomarkerModel>>(
-                            converter: (store) => store.state.memberBiomarkerModelList.biomarkers,
+                          StoreConnector<AppState, List<MemberBiomarkerModel>?>(
+                            converter: (store) => store.state.memberBiomarkerModelList!.biomarkers,
                             builder: (ctx, state) {
-                              _biomarkers = store.state.memberBiomarkerModelList.biomarkers;
+                              _biomarkers = store.state.memberBiomarkerModelList!.biomarkers;
                               return Container(
-                                  height: 76 * _biomarkers.length.toDouble() < 304
-                                      ? 76 * _biomarkers.length.toDouble()
+                                  height: 76 * _biomarkers!.length.toDouble() < 304
+                                      ? 76 * _biomarkers!.length.toDouble()
                                       : MediaQuery.of(context).size.height - AppBar().preferredSize.height - 372,
                                   width: MediaQuery.of(context).size.width,
                                   child: ScrollConfiguration(
                                       behavior: NoRippleScrollBehaviour(),
                                       child: ListView.builder(
-                                          itemCount: _biomarkers.length,
+                                          itemCount: _biomarkers!.length,
                                           itemBuilder: (context, index) {
                                             return FutureBuilder(
                                                 future: biomarkers,
-                                                builder: (context, AsyncSnapshot<List<Biomarker>> biomarkers) {
+                                                builder: (context, AsyncSnapshot<List<Biomarker>?> biomarkers) {
                                                   if (biomarkers.hasData) {
-                                                    Biomarker biomarkerItem = biomarkers.data
-                                                        .firstWhere((element) => element.id == _biomarkers[index].biomarkerId);
+                                                    Biomarker biomarkerItem = biomarkers.data!
+                                                        .firstWhere((element) => element.id == _biomarkers![index].biomarkerId);
                                                     return BiomarkerItem(
-                                                      value: _biomarkers[index].value ?? null,
-                                                      unit: store.state.unitList.units
-                                                              .firstWhere((element) => element.id == _biomarkers[index].unitId)
-                                                              .content
+                                                      value: _biomarkers![index].value ?? null,
+                                                      unit: store.state.unitList!.units!
+                                                              .firstWhere((element) => element.id == _biomarkers![index].unitId)
+                                                              .content!
                                                               .shorthand ??
                                                           "unnamed",
-                                                      unitId: _biomarkers[index].unitId,
-                                                      id: _biomarkers[index].biomarkerId,
+                                                      unitId: _biomarkers![index].unitId,
+                                                      id: _biomarkers![index].biomarkerId,
                                                       biomarkerState: biomarkerItem.state,
-                                                      biomarkerName: biomarkerItem.content.name,
+                                                      biomarkerName: biomarkerItem.content!.name,
                                                       isModel: true,
                                                       index: index,
                                                     );

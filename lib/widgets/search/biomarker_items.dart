@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 Widget biomarkerItems(BuildContext context, Biomarker data) {
   bool isAdded;
   try {
-    store.state.memberBiomarkerModelList.biomarkers?.firstWhere((element) => element.biomarkerId == data.id, orElse: null);
+    store.state.memberBiomarkerModelList!.biomarkers?.firstWhere((element) => element.biomarkerId == data.id, orElse: null);
     isAdded = true;
   } catch (e) {
     isAdded = false;
@@ -26,10 +26,10 @@ Widget biomarkerItems(BuildContext context, Biomarker data) {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    data.content.name.length > 44 ? data.content.name.substring(0, 44) + "..." : data.content.name,
+                    data.content!.name!.length > 44 ? data.content!.name!.substring(0, 44) + "..." : data.content!.name!,
                     style: Theme.of(context)
                         .textTheme
-                        .subtitle1
+                        .subtitle1!
                         .merge(TextStyle(color: BioMadColors.base[300], fontWeight: FontWeight.normal)),
                   ),
                 ],
@@ -44,16 +44,16 @@ Widget biomarkerItems(BuildContext context, Biomarker data) {
             child: Container(
               padding: EdgeInsets.symmetric(vertical: Indents.sm),
               child: Text(
-                data.content.name.length > 44 ? data.content.name.substring(0, 44) + "..." : data.content.name,
+                data.content!.name!.length > 44 ? data.content!.name!.substring(0, 44) + "..." : data.content!.name!,
                 style: Theme.of(context)
                     .textTheme
-                    .subtitle1
+                    .subtitle1!
                     .merge(TextStyle(color: BioMadColors.base[500], fontWeight: FontWeight.normal)),
               ),
             ));
   } else {
     return Container(
         child: Text("Все биомаркеры:",
-            style: Theme.of(context).textTheme.subtitle1.merge(TextStyle(color: Theme.of(context).primaryColor.withOpacity(0.8)))));
+            style: Theme.of(context).textTheme.subtitle1!.merge(TextStyle(color: Theme.of(context).primaryColor.withOpacity(0.8)))));
   }
 }

@@ -2,19 +2,19 @@ part of api.api;
 
 class MemberAnalysis {
   
-  int id = null;
+  int? id = null;
   
-  String name = null;
+  String? name = null;
   
-  String description = null;
+  String? description = null;
   
-  DateTime date = null;
+  DateTime? date = null;
   
-  int memberId = null;
+  int? memberId = null;
 
-  List<MemberBiomarker> biomarkers = [];
+  List<MemberBiomarker>? biomarkers = [];
   
-  DateTime dateCreatedAt = null;
+  DateTime? dateCreatedAt = null;
   MemberAnalysis();
 
   @override
@@ -22,7 +22,7 @@ class MemberAnalysis {
     return 'MemberAnalysis[id=$id, name=$name, description=$description, date=$date, memberId=$memberId, biomarkers=$biomarkers, dateCreatedAt=$dateCreatedAt, ]';
   }
 
-  MemberAnalysis.fromJson(Map<String, dynamic> json) {
+  MemberAnalysis.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
     id = json['id'];
     name = json['name'];
@@ -46,16 +46,16 @@ class MemberAnalysis {
       json['name'] = name;
       json['description'] = description;
     if (date != null)
-      json['date'] = date == null ? null : date.toUtc().toIso8601String();
+      json['date'] = date == null ? null : date!.toUtc().toIso8601String();
     if (memberId != null)
       json['memberId'] = memberId;
     if (dateCreatedAt != null)
-      json['dateCreatedAt'] = dateCreatedAt == null ? null : dateCreatedAt.toUtc().toIso8601String();
+      json['dateCreatedAt'] = dateCreatedAt == null ? null : dateCreatedAt!.toUtc().toIso8601String();
     return json;
   }
 
-  static List<MemberAnalysis> listFromJson(List<dynamic> json) {
-    return json == null ? List<MemberAnalysis>() : json.map((value) => MemberAnalysis.fromJson(value)).toList();
+  static List<MemberAnalysis> listFromJson(List<dynamic>? json) {
+    return json == null ? <MemberAnalysis>[] : json.map((value) => MemberAnalysis.fromJson(value)).toList();
   }
 
   static Map<String, MemberAnalysis> mapFromJson(Map<String, dynamic> json) {

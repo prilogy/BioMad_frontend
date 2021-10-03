@@ -10,23 +10,23 @@ import 'package:flutter/material.dart';
 import 'biomarker_alert.dart';
 
 class BiomarkerItem extends StatelessWidget {
-  final Widget child;
-  final int id;
-  final String biomarkerName;
-  final int unitId;
-  final double value;
-  final String unit;
-  final bool isModel;
-  final int index;
-  final bool withActions;
-  final BiomarkerStateType biomarkerState;
+  final Widget? child;
+  final int? id;
+  final String? biomarkerName;
+  final int? unitId;
+  final double? value;
+  final String? unit;
+  final bool? isModel;
+  final int? index;
+  final bool? withActions;
+  final BiomarkerStateType? biomarkerState;
 
   static const EdgeInsetsGeometry _defaultMargin = const EdgeInsets.only(bottom: Indents.md);
 
   BiomarkerItem({
     this.child,
-    @required this.id,
-    @required this.unitId,
+    required this.id,
+    required this.unitId,
     this.value,
     this.biomarkerName,
     this.unit = "",
@@ -38,8 +38,8 @@ class BiomarkerItem extends StatelessWidget {
 
   BiomarkerItem.forScrollingViews({
     this.child,
-    @required this.id,
-    @required this.unitId,
+    required this.id,
+    required this.unitId,
     this.value,
     this.biomarkerName,
     this.unit,
@@ -57,8 +57,8 @@ class BiomarkerItem extends StatelessWidget {
     var color;
     var icon;
 
-    MemberBiomarkerModel _biomarkerModel;
-    if (isModel) _biomarkerModel = store.state.memberBiomarkerModelList.biomarkers.firstWhere((element) => element.biomarkerId == id);
+    MemberBiomarkerModel? _biomarkerModel;
+    if (isModel!) _biomarkerModel = store.state.memberBiomarkerModelList!.biomarkers!.firstWhere((element) => element.biomarkerId == id);
 
     if (biomarkerState == BiomarkerStateType.number2_) {
       color = BioMadColors.success;
@@ -73,7 +73,7 @@ class BiomarkerItem extends StatelessWidget {
       icon = Icons.keyboard_arrow_up;
     } else {
       status = tr('state.undefined');
-      color = BioMadColors.base[300].withOpacity(0.8);
+      color = BioMadColors.base[300]!.withOpacity(0.8);
     }
 
     var iconContainerNormal = Container(
@@ -87,9 +87,8 @@ class BiomarkerItem extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        return withActions
-            ? null
-            : showDialog(
+        if(!withActions!)
+            showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return BioMarkerScreen(biomarkerId: id);
@@ -121,7 +120,7 @@ class BiomarkerItem extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(biomarkerName.length > 30 ? biomarkerName.substring(0, 30) + "..." : biomarkerName,
+                    Text(biomarkerName!.length > 30 ? biomarkerName!.substring(0, 30) + "..." : biomarkerName!,
                         style: Theme.of(context).textTheme.subtitle1),
                     Container(
                       child: Column(
@@ -131,12 +130,12 @@ class BiomarkerItem extends StatelessWidget {
                           Row(
                             children: [
                               Container(
-                                  child: withActions
+                                  child: withActions!
                                       ? Container()
                                       : icon != null
                                           ? Icon(icon, color: color, size: 16.0)
                                           : iconContainerNormal),
-                              Text(value.toString() + ' ' + unit + (withActions ? "" : ', ' + status),
+                              Text(value.toString() + ' ' + unit! + (withActions! ? "" : ', ' + status),
                                   style: Theme.of(context).textTheme.bodyText2),
                             ],
                           ),
@@ -147,7 +146,7 @@ class BiomarkerItem extends StatelessWidget {
                 ),
               )
             ]),
-            withActions
+            withActions!
                 ? Row(
                     children: [
                       IconButton(
@@ -177,8 +176,8 @@ class BiomarkerItem extends StatelessWidget {
                             size: 24.0,
                           ),
                           onPressed: () {
-                            store.state.memberBiomarkerModelList.biomarkers.removeAt(index);
-                            store.dispatch(StoreThunks.setMemberBiomarkerModels(store.state.memberBiomarkerModelList.biomarkers));
+                            store.state.memberBiomarkerModelList!.biomarkers!.removeAt(index!);
+                            store.dispatch(StoreThunks.setMemberBiomarkerModels(store.state.memberBiomarkerModelList!.biomarkers));
                           })
                     ],
                   )
@@ -189,7 +188,7 @@ class BiomarkerItem extends StatelessWidget {
                       size: 24.0,
                     ),
                     onPressed: () {
-                      return showDialog(
+                      showDialog(
                           context: context,
                           builder: (BuildContext context) {
                             return BioMarkerScreen(biomarkerId: id);

@@ -2,11 +2,11 @@ part of api.api;
 
 class City {
   
-  int id = null;
+  int? id = null;
   
-  CityTranslation content = null;
+  CityTranslation? content = null;
   
-  List<int> labIds = [];
+  List<int>? labIds = [];
   City();
 
   @override
@@ -14,7 +14,7 @@ class City {
     return 'City[id=$id, content=$content, labIds=$labIds, ]';
   }
 
-  City.fromJson(Map<String, dynamic> json) {
+  City.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
     id = json['id'];
     content = (json['content'] == null) ?
@@ -35,8 +35,8 @@ class City {
     return json;
   }
 
-  static List<City> listFromJson(List<dynamic> json) {
-    return json == null ? List<City>() : json.map((value) => City.fromJson(value)).toList();
+  static List<City> listFromJson(List<dynamic>? json) {
+    return json == null ? <City>[] : json.map((value) => City.fromJson(value)).toList();
   }
 
   static Map<String, City> mapFromJson(Map<String, dynamic> json) {

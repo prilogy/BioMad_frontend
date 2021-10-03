@@ -2,15 +2,15 @@ part of api.api;
 
 class RefreshToken {
   
-  int id = null;
+  int? id = null;
   
-  String token = null;
+  String? token = null;
   
-  DateTime dateExpiration = null;
+  DateTime? dateExpiration = null;
   
-  bool isValid = null;
+  bool? isValid = null;
   
-  int userId = null;
+  int? userId = null;
   RefreshToken();
 
   @override
@@ -18,7 +18,7 @@ class RefreshToken {
     return 'RefreshToken[id=$id, token=$token, dateExpiration=$dateExpiration, isValid=$isValid, userId=$userId, ]';
   }
 
-  RefreshToken.fromJson(Map<String, dynamic> json) {
+  RefreshToken.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
     id = json['id'];
     token = json['token'];
@@ -35,7 +35,7 @@ class RefreshToken {
       json['id'] = id;
       json['token'] = token;
     if (dateExpiration != null)
-      json['dateExpiration'] = dateExpiration == null ? null : dateExpiration.toUtc().toIso8601String();
+      json['dateExpiration'] = dateExpiration == null ? null : dateExpiration!.toUtc().toIso8601String();
     if (isValid != null)
       json['isValid'] = isValid;
     if (userId != null)
@@ -43,8 +43,8 @@ class RefreshToken {
     return json;
   }
 
-  static List<RefreshToken> listFromJson(List<dynamic> json) {
-    return json == null ? List<RefreshToken>() : json.map((value) => RefreshToken.fromJson(value)).toList();
+  static List<RefreshToken> listFromJson(List<dynamic>? json) {
+    return json == null ? <RefreshToken>[] : json.map((value) => RefreshToken.fromJson(value)).toList();
   }
 
   static Map<String, RefreshToken> mapFromJson(Map<String, dynamic> json) {

@@ -12,6 +12,7 @@ import 'package:biomad_frontend/store/user/actions.dart';
 import 'package:biomad_frontend/styles/app_theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -19,6 +20,9 @@ import 'services/api.dart' as apiService;
 import 'services/dio.dart' as dioService;
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   await Env.init('.env');
   await localStorage.ready;
   dioService.init();
@@ -41,7 +45,7 @@ class MyApp extends StatelessWidget {
     initializeDateFormatting("en", null);
 
     if (!connectionChecked)
-      WidgetsBinding.instance.addPostFrameCallback((x) => initAction(x, context));
+      WidgetsBinding.instance!.addPostFrameCallback((x) => initAction(x, context));
 
     return StoreProvider<AppState>(
       store: store,
@@ -52,7 +56,7 @@ class MyApp extends StatelessWidget {
         navigatorKey: Keys.rootNavigator,
         onGenerateRoute: (settings) => RouteGenerator.generateRoute(settings),
         initialRoute: store.state.authorization == null ||
-                !store.state.authorization.isAuthorized
+                !store.state.authorization!.isAuthorized
             ? '/auth'
             : '/main',
         builder: (context, child) => Scaffold(
@@ -68,11 +72,11 @@ class MyApp extends StatelessWidget {
   /// If TIMEOUT - shows snack bar
   /// If user == null - logs out
   Future initAction(dynamic _, BuildContext ctx) async {
-    store.dispatch(SetSettings(Settings(culture: EasyLocalization.of(ctx).locale.languageCode)));
+    store.dispatch(SetSettings(Settings(culture: EasyLocalization.of(ctx)!.locale.languageCode)));
     store.dispatch(StoreThunks.refreshGendersAndCulture());
 
     if (store.state.authorization == null ||
-        !store.state.authorization.isAuthorized) return;
+        !store.state.authorization!.isAuthorized) return;
 
     try {
       var user = await apiService.api.user.infoWithExceptionOnTimeOut();

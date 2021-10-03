@@ -1,13 +1,13 @@
 part of api.api;
 
 class MemberAnalysisModel {
-  String name = null;
+  String? name = null;
 
-  String description = null;
+  String? description = null;
 
-  DateTime date = null;
+  DateTime? date = null;
 
-  List<MemberBiomarkerModel> biomarkers = [];
+  List<MemberBiomarkerModel>? biomarkers = [];
 
   MemberAnalysisModel(
       {this.name, this.description, this.date, this.biomarkers});
@@ -32,14 +32,14 @@ class MemberAnalysisModel {
     json['name'] = name;
     json['description'] = description;
     if (date != null)
-      json['date'] = date == null ? null : date.toUtc().toIso8601String();
+      json['date'] = date == null ? null : date!.toUtc().toIso8601String();
     json['biomarkers'] = biomarkers;
     return json;
   }
 
   static List<MemberAnalysisModel> listFromJson(List<dynamic> json) {
     return json == null
-        ? List<MemberAnalysisModel>()
+        ? <MemberAnalysisModel>[]
         : json.map((value) => MemberAnalysisModel.fromJson(value)).toList();
   }
 

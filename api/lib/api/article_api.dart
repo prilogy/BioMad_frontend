@@ -3,7 +3,7 @@ part of api.api;
 class ArticleApi extends ApiBase<ArticleApi> {
   ArticleApi(Dio dio, {String version = "v1"}) : super(dio, version);
 
-  Future<List<Article>> info() async {
+  Future<List<Article>?> info() async {
     try {
       var url = '${v}/article';
       var response = await dio.get(url);
@@ -13,7 +13,7 @@ class ArticleApi extends ApiBase<ArticleApi> {
     }
   }
 
-  Future<Article> infoById(int id) async {
+  Future<Article?> infoById(int id) async {
     try {
       var url = '${v}/article/${id}';
       var response = await dio.get(url);

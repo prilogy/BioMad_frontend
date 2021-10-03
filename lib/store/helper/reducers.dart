@@ -5,7 +5,7 @@ import 'package:redux/redux.dart';
 import 'actions.dart' as Actions;
 
 final helperReducer = combineReducers<Helper>(
-    [TypedReducer<Helper, Actions.SetHelper>(_setHelper)]);
+    [TypedReducer<Helper, Actions.SetHelper>(_setHelper) as Helper Function(Helper, dynamic)]);
 
 Helper _setHelper(Helper state, Actions.SetHelper action) {
   Helper.saveToLocalStorage(action.helper);

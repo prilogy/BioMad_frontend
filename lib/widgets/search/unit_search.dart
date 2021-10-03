@@ -10,37 +10,37 @@ import 'package:flutter/material.dart';
 
 class UnitSearch extends StatefulWidget {
   final String hintText;
-  final List<int> unitIds;
+  final List<int>? unitIds;
 
-  UnitSearch({@required this.hintText, this.unitIds, Key key}) : super(key: key);
+  UnitSearch({required this.hintText, this.unitIds, Key? key}) : super(key: key);
 
   @override
   _UnitSearchState createState() => _UnitSearchState(hintText, unitIds);
 }
 
 class _UnitSearchState extends State<UnitSearch> {
-  final String hintText;
-  final List<int> unitIds;
+  final String? hintText;
+  final List<int>? unitIds;
 
   _UnitSearchState(this.hintText, this.unitIds);
 
   TextEditingController _searchController = TextEditingController();
 
-  Future<List<Unit>> getUnits({String query, bool init = false}) async {
+  Future<List<Unit>?> getUnits({String? query, bool init = false}) async {
     if (init)
-      return store.state.unitList.units;
+      return store.state.unitList!.units;
     else
-      return await api.unit.search("\"" + query + "\"");
+      return await api.unit.search("\"" + query! + "\"");
   }
 
-  StreamController<Future<List<Unit>>> searchStream;
-  Future<List<Unit>> units;
+  late StreamController<Future<List<Unit>>?> searchStream;
+  Future<List<Unit>?>? units;
 
   void _loadUnits(units) async => searchStream.add(units);
 
   @override
   void initState() {
-    searchStream = StreamController<Future<List<Unit>>>();
+    searchStream = StreamController<Future<List<Unit>>?>();
     units = getUnits(init: true);
     _loadUnits(units);
     super.initState();
@@ -86,12 +86,12 @@ class _UnitSearchState extends State<UnitSearch> {
             builder: (context, snap) {
               if (snap.hasData) {
                 return FutureBuilder(
-                    future: snap.data,
+                    future: snap.data as Future<List<Unit>>?,
                     builder: (context, AsyncSnapshot<List<Unit>> unitsSnap) {
                       if (unitsSnap.hasData) {
-                        if (unitsSnap.data.isNotEmpty) {
+                        if (unitsSnap.data!.isNotEmpty) {
                           List<Unit> unitList = [];
-                          for (var unit in unitsSnap.data) for (var unitId in unitIds) if (unitId == unit.id) unitList.add(unit);
+                          for (var unit in unitsSnap.data!) for (var unitId in unitIds!) if (unitId == unit.id) unitList.add(unit);
                           return Container(
                               height: MediaQuery.of(context).size.height - AppBar().preferredSize.height - 61,
                               child: ListView.separated(

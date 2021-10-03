@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 
 class CustomListTile extends StatelessWidget {
   final double height;
-  final Widget prepend;
-  final Widget append;
+  final Widget? prepend;
+  final Widget? append;
   final MainAxisAlignment mainAxisAlignment;
   final CrossAxisAlignment crossAxisAlignment;
-  final Widget divider;
+  final Widget? divider;
   final EdgeInsetsGeometry tilePadding;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   static const double baseHeight = 60;
 

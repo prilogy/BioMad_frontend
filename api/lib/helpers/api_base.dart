@@ -9,7 +9,7 @@ abstract class ApiBase<T> {
   ApiBase(this.dio, this.v);
 
   T withVersion(String version) {
-    var tmp = this;
+    ApiBase<T> tmp = this;
     tmp.v = version;
     return tmp as T;
   }

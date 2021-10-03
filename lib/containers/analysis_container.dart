@@ -11,11 +11,11 @@ import 'package:biomad_frontend/styles/indents.dart';
 import 'package:flutter/material.dart';
 
 class AnalysisContainer extends StatefulWidget {
-  final MemberAnalysis analysis;
+  final MemberAnalysis? analysis;
 
   AnalysisContainer({
     this.analysis,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -23,7 +23,7 @@ class AnalysisContainer extends StatefulWidget {
 }
 
 class _AnalysisContainerState extends State<AnalysisContainer> {
-  final MemberAnalysis analysis;
+  final MemberAnalysis? analysis;
 
   _AnalysisContainerState(this.analysis);
 
@@ -31,14 +31,14 @@ class _AnalysisContainerState extends State<AnalysisContainer> {
     return value > 9 ? value.toString() : "0" + value.toString();
   }
 
-  Future<List<Biomarker>> getBiomarker() async {
+  Future<List<Biomarker>?> getBiomarker() async {
     return await api.biomarker.info();
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    Future<List<Biomarker>> biomarkers = getBiomarker();
+    Future<List<Biomarker>?> biomarkers = getBiomarker();
     return Container(
         padding: EdgeInsets.only(left: Indents.md, right: Indents.md),
         margin: EdgeInsets.only(bottom: Indents.sm),
@@ -54,15 +54,15 @@ class _AnalysisContainerState extends State<AnalysisContainer> {
                   style: theme.textTheme.bodyText1,
                 ),
                 Text(
-                  zeroAdding(analysis.dateCreatedAt.day) +
+                  zeroAdding(analysis!.dateCreatedAt!.day) +
                       "." +
-                      zeroAdding(analysis.dateCreatedAt.month) +
+                      zeroAdding(analysis!.dateCreatedAt!.month) +
                       "." +
-                      analysis.dateCreatedAt.year.toString() +
+                      analysis!.dateCreatedAt!.year.toString() +
                       " - " +
-                      analysis.dateCreatedAt.hour.toString() +
+                      analysis!.dateCreatedAt!.hour.toString() +
                       ":" +
-                      zeroAdding(analysis.dateCreatedAt.minute),
+                      zeroAdding(analysis!.dateCreatedAt!.minute),
                 ),
               ],
             ),
@@ -77,7 +77,7 @@ class _AnalysisContainerState extends State<AnalysisContainer> {
                   tr('analysis.desc'),
                   style: theme.textTheme.bodyText1,
                 ),
-                Text(analysis.description),
+                Text(analysis!.description!),
               ],
             ),
           ),
@@ -86,7 +86,7 @@ class _AnalysisContainerState extends State<AnalysisContainer> {
             child: Text(
               tr('analysis.biomarkers'),
               style:
-                  theme.textTheme.subtitle1.merge(TextStyle(color: theme.primaryColor, fontWeight: FontWeight.normal)),
+                  theme.textTheme.subtitle1!.merge(TextStyle(color: theme.primaryColor, fontWeight: FontWeight.normal)),
             ),
           ),
           Container(
@@ -95,22 +95,22 @@ class _AnalysisContainerState extends State<AnalysisContainer> {
               child: ScrollConfiguration(
                   behavior: NoRippleScrollBehaviour(),
                   child: ListView.builder(
-                      itemCount: analysis.biomarkers.length,
+                      itemCount: analysis!.biomarkers!.length,
                       itemBuilder: (context, index) {
                         return FutureBuilder(
                             future: biomarkers,
-                            builder: (context, AsyncSnapshot<List<Biomarker>> biomarkers) {
+                            builder: (context, AsyncSnapshot<List<Biomarker>?> biomarkers) {
                               if (biomarkers.hasData) {
-                                MemberBiomarker memberBiomarkerItem = analysis.biomarkers[index];
-                                Biomarker biomarkerItem = biomarkers.data
+                                MemberBiomarker memberBiomarkerItem = analysis!.biomarkers![index];
+                                Biomarker biomarkerItem = biomarkers.data!
                                     .firstWhere((element) => element.id == memberBiomarkerItem.biomarkerId);
                                 return BiomarkerItem(
-                                  value: memberBiomarkerItem.value ?? "null",
-                                  unit: memberBiomarkerItem.unit.content.shorthand ?? "unnamed",
+                                  value: memberBiomarkerItem.value ?? "null" as double?,
+                                  unit: memberBiomarkerItem.unit!.content!.shorthand ?? "unnamed",
                                   unitId: memberBiomarkerItem.unitId,
                                   id: memberBiomarkerItem.biomarkerId,
                                   biomarkerState: biomarkerItem.state,
-                                  biomarkerName: biomarkerItem.content.name,
+                                  biomarkerName: biomarkerItem.content!.name,
                                   withActions: false,
                                 );
                               } else {

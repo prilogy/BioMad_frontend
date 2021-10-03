@@ -1,21 +1,21 @@
 part of api.api;
 
 class MemberBiomarker {
-  int id = null;
+  int? id = null;
 
-  double value = null;
+  double? value = null;
 
-  DateTime dateCreatedAt = null;
+  DateTime? dateCreatedAt = null;
 
-  int unitId = null;
+  int? unitId = null;
 
-  Unit unit = null;
+  Unit? unit = null;
 
-  int biomarkerId = null;
+  int? biomarkerId = null;
 
-  BiomarkerTranslation biomarkerContent = null;
+  BiomarkerTranslation? biomarkerContent = null;
 
-  int analysisId = null;
+  int? analysisId = null;
 
   MemberBiomarker();
 
@@ -24,7 +24,7 @@ class MemberBiomarker {
     return 'MemberBiomarker[id=$id, value=$value, dateCreatedAt=$dateCreatedAt, unitId=$unitId, unit=$unit, biomarkerId=$biomarkerId, biomarkerContent=$biomarkerContent, analysisId=$analysisId, ]';
   }
 
-  MemberBiomarker.fromJson(Map<String, dynamic> json) {
+  MemberBiomarker.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
 
     id = json['id'];
@@ -48,7 +48,7 @@ class MemberBiomarker {
     if (dateCreatedAt != null)
       json['dateCreatedAt'] = dateCreatedAt == null
           ? null
-          : dateCreatedAt.toUtc().toIso8601String();
+          : dateCreatedAt!.toUtc().toIso8601String();
     if (unitId != null) json['unitId'] = unitId;
     if (unit != null) json['unit'] = unit;
     if (biomarkerId != null) json['biomarkerId'] = biomarkerId;
@@ -57,9 +57,9 @@ class MemberBiomarker {
     return json;
   }
 
-  static List<MemberBiomarker> listFromJson(List<dynamic> json) {
+  static List<MemberBiomarker> listFromJson(List<dynamic>? json) {
     return json == null
-        ? List<MemberBiomarker>()
+        ? <MemberBiomarker>[]
         : json.map((value) => MemberBiomarker.fromJson(value)).toList();
   }
 

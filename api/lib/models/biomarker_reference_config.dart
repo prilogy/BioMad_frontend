@@ -2,15 +2,15 @@ part of api.api;
 
 class BiomarkerReferenceConfig {
   
-  int id = null;
+  int? id = null;
   
-  int referenceId = null;
+  int? referenceId = null;
   
-  int ageRangeId = null;
+  int? ageRangeId = null;
   
-  BiomarkerReferenceConfigRange ageRange = null;
+  BiomarkerReferenceConfigRange? ageRange = null;
   
-  int genderId = null;
+  int? genderId = null;
   BiomarkerReferenceConfig();
 
   @override
@@ -18,7 +18,7 @@ class BiomarkerReferenceConfig {
     return 'BiomarkerReferenceConfig[id=$id, referenceId=$referenceId, ageRangeId=$ageRangeId, ageRange=$ageRange, genderId=$genderId, ]';
   }
 
-  BiomarkerReferenceConfig.fromJson(Map<String, dynamic> json) {
+  BiomarkerReferenceConfig.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
     id = json['id'];
     referenceId = json['referenceId'];
@@ -44,7 +44,7 @@ class BiomarkerReferenceConfig {
   }
 
   static List<BiomarkerReferenceConfig> listFromJson(List<dynamic> json) {
-    return json == null ? List<BiomarkerReferenceConfig>() : json.map((value) => BiomarkerReferenceConfig.fromJson(value)).toList();
+    return json == null ? <BiomarkerReferenceConfig>[] : json.map((value) => BiomarkerReferenceConfig.fromJson(value)).toList();
   }
 
   static Map<String, BiomarkerReferenceConfig> mapFromJson(Map<String, dynamic> json) {

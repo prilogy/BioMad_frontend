@@ -3,7 +3,7 @@ part of api.api;
 class UserApi extends ApiBase<HelperApi> {
   UserApi(Dio dio, {String version = "v1"}) : super(dio, version);
 
-  Future<User> info() async {
+  Future<User?> info() async {
     try {
       var url = '${v}/user';
       var response = await dio.get(url);
@@ -15,14 +15,14 @@ class UserApi extends ApiBase<HelperApi> {
 
   /// WARNING: REQUIRED TRY CATCH
   /// Throws exception if connection timed out
-  Future<User> infoWithExceptionOnTimeOut() async {
+  Future<User?> infoWithExceptionOnTimeOut() async {
     try {
       var url = '${v}/user';
       var response = await dio.get(url);
 
       return User.fromJson(response.data);
     } on DioError catch (e) {
-      if(e.type == DioErrorType.CONNECT_TIMEOUT)
+      if(e.type == DioErrorType.connectTimeout)
         throw Exception();
       return null;
     }

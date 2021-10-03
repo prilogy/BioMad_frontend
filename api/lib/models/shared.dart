@@ -2,17 +2,17 @@ part of api.api;
 
 class Shared {
   
-  int id = null;
+  int? id = null;
   
-  String token = null;
+  String? token = null;
   
-  DateTime dateCreatedAt = null;
+  DateTime? dateCreatedAt = null;
   
-  String url = null;
+  String? url = null;
   
-  int memberId = null;
+  int? memberId = null;
   
-  List<int> biomarkerIds = [];
+  List<int>? biomarkerIds = [];
   Shared();
 
   @override
@@ -20,7 +20,7 @@ class Shared {
     return 'Shared[id=$id, token=$token, dateCreatedAt=$dateCreatedAt, url=$url, memberId=$memberId, biomarkerIds=$biomarkerIds, ]';
   }
 
-  Shared.fromJson(Map<String, dynamic> json) {
+  Shared.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
     id = json['id'];
     token = json['token'];
@@ -40,7 +40,7 @@ class Shared {
       json['id'] = id;
       json['token'] = token;
     if (dateCreatedAt != null)
-      json['dateCreatedAt'] = dateCreatedAt == null ? null : dateCreatedAt.toUtc().toIso8601String();
+      json['dateCreatedAt'] = dateCreatedAt == null ? null : dateCreatedAt!.toUtc().toIso8601String();
       json['url'] = url;
     if (memberId != null)
       json['memberId'] = memberId;
@@ -48,8 +48,8 @@ class Shared {
     return json;
   }
 
-  static List<Shared> listFromJson(List<dynamic> json) {
-    return json == null ? List<Shared>() : json.map((value) => Shared.fromJson(value)).toList();
+  static List<Shared> listFromJson(List<dynamic>? json) {
+    return json == null ? <Shared>[] : json.map((value) => Shared.fromJson(value)).toList();
   }
 
   static Map<String, Shared> mapFromJson(Map<String, dynamic> json) {

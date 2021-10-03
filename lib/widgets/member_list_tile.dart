@@ -13,8 +13,8 @@ import 'custom/custom_list_tile.dart';
 
 class MemberListTile extends StatelessWidget {
   final Member model;
-  final AsyncCallback onArrowTap;
-  final AsyncCallback onTap;
+  final AsyncCallback? onArrowTap;
+  final AsyncCallback? onTap;
   final bool divider;
   final EdgeInsetsGeometry padding;
 
@@ -24,7 +24,7 @@ class MemberListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final name = model?.name;
+    final name = model.name!;
     final isCurrent = store.state.authorization?.currentMemberId == model.id;
 
     return CustomListTile(
@@ -42,7 +42,7 @@ class MemberListTile extends StatelessWidget {
                 child: CustomCircleAvatar(
                     text: name,
                     radius: AvatarSizes.md,
-                    backgroundColor: model.color == null ? theme.primaryColor : ColorHelpers.fromHex(model.color))),
+                    backgroundColor: model.color == null ? theme.primaryColor : ColorHelpers.fromHex(model.color!))),
             Expanded(
               child: Text(
                 name,
@@ -60,7 +60,7 @@ class MemberListTile extends StatelessWidget {
           isCurrent
               ? Text(
                   tr('member_list_tile.current'),
-                  style: theme.textTheme.subtitle1.merge(TextStyle(color: theme.canvasColor)),
+                  style: theme.textTheme.subtitle1!.merge(TextStyle(color: theme.canvasColor)),
                 )
               : Container(),
           IconButton(

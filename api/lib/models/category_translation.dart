@@ -2,13 +2,13 @@ part of api.api;
 
 class CategoryTranslation {
   
-  String name = null;
+  String? name = null;
   
-  String description = null;
+  String? description = null;
   
-  int baseEntityId = null;
+  int? baseEntityId = null;
   
-  int cultureId = null;
+  int? cultureId = null;
   CategoryTranslation();
 
   @override
@@ -16,7 +16,7 @@ class CategoryTranslation {
     return 'CategoryTranslation[name=$name, description=$description, baseEntityId=$baseEntityId, cultureId=$cultureId, ]';
   }
 
-  CategoryTranslation.fromJson(Map<String, dynamic> json) {
+  CategoryTranslation.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
     name = json['name'];
     description = json['description'];
@@ -36,7 +36,7 @@ class CategoryTranslation {
   }
 
   static List<CategoryTranslation> listFromJson(List<dynamic> json) {
-    return json == null ? List<CategoryTranslation>() : json.map((value) => CategoryTranslation.fromJson(value)).toList();
+    return json == null ? <CategoryTranslation>[] : json.map((value) => CategoryTranslation.fromJson(value)).toList();
   }
 
   static Map<String, CategoryTranslation> mapFromJson(Map<String, dynamic> json) {

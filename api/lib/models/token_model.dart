@@ -2,7 +2,7 @@ part of api.api;
 
 class TokenModel {
   
-  String token = null;
+  String? token = null;
   TokenModel();
 
   @override
@@ -23,7 +23,7 @@ class TokenModel {
   }
 
   static List<TokenModel> listFromJson(List<dynamic> json) {
-    return json == null ? List<TokenModel>() : json.map((value) => TokenModel.fromJson(value)).toList();
+    return json == null ? <TokenModel>[] : json.map((value) => TokenModel.fromJson(value)).toList();
   }
 
   static Map<String, TokenModel> mapFromJson(Map<String, dynamic> json) {

@@ -2,33 +2,33 @@ part of api.api;
 
 class User {
   
-  int id = null;
+  int? id = null;
   
-  String email = null;
+  String? email = null;
   
-  bool emailIsVerified = null;
+  bool? emailIsVerified = null;
   
-  String password = null;
+  String? password = null;
   
-  DateTime dateCreatedAt = null;
+  DateTime? dateCreatedAt = null;
   
-  int cultureId = null;
+  int? cultureId = null;
   
-  Culture culture = null;
+  Culture? culture = null;
   
-  List<Member> members = [];
+  List<Member>? members = [];
   
-  int currentMemberId = null;
+  int? currentMemberId = null;
   
-  List<SocialAccount> socialAccounts = [];
+  List<SocialAccount>? socialAccounts = [];
   
-  List<ConfirmationCode> confirmationCodes = [];
+  List<ConfirmationCode>? confirmationCodes = [];
   
-  int roleId = null;
+  int? roleId = null;
   
-  Role role = null;
+  Role? role = null;
   
-  List<RefreshToken> refreshTokens = [];
+  List<RefreshToken>? refreshTokens = [];
   User();
 
   @override
@@ -36,7 +36,7 @@ class User {
     return 'User[id=$id, email=$email, emailIsVerified=$emailIsVerified, password=$password, dateCreatedAt=$dateCreatedAt, cultureId=$cultureId, culture=$culture, members=$members, currentMemberId=$currentMemberId, socialAccounts=$socialAccounts, confirmationCodes=$confirmationCodes, roleId=$roleId, role=$role, refreshTokens=$refreshTokens, ]';
   }
 
-  User.fromJson(Map<String, dynamic> json) {
+  User.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
     id = json['id'];
     email = json['email'];
@@ -77,7 +77,7 @@ class User {
       json['emailIsVerified'] = emailIsVerified;
       json['password'] = password;
     if (dateCreatedAt != null)
-      json['dateCreatedAt'] = dateCreatedAt == null ? null : dateCreatedAt.toUtc().toIso8601String();
+      json['dateCreatedAt'] = dateCreatedAt == null ? null : dateCreatedAt!.toUtc().toIso8601String();
       json['cultureId'] = cultureId;
     if (culture != null)
       json['culture'] = culture;
@@ -95,7 +95,7 @@ class User {
   }
 
   static List<User> listFromJson(List<dynamic> json) {
-    return json == null ? List<User>() : json.map((value) => User.fromJson(value)).toList();
+    return json == null ? <User>[] : json.map((value) => User.fromJson(value)).toList();
   }
 
   static Map<String, User> mapFromJson(Map<String, dynamic> json) {

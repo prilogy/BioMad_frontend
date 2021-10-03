@@ -7,6 +7,7 @@ import 'package:biomad_frontend/services/social_auth.dart';
 import 'package:biomad_frontend/store/main.dart';
 import 'package:biomad_frontend/store/thunks.dart';
 import 'package:biomad_frontend/styles/indents.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -22,20 +23,12 @@ class SocialAccountListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    String svgPath;
-    Color color;
-    double size;
-    Future<String> Function() tokenGetter;
+    String? svgPath;
+    Color? color;
+    double? size;
+    late Future<String?> Function() tokenGetter;
 
-    if (model.name == SocialAccountProvider.facebook.name) {
-      svgPath = FacebookAuthService.svgPath;
-      color = FacebookAuthService.color;
-      size = FacebookAuthService.size;
-      tokenGetter = () async {
-        var fbAuth = FacebookAuthService();
-        return await fbAuth.getToken();
-      };
-    } else if (model.name == SocialAccountProvider.google.name) {
+    if (model.name == SocialAccountProvider.google.name) {
       svgPath = GoogleAuthService.svgPath;
       color = GoogleAuthService.color;
       size = GoogleAuthService.size;
@@ -53,9 +46,9 @@ class SocialAccountListTile extends StatelessWidget {
       };
     }
 
-    final bool isConnected = store.state.user.socialAccounts.firstWhere((x) => x.provider.name == model.name, orElse: () => null) != null;
+    final bool isConnected = store.state.user!.socialAccounts!.firstWhereOrNull((x) => x.provider!.name == model.name) != null;
 
-    final _tr = trWithKey('account_container');
+    final String Function(String, {List<String> args, BuildContext context, String gender, Map<String, String> namedArgs}) _tr = trWithKey('account_container');
 
     return CustomListTile(
       prepend: Row(
@@ -69,7 +62,7 @@ class SocialAccountListTile extends StatelessWidget {
                 svgSize: size,
                 onPressed: () {},
 )              ),
-          Text(model.name, style: theme.textTheme.subtitle1),
+          Text(model.name!, style: theme.textTheme.subtitle1),
         ],
       ),
       append: CustomButton.flat(
@@ -77,7 +70,7 @@ class SocialAccountListTile extends StatelessWidget {
         textColor: isConnected ? theme.errorColor : theme.primaryColor,
         onPressed: () async {
           if(isConnected) {
-            var r = await api.socialAccount.remove(model.name);
+            var r = await api.socialAccount.remove(model.name!);
             if(r)
               SnackBarExtension.success(_tr('social_disconnect_success'));
             else SnackBarExtension.error(_tr('social_disconnect_error'));
@@ -89,7 +82,7 @@ class SocialAccountListTile extends StatelessWidget {
               return;
             }
 
-            var r = await api.socialAccount.add(token, model.name);
+            var r = await api.socialAccount.add(token, model.name!);
             if(r)
               SnackBarExtension.success(_tr('social_connect_success'));
             else SnackBarExtension.error(_tr('social_connect_error'));

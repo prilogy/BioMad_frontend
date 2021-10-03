@@ -2,13 +2,13 @@ part of api.api;
 
 class Category {
   
-  int id = null;
+  int? id = null;
   
-  CategoryTranslation content = null;
+  CategoryTranslation? content = null;
   
-  MemberCategoryState state = null;
+  MemberCategoryState? state = null;
   
-  List<int> biomarkerIds = [];
+  List<int>? biomarkerIds = [];
   Category();
 
   @override
@@ -16,7 +16,7 @@ class Category {
     return 'Category[id=$id, content=$content, state=$state, biomarkerIds=$biomarkerIds, ]';
   }
 
-  Category.fromJson(Map<String, dynamic> json) {
+  Category.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
     id = json['id'];
     content = (json['content'] == null) ?
@@ -42,8 +42,8 @@ class Category {
     return json;
   }
 
-  static List<Category> listFromJson(List<dynamic> json) {
-    return json == null ? List<Category>() : json.map((value) => Category.fromJson(value)).toList();
+  static List<Category> listFromJson(List<dynamic>? json) {
+    return json == null ? <Category>[] : json.map((value) => Category.fromJson(value)).toList();
   }
 
   static Map<String, Category> mapFromJson(Map<String, dynamic> json) {

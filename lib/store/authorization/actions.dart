@@ -1,7 +1,7 @@
 import 'package:biomad_frontend/models/authorization.dart';
 
 class SetAuthorization {
-  final Authorization authorization;
+  final Authorization? authorization;
 
   SetAuthorization(this.authorization);
 

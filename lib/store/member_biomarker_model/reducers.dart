@@ -6,7 +6,7 @@ import 'actions.dart' as Actions;
 
 final memberBiomarkerModelListReducer = combineReducers<MemberBiomarkerModelList>([
   TypedReducer<MemberBiomarkerModelList, Actions.SetMemberBiomarkerModelList>(
-      _setMemberBiomarkerModelList),
+      _setMemberBiomarkerModelList) as MemberBiomarkerModelList Function(MemberBiomarkerModelList, dynamic),
 ]);
 
 MemberBiomarkerModelList _setMemberBiomarkerModelList(

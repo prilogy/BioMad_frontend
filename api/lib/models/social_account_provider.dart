@@ -2,21 +2,20 @@ part of api.api;
 
 class SocialAccountProvider {
   
-  int id = null;
+  int? id = null;
   
-  String name = null;
+  String? name = null;
   SocialAccountProvider({this.id, this.name});
 
   static final SocialAccountProvider google = SocialAccountProvider(name: 'Google', id: 1);
   static final SocialAccountProvider vk = SocialAccountProvider(name: 'VK', id: 2);
-  static final SocialAccountProvider facebook = SocialAccountProvider(name: 'Facebook', id: 3);
 
   @override
   String toString() {
     return 'SocialAccountProvider[id=$id, name=$name, ]';
   }
 
-  SocialAccountProvider.fromJson(Map<String, dynamic> json) {
+  SocialAccountProvider.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
     id = json['id'];
     name = json['name'];
@@ -31,7 +30,7 @@ class SocialAccountProvider {
   }
 
   static List<SocialAccountProvider> listFromJson(List<dynamic> json) {
-    return json == null ? List<SocialAccountProvider>() : json.map((value) => SocialAccountProvider.fromJson(value)).toList();
+    return json == null ? <SocialAccountProvider>[] : json.map((value) => SocialAccountProvider.fromJson(value)).toList();
   }
 
   static Map<String, SocialAccountProvider> mapFromJson(Map<String, dynamic> json) {

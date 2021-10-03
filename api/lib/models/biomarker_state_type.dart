@@ -11,12 +11,12 @@ class BiomarkerStateType {
   static const BiomarkerStateType number2_ = const BiomarkerStateType._internal(2);
   static const BiomarkerStateType number3_ = const BiomarkerStateType._internal(3);
 
-  static BiomarkerStateType fromJson(int value) {
+  static BiomarkerStateType fromJson(int? value) {
     return new BiomarkerStateTypeTypeTransformer().decode(value);
   }
   
   static List<BiomarkerStateType> listFromJson(List<dynamic> json) {
-    return json == null ? new List<BiomarkerStateType>() : json.map((value) => BiomarkerStateType.fromJson(value)).toList();
+    return json == null ? <BiomarkerStateType>[] : json.map((value) => BiomarkerStateType.fromJson(value)).toList();
   }
 }
 

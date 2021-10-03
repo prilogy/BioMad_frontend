@@ -12,7 +12,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class MemberScreen extends StatefulWidget {
-  final Member member;
+  final Member? member;
 
   MemberScreen({this.member});
 
@@ -21,21 +21,21 @@ class MemberScreen extends StatefulWidget {
 }
 
 class _MemberScreenState extends State<MemberScreen> {
-  MemberModel _memberModel;
+  late MemberModel _memberModel;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final _tr = trWithKey('member_screen');
+    final String Function(String, {List<String> args, BuildContext context, String gender, Map<String, String> namedArgs}) _tr = trWithKey('member_screen');
     final title = widget.member == null ? _tr('new_profile') : _tr('edit_profile');
 
-    final actionButton = widget.member != null && widget.member.id != store.state.authorization.currentMemberId
+    final actionButton = widget.member != null && widget.member!.id != store.state.authorization!.currentMemberId
         ? FlatButton(
             child: Text(_tr('delete'), style: TextStyle(color: theme.errorColor)),
             onPressed: () {
               AcceptDialog.show(context, onYes: () async {
-                var res = await api.member.delete(widget.member.id);
+                var res = await api.member.delete(widget.member!.id!);
                 if (res == false) {
                   SnackBarExtension.error(_tr('delete_error'));
                   return;
@@ -70,7 +70,7 @@ class _MemberScreenState extends State<MemberScreen> {
               ? IconButton(
                   tooltip: tr('misc.save'),
                   onPressed: () async {
-                    var res = await api.member.edit(_memberModel, widget.member.id);
+                    var res = await api.member.edit(_memberModel, widget.member!.id!);
                     if (res == null) {
                       SnackBarExtension.error(tr('misc.save_error'));
                       return;

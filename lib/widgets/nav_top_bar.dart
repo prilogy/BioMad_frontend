@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 class NavTopBar extends StatefulWidget {
   final index;
-  NavTopBar({Key key, this.index}) : super(key: key);
+  NavTopBar({Key? key, this.index}) : super(key: key);
 
   @override
   _NavTopBarState createState() => _NavTopBarState(index);
@@ -16,7 +16,7 @@ class NavTopBar extends StatefulWidget {
 class _NavTopBarState extends State<NavTopBar> {
   List<String> navTopBar = [tr('navigation.monitoring'), tr('navigation.analyzes')];
   var navTopBarLink = [Routes.main, Routes.analysis_list];
-  int selectedIndex;
+  int? selectedIndex;
   _NavTopBarState(this.selectedIndex);
 
   @override
@@ -35,7 +35,7 @@ class _NavTopBarState extends State<NavTopBar> {
         setState(() {
           selectedIndex = index;
         });
-        Keys.rootNavigator.currentState
+        Keys.rootNavigator.currentState!
             .pushReplacementNamed(navTopBarLink[index]);
       },
       child: Padding(

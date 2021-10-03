@@ -12,23 +12,23 @@ import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class AnalysisListScreen extends StatefulWidget {
-  final int index;
+  final int? index;
 
-  AnalysisListScreen({Key key, this.index}) : super(key: key);
+  AnalysisListScreen({Key? key, this.index}) : super(key: key);
 
   @override
   _AnalysisListScreenState createState() => _AnalysisListScreenState(index);
 }
 
 class _AnalysisListScreenState extends State<AnalysisListScreen> {
-  int index = 1;
+  int? index = 1;
 
   _AnalysisListScreenState(this.index);
 
   PanelController _panelController = PanelController();
 
   final double _initFabHeight = 120.0;
-  double _fabHeight;
+  double? _fabHeight;
   double _panelHeightOpen = 500;
   double _panelHeightClosed = 0;
 
@@ -42,7 +42,7 @@ class _AnalysisListScreenState extends State<AnalysisListScreen> {
       ),
       body: WillPopScope(
           onWillPop: () async {
-            Keys.rootNavigator.currentState.pushReplacementNamed(Routes.main);
+            Keys.rootNavigator.currentState!.pushReplacementNamed(Routes.main);
             return false;
           },
           child: Stack(children: [

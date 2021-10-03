@@ -2,13 +2,13 @@ part of api.api;
 
 class MemberBiomarkerModel {
   
-  double value = null;
+  double? value = null;
   
-  int analysisId = null;
+  int? analysisId = null;
   
-  int biomarkerId = null;
+  int? biomarkerId = null;
   
-  int unitId = null;
+  int? unitId = null;
   MemberBiomarkerModel({this.value, this.analysisId, this.biomarkerId, this.unitId});
 
   @override
@@ -39,8 +39,8 @@ class MemberBiomarkerModel {
     return json;
   }
 
-  static List<MemberBiomarkerModel> listFromJson(List<dynamic> json) {
-    return json == null ? List<MemberBiomarkerModel>() : json.map((value) => MemberBiomarkerModel.fromJson(value)).toList();
+  static List<MemberBiomarkerModel> listFromJson(List<dynamic>? json) {
+    return json == null ? <MemberBiomarkerModel>[] : json.map((value) => MemberBiomarkerModel.fromJson(value)).toList();
   }
 
   static Map<String, MemberBiomarkerModel> mapFromJson(Map<String, dynamic> json) {

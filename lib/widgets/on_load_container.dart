@@ -3,10 +3,10 @@ import 'package:biomad_frontend/styles/indents.dart';
 import 'package:flutter/material.dart';
 
 class OnLoadContainer extends StatelessWidget {
-  final int index;
+  final int? index;
   final color;
-  final EdgeInsetsGeometry padding;
-  final EdgeInsetsGeometry margin;
+  final EdgeInsetsGeometry? padding;
+  final EdgeInsetsGeometry? margin;
 
   OnLoadContainer({this.index, this.color, this.padding, this.margin});
 
@@ -62,7 +62,7 @@ class OnLoadContainer extends StatelessWidget {
           IconButton(
               icon: Icon(
                 Icons.arrow_forward,
-                color: BioMadColors.base[300].withOpacity(0.8),
+                color: BioMadColors.base[300]!.withOpacity(0.8),
                 size: 24.0,
               ),
               onPressed: null)
@@ -71,15 +71,15 @@ class OnLoadContainer extends StatelessWidget {
     );
   }
 
-  Widget onLoadContainerItem({double height, double width,
-      EdgeInsetsGeometry padding, EdgeInsetsGeometry margin, color}) {
+  Widget onLoadContainerItem({double? height, double? width,
+      EdgeInsetsGeometry? padding, EdgeInsetsGeometry? margin, color}) {
     return Container(
       padding: padding,
       margin: margin,
       height: height,
       width: width,
       decoration: BoxDecoration(
-        color: color ?? BioMadColors.base[200].withOpacity(0.8),
+        color: color ?? BioMadColors.base[200]!.withOpacity(0.8),
         borderRadius: BorderRadius.all(Radius.circular(4)),
       ),
     );

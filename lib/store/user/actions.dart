@@ -1,7 +1,7 @@
 import 'package:api/api.dart';
 
 class SetUser {
-  final User user;
+  final User? user;
 
   SetUser(this.user);
 

@@ -7,7 +7,7 @@ import 'package:redux/redux.dart';
 import 'actions.dart' as Actions;
 
 final memberAnalysisListReducer = combineReducers<MemberAnalysisList>([
-  TypedReducer<MemberAnalysisList, Actions.SetMemberAnalysisList>(_setMemberAnalysisList),
+  TypedReducer<MemberAnalysisList, Actions.SetMemberAnalysisList>(_setMemberAnalysisList) as MemberAnalysisList Function(MemberAnalysisList, dynamic),
 ]);
 
 MemberAnalysisList _setMemberAnalysisList(MemberAnalysisList state, Actions.SetMemberAnalysisList action) {

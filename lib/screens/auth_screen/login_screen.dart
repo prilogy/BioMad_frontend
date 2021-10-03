@@ -32,16 +32,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void dispose() {
-    _formKey?.currentState?.dispose();
-    _emailController?.dispose();
-    _passwordController?.dispose();
+    _formKey.currentState?.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
 
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final _tr = trWithKey('auth_screen');
+    final String Function(String, {List<String> args, BuildContext context, String gender, Map<String, String> namedArgs}) _tr = trWithKey('auth_screen');
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -58,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     Text(
                       _tr('login'),
-                      style: theme.textTheme.headline5.merge(TextStyle(fontWeight: FontWeight.w500, color: theme.primaryColor)),
+                      style: theme.textTheme.headline5!.merge(TextStyle(fontWeight: FontWeight.w500, color: theme.primaryColor)),
                     ),
                     Container(
                       height: 30,
@@ -108,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           children: [
                             CustomButton.raised(
                               onPressed: () async {
-                                if (_formKey.currentState.validate())
+                                if (_formKey.currentState!.validate())
                                   store.dispatch(StoreThunks.authorize(() async {
                                     var authResponse = await api.auth.logIn(
                                         LogInWithCredentialsModel(email: _emailController.text, password: _passwordController.text));
@@ -120,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       return authResponse;
                                   }, onSuccess: () {
                                     SnackBarExtension.success(_tr('log_in_success'));
-                                    Keys.rootNavigator.currentState.pushReplacementNamed(Routes.main);
+                                    Keys.rootNavigator.currentState!.pushReplacementNamed(Routes.main);
                                   }));
                               },
                               margin: EdgeInsets.only(left: Indents.sm),
@@ -185,13 +185,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     FlatButton(
                       onPressed: () async {
-                        var url = env.API_BASE_URL.replaceAll("/api/", "");
-                        url += "/policy/${EasyLocalization.of(context).locale.languageCode}";
+                        var url = env.API_BASE_URL!.replaceAll("/api/", "");
+                        url += "/policy/${EasyLocalization.of(context)!.locale.languageCode}";
                         if (await canLaunch(url)) await launch(url);
                       },
                       child: Text(
                         tr("misc.privacy_policy"),
-                        style: theme.textTheme.caption.merge(TextStyle(
+                        style: theme.textTheme.caption!.merge(TextStyle(
                           decoration: TextDecoration.underline,
                         )),
                       ),
@@ -208,7 +208,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future _authWithSocial(BuildContext context, SocialAccountProvider provider, String token) async {
     if (token == null) {
-      var socialName = provider.name[0].toUpperCase() + provider.name.substring(1);
+      var socialName = provider.name![0].toUpperCase() + provider.name!.substring(1);
       SnackBarExtension.error(tr('auth_screen.sign_in_social_error'));
       return;
     }
@@ -228,20 +228,20 @@ class _LoginScreenState extends State<LoginScreen> {
     store.dispatch(StoreThunks.authorize(() async {
       return r;
     }, onSuccess: () {
-      Keys.rootNavigator.currentState.pushReplacementNamed(Routes.main);
+      Keys.rootNavigator.currentState!.pushReplacementNamed(Routes.main);
     }));
   }
 }
 
 class SocialAuthIcon extends StatelessWidget {
-  final String svgPath;
-  final VoidCallback onPressed;
-  final Color backgroundColor;
-  final Color shadowColor;
-  final double svgSize;
+  final String? svgPath;
+  final VoidCallback? onPressed;
+  final Color? backgroundColor;
+  final Color? shadowColor;
+  final double? svgSize;
 
   SocialAuthIcon(
-      {@required this.svgPath, @required this.onPressed, @required this.backgroundColor, this.svgSize = 25, this.shadowColor});
+      {required this.svgPath, required this.onPressed, required this.backgroundColor, this.svgSize = 25, this.shadowColor});
 
   @override
   Widget build(BuildContext context) {
@@ -250,7 +250,7 @@ class SocialAuthIcon extends StatelessWidget {
       width: 45,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        boxShadow: [BoxShadow(blurRadius: 20, color: (shadowColor ?? backgroundColor).withOpacity(ColorAlphas.a30), spreadRadius: 1)],
+        boxShadow: [BoxShadow(blurRadius: 20, color: (shadowColor ?? backgroundColor)!.withOpacity(ColorAlphas.a30), spreadRadius: 1)],
       ),
       child: GestureDetector(
         onTap: onPressed ?? () {},
@@ -258,7 +258,7 @@ class SocialAuthIcon extends StatelessWidget {
           backgroundColor: backgroundColor,
           radius: 30.0,
           child: SvgPicture.asset(
-            svgPath,
+            svgPath!,
             height: svgSize,
           ),
         ),

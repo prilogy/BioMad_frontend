@@ -13,7 +13,7 @@ class AuthScreen extends StatefulWidget{
 
 class _AuthScreenState extends State<AuthScreen> {
   final navigatorKey = GlobalKey<NavigatorState>();
-  AppExitHelper _exitHelper;
+  late AppExitHelper _exitHelper;
 
   @override
   void initState() {
@@ -24,7 +24,7 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: _exitHelper.onWillPop,
+      onWillPop: _exitHelper.onWillPop as Future<bool> Function()?,
       child: Navigator(
         key: navigatorKey,
         onGenerateRoute: (context) =>

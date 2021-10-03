@@ -5,9 +5,9 @@ typedef WidgetBuilderGeneric<T> = Widget Function(T model);
 
 class CustomFutureBuilder<T> extends StatelessWidget {
   final Future<T> future;
-  final WidgetBuilderGeneric<T> builder;
+  final WidgetBuilderGeneric<T?> builder;
 
-  CustomFutureBuilder({@required this.future,@required this.builder});
+  CustomFutureBuilder({required this.future,required this.builder});
 
   @override
   Widget build(BuildContext context) {
